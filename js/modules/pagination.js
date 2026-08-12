@@ -1,0 +1,74 @@
+window.AVM = window.AVM || {};
+AVM.modules = AVM.modules || {};
+
+(function () {
+  const state = AVM.state;
+
+  function getPageWindow(current, total, size) {
+    if (total <= size + 2) return Array.from({ length: total }, (_, i) => i + 1);
+    const pages = [1];
+    const start = Math.max(2, current - 1);
+    const end = Math.min(total - 1, current + 1);
+    if (start > 2) pages.push("…");
+    for (let i = start; i <= end; i++) pages.push(i);
+    if (end < total - 1) pages.push("…");
+    pages.push(total);
+    return pages;
+  }
+
+  function renderPagination({ container, totalItems, onChange }) {
+    if (!container) return;
+    const totalPages = Math.max(1, Math.ceil(totalItems / state.pageSize));
+    if (state.currentPage > totalPages) state.currentPage = totalPages;
+    if (state.currentPage < 1) state.currentPage = 1;
+
+    container.innerHTML = "";
+    if (totalPages <= 1) return;
+
+    const prevBtn = document.createElement("button");
+    prevBtn.type = "button";
+    prevBtn.className = "page-btn page-btn--nav";
+    prevBtn.textContent = "Previous";
+    prevBtn.disabled = state.currentPage === 1;
+    prevBtn.onclick = () => { state.currentPage -= 1; onChange(); };
+    container.appendChild(prevBtn);
+
+    getPageWindow(state.currentPage, totalPages, 5).forEach(p => {
+      if (p === "…") {
+        const span = document.createElement("span");
+        span.className = "page-ellipsis";
+        span.textContent = "…";
+        container.appendChild(span);
+        return;
+      }
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "page-btn" + (p === state.currentPage ? " active" : "");
+      btn.textContent = p;
+      btn.onclick = () => { state.currentPage = p; onChange(); };
+      container.appendChild(btn);
+    });
+
+    const nextBtn = document.createElement("button");
+    nextBtn.type = "button";
+    nextBtn.className = "page-btn page-btn--nav";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = state.currentPage === totalPages;
+    nextBtn.onclick = () => { state.currentPage += 1; onChange(); };
+    container.appendChild(nextBtn);
+  }
+
+  function wirePageSize(select, { onChange }) {
+    if (!select) return;
+    select.innerHTML = AVM.CONFIG.AVAILABLE_PAGE_SIZES.map(n =>
+      `<option value="${n}" ${n === state.pageSize ? "selected" : ""}>${n} per page</option>`
+    ).join("");
+    select.addEventListener("change", (e) => {
+      state.pageSize = parseInt(e.target.value, 10);
+      state.currentPage = 1;
+      onChange();
+    });
+  }
+
+  AVM.modules.pagination = { renderPagination, wirePageSize };
+})();

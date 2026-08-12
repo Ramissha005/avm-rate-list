@@ -1,0 +1,82 @@
+[
+  {
+    "id": "diabetes",
+    "label": "Diabetes"
+  },
+  {
+    "id": "liver-function",
+    "label": "Liver Function"
+  },
+  {
+    "id": "kidney-function",
+    "label": "Kidney Function"
+  },
+  {
+    "id": "lipid-profile",
+    "label": "Lipid Profile"
+  },
+  {
+    "id": "thyroid",
+    "label": "Thyroid"
+  },
+  {
+    "id": "iron-studies",
+    "label": "Iron Studies"
+  },
+  {
+    "id": "vitamins",
+    "label": "Vitamins"
+  },
+  {
+    "id": "cardiac",
+    "label": "Cardiac"
+  },
+  {
+    "id": "drug-monitoring",
+    "label": "Therapeutic Drug Monitoring"
+  },
+  {
+    "id": "reproductive-hormones",
+    "label": "Reproductive & Endocrine Hormones"
+  },
+  {
+    "id": "pregnancy",
+    "label": "Pregnancy"
+  },
+  {
+    "id": "tumor-markers",
+    "label": "Tumor Markers"
+  },
+  {
+    "id": "infectious-disease",
+    "label": "Infectious Disease Serology"
+  },
+  {
+    "id": "autoimmune",
+    "label": "Autoimmune"
+  },
+  {
+    "id": "bone-metabolism",
+    "label": "Bone Metabolism"
+  },
+  {
+    "id": "pituitary-growth",
+    "label": "Pituitary & Growth"
+  },
+  {
+    "id": "allergy-immunology",
+    "label": "Allergy & Immunology"
+  },
+  {
+    "id": "general-biochemistry",
+    "label": "General Biochemistry"
+  },
+  {
+    "id": "hematology",
+    "label": "Hematology"
+  },
+  {
+    "id": "urine",
+    "label": "Urine"
+  }
+]

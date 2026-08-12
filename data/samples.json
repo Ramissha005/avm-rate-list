@@ -1,0 +1,6 @@
+[
+  { "id": "serum", "label": "Serum" },
+  { "id": "fluoride", "label": "Fluoride" },
+  { "id": "edta", "label": "EDTA" },
+  { "id": "urine", "label": "Urine" }
+]

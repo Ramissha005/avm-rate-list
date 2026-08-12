@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVMLabs — Rate List &amp; Custom Health Profiles</title>
+<meta name="description" content="AVMLabs diagnostic rate list. Browse 106 lab tests, compare technologies and build your own custom health profile.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html#top" class="brand">
+      <img class="brand__logo" src="assets/images/avm-logo.png" alt="AVMLabs" height="34">
+    </a>
+    <div class="nav__links">
+      <a href="index.html#about">About</a>
+      <a href="pages/rate-list.html">Rate List</a>
+      <a href="pages/packages.html">Packages</a>
+      <a href="pages/profile-builder.html">Build Profile</a>
+      <a href="index.html#founder">Dr. Velumani</a>
+    </div>
+    <div class="nav__actions">
+      <button class="cart-btn" id="openCart" aria-haspopup="dialog">
+        My Profile <span class="cart-btn__badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top">
+    <div class="wrap hero__grid">
+      <div>
+        <p class="eyebrow on-dark">PARTNER PRICING · MARGIN YOU CAN SEE</p>
+        <h1>Every test. Your cost, your price, your margin — upfront.</h1>
+        <p class="hero__sub">AVMLabs is built for partner clinics, hospitals and collection centres — automated Photometry, E.C.L.I.A, H.P.L.C and more, with a B2B rate, a B2C rate and the exact margin between them on every single line.</p>
+        <div class="hero__ctas">
+          <a href="pages/rate-list.html" class="btn btn--amber">Browse the Rate List</a>
+          <a href="pages/profile-builder.html" class="btn btn--ghost-dark">Build My Profile</a>
+        </div>
+        <div class="stat-strip">
+          <span><span class="dot"></span><span id="statTests">106</span> TESTS</span>
+          <span><span class="dot"></span><span id="statTech">6</span> METHODS</span>
+          <span><span class="dot"></span>B2B + B2C + MARGIN, ONE VIEW</span>
+        </div>
+      </div>
+      <div>
+        <div class="slip" id="heroSlip">
+          <div class="slip__head"><span>Specimen Requisition</span><span>AVM · 004311</span></div>
+          <ul class="slip__rows">
+            <li style="transition-delay:.15s"><span class="tick"></span>Fasting Blood Sugar<em>FBS</em></li>
+            <li style="transition-delay:.5s"><span class="tick"></span>HbA1c<em>A1c</em></li>
+            <li style="transition-delay:.85s"><span class="tick"></span>Total Cholesterol<em>CHOL</em></li>
+            <li style="transition-delay:1.2s"><span class="tick"></span>Thyroid Stimulating Hormone<em>UTSH</em></li>
+            <li style="transition-delay:1.55s"><span class="tick"></span>Vitamin D, Total<em>VITDT</em></li>
+          </ul>
+          <div class="slip__perf"></div>
+          <div class="slip__foot slip__foot--stack">
+            <div><span>B2B Cost</span><b>₹275</b></div>
+            <div><span>B2C Value</span><b>₹1,000</b></div>
+            <div class="is-profit"><span>Margin</span><b>+₹725</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= APP TEASER ================= -->
+  <section class="ratelist" id="app">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">THE RATE LIST APPLICATION</p>
+        <h2>One catalog. Search it, filter it, price it, print it.</h2>
+        <p>The full rate list, category and technology filters, a packages gallery, and the profile builder all live in the application below — this page is just the front door.</p>
+      </div>
+
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-card__num" id="statAppTests">—</div><div class="stat-card__label">Tests</div></div>
+        <div class="stat-card"><div class="stat-card__num" id="statAppCategories">—</div><div class="stat-card__label">Categories</div></div>
+        <div class="stat-card"><div class="stat-card__num" id="statAppTech">—</div><div class="stat-card__label">Technologies</div></div>
+        <div class="stat-card"><div class="stat-card__num" id="statAppPackages">—</div><div class="stat-card__label">Packages</div></div>
+      </div>
+
+      <div class="package-grid">
+        <div class="package-card">
+          <div>
+            <p class="package-card__meta">Step 01</p>
+            <h3>Rate List</h3>
+          </div>
+          <p class="package-card__desc">Search, filter by category / technology / sample / price, sort, and page through every test with its B2B cost, B2C price and margin.</p>
+          <div class="package-card__actions"><a href="pages/rate-list.html" class="btn btn--navy btn--sm">Open Rate List</a></div>
+        </div>
+        <div class="package-card">
+          <div>
+            <p class="package-card__meta">Step 02</p>
+            <h3>Packages</h3>
+          </div>
+          <p class="package-card__desc">Ready-made panels — Liver, Kidney, Lipid, Thyroid and more — added to your profile in a single click.</p>
+          <div class="package-card__actions"><a href="pages/packages.html" class="btn btn--navy btn--sm">Browse Packages</a></div>
+        </div>
+        <div class="package-card">
+          <div>
+            <p class="package-card__meta">Step 03</p>
+            <h3>Build a Profile</h3>
+          </div>
+          <p class="package-card__desc">Combine packages and individual tests into one profile, see the running B2B/B2C/margin totals, then print or export it.</p>
+          <div class="package-card__actions"><a href="pages/profile-builder.html" class="btn btn--navy btn--sm">Build My Profile</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT AVMLABS ================= -->
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">ABOUT AVMLABS</p>
+        <h2>A lab built around one instrument nobody talks about: honesty.</h2>
+      </div>
+      <p class="about__lede">AVMLabs is a diagnostic testing service built on a simple premise — every test on this list runs on validated, automated instrumentation, and every price on this list is the price you actually pay. No hidden handling fees, no "price varies," no fine print between the rate card and the bill.</p>
+
+      <div class="pillars">
+        <div class="pillar">
+          <p class="pillar__num">01</p>
+          <h3>Precision</h3>
+          <p>Samples are processed on calibrated Photometry, E.C.L.I.A, H.P.L.C, Immunoturbidimetry and Hematology platforms — the same instrument classes used across India's leading reference labs.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar__num">02</p>
+          <h3>Access</h3>
+          <p>One rate card for our B2B partners — clinics, hospitals and collection centres — showing your cost, the patient-facing B2C price, and the margin on every test. No negotiation needed.</p>
+        </div>
+        <div class="pillar">
+          <p class="pillar__num">03</p>
+          <h3>Automation</h3>
+          <p>Fewer manual handoffs between your sample and your report means fewer places for error to creep in, and faster turnaround on results.</p>
+        </div>
+      </div>
+
+      <div class="tech-row">
+        <span class="tech-row__label">Technologies in use</span>
+        <span class="tech-pill">Photometry</span>
+        <span class="tech-pill">E.C.L.I.A</span>
+        <span class="tech-pill">H.P.L.C</span>
+        <span class="tech-pill">Immunoturbidimetry</span>
+        <span class="tech-pill">Hematology</span>
+        <span class="tech-pill">Microscopy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOUNDER ================= -->
+  <section class="founder" id="founder">
+    <div class="wrap founder__grid">
+      <div class="founder__card">
+        <div class="monogram">AV</div>
+        <h3>Dr. Arokiaswamy Velumani</h3>
+        <p class="role">Scientist · Founder, Thyrocare Technologies</p>
+        <ul class="founder__timeline">
+          <li class="tl-row"><span class="tl-year">1981–95</span><span class="tl-text">Research scientist, Bhabha Atomic Research Centre (BARC)</span></li>
+          <li class="tl-row"><span class="tl-year">1996</span><span class="tl-text">Founded Thyrocare Technologies with capital from his own provident fund</span></li>
+          <li class="tl-row"><span class="tl-year">2021</span><span class="tl-text">Exited as majority stakeholder; continues as an investor and mentor in diagnostics</span></li>
+        </ul>
+      </div>
+      <div class="founder__bio">
+        <p class="eyebrow on-dark">THE PHILOSOPHY BEHIND THE PRICE LIST</p>
+        <h2>Built on a scientist's conviction that testing shouldn't be a luxury.</h2>
+        <p>Dr. Velumani spent over a decade as a research scientist at BARC before founding Thyrocare Technologies in 1996 — one of India's largest diagnostic chains, built on centralising processing into one highly automated lab and passing the savings on as lower prices.</p>
+        <blockquote class="pull">
+          <p>"Poverty is the best MBA."</p>
+          <cite>— Dr. A. Velumani, widely cited in interviews on his approach to frugal, high-volume business</cite>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <img class="brand__logo" src="assets/images/avm-logo.png" alt="AVMLabs" height="34">
+        <p>Automated diagnostics, one transparent rate card, for individuals and partner clinics alike.</p>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="index.html#about">About AVMLabs</a></li>
+          <li><a href="index.html#founder">Dr. Velumani</a></li>
+          <li><a href="pages/rate-list.html">Rate List</a></li>
+          <li><a href="pages/packages.html">Packages</a></li>
+          <li><a href="pages/profile-builder.html">Build a Profile</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>care@avmlabs.example</li>
+          <li>+91 00000 00000</li>
+          <li>Sample collection available on request</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 AVMLabs. Placeholder contact details — update before publishing.</span>
+      <span>Rates in INR (₹). Indicative rate card, not a medical prescription.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= CART DRAWER ================= -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="My custom profile">
+  <div class="cart-head">
+    <div>
+      <h3>My Profile</h3>
+      <p class="sub" id="cartSub">0 tests selected</p>
+    </div>
+    <button class="cart-close" id="closeCart" aria-label="Close">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a panel.</p>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-totals">
+      <div class="ct-row"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
+      <div class="ct-row"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
+      <div class="ct-row ct-margin"><span>Your Margin</span><span id="cartMargin">₹0</span></div>
+    </div>
+    <div class="cart-actions">
+      <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
+      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export CSV</button>
+      <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>
+    </div>
+    <button class="cart-clear" id="clearCart">Clear all</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<script src="js/config.js"></script>
+<script src="js/utils/formatters.js"></script>
+<script src="js/utils/storage.js"></script>
+<script src="js/utils/helpers.js"></script>
+<script src="js/data.js"></script>
+<script src="js/modules/calculations.js"></script>
+<script src="js/modules/profile.js"></script>
+<script src="js/modules/pagination.js"></script>
+<script src="js/modules/test-detail.js"></script>
+<script src="js/modules/rate-list.js"></script>
+<script src="js/modules/search.js"></script>
+<script src="js/modules/sorting.js"></script>
+<script src="js/modules/filters.js"></script>
+<script src="js/modules/packages.js"></script>
+<script src="js/modules/export.js"></script>
+<script src="js/modules/print.js"></script>
+<script src="js/app.js"></script>
+<script>
+  AVM.data.loadCatalog().then(catalog => {
+    document.getElementById("statAppTests").textContent = catalog.tests.length;
+    document.getElementById("statAppCategories").textContent = catalog.categories.length;
+    document.getElementById("statAppTech").textContent = catalog.technologies.length;
+    document.getElementById("statAppPackages").textContent = catalog.packages.length;
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* AVMLabs print-profile page — standalone, loaded only by pages/print-profile.html */
+/* Ported verbatim from the inline styles the original inline script wrote into window.open(). */
+
+body{ font-family:Arial,sans-serif; padding:40px; color:#16232F; }
+h1{ font-size:22px; margin-bottom:2px; }
+p.sub{ color:#666; margin-top:0; margin-bottom:24px; }
+table{ width:100%; border-collapse:collapse; }
+th,td{ text-align:left; padding:8px 6px; border-bottom:1px solid #ddd; font-size:14px; }
+tfoot td{ font-weight:bold; border-top:2px solid #16232F; border-bottom:none; }
+.profit{ color:#0E7A4C; }
+
+@media print{
+  body{ padding:0; }
+}

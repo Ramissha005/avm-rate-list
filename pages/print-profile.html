@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AVMLabs — My Profile</title>
+<link rel="stylesheet" href="../css/print.css">
+</head>
+<body>
+
+<h1>AVMLabs — My Custom Profile</h1>
+<p class="sub">B2B cost, B2C price &amp; margin · Generated <span id="printDate"></span></p>
+
+<table>
+  <thead>
+    <tr><th>Code</th><th>Test</th><th>Technology</th><th>B2B</th><th>B2C</th><th>Margin</th></tr>
+  </thead>
+  <tbody id="printBody"></tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3">Total</td>
+      <td id="printTotalB2B"></td>
+      <td id="printTotalB2C"></td>
+      <td class="profit" id="printTotalMargin"></td>
+    </tr>
+  </tfoot>
+</table>
+
+<script src="../js/config.js"></script>
+<script src="../js/utils/formatters.js"></script>
+<script src="../js/utils/storage.js"></script>
+<script src="../js/utils/helpers.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/modules/calculations.js"></script>
+<script src="../js/modules/print.js"></script>
+<script>
+  AVM.modules.print.renderPrintPage({
+    tbody: document.getElementById("printBody"),
+    dateEl: document.getElementById("printDate"),
+    totalB2BEl: document.getElementById("printTotalB2B"),
+    totalB2CEl: document.getElementById("printTotalB2C"),
+    totalMarginEl: document.getElementById("printTotalMargin"),
+  });
+</script>
+
+</body>
+</html>

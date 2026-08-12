@@ -1,0 +1,88 @@
+/* AVMLabs design tokens — colors, spacing scale, type scale, radii, shadows, glass, motion */
+
+:root{
+  /* ---- Brand colors (unchanged) ---- */
+  --navy:#0E2238;
+  --navy-2:#173A5A;
+  --navy-soft:#2A4C6B;
+  --paper:#EFF0F2;
+  --paper-2:#E4E6E9;
+  --card:#FFFFFF;
+  --amber:#DB8A34;
+  --amber-dark:#B4701F;
+  --teal:#1E63B4;
+  --teal-dark:#123A66;
+  --ink:#101C27;
+  --ink-soft:#39474F;
+  --ink-faint:#5B6971;
+  --line:#D2D5D9;
+  --line-dark:#2C4863;
+  --profit:#1B5FA8;
+  --profit-bg:#E2ECF7;
+  --mono-chip:#E9EAEC;
+
+  /* ---- Spacing scale — 4px grid ---- */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-7:28px;
+  --space-8:32px;
+  --space-9:36px;
+  --space-10:40px;
+  --space-12:48px;
+  --space-14:56px;
+  --space-16:64px;
+  --space-20:80px;
+  --space-24:96px;
+
+  /* ---- Type scale ---- */
+  --text-2xs:11px;
+  --text-xs:12px;
+  --text-sm:13px;
+  --text-base:14px;
+  --text-md:16px;
+  --text-lg:18px;
+  --text-xl:21px;
+  --text-2xl:24px;
+  --text-3xl:28px;
+  --text-4xl:clamp(26px,3vw,36px);
+  --text-5xl:clamp(32px,4.4vw,52px);
+
+  /* ---- Radius scale ---- */
+  --radius-xs:8px;
+  --radius-sm:10px;
+  --radius:16px;
+  --radius-lg:24px;
+  --radius-full:999px;
+
+  /* ---- Shadow / elevation scale ---- */
+  --shadow-xs:0 2px 6px -2px rgba(14,34,56,0.15);
+  --shadow-sm:0 8px 20px -12px rgba(14,34,56,0.25);
+  --shadow:0 18px 40px -22px rgba(14,34,56,0.35);
+  --shadow-lg:0 30px 60px -20px rgba(14,34,56,0.4);
+  --shadow-amber:0 14px 26px -14px rgba(219,138,52,0.55);
+  --shadow-navy:0 14px 26px -14px rgba(14,34,56,0.5);
+  --shadow-teal:0 14px 26px -14px rgba(30,99,180,0.45);
+
+  /* ---- Glassmorphism tokens ---- */
+  --glass-light-bg:rgba(255,255,255,0.55);
+  --glass-light-border:rgba(255,255,255,0.65);
+  --glass-dark-bg:rgba(255,255,255,0.08);
+  --glass-dark-border:rgba(255,255,255,0.18);
+  --glass-blur:18px;
+  --glass-blur-sm:10px;
+
+  /* ---- Motion ---- */
+  --ease:cubic-bezier(.4,0,.2,1);
+  --transition-fast:.15s var(--ease);
+  --transition:.25s var(--ease);
+  --transition-slow:.35s var(--ease);
+
+  /* ---- Type families ---- */
+  --font-display:'Space Grotesk', system-ui, sans-serif;
+  --font-body:'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:'IBM Plex Mono', ui-monospace, monospace;
+}

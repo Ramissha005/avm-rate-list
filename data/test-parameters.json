@@ -1,0 +1,9 @@
+{
+  "_note": "Maps a test code to its parameter breakdown. In this catalog, CBC is the only test that is itself a bundled multi-analyte panel (all other panels — Lipid, Liver, Kidney — are already broken into separate individual line items in tests.json, which is why packages.json groups them instead). Everything else resolves to a single implicit parameter (its own name) in js/modules/test-detail.js.",
+  "testParameters": {
+    "CBC": [
+      "PAR_HB", "PAR_RBC", "PAR_WBC", "PAR_HCT", "PAR_MCV", "PAR_MCH", "PAR_MCHC",
+      "PAR_PLT", "PAR_NEUT", "PAR_LYMPH", "PAR_MONO", "PAR_EOS", "PAR_BASO"
+    ]
+  }
+}

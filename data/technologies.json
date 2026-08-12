@@ -1,0 +1,8 @@
+[
+  { "id": "photometry", "label": "Photometry", "fg": "#0B3E66", "bd": "#1E63B4", "bg": "#DDEAF7" },
+  { "id": "eclia", "label": "E.C.L.I.A", "fg": "#0E2238", "bd": "#2C4863", "bg": "#E1E7EC" },
+  { "id": "hplc", "label": "H.P.L.C", "fg": "#7A4E14", "bd": "#B96E1D", "bg": "#FBEAD3" },
+  { "id": "immunoturbidimetry", "label": "Immunoturbidimetry", "fg": "#5E2E4B", "bd": "#8C466E", "bg": "#F3E1EC" },
+  { "id": "hematology", "label": "Hematology", "fg": "#7A3223", "bd": "#B44637", "bg": "#F5DFD9" },
+  { "id": "microscopy", "label": "Microscopy", "fg": "#1F4260", "bd": "#3C6E96", "bg": "#DCE9F3" }
+]

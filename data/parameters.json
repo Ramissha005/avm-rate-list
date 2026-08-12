@@ -1,0 +1,43 @@
+{
+  "_note": "Only populated for tests that are genuinely well-known multi-analyte panels (lipid profile, liver function, kidney function, CBC) — these breakdowns are standard textbook clinical chemistry, not lab-specific. Single-analyte tests are not listed here since the test itself IS the parameter; see js/modules/test-detail.js, which falls back to the test's own name when no breakdown exists.",
+  "parameters": [
+    { "id": "PAR_CHOL", "name": "Total Cholesterol", "unit": "mg/dL" },
+    { "id": "PAR_TRIG", "name": "Triglycerides", "unit": "mg/dL" },
+    { "id": "PAR_HDL", "name": "HDL Cholesterol", "unit": "mg/dL" },
+    { "id": "PAR_LDL", "name": "LDL Cholesterol", "unit": "mg/dL" },
+    { "id": "PAR_VLDL", "name": "VLDL Cholesterol (calculated)", "unit": "mg/dL" },
+    { "id": "PAR_CHOL_HDL_RATIO", "name": "Cholesterol / HDL Ratio (calculated)", "unit": "ratio" },
+
+    { "id": "PAR_BILT", "name": "Bilirubin - Total", "unit": "mg/dL" },
+    { "id": "PAR_BILD", "name": "Bilirubin - Direct", "unit": "mg/dL" },
+    { "id": "PAR_BILI", "name": "Bilirubin - Indirect (calculated)", "unit": "mg/dL" },
+    { "id": "PAR_SGOT", "name": "SGOT (AST)", "unit": "U/L" },
+    { "id": "PAR_SGPT", "name": "SGPT (ALT)", "unit": "U/L" },
+    { "id": "PAR_ALKP", "name": "Alkaline Phosphatase", "unit": "U/L" },
+    { "id": "PAR_GGT", "name": "GGT", "unit": "U/L" },
+    { "id": "PAR_PROT", "name": "Total Protein", "unit": "g/dL" },
+    { "id": "PAR_SALB", "name": "Albumin", "unit": "g/dL" },
+    { "id": "PAR_GLOB", "name": "Globulin (calculated)", "unit": "g/dL" },
+    { "id": "PAR_AG_RATIO", "name": "A:G Ratio (calculated)", "unit": "ratio" },
+
+    { "id": "PAR_UREA", "name": "Blood Urea", "unit": "mg/dL" },
+    { "id": "PAR_BUN", "name": "Blood Urea Nitrogen", "unit": "mg/dL" },
+    { "id": "PAR_SCRE", "name": "Serum Creatinine", "unit": "mg/dL" },
+    { "id": "PAR_URIC", "name": "Uric Acid", "unit": "mg/dL" },
+    { "id": "PAR_BUN_CRE_RATIO", "name": "BUN / Creatinine Ratio (calculated)", "unit": "ratio" },
+
+    { "id": "PAR_WBC", "name": "Total WBC Count", "unit": "/cumm" },
+    { "id": "PAR_RBC", "name": "Total RBC Count", "unit": "mill/cumm" },
+    { "id": "PAR_HB", "name": "Hemoglobin", "unit": "g/dL" },
+    { "id": "PAR_HCT", "name": "Hematocrit (PCV)", "unit": "%" },
+    { "id": "PAR_MCV", "name": "MCV", "unit": "fL" },
+    { "id": "PAR_MCH", "name": "MCH", "unit": "pg" },
+    { "id": "PAR_MCHC", "name": "MCHC", "unit": "g/dL" },
+    { "id": "PAR_PLT", "name": "Platelet Count", "unit": "/cumm" },
+    { "id": "PAR_NEUT", "name": "Neutrophils", "unit": "%" },
+    { "id": "PAR_LYMPH", "name": "Lymphocytes", "unit": "%" },
+    { "id": "PAR_MONO", "name": "Monocytes", "unit": "%" },
+    { "id": "PAR_EOS", "name": "Eosinophils", "unit": "%" },
+    { "id": "PAR_BASO", "name": "Basophils", "unit": "%" }
+  ]
+}

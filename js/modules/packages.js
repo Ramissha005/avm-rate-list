@@ -34,10 +34,10 @@ AVM.modules = AVM.modules || {};
             <h3>${pkg.name}</h3>
           </div>
           <p class="package-card__desc">${pkg.description || ""}</p>
-          <ul class="package-card__tests">${items.map(t => `<li>${t.name} <small>${t.code}</small></li>`).join("")}</ul>
-          <p class="package-card__meta">${items.length} test${items.length !== 1 ? "s" : ""}</p>
+          <ul class="package-card__tests">${items.map(t => `<li title="${t.name}">${t.code}</li>`).join("")}</ul>
+          <p class="package-card__count">${items.length} test${items.length !== 1 ? "s" : ""} in this panel</p>
           <div class="package-card__actions">
-            <button type="button" class="btn btn--outline btn--sm" data-add="${pkg.id}">Add All to Profile</button>
+            <button type="button" class="btn btn--teal btn--sm" data-add="${pkg.id}">Add All to Profile</button>
           </div>
         </div>`;
     }).join("");

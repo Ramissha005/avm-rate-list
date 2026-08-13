@@ -4,27 +4,82 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AVMLabs — My Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/print.css">
 </head>
 <body>
 
-<h1>AVMLabs — My Custom Profile</h1>
-<p class="sub">B2B cost, B2C price &amp; margin · Generated <span id="printDate"></span></p>
+<div class="sheet" id="sheet">
 
-<table>
-  <thead>
-    <tr><th>Code</th><th>Test</th><th>Technology</th><th>B2B</th><th>B2C</th><th>Margin</th></tr>
-  </thead>
-  <tbody id="printBody"></tbody>
-  <tfoot>
-    <tr>
-      <td colspan="3">Total</td>
-      <td id="printTotalB2B"></td>
-      <td id="printTotalB2C"></td>
-      <td class="profit" id="printTotalMargin"></td>
-    </tr>
-  </tfoot>
-</table>
+  <header class="letterhead">
+    <div class="letterhead__brand">
+      <img class="letterhead__logo" src="../assets/images/avm-logo.png" alt="AVMLabs">
+      <div>
+        <p class="letterhead__name">AVMLabs</p>
+        <p class="letterhead__tag">Automated Diagnostics · Transparent Rate Card</p>
+      </div>
+    </div>
+    <div class="letterhead__doc">
+      <p class="letterhead__title">Custom Health Profile</p>
+      <p class="letterhead__meta">Ref <b id="printRef"></b> · Generated <b id="printDate"></b></p>
+    </div>
+  </header>
+
+  <div id="printContent">
+    <section class="fields">
+      <div class="field"><span>Patient Name</span><i></i></div>
+      <div class="field"><span>Age / Sex</span><i></i></div>
+      <div class="field"><span>Referred By</span><i></i></div>
+      <div class="field"><span>Collection Date</span><i></i></div>
+    </section>
+
+    <table>
+      <colgroup>
+        <col class="c-sr"><col class="c-code"><col class="c-name"><col class="c-tech">
+        <col class="c-sample"><col class="c-b2b"><col class="c-b2c"><col class="c-margin">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>#</th><th>Code</th><th>Test</th><th>Technology</th><th>Sample</th>
+          <th class="num">B2B</th><th class="num">B2C</th><th class="num">Margin</th>
+        </tr>
+      </thead>
+      <tbody id="printBody"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" class="foot-label">Total — <b id="printCount">0 tests</b></td>
+          <td class="num" id="printTotalB2B"></td>
+          <td class="num" id="printTotalB2C"></td>
+          <td class="num profit" id="printTotalMargin"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="summary">
+      <div class="summary__card"><span>B2B Cost</span><b id="sumB2B"></b></div>
+      <div class="summary__card"><span>B2C Value</span><b id="sumB2C"></b></div>
+      <div class="summary__card is-profit"><span>Your Margin</span><b id="sumMargin"></b></div>
+      <div class="summary__card is-profit"><span>Avg. Margin %</span><b id="sumMarginPct"></b></div>
+    </div>
+  </div>
+
+  <div id="printEmpty" class="empty" hidden>
+    <h2>No tests in this profile</h2>
+    <p>Add tests from the rate list or build a profile, then print again.</p>
+  </div>
+
+  <footer class="foot">
+    <p>Rates in INR (₹). Indicative rate card, not a medical prescription — please confirm fasting and sample requirements at the time of collection.</p>
+    <p class="foot__brand">AVMLabs · care@avmlabs.example · +91 00000 00000</p>
+  </footer>
+
+</div>
+
+<div class="toolbar no-print">
+  <button type="button" id="btnClose">Close</button>
+  <button type="button" id="btnPrint" class="primary">🖨 Print</button>
+</div>
 
 <script src="../js/config.js"></script>
 <script src="../js/utils/formatters.js"></script>
@@ -37,10 +92,21 @@
   AVM.modules.print.renderPrintPage({
     tbody: document.getElementById("printBody"),
     dateEl: document.getElementById("printDate"),
+    refEl: document.getElementById("printRef"),
+    countEl: document.getElementById("printCount"),
     totalB2BEl: document.getElementById("printTotalB2B"),
     totalB2CEl: document.getElementById("printTotalB2C"),
     totalMarginEl: document.getElementById("printTotalMargin"),
+    sumB2BEl: document.getElementById("sumB2B"),
+    sumB2CEl: document.getElementById("sumB2C"),
+    sumMarginEl: document.getElementById("sumMargin"),
+    sumMarginPctEl: document.getElementById("sumMarginPct"),
+    contentEl: document.getElementById("printContent"),
+    emptyEl: document.getElementById("printEmpty"),
   });
+
+  document.getElementById("btnPrint").addEventListener("click", () => window.print());
+  document.getElementById("btnClose").addEventListener("click", () => window.close());
 </script>
 
 </body>

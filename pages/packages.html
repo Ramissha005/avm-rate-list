@@ -34,10 +34,19 @@
 <main>
   <section class="ratelist ratelist--page">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">PACKAGES</p>
-        <h2>Ready-made panels, one click away.</h2>
-        <p>Every package below adds its full set of tests to your profile at once. You can still remove anything you don't need afterwards from the <a href="rate-list.html">full rate list</a>.</p>
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">PACKAGES</p>
+          <h2>Ready-made panels, one click away.</h2>
+          <p>Every package below adds its full set of tests to your profile at once — B2B cost, B2C price and your margin, bundled. Fine-tune anything afterwards, test by test.</p>
+        </div>
+        <a href="rate-list.html" class="btn btn--outline btn--sm section-head__cta">Browse Full Rate List <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="stat-cards" id="packageStats">
+        <div class="stat-card"><div class="stat-card__num" id="statPkgCount">—</div><div class="stat-card__label">Packages</div></div>
+        <div class="stat-card"><div class="stat-card__num" id="statPkgTests">—</div><div class="stat-card__label">Tests Bundled</div></div>
+        <div class="stat-card"><div class="stat-card__num" id="statPkgCategories">—</div><div class="stat-card__label">Categories Covered</div></div>
       </div>
 
       <div class="package-grid" id="packageGrid"></div>
@@ -98,7 +107,7 @@
     </div>
     <div class="cart-actions">
       <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
-      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export CSV</button>
+      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
       <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>
     </div>
     <button class="cart-clear" id="clearCart">Clear all</button>
@@ -111,6 +120,7 @@
 <script src="../js/utils/formatters.js"></script>
 <script src="../js/utils/storage.js"></script>
 <script src="../js/utils/helpers.js"></script>
+<script src="../js/utils/xlsx.js"></script>
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
 <script src="../js/modules/profile.js"></script>
@@ -129,6 +139,12 @@
     AVM.modules.packages.renderPackageCards(document.getElementById("packageGrid"), catalog.packages, () => {
       if (AVM.app && AVM.app.refreshAll) AVM.app.refreshAll();
     });
+
+    const uniqueCodes = new Set(catalog.packages.flatMap(p => p.codes));
+    const categories = new Set(catalog.packages.map(p => p.categoryId).filter(Boolean));
+    document.getElementById("statPkgCount").textContent = catalog.packages.length;
+    document.getElementById("statPkgTests").textContent = uniqueCodes.size;
+    document.getElementById("statPkgCategories").textContent = categories.size;
   });
 </script>
 

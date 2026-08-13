@@ -435,7 +435,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .quick-actions{ display:flex; flex-wrap:wrap; gap:var(--space-3); }
 
 /* ---------- Package cards (packages.html) ---------- */
-.package-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr)); gap:var(--space-5); }
+.package-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:var(--space-5); }
 .package-card{
   position:relative; overflow:hidden;
   background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-6) var(--space-5);
@@ -457,11 +457,47 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .package-card__tests{ display:flex; flex-wrap:wrap; gap:var(--space-2); }
 .package-card__tests li{
   font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--navy); background:var(--paper-2);
-  border-radius:var(--radius-full); padding:3px var(--space-3); cursor:default;
+  border:1.5px solid transparent; border-radius:var(--radius-full); padding:2.5px var(--space-3); cursor:default;
 }
 .package-card__count{ font-size:var(--text-xs); color:var(--ink-faint); }
+
+.package-card__price{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-2);
+  padding-top:var(--space-3); border-top:1px solid var(--line);
+}
+.package-card__price div{ display:flex; flex-direction:column; gap:2px; }
+.package-card__price span{ font-family:var(--font-mono); font-size:var(--text-2xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
+.package-card__price b{ font-size:var(--text-md); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
+.package-card__price .is-profit span{ color:var(--profit); }
+.package-card__price .is-profit b{ color:var(--profit); }
+
 .package-card__actions{ display:flex; gap:var(--space-2); margin-top:var(--space-1); }
 .package-card__actions .btn{ flex:1; justify-content:center; }
+
+/* The single most comprehensive panel is called out visually so the grid
+   isn't a wall of identical cards — same pattern pricing pages use for a
+   "recommended" tier. */
+.package-card--featured{
+  background:linear-gradient(165deg, var(--navy) 0%, var(--navy-2) 100%);
+  border-color:var(--navy); box-shadow:var(--shadow-navy);
+  transform:scale(1.015);
+}
+.package-card--featured::before{ background:var(--amber); height:4px; }
+.package-card--featured:hover{ transform:translateY(-4px) scale(1.015); border-color:var(--amber); }
+.package-card--featured h3{ color:#fff; }
+.package-card--featured .package-card__desc{ color:#C6D3DC; }
+.package-card--featured .package-card__meta{ background:rgba(255,255,255,.14); color:#fff; }
+.package-card--featured .package-card__count{ color:#9FB4C4; }
+.package-card--featured .package-card__price{ border-top-color:rgba(255,255,255,.18); }
+.package-card--featured .package-card__price span{ color:#9FB4C4; }
+.package-card--featured .package-card__price b{ color:#fff; }
+.package-card--featured .package-card__price .is-profit span,
+.package-card--featured .package-card__price .is-profit b{ color:#8FD4B8; }
+.package-card__badge{
+  position:absolute; top:0; right:0; font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700;
+  letter-spacing:.04em; color:#241300; background:var(--amber); padding:6px var(--space-4) 6px var(--space-5);
+  border-radius:0 var(--radius) 0 var(--radius);
+}
 
 /* ---------- Test-detail drawer ---------- */
 .td-head{ padding-bottom:var(--space-3); border-bottom:1px solid var(--line); margin-bottom:var(--space-3); }

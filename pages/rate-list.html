@@ -34,10 +34,13 @@
 <main>
   <section class="ratelist ratelist--page" id="ratelist">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">THE RATE LIST</p>
-        <h2>Every test, one honest number.</h2>
-        <p>Search by name or code, filter by category, technology or sample, and add anything straight into your profile. Want to start from a ready-made panel instead? <a href="packages.html">Browse packages</a>.</p>
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">THE RATE LIST</p>
+          <h2>Every test, one honest number.</h2>
+          <p>Search by name or code, filter by category, technology or sample, and add anything straight into your profile.</p>
+        </div>
+        <a href="packages.html" class="btn btn--outline btn--sm section-head__cta">Browse Ready-Made Packages <span aria-hidden="true">→</span></a>
       </div>
 
       <div class="stat-cards">
@@ -94,7 +97,7 @@
         <p class="rl-count" id="rlCount"></p>
         <div class="rl-toolbar__actions">
           <button type="button" class="view-more-btn" id="clearFilters">Clear filters</button>
-          <button type="button" class="view-more-btn" id="exportRateListCsv">Export CSV</button>
+          <button type="button" class="view-more-btn" id="exportRateListCsv">Export Excel</button>
         </div>
       </div>
 
@@ -175,7 +178,7 @@
     </div>
     <div class="cart-actions">
       <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
-      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export CSV</button>
+      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
       <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>
     </div>
     <button class="cart-clear" id="clearCart">Clear all</button>
@@ -199,6 +202,7 @@
 <script src="../js/utils/formatters.js"></script>
 <script src="../js/utils/storage.js"></script>
 <script src="../js/utils/helpers.js"></script>
+<script src="../js/utils/xlsx.js"></script>
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
 <script src="../js/modules/profile.js"></script>

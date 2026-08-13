@@ -34,10 +34,13 @@
 <main>
   <section class="ratelist ratelist--page" id="ratelist-bundles">
     <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">BUILD A PROFILE</p>
-        <h2>Start from a common panel, then fine-tune it.</h2>
-        <p>One click adds a whole panel to your profile — remove anything you don't need, or add individual tests from the full list below. Prefer to browse packages as cards? <a href="packages.html">See the packages gallery</a>.</p>
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">BUILD A PROFILE</p>
+          <h2>Start from a common panel, then fine-tune it.</h2>
+          <p>One click adds a whole panel to your profile — remove anything you don't need, or add individual tests from the full list below.</p>
+        </div>
+        <a href="packages.html" class="btn btn--outline btn--sm section-head__cta">See Packages Gallery <span aria-hidden="true">→</span></a>
       </div>
 
       <div class="bundles">
@@ -161,7 +164,7 @@
     </div>
     <div class="cart-actions">
       <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
-      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export CSV</button>
+      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
       <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>
     </div>
     <button class="cart-clear" id="clearCart">Clear all</button>
@@ -185,6 +188,7 @@
 <script src="../js/utils/formatters.js"></script>
 <script src="../js/utils/storage.js"></script>
 <script src="../js/utils/helpers.js"></script>
+<script src="../js/utils/xlsx.js"></script>
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
 <script src="../js/modules/profile.js"></script>

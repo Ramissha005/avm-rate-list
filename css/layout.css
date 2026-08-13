@@ -103,6 +103,18 @@ section{ padding:var(--space-20) 0; }
 
 .section-head p{ color:var(--ink-soft); font-size:var(--text-md); }
 
+/* Section head with a visible CTA button alongside the copy — replaces the
+   old pattern of burying a same-color, no-underline link inside the
+   paragraph text, which read as plain text and was effectively invisible. */
+.section-head--split{
+  max-width:none; display:flex; align-items:flex-end; justify-content:space-between;
+  gap:var(--space-6) var(--space-8); flex-wrap:wrap;
+}
+.section-head--split > div{ max-width:640px; }
+.section-head__cta{ flex:none; white-space:nowrap; }
+.section-head__cta span{ display:inline-block; transition:transform var(--transition-fast); }
+.section-head__cta:hover span{ transform:translateX(3px); }
+
 .about{ background:var(--paper); }
 
 .about__lede{ font-size:var(--text-lg); color:var(--ink); max-width:70ch; margin-bottom:var(--space-8); }

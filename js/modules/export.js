@@ -4,25 +4,8 @@ AVM.modules = AVM.modules || {};
 (function () {
   const state = AVM.state;
 
-  function csvEscape(value) {
-    const s = String(value);
-    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-  }
-
-  function toCSV(rows) {
-    return rows.map(r => r.map(csvEscape).join(",")).join("\r\n");
-  }
-
-  function downloadText(content, filename, mime) {
-    const blob = new Blob([content], { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  function today() {
+    return new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
   }
 
   function copyProfileToClipboard() {
@@ -51,10 +34,25 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
-    const header = ["Code", "Test", "Technology", "Sample", "B2B", "B2C", "Margin"];
-    const rows = items.map(t => [t.code, t.name, t.tech, t.sample, t.b2b, t.b2c, t.b2c - t.b2b]);
-    downloadText(toCSV([header, ...rows]), "avmlabs-profile.csv", "text/csv;charset=utf-8;");
-    AVM.utils.helpers.showToast("Profile exported as CSV");
+    const sum = AVM.modules.calculations.totals(items);
+    AVM.utils.xlsx.downloadWorkbook({
+      filename: "avmlabs-profile.xlsx",
+      sheetName: "My Profile",
+      title: "AVMLabs — My Custom Profile",
+      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}`,
+      columns: [
+        { header: "Code", key: "code", type: "text", width: 12 },
+        { header: "Test", key: "name", type: "text", width: 36 },
+        { header: "Technology", key: "tech", type: "text", width: 20 },
+        { header: "Sample", key: "sample", type: "text", width: 12 },
+        { header: "B2B", key: "b2b", type: "currency", width: 12 },
+        { header: "B2C", key: "b2c", type: "currency", width: 12 },
+        { header: "Margin", key: "margin", type: "margin", width: 12 },
+      ],
+      rows: items.map(t => ({ code: t.code, name: t.name, tech: t.tech, sample: t.sample, b2b: t.b2b, b2c: t.b2c, margin: t.b2c - t.b2b })),
+      totals: { b2b: sum.b2b, b2c: sum.b2c, margin: sum.margin },
+    });
+    AVM.utils.helpers.showToast("Profile exported to Excel");
   }
 
   function exportRateListCSV(tests) {
@@ -62,10 +60,26 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Nothing to export");
       return;
     }
-    const header = ["Code", "Test", "Category", "Technology", "Sample", "B2B", "B2C", "Margin"];
-    const rows = tests.map(t => [t.code, t.name, t.category || "", t.tech, t.sample, t.b2b, t.b2c, t.b2c - t.b2b]);
-    downloadText(toCSV([header, ...rows]), "avmlabs-rate-list.csv", "text/csv;charset=utf-8;");
-    AVM.utils.helpers.showToast("Rate list exported as CSV");
+    const sum = AVM.modules.calculations.totals(tests);
+    AVM.utils.xlsx.downloadWorkbook({
+      filename: "avmlabs-rate-list.xlsx",
+      sheetName: "Rate List",
+      title: "AVMLabs — Rate List",
+      subtitle: `Generated ${today()} · ${tests.length} test${tests.length === 1 ? "" : "s"}`,
+      columns: [
+        { header: "Code", key: "code", type: "text", width: 12 },
+        { header: "Test", key: "name", type: "text", width: 36 },
+        { header: "Category", key: "category", type: "text", width: 18 },
+        { header: "Technology", key: "tech", type: "text", width: 20 },
+        { header: "Sample", key: "sample", type: "text", width: 12 },
+        { header: "B2B", key: "b2b", type: "currency", width: 12 },
+        { header: "B2C", key: "b2c", type: "currency", width: 12 },
+        { header: "Margin", key: "margin", type: "margin", width: 12 },
+      ],
+      rows: tests.map(t => ({ code: t.code, name: t.name, category: t.category || "", tech: t.tech, sample: t.sample, b2b: t.b2b, b2c: t.b2c, margin: t.b2c - t.b2b })),
+      totals: { b2b: sum.b2b, b2c: sum.b2c, margin: sum.margin },
+    });
+    AVM.utils.helpers.showToast("Rate list exported to Excel");
   }
 
   AVM.modules.exportProfile = { copyProfileToClipboard, exportProfileCSV, exportRateListCSV };

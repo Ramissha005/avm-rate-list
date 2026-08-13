@@ -231,14 +231,17 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .bundle-chip{
   display:flex; align-items:center; gap:var(--space-2);
-  background:#fff; border:1px solid var(--line-dark); border-radius:var(--radius-full);
+  background:#fff; border:1.5px solid var(--line-dark); border-radius:var(--radius-full);
   padding:var(--space-2) var(--space-2) var(--space-2) var(--space-4); font-size:var(--text-base); font-weight:500; color:var(--navy);
-  transition:background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition);
+  transition:background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition), border-color var(--transition-fast);
 }
 
-.bundle-chip:hover{ background:#fff; transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+.bundle-chip:hover{ border-color:var(--teal); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
 
-.bundle-chip .count{ font-family:var(--font-body); font-size:var(--text-xs); color:var(--ink-faint); }
+.bundle-chip .count{
+  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--teal-dark);
+  background:var(--profit-bg); border-radius:var(--radius-full); padding:2px 8px;
+}
 
 .bundle-chip .plus{
   width:24px; height:24px; border-radius:50%; background:var(--teal); color:#fff;
@@ -256,9 +259,23 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .rl-search svg{ position:absolute; left:13px; top:50%; transform:translateY(-50%); width:15px; height:15px; opacity:.55; }
 
+/* Custom-styled <select> — the native control had no styling of its own
+   (default browser arrow, no hover/focus treatment), which stood out badly
+   next to the pill-shaped search input and filter buttons beside it. */
+.rl-sort{ position:relative; }
 .rl-sort select{
-  font-family:var(--font-body); font-size:var(--text-sm); padding:var(--space-2) var(--space-3); border-radius:var(--radius-full); border:1px solid var(--line-dark); background:#fff;
+  appearance:none; -webkit-appearance:none; -moz-appearance:none;
+  font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; color:var(--navy);
+  padding:var(--space-3) 36px var(--space-3) var(--space-4);
+  border-radius:var(--radius-full); border:1.5px solid var(--line-dark); background:#fff;
+  cursor:pointer; max-width:100%;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%2339474F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 13px center; background-size:13px;
+  transition:border-color var(--transition-fast), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
+.rl-sort select:hover{ border-color:var(--navy-soft); background-color:var(--paper-2); }
+.rl-sort select:focus-visible{ outline:none; border-color:var(--teal); box-shadow:0 0 0 3px var(--profit-bg); }
+.rl-sort select::-ms-expand{ display:none; }
 
 .rl-toggle{
   display:flex; align-items:center; gap:var(--space-2); font-size:var(--text-sm); font-family:var(--font-mono); color:var(--ink-soft);
@@ -356,7 +373,14 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .cart-empty{ text-align:center; color:var(--ink-faint); font-size:var(--text-base); padding:var(--space-14) var(--space-3); }
 
-.cart-item{ display:flex; align-items:center; gap:var(--space-3); padding:var(--space-3) 0; border-bottom:1px solid var(--line); }
+.cart-item{
+  display:flex; align-items:center; gap:var(--space-3);
+  padding:var(--space-3) var(--space-2); margin:0 calc(var(--space-2) * -1);
+  border-bottom:1px solid var(--line); border-radius:var(--radius-xs);
+  transition:background var(--transition-fast);
+}
+.cart-item:hover{ background:var(--paper); }
+.cart-item:last-child{ border-bottom:none; }
 
 .cart-item__name{ font-size:var(--text-base); color:var(--ink); flex:1; }
 
@@ -399,7 +423,10 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   line-height:1.1; font-variant-numeric:tabular-nums;
 }
 
-.cart-item__margin{ font-family:var(--font-mono); font-size:var(--text-xs); font-weight:700; color:var(--profit); white-space:nowrap; }
+.cart-item__margin{
+  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:var(--profit); white-space:nowrap;
+  background:var(--profit-bg); border-radius:var(--radius-full); padding:3px 9px; flex:none;
+}
 
 .cart-actions .btn{ flex:1; justify-content:center; }
 

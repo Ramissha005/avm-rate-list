@@ -26,7 +26,7 @@ window.AVM = window.AVM || {};
     const hasCart = !!$("cartBody");
     const cartElements = hasCart ? {
       body: $("cartBody"), badge: $("cartBadge"), sub: $("cartSub"),
-      b2b: $("cartB2B"), b2c: $("cartB2C"), margin: $("cartMargin"),
+      b2b: $("cartB2B"), b2c: $("cartB2C"), margin: $("cartMargin"), marginPct: $("cartMarginPct"),
       onChange: refreshAll,
     } : null;
 

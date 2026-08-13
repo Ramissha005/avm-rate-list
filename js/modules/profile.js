@@ -68,6 +68,7 @@ AVM.modules = AVM.modules || {};
       elements.b2b.textContent = money(0);
       elements.b2c.textContent = money(0);
       elements.margin.textContent = money(0);
+      if (elements.marginPct) elements.marginPct.textContent = "+0%";
       return;
     }
 
@@ -90,6 +91,7 @@ AVM.modules = AVM.modules || {};
     elements.b2b.textContent = money(sum.b2b);
     elements.b2c.textContent = money(sum.b2c);
     elements.margin.textContent = money(sum.margin);
+    if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.marginPercentage) + "%";
   }
 
   AVM.modules.profile = { persistCart, restoreCart, toggleTest, addPackage, removeFromProfile, clearProfile, renderCart };

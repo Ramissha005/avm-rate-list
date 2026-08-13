@@ -367,15 +367,37 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cart-item__remove{ width:26px; height:26px; border-radius:50%; border:1px solid var(--line-dark); background:#fff; color:var(--ink-soft); font-size:var(--text-sm); transition:background var(--transition-fast); }
 .cart-item__remove:hover{ background:var(--paper-2); }
 
-.cart-totals{ margin-bottom:var(--space-4); }
+.cart-totals{ margin-bottom:var(--space-3); }
 
 .ct-row{ display:flex; justify-content:space-between; align-items:baseline; padding:var(--space-1) 0; font-size:var(--text-base); color:var(--ink-soft); }
 
 .ct-row span:last-child{ font-family:var(--font-mono); font-weight:600; color:var(--navy); font-variant-numeric:tabular-nums; }
 
-.ct-row.ct-margin{ border-top:1px solid var(--line); margin-top:var(--space-2); padding-top:var(--space-3); font-size:var(--text-md); font-weight:600; color:var(--ink); }
-
-.ct-row.ct-margin span:last-child{ font-family:var(--font-display); font-size:var(--text-2xl); color:var(--profit); font-weight:700; }
+/* ---------- Margin box — the cart drawer's headline callout ---------- */
+/* Margin visibility is this app's whole pitch ("your cost, your price, your
+   margin — upfront"), so the number gets a real callout instead of just
+   being the last row in a plain list: colored panel, left accent bar, and
+   a live margin-percentage pill for instant context. */
+.margin-box{
+  position:relative; overflow:hidden;
+  background:var(--profit-bg); border-radius:var(--radius-sm); padding:var(--space-4) var(--space-5);
+  margin-bottom:var(--space-4);
+}
+.margin-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--profit); }
+.margin-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); margin-bottom:2px; }
+.margin-box__label{
+  display:flex; align-items:center; gap:6px; font-size:var(--text-xs); font-weight:700; color:var(--profit);
+  text-transform:uppercase; letter-spacing:.05em;
+}
+.margin-box__dot{ width:6px; height:6px; border-radius:50%; background:var(--profit); flex:none; }
+.margin-box__pct{
+  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:#fff; background:var(--profit);
+  padding:2px 8px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
+}
+.margin-box__amount{
+  font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--profit);
+  line-height:1.1; font-variant-numeric:tabular-nums;
+}
 
 .cart-item__margin{ font-family:var(--font-mono); font-size:var(--text-xs); font-weight:700; color:var(--profit); white-space:nowrap; }
 

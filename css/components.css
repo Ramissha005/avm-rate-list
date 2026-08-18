@@ -509,6 +509,12 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .ct-row span:last-child{ font-family:var(--font-mono); font-weight:600; color:var(--navy); font-variant-numeric:tabular-nums; }
 
+/* Bulk B2B discount — a subtotal/discount/net bridge between the raw B2B
+   Cost row and the B2C Value row, shown only once a profile's combined B2B
+   cost clears a discount tier. */
+.ct-row--discount span:last-child{ color:var(--amber-dark); }
+.ct-row--net span:last-child{ color:var(--navy); font-weight:700; }
+
 /* ---------- Margin box — the cart drawer's headline callout ---------- */
 /* Margin visibility is this app's whole pitch ("your cost, your price, your
    margin — upfront"), so the number gets a real callout instead of just

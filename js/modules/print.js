@@ -46,6 +46,7 @@ AVM.modules = AVM.modules || {};
   async function renderPrintPage({
     tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
     refEl, countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
+    sumDiscountCardEl, sumDiscountLabelEl, sumDiscountEl,
     contentEl, emptyEl, sheetEl, titleEl, autoPrint,
   }, customerViewOverride) {
     const money = AVM.utils.formatters.money;
@@ -87,6 +88,11 @@ AVM.modules = AVM.modules || {};
       </tr>
     `).join("");
 
+    // The table's own rows list each test's raw B2B/margin, so its footer
+    // total stays raw too (it's a plain sum of what's printed above it).
+    // The bulk discount is a whole-profile figure, not a per-test one — it
+    // surfaces in the summary cards below instead, alongside the partner's
+    // real (post-discount) margin.
     totalB2BEl.textContent = money(sum.b2b);
     totalB2CEl.textContent = money(sum.b2c);
     totalMarginEl.textContent = "+" + money(sum.margin);
@@ -94,8 +100,16 @@ AVM.modules = AVM.modules || {};
 
     if (sumB2BEl) sumB2BEl.textContent = money(sum.b2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
-    if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.margin);
-    if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.marginPercentage) + "%";
+    if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);
+    if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
+    if (sumDiscountCardEl) {
+      const applies = !customerView && sum.discountRate > 0;
+      sumDiscountCardEl.hidden = !applies;
+      if (applies) {
+        if (sumDiscountLabelEl) sumDiscountLabelEl.textContent = `Bulk Discount (${Math.round(sum.discountRate * 100)}%)`;
+        if (sumDiscountEl) sumDiscountEl.textContent = "−" + money(sum.discountAmount);
+      }
+    }
 
     if (autoPrint) afterFontsReady(() => setTimeout(() => window.print(), 150));
   }

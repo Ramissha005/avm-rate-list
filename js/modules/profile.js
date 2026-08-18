@@ -173,6 +173,10 @@ AVM.modules = AVM.modules || {};
     if (elements.b2cRow) elements.b2cRow.style.display = customerView ? "none" : "";
     if (elements.marginBox) elements.marginBox.style.display = customerView ? "none" : "";
     if (elements.priceBox) elements.priceBox.style.display = customerView ? "" : "none";
+    // Reset every render — shown again below only when a bulk discount is
+    // actually in effect (and never in customer view, alongside B2B/margin).
+    if (elements.discountRow) elements.discountRow.style.display = "none";
+    if (elements.netB2bRow) elements.netB2bRow.style.display = "none";
 
     elements.badge.textContent = items.length;
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
@@ -243,9 +247,23 @@ AVM.modules = AVM.modules || {};
     const sum = AVM.modules.calculations.totals(items);
     elements.b2b.textContent = money(sum.b2b);
     elements.b2c.textContent = money(sum.b2c);
-    elements.margin.textContent = money(sum.margin);
-    if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.marginPercentage) + "%";
+    // The headline margin is the partner's real bottom line — after the
+    // bulk B2B discount below, not before it.
+    elements.margin.textContent = money(sum.netMargin);
+    if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
     if (elements.price) elements.price.textContent = money(sum.b2c);
+
+    if (!customerView && sum.discountRate > 0) {
+      if (elements.discountRow) {
+        elements.discountRow.style.display = "";
+        if (elements.discountLabel) elements.discountLabel.textContent = `Bulk Discount (${Math.round(sum.discountRate * 100)}%)`;
+        if (elements.discountAmt) elements.discountAmt.textContent = "−" + money(sum.discountAmount);
+      }
+      if (elements.netB2bRow) {
+        elements.netB2bRow.style.display = "";
+        if (elements.netB2b) elements.netB2b.textContent = money(sum.netB2b);
+      }
+    }
   }
 
   AVM.modules.profile = {

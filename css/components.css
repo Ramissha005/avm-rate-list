@@ -548,7 +548,18 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-row--msb{ background:var(--violet-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin:var(--space-1) 0; }
 .ct-row--msb span:first-child{ color:var(--violet-dark); font-weight:600; }
 .ct-row--msb span:last-child{ color:var(--violet-dark); }
-.ct-hint{ font-size:var(--text-xs); color:var(--violet-dark); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
+
+/* Shared "add ₹X more to unlock…" nudge line. Bare .ct-hint sets the
+   typography only — each caller picks a color/tint variant so it reads as
+   belonging to the row it's explaining rather than a generic gray note. */
+.ct-hint{ font-size:var(--text-xs); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
+.ct-hint--msb{ color:var(--violet-dark); }
+
+/* "Add ₹X more to unlock a bulk discount" nudge — same amber family as the
+   discount row it leads into, shown whenever a higher tier is still within
+   reach (even at ₹0 discount today), so the incentive to add one more test
+   is visible before the discount itself ever kicks in. */
+.ct-hint--discount{ color:var(--amber-dark); background:var(--amber-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; }
 
 /* ---------- Margin box — the cart drawer's headline callout ---------- */
 /* Margin visibility is this app's whole pitch ("your cost, your price, your

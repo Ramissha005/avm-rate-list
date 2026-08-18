@@ -32,6 +32,17 @@ AVM.modules = AVM.modules || {};
     return tier ? tier.rate : 0;
   }
 
+  // The next bulk-discount tier above the current B2B total, and how much
+  // more B2B value would unlock it — the data behind an "add ₹640 more to
+  // unlock a 10% Bulk Discount" nudge. Returns null once the top tier (20%)
+  // is already in effect, since there's nothing higher left to work toward.
+  function nextDiscountTier(b2bTotal) {
+    const ascending = [...B2B_DISCOUNT_TIERS].sort((a, b) => a.over - b.over);
+    const next = ascending.find(t => b2bTotal <= t.over);
+    if (!next) return null;
+    return { over: next.over, rate: next.rate, remaining: next.over - b2bTotal + 1 };
+  }
+
   // Minimum Sample Billing: the lab draws/processes one sample per sample
   // type regardless of how many tests ride on it, so the ₹25 floor applies
   // once per sample type — never per test. Tests are grouped by sampleId,
@@ -126,7 +137,7 @@ AVM.modules = AVM.modules || {};
   }
 
   AVM.modules.calculations = {
-    margin, multiplier, marginPercentage, totals, packageTestCount, b2bDiscountRate,
+    margin, multiplier, marginPercentage, totals, packageTestCount, b2bDiscountRate, nextDiscountTier,
     sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
   };
 })();

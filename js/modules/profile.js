@@ -177,6 +177,7 @@ AVM.modules = AVM.modules || {};
     // actually in effect (and never in customer view, alongside B2B/margin).
     if (elements.discountRow) elements.discountRow.style.display = "none";
     if (elements.netB2bRow) elements.netB2bRow.style.display = "none";
+    if (elements.discountHint) elements.discountHint.style.display = "none";
     if (elements.msbRow) elements.msbRow.style.display = "none";
     if (elements.msbHint) elements.msbHint.style.display = "none";
 
@@ -300,6 +301,19 @@ AVM.modules = AVM.modules || {};
       if (elements.netB2bRow) {
         elements.netB2bRow.style.display = "";
         if (elements.netB2b) elements.netB2b.textContent = money(sum.netB2b);
+      }
+    }
+
+    // "Add ₹X more to unlock a bigger Bulk Discount" — points at the next
+    // tier above the current MSB-adjusted B2B total (the same base the
+    // discount itself is computed on), whether or not a discount already
+    // applies today. Nothing shown once the top tier (20%) is reached.
+    if (!customerView && elements.discountHint) {
+      const next = AVM.modules.calculations.nextDiscountTier(sum.msbB2b);
+      if (next) {
+        elements.discountHint.style.display = "";
+        elements.discountHint.textContent =
+          `Add ${money(next.remaining)} more to unlock a ${Math.round(next.rate * 100)}% Bulk Discount (over ${money(next.over)})`;
       }
     }
   }

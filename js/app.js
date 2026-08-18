@@ -29,7 +29,7 @@ window.AVM = window.AVM || {};
       b2bRow: $("cartB2BRow"), marginBox: $("marginBox"),
       b2cRow: $("cartB2CRow"), priceBox: $("priceBox"), price: $("cartPrice"),
       discountRow: $("cartDiscountRow"), discountLabel: $("cartDiscountLabel"), discountAmt: $("cartDiscountAmt"),
-      netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"),
+      netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"), discountHint: $("cartDiscountHint"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
       onChange: refreshAll,
     } : null;

@@ -64,6 +64,26 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
+  // Which sample-type groups are currently under the ₹25 floor, and how
+  // much more B2B value in that same sample type would clear it — the data
+  // behind a "add ₹5 more Serum tests to clear the ₹25 minimum" nudge.
+  // Groups already at/above ₹25 (no MSB uplift) are omitted entirely.
+  function msbShortfalls(items) {
+    const shortfalls = [];
+    sampleTypeBilling(items).forEach(group => {
+      if (group.rawB2b >= MSB_FLOOR) return;
+      shortfalls.push({
+        sampleId: group.sampleId,
+        label: (group.tests[0] && group.tests[0].sample) || group.sampleId,
+        rawB2b: group.rawB2b,
+        billedB2b: group.billedB2b,
+        uplift: group.billedB2b - group.rawB2b,
+        remaining: MSB_FLOOR - group.rawB2b,
+      });
+    });
+    return shortfalls;
+  }
+
   // `margin`/`marginPercentage`/`b2b` stay raw (pre-MSB, pre-discount) so
   // they still match a straight sum of each item's own numbers — callers
   // that render per-line-item figures alongside a total (Excel columns
@@ -107,6 +127,6 @@ AVM.modules = AVM.modules || {};
 
   AVM.modules.calculations = {
     margin, multiplier, marginPercentage, totals, packageTestCount, b2bDiscountRate,
-    sampleTypeBilling, msbAdjustedB2b,
+    sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
   };
 })();

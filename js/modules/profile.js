@@ -177,6 +177,8 @@ AVM.modules = AVM.modules || {};
     // actually in effect (and never in customer view, alongside B2B/margin).
     if (elements.discountRow) elements.discountRow.style.display = "none";
     if (elements.netB2bRow) elements.netB2bRow.style.display = "none";
+    if (elements.msbRow) elements.msbRow.style.display = "none";
+    if (elements.msbHint) elements.msbHint.style.display = "none";
 
     elements.badge.textContent = items.length;
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
@@ -256,6 +258,28 @@ AVM.modules = AVM.modules || {};
     elements.margin.textContent = money(sum.netMargin);
     if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
     if (elements.price) elements.price.textContent = money(sum.b2c);
+
+    // Minimum Sample Billing: surface it as its own line (not silently
+    // folded into B2B Cost above) plus a hint telling the partner exactly
+    // how much more of that same sample type would clear the ₹25 floor —
+    // so adding one more test in it visibly drops the MSB row instead of
+    // just quietly changing the total.
+    if (!customerView) {
+      const shortfalls = AVM.modules.calculations.msbShortfalls(items);
+      if (shortfalls.length > 0) {
+        const totalUplift = shortfalls.reduce((s, g) => s + g.uplift, 0);
+        if (elements.msbRow) {
+          elements.msbRow.style.display = "";
+          if (elements.msbAmt) elements.msbAmt.textContent = "+" + money(totalUplift);
+        }
+        if (elements.msbHint) {
+          elements.msbHint.style.display = "";
+          elements.msbHint.textContent = shortfalls.length === 1
+            ? `Add ${money(shortfalls[0].remaining)} more in ${shortfalls[0].label} to clear the ₹25 minimum`
+            : shortfalls.map(g => `${g.label}: add ${money(g.remaining)}`).join(" · ") + " to clear the ₹25 minimum per sample type";
+        }
+      }
+    }
 
     if (!customerView && sum.discountRate > 0) {
       if (elements.discountRow) {

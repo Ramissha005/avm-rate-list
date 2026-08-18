@@ -527,6 +527,13 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-row--discount span:last-child{ color:var(--amber-dark); }
 .ct-row--net span:last-child{ color:var(--navy); font-weight:700; }
 
+/* Minimum Sample Billing uplift — shown between the raw B2B Cost row and
+   the discount/net rows only when one or more sample-type groups fall
+   short of the ₹25 floor. The hint line right below tells the partner
+   exactly how much more of that same sample type would clear it. */
+.ct-row--msb span:last-child{ color:var(--teal-dark); }
+.ct-hint{ font-size:var(--text-xs); color:var(--ink-faint); margin:0 0 var(--space-1); line-height:1.4; }
+
 /* ---------- Margin box — the cart drawer's headline callout ---------- */
 /* Margin visibility is this app's whole pitch ("your cost, your price, your
    margin — upfront"), so the number gets a real callout instead of just

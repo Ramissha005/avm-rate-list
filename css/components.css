@@ -429,7 +429,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .cta-band{
   background:linear-gradient(120deg, var(--teal-dark), var(--teal));
-  color:#fff; border-radius:var(--radius-lg); padding:var(--space-10);
+  color:#fff; border-radius:var(--radius-lg); padding:var(--space-7);
   display:flex; align-items:center; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;
   box-shadow:var(--shadow-lg);
 }
@@ -442,7 +442,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    two-column grid — it shares the hero's dark backdrop rather than
    getting its own section, so it just needs top spacing to separate it
    from the grid above (the hero's own bottom padding closes it out). */
-.hero__franchise{ position:relative; z-index:1; margin-top:var(--space-10); }
+.hero__franchise{ position:relative; z-index:1; margin-top:var(--space-7); }
 
 /* ---------- WhatsApp CTA button — brand green, recognizable at a glance,
    tapping anywhere on the button opens a WhatsApp chat directly. ---------- */

@@ -23,5 +23,22 @@ AVM.utils = AVM.utils || {};
     };
   }
 
-  AVM.utils.helpers = { $, showToast, debounce };
+  // Searching/sorting/filtering always resets to page 1 of the results —
+  // but if the reader had scrolled down into page 3, or down to the
+  // pagination controls, their *viewport* doesn't move with it. The table
+  // re-renders correctly off-screen above them, so it looks like nothing
+  // happened (or that it "jumped to the last page") until they manually
+  // scroll back up. Call this after any change that reflows the results so
+  // the match is actually visible without that manual scroll — but only
+  // when the table's top has already been scrolled past, so it doesn't
+  // yank someone who hasn't reached the table yet.
+  function scrollResultsIntoView(selector) {
+    const target = document.querySelector(selector || ".rl-table");
+    if (!target) return;
+    if (target.getBoundingClientRect().top < 0) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  AVM.utils.helpers = { $, showToast, debounce, scrollResultsIntoView };
 })();

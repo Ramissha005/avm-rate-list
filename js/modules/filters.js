@@ -28,6 +28,7 @@ AVM.modules = AVM.modules || {};
       state.currentPage = 1;
       rerender();
       onChange();
+      AVM.utils.helpers.scrollResultsIntoView();
     };
     container.appendChild(allBtn);
 

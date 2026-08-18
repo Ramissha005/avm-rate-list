@@ -10,6 +10,7 @@ AVM.modules = AVM.modules || {};
       state.sortMode = e.target.value;
       state.currentPage = 1;
       onChange();
+      AVM.utils.helpers.scrollResultsIntoView();
     });
   }
 

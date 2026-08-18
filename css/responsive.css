@@ -33,6 +33,11 @@
   .footer__top{ grid-template-columns:1fr 1fr; }
   .rl-head{ display:none; }
 
+  /* Technology/Price filter pills take real estate a phone doesn't have and
+     duplicate what search already covers well enough — drop the whole panel
+     on mobile rather than cram two rows of small chips above the list. */
+  .filters-panel{ display:none; }
+
   /* Mobile test card — an explicit 3-column grid rather than every field
      stacking full-width on its own line (which is what made B2B/B2C read as
      two huge, disconnected numbers with nothing tying them together). Each
@@ -61,16 +66,23 @@
   }
 
   /* Price cells become compact, evenly-sized stat chips in one row instead
-     of one oversized number per line. */
+     of one oversized number per line — dialed down further (padding, font,
+     column-gap) so three of them actually fit a phone width without feeling
+     cramped or wasting space on oversized numbers. */
+  .rl-row{ column-gap:6px; }
   .cell-price{
-    font-size:var(--text-base); background:var(--paper-2); border-radius:var(--radius-xs);
-    padding:var(--space-2); line-height:1.25;
+    font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
+    padding:var(--space-1) 6px; line-height:1.2;
   }
   .mobile-label{
-    display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-faint);
-    text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
+    display:block; font-size:9px; font-weight:700; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:.03em; margin-bottom:1px;
   }
-  .cell-margin{ font-size:var(--text-sm); padding:var(--space-2); width:100%; box-sizing:border-box; }
+  .cell-margin{
+    font-size:var(--text-xs); padding:var(--space-1) 6px; width:100%; box-sizing:border-box;
+    display:block; text-align:center;
+  }
+  .cell-margin small{ display:inline; margin-left:3px; }
 
   .cell-action{ text-align:left; }
   .add-btn{

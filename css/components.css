@@ -438,6 +438,18 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .cta-band p{ color:#D6E4F2; font-size:var(--text-base); }
 
+/* The franchise band now lives inside the hero itself, sitting below the
+   two-column grid — it shares the hero's dark backdrop rather than
+   getting its own section, so it just needs top spacing to separate it
+   from the grid above (the hero's own bottom padding closes it out). */
+.hero__franchise{ position:relative; z-index:1; margin-top:var(--space-10); }
+
+/* ---------- WhatsApp CTA button — brand green, recognizable at a glance,
+   tapping anywhere on the button opens a WhatsApp chat directly. ---------- */
+.btn--whatsapp{ background:#25D366; color:#fff; }
+.btn--whatsapp:hover{ background:#1EBE5B; box-shadow:0 14px 26px -14px rgba(37,211,102,0.55); }
+.btn--whatsapp__icon{ width:22px; height:22px; flex:none; }
+
 .cart-head h3{ font-size:var(--text-lg); color:var(--navy); }
 
 .cart-head .sub{ font-family:var(--font-mono); font-size:var(--text-xs); color:var(--ink-faint); margin-top:3px; }

@@ -462,13 +462,24 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cart-group{ margin-bottom:var(--space-4); }
 .cart-group:last-child{ margin-bottom:0; }
 
+.cart-group__header{ display:flex; align-items:center; gap:var(--space-1); }
+
 .cart-group__title{
-  display:flex; align-items:center; gap:var(--space-2); width:100%;
-  background:none; border:none; padding:var(--space-2); margin:0 calc(var(--space-2) * -1) 0;
+  display:flex; align-items:center; gap:var(--space-2); flex:1; min-width:0;
+  background:none; border:none; padding:var(--space-2); margin:0 0 0 calc(var(--space-2) * -1);
   border-radius:var(--radius-xs); cursor:pointer; text-align:left;
   transition:background var(--transition-fast);
 }
 .cart-group__title:hover{ background:var(--paper); }
+
+/* Removes the whole panel (every test tagged with this package) in one
+   click — same look as a per-test remove button, just sitting at the
+   group-header level instead of on a row. */
+.cart-group__remove{
+  width:26px; height:26px; flex:none; border-radius:50%; border:1px solid var(--line-dark);
+  background:#fff; color:var(--ink-soft); font-size:var(--text-sm); transition:background var(--transition-fast);
+}
+.cart-group__remove:hover{ background:var(--paper-2); }
 
 .cart-group__chevron{
   font-size:var(--text-sm); color:var(--teal-dark); flex:none; transition:transform var(--transition-fast);

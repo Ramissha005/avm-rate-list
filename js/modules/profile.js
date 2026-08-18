@@ -194,12 +194,8 @@ AVM.modules = AVM.modules || {};
     }
 
     const groups = groupCartItems(items);
-    const multiGroup = groups.length > 1 || (groups.length === 1 && groups[0].pkg);
 
     elements.body.innerHTML = groups.map(group => {
-      const groupKey = group.pkg ? group.pkg.id : "individual";
-      const collapsed = multiGroup && !state.expandedGroups.has(groupKey);
-
       const rows = group.items.map(t => `
         <div class="cart-item">
           <div class="cart-item__name">${t.name}<small>${t.code}${customerView ? ` · Price ${money(t.b2c)}` : ` · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}`}</small></div>
@@ -208,24 +204,29 @@ AVM.modules = AVM.modules || {};
         </div>
       `).join("");
 
-      const calcRows = (group.pkg && group.pkg.calculatedParams || []).map(name => `
+      // Individually added tests (no package tag) are never grouped under a
+      // heading — they're just plain rows, added and removed one at a time.
+      if (!group.pkg) return rows;
+
+      const groupKey = group.pkg.id;
+      const collapsed = !state.expandedGroups.has(groupKey);
+      const testCount = AVM.modules.calculations.packageTestCount(group.pkg);
+      const calcRows = (group.pkg.calculatedParams || []).map(name => `
         <div class="cart-item cart-item--calc">
           <div class="cart-item__name">${name}<small>Calculated from the tests above</small></div>
         </div>
       `).join("");
 
-      if (!multiGroup) return rows; // plain flat list — no need for a heading when it's all individual picks
-
-      const groupName = group.pkg ? group.pkg.name : "Individually added";
-      const testCount = group.pkg ? AVM.modules.calculations.packageTestCount(group.pkg) : group.items.length;
-
       return `
         <div class="cart-group ${collapsed ? "is-collapsed" : ""}">
-          <button type="button" class="cart-group__title" data-toggle-group="${groupKey}" aria-expanded="${!collapsed}">
-            <span class="cart-group__chevron" aria-hidden="true">▾</span>
-            <span class="cart-group__title-text">${groupName}</span>
-            <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""}</span>
-          </button>
+          <div class="cart-group__header">
+            <button type="button" class="cart-group__title" data-toggle-group="${groupKey}" aria-expanded="${!collapsed}">
+              <span class="cart-group__chevron" aria-hidden="true">▾</span>
+              <span class="cart-group__title-text">${group.pkg.name}</span>
+              <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""}</span>
+            </button>
+            <button type="button" class="cart-group__remove" data-remove-pkg="${group.pkg.id}" aria-label="Remove ${group.pkg.name} panel">✕</button>
+          </div>
           <div class="cart-group__items" ${collapsed ? "hidden" : ""}>${rows}${calcRows}</div>
         </div>`;
     }).join("");
@@ -242,6 +243,15 @@ AVM.modules = AVM.modules || {};
         const key = btn.dataset.toggleGroup;
         if (state.expandedGroups.has(key)) state.expandedGroups.delete(key);
         else state.expandedGroups.add(key);
+        elements.onChange();
+      };
+    });
+
+    elements.body.querySelectorAll("[data-remove-pkg]").forEach(btn => {
+      btn.onclick = () => {
+        const { packageById } = AVM.data.getCatalog();
+        const pkg = packageById[btn.dataset.removePkg];
+        if (pkg) removePackage(pkg);
         elements.onChange();
       };
     });

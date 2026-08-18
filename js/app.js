@@ -46,6 +46,18 @@ window.AVM = window.AVM || {};
       if ($("bundleRow")) {
         AVM.modules.packages.renderPackages($("bundleRow"), catalog.packages, refreshAll);
       }
+      updateFiltersBadge();
+    }
+
+    // Little count badge on the Filters toggle button — how many chips are
+    // active across every facet, so a partner can tell filters are applied
+    // even while the panel itself is collapsed.
+    function updateFiltersBadge() {
+      const countEl = $("filtersActiveCount");
+      if (!countEl) return;
+      const count = Object.values(AVM.state.activeFilters).reduce((sum, set) => sum + set.size, 0);
+      countEl.hidden = count === 0;
+      countEl.textContent = count;
     }
 
     function renderFilterGroups() {
@@ -93,6 +105,18 @@ window.AVM = window.AVM || {};
         if ($("searchInput")) $("searchInput").value = "";
         renderFilterGroups();
         refreshAll();
+      };
+    }
+
+    // Filters start collapsed (see the `hidden` attribute in index.html) so
+    // the rate list opens straight into results, on mobile same as desktop
+    // — the toggle button is what reveals Technology/Price.
+    if ($("filtersToggleBtn") && $("filtersPanel")) {
+      $("filtersToggleBtn").onclick = () => {
+        const panel = $("filtersPanel");
+        const willOpen = panel.hidden;
+        panel.hidden = !willOpen;
+        $("filtersToggleBtn").setAttribute("aria-expanded", String(willOpen));
       };
     }
 

@@ -33,10 +33,10 @@
   .footer__top{ grid-template-columns:1fr 1fr; }
   .rl-head{ display:none; }
 
-  /* Technology/Price filter pills take real estate a phone doesn't have and
-     duplicate what search already covers well enough — drop the whole panel
-     on mobile rather than cram two rows of small chips above the list. */
-  .filters-panel{ display:none; }
+  /* Technology/Price filters are collapsed behind the Filters toggle button
+     on every breakpoint now (see .filters-panel[hidden] in layout.css), so
+     they no longer need a mobile-only display:none — the panel just isn't
+     open until tapped, same as desktop. */
 
   /* Mobile test card — an explicit 3-column grid rather than every field
      stacking full-width on its own line (which is what made B2B/B2C read as

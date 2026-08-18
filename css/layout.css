@@ -273,6 +273,33 @@ section{ padding:var(--space-20) 0; }
 
 .rl-right{ display:flex; gap:var(--space-4); align-items:center; flex-wrap:wrap; }
 
+/* Filters live in their own collapsed panel below (see .filters-panel) —
+   this button is what opens it. Sits directly in .rl-controls rather than
+   inside .rl-right so it stays visible even where .rl-right itself is
+   hidden on narrow screens (see responsive.css) — filtering needs to work
+   on mobile just as much as desktop, not disappear there. */
+.filters-toggle-btn{
+  display:inline-flex; align-items:center; gap:var(--space-2);
+  font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; color:var(--navy);
+  background:#fff; border:1.5px solid var(--line-dark); border-radius:var(--radius-full);
+  padding:var(--space-2) var(--space-4); flex:none;
+  transition:background var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast);
+}
+.filters-toggle-btn svg{ width:18px; height:18px; flex:none; }
+.filters-toggle-btn:hover{ background:var(--paper-2); border-color:var(--navy-soft); }
+.filters-toggle-btn[aria-expanded="true"]{ background:var(--navy); border-color:var(--navy); color:#fff; }
+
+.filters-toggle-btn__count{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:18px; height:18px; padding:0 5px; border-radius:var(--radius-full);
+  background:var(--amber); color:#fff; font-size:var(--text-2xs); font-weight:700; line-height:1;
+}
+/* Its own `display` above (an author rule) otherwise wins over the UA's
+   `[hidden]{display:none}` and the badge stays visible at 0 — same trap
+   noted for .ct-row in components.css. */
+.filters-toggle-btn__count[hidden]{ display:none; }
+.filters-toggle-btn[aria-expanded="true"] .filters-toggle-btn__count{ background:#fff; color:var(--navy); }
+
 .rl-filters{ display:flex; flex-wrap:wrap; gap:var(--space-2); }
 
 .filters-panel{

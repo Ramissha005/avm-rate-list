@@ -529,10 +529,15 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 /* Minimum Sample Billing uplift — shown between the raw B2B Cost row and
    the discount/net rows only when one or more sample-type groups fall
-   short of the ₹25 floor. The hint line right below tells the partner
-   exactly how much more of that same sample type would clear it. */
-.ct-row--msb span:last-child{ color:var(--teal-dark); }
-.ct-hint{ font-size:var(--text-xs); color:var(--ink-faint); margin:0 0 var(--space-1); line-height:1.4; }
+   short of the ₹25 floor. Given its own violet accent + tinted background
+   (distinct from the amber discount row and navy/blue totals) so the
+   uplift reads as its own line item rather than blending into B2B Cost.
+   The hint line right below tells the partner exactly how much more of
+   that same sample type would clear it. */
+.ct-row--msb{ background:var(--violet-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin:var(--space-1) 0; }
+.ct-row--msb span:first-child{ color:var(--violet-dark); font-weight:600; }
+.ct-row--msb span:last-child{ color:var(--violet-dark); }
+.ct-hint{ font-size:var(--text-xs); color:var(--violet-dark); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
 
 /* ---------- Margin box — the cart drawer's headline callout ---------- */
 /* Margin visibility is this app's whole pitch ("your cost, your price, your

@@ -245,7 +245,11 @@ AVM.modules = AVM.modules || {};
     });
 
     const sum = AVM.modules.calculations.totals(items);
-    elements.b2b.textContent = money(sum.b2b);
+    // The headline B2B figure is the MSB-adjusted cost (grouped by sample
+    // type, floored at ₹25/sample type), not a raw per-test sum — that's
+    // what the partner is actually billed. Per-item rows below still show
+    // each test's own raw price.
+    elements.b2b.textContent = money(sum.msbB2b);
     elements.b2c.textContent = money(sum.b2c);
     // The headline margin is the partner's real bottom line — after the
     // bulk B2B discount below, not before it.

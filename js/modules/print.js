@@ -98,7 +98,10 @@ AVM.modules = AVM.modules || {};
     totalMarginEl.textContent = "+" + money(sum.margin);
     if (countEl) countEl.textContent = pluralize(items.length, "test");
 
-    if (sumB2BEl) sumB2BEl.textContent = money(sum.b2b);
+    // Unlike the table footer above (raw, row-matching), this summary card
+    // is the actual billable B2B cost: MSB-adjusted, floored at ₹25 per
+    // sample type — the discount card below subtracts from this figure.
+    if (sumB2BEl) sumB2BEl.textContent = money(sum.msbB2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);
     if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";

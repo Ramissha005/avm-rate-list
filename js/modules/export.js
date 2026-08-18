@@ -25,8 +25,11 @@ AVM.modules = AVM.modules || {};
     const discountLines = sum.discountRate > 0
       ? `\nBulk Discount (${Math.round(sum.discountRate * 100)}%): −${money(sum.discountAmount)}\nNet B2B Payable: ${money(sum.netB2b)}`
       : "";
+    // B2B Cost is the MSB-adjusted figure (grouped by sample type, floored
+    // at ₹25/sample type) — the actual billable amount before any bulk
+    // discount, not a raw per-test sum.
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
-      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.b2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
+      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.msbB2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 
     navigator.clipboard?.writeText(text)
       .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
@@ -50,10 +53,14 @@ AVM.modules = AVM.modules || {};
           { header: "Margin", key: "margin", type: "margin", width: 12 },
         ];
     // The B2B/Margin columns below stay raw (each row summed by an actual
-    // Excel formula), so a discounted total can't be dropped into those
-    // footer cells without them disagreeing with their own SUM() once Excel
-    // recalculates. The bulk discount and net payable figure go in the
-    // subtitle instead, as a plain note alongside the raw column totals.
+    // Excel formula), so a discounted or MSB-adjusted total can't be dropped
+    // into those footer cells without them disagreeing with their own SUM()
+    // once Excel recalculates. The MSB adjustment, bulk discount, and net
+    // payable figure go in the subtitle instead, as plain notes alongside
+    // the raw column totals.
+    const msbNote = !customerView && sum.msbB2b !== sum.b2b
+      ? ` · Min. Sample Billing → B2B ${AVM.utils.formatters.money(sum.msbB2b)}`
+      : "";
     const discountNote = !customerView && sum.discountRate > 0
       ? ` · Bulk Discount ${Math.round(sum.discountRate * 100)}% (−${AVM.utils.formatters.money(sum.discountAmount)}) → Net B2B ${AVM.utils.formatters.money(sum.netB2b)}`
       : "";
@@ -61,7 +68,7 @@ AVM.modules = AVM.modules || {};
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${discountNote}`,
+      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${discountNote}`,
       columns: [
         { header: "Code", key: "code", type: "text", width: 12 },
         { header: "Test", key: "name", type: "text", width: 36 },

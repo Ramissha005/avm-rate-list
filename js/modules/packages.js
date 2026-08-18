@@ -37,7 +37,7 @@ AVM.modules = AVM.modules || {};
       chip.innerHTML = `
         <span class="plus">${isActive ? "✓" : "+"}</span>${pkg.name}<span class="count">${testCount} tests</span>
         <span class="bundle-tip" role="tooltip">
-          <span class="bundle-tip__title">${pkg.name} <span class="bundle-tip__total">B2B ${money(sum.b2b)} · B2C ${money(sum.b2c)}</span></span>
+          <span class="bundle-tip__title">${pkg.name} <span class="bundle-tip__total">B2B ${money(sum.msbB2b)} · B2C ${money(sum.b2c)}</span></span>
           <ul>${testLines}${calcLines}</ul>
         </span>`;
       chip.setAttribute("aria-pressed", isActive ? "true" : "false");

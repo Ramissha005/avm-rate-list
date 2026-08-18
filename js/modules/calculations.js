@@ -32,21 +32,63 @@ AVM.modules = AVM.modules || {};
     return tier ? tier.rate : 0;
   }
 
-  // `margin`/`marginPercentage`/`b2b` stay raw (pre-discount) so they still
-  // match a straight sum of each item's own numbers — callers that render
-  // per-line-item figures alongside a total (Excel columns, the print
-  // table's footer row) stay internally consistent. `netB2b`/`netMargin`/
-  // `netMarginPercentage` are the post-discount figures for callers that
-  // want the partner's actual bottom line (cart drawer headline, print
-  // summary cards, clipboard copy).
+  // Minimum Sample Billing: the lab draws/processes one sample per sample
+  // type regardless of how many tests ride on it, so the ₹25 floor applies
+  // once per sample type — never per test. Tests are grouped by sampleId,
+  // their B2B prices summed per group, and only *that* group total is
+  // floored at ₹25. A group with several tests whose combined price already
+  // clears ₹25 is billed at its real (higher) total, not bumped to ₹25×N.
+  const MSB_FLOOR = 25;
+
+  // Map<sampleId, { sampleId, tests, rawB2b, billedB2b }>
+  function sampleTypeBilling(items) {
+    const groups = new Map();
+    items.forEach(t => {
+      const sampleId = t.sampleId || "unknown";
+      if (!groups.has(sampleId)) {
+        groups.set(sampleId, { sampleId, tests: [], rawB2b: 0, billedB2b: 0 });
+      }
+      const group = groups.get(sampleId);
+      group.tests.push(t);
+      group.rawB2b += t.b2b;
+    });
+    groups.forEach(group => {
+      group.billedB2b = group.rawB2b < MSB_FLOOR ? MSB_FLOOR : group.rawB2b;
+    });
+    return groups;
+  }
+
+  function msbAdjustedB2b(items) {
+    let total = 0;
+    sampleTypeBilling(items).forEach(group => { total += group.billedB2b; });
+    return total;
+  }
+
+  // `margin`/`marginPercentage`/`b2b` stay raw (pre-MSB, pre-discount) so
+  // they still match a straight sum of each item's own numbers — callers
+  // that render per-line-item figures alongside a total (Excel columns
+  // summed by an actual SUM() formula, the print table's footer row) stay
+  // internally consistent with what's printed above them.
+  //
+  // `msbB2b` is the actual billable B2B base: tests grouped by sample type,
+  // each group floored at ₹25 (see `sampleTypeBilling`) — MSB applies once
+  // per sample type, never per test. The volume discount tiers then apply
+  // to *that* MSB-adjusted total, since that's the partner's real combined
+  // cost. `netB2b`/`netMargin`/`netMarginPercentage` are the final
+  // post-MSB, post-discount figures for callers that want the partner's
+  // actual bottom line (cart drawer headline, print summary cards,
+  // clipboard copy). Recompute by calling `totals` again after any
+  // add/remove — nothing here is cached, so it always reflects the current
+  // item list.
   function totals(items) {
     const b2b = items.reduce((sum, t) => sum + t.b2b, 0);
     const b2c = items.reduce((sum, t) => sum + t.b2c, 0);
-    const discountRate = b2bDiscountRate(b2b);
-    const discountAmount = b2b * discountRate;
-    const netB2b = b2b - discountAmount;
+    const msbB2b = msbAdjustedB2b(items);
+    const discountRate = b2bDiscountRate(msbB2b);
+    const discountAmount = msbB2b * discountRate;
+    const netB2b = msbB2b - discountAmount;
     return {
-      b2b, b2c,
+      b2b, b2c, msbB2b,
       margin: b2c - b2b,
       marginPercentage: marginPercentage(b2b, b2c),
       discountRate, discountAmount, netB2b,
@@ -63,5 +105,8 @@ AVM.modules = AVM.modules || {};
     return pkg.codes.length + (pkg.calculatedParams ? pkg.calculatedParams.length : 0);
   }
 
-  AVM.modules.calculations = { margin, multiplier, marginPercentage, totals, packageTestCount, b2bDiscountRate };
+  AVM.modules.calculations = {
+    margin, multiplier, marginPercentage, totals, packageTestCount, b2bDiscountRate,
+    sampleTypeBilling, msbAdjustedB2b,
+  };
 })();

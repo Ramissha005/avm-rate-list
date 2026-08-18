@@ -63,9 +63,30 @@ AVM.modules = AVM.modules || {};
       return;
     }
 
+    const { byCode } = AVM.data.getCatalog();
+
     elements.body.innerHTML = shown.map(t => {
       const col = techColors[t.tech] || { fg: "#101C27", bd: "#D2D5D9", bg: "#EFF0F2" };
       const isAdded = state.cart.has(t.code);
+      const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
+      const conflictTest = conflictCode ? byCode[conflictCode] : null;
+
+      let btnClass = "add-btn";
+      let btnLabel = "Add to Profile";
+      let btnIcon = "+";
+      let btnAttrs = `data-code="${t.code}" aria-label="Add ${t.name}"`;
+      if (isAdded) {
+        btnClass += " added";
+        btnLabel = "Added";
+        btnIcon = "✓";
+        btnAttrs = `data-code="${t.code}" aria-label="Remove ${t.name}"`;
+      } else if (conflictTest) {
+        btnClass += " blocked";
+        btnLabel = "Blocked";
+        btnIcon = "⊘";
+        btnAttrs = `data-code="${t.code}" data-conflict="1" aria-label="${t.name} conflicts with ${conflictTest.name}, already in your profile" title="Already covered by ${conflictTest.name} in your profile"`;
+      }
+
       return `
         <div class="rl-row ${isAdded ? "is-added" : ""}" data-code="${t.code}">
           <div><span class="cell-code">${t.code}</span></div>
@@ -76,7 +97,7 @@ AVM.modules = AVM.modules || {};
           <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(t.b2c)}</div>
           <div><span class="cell-margin">+${money(margin(t))}<small>${multiplier(t)}x</small></span></div>
           <div class="cell-action">
-            <button type="button" class="add-btn ${isAdded ? "added" : ""}" data-code="${t.code}" aria-label="${isAdded ? "Remove" : "Add"} ${t.name}"><span aria-hidden="true">${isAdded ? "✓" : "+"}</span><span class="add-btn__label">${isAdded ? "Added" : "Add to Profile"}</span></button>
+            <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>
           </div>
         </div>`;
     }).join("");

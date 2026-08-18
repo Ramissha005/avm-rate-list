@@ -2,6 +2,27 @@
 /* Depends on: variables.css, layout.css, components.css */
 
 @media (max-width:960px){
+  /* Nav links collapse into a hamburger dropdown — with up to 7 links on
+     admin pages, forcing them to stay inline (or scroll sideways, as the
+     old overflow:auto row did) either overlapped the cart button or made
+     the row unreadable at phone widths. */
+  .nav{ flex-wrap:wrap; position:relative; }
+  .nav-toggle-btn{ display:flex; order:3; }
+  .nav__actions{ order:2; }
+  .nav__links{
+    order:4; flex-basis:100%; width:100%; margin-top:0;
+    flex-direction:column; align-items:stretch; gap:0;
+    max-height:0; opacity:0; overflow:hidden;
+    transition:max-height var(--transition), opacity var(--transition-fast);
+  }
+  .nav-toggle:checked ~ .nav__links{
+    max-height:70vh; opacity:1; overflow-y:auto; margin-top:var(--space-3);
+  }
+  .nav__links a{
+    padding:var(--space-3) 2px; border-bottom:1px solid var(--line); white-space:normal;
+  }
+  .nav__links a:last-child{ border-bottom:none; }
+
   .hero__grid{ grid-template-columns:1fr; }
   .hero::before{ width:360px; height:360px; right:-120px; top:-100px; }
   .slip{ transform:none; max-width:420px; margin:0 auto; }
@@ -18,15 +39,27 @@
   .add-btn{ width:auto; height:auto; border-radius:var(--radius-full); padding:var(--space-3) var(--space-4); font-size:var(--text-base); font-weight:600; }
   .add-btn__label{ display:inline; }
   .rl-controls{ padding:var(--space-4); }
+
+  /* The sticky search bar assumes a fixed desktop header height (top:64px) —
+     the mobile header's own height varies with the hamburger row, so instead
+     of chasing that offset the bar just goes back to normal document flow
+     below ~768px. It still scrolls into view quickly; it just doesn't pin. */
+  .rl-controls{ position:static; box-shadow:none; }
+
+  .stat-cards{ grid-template-columns:repeat(3,1fr); gap:var(--space-2); }
+  .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
+  .stat-card__num{ font-size:var(--text-xl); }
+  .stat-card__label{ font-size:9px; margin-top:2px; }
 }
 @media (max-width:600px){
   .wrap{ padding:0 var(--space-4); }
   section{ padding:var(--space-12) 0; }
   .nav{ padding:var(--space-3) var(--space-4); gap:var(--space-2); }
-  .brand__logo{ height:28px; }
-  .nav__links{ gap:var(--space-4); }
+  .brand__logo{ height:36px; }
   .nav__links a{ font-size:var(--text-sm); }
   .cart-btn{ padding:var(--space-2) var(--space-3) var(--space-2) var(--space-3); font-size:var(--text-xs); }
+  .cart-btn__text-full{ display:none; }
+  .cart-btn__text-short{ display:inline; }
   .hero{ padding:var(--space-12) 0 var(--space-9); }
   .hero::before{ width:280px; height:280px; right:-100px; top:-80px; }
   .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
@@ -38,11 +71,17 @@
   .rl-sort{ width:100%; }
   .rl-sort select{ width:100%; }
   .cart-drawer{ width:100vw; }
+
+  .section-head{ margin-bottom:var(--space-6); }
+  .stat-cards{ margin-bottom:var(--space-5); }
+  .bundles{ margin-bottom:var(--space-6); }
+  .bundle-chip{ font-size:var(--text-sm); padding:var(--space-1) var(--space-2) var(--space-1) var(--space-3); }
+  .filters-panel{ padding:var(--space-4); margin-bottom:var(--space-4); }
+  .rl-toolbar{ margin:var(--space-4) 0 var(--space-2); }
 }
 @media (max-width:400px){
-  .brand__logo{ height:24px; }
+  .brand__logo{ height:30px; }
   .cart-btn{ padding:var(--space-2) var(--space-2) var(--space-2) var(--space-2); font-size:var(--text-2xs); }
-  .nav__links{ gap:var(--space-3); }
 }
 
 @media (prefers-reduced-motion: reduce){

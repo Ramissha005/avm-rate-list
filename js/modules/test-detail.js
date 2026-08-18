@@ -11,8 +11,28 @@ AVM.modules = AVM.modules || {};
 
     const { money } = AVM.utils.formatters;
     const { margin, multiplier } = AVM.modules.calculations;
+    const { byCode } = AVM.data.getCatalog();
     const params = AVM.data.getParametersForTest(test.code);
+    // A single param with id:null is just the fallback echo of the test's
+    // own name (see data.js) — not a real breakdown, so don't show it.
+    const hasParamBreakdown = !(params.length === 1 && params[0].id === null);
     const isAdded = AVM.state.cart.has(test.code);
+    const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(test.code) : null;
+    const conflictTest = conflictCode ? byCode[conflictCode] : null;
+
+    let btnClass = "btn--teal";
+    let btnLabel = "+ Add to Profile";
+    let btnDisabled = "";
+    let btnNote = "";
+    if (isAdded) {
+      btnClass = "btn--outline";
+      btnLabel = "✓ Added to Profile";
+    } else if (conflictTest) {
+      btnClass = "btn--outline";
+      btnLabel = "Blocked — conflicts with " + conflictTest.name;
+      btnDisabled = "disabled";
+      btnNote = `<p class="td-note">Already covered by ${conflictTest.name} in your profile. Remove it first to add this instead.</p>`;
+    }
 
     const fastingLabel = test.fastingRequired === true ? "Yes"
       : test.fastingRequired === false ? "No"
@@ -24,15 +44,11 @@ AVM.modules = AVM.modules || {};
         <h2>${test.name}</h2>
         <div class="td-tags">
           <span class="tech-pill">${test.tech}</span>
-          ${test.category ? `<span class="tech-pill">${test.category}</span>` : ""}
         </div>
       </div>
       <dl class="td-facts">
         <div><dt>Sample</dt><dd>${test.sample}</dd></div>
-        <div><dt>Department</dt><dd>${test.department || "—"}</dd></div>
         <div><dt>Fasting required</dt><dd>${fastingLabel}</dd></div>
-        <div><dt>Home collection</dt><dd>${test.homeCollection ? "Available on request" : "—"}</dd></div>
-        <div><dt>Report type</dt><dd>${test.reportType || "—"}</dd></div>
         <div><dt>Turnaround time</dt><dd>${test.tat || "To be confirmed"}</dd></div>
       </dl>
       <div class="td-pricing">
@@ -40,14 +56,17 @@ AVM.modules = AVM.modules || {};
         <div><span>B2C Value</span><b>${money(test.b2c)}</b></div>
         <div class="is-profit"><span>Margin</span><b>+${money(margin(test))} <small>(${multiplier(test)}×)</small></b></div>
       </div>
+      ${hasParamBreakdown ? `
       <div class="td-params">
         <h3>Parameters</h3>
         <ul>${params.map(p => `<li>${p.name}${p.unit ? ` <small>${p.unit}</small>` : ""}</li>`).join("")}</ul>
-      </div>
-      <button type="button" class="btn ${isAdded ? "btn--outline" : "btn--teal"} td-add-btn" id="tdAddBtn">${isAdded ? "✓ Added to Profile" : "+ Add to Profile"}</button>
+      </div>` : ""}
+      ${btnNote}
+      <button type="button" class="btn ${btnClass} td-add-btn" id="tdAddBtn" ${btnDisabled}>${btnLabel}</button>
     `;
 
     container.querySelector("#tdAddBtn").onclick = () => {
+      if (conflictTest) return;
       AVM.modules.profile.toggleTest(test.code);
       if (onChange) onChange();
       renderTestDetail(container, AVM.data.getTestByCode(test.code), onChange);

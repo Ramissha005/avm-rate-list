@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0E2238">
 <title>AVMLabs — Rate List &amp; Custom Health Profiles</title>
 <meta name="description" content="AVMLabs diagnostic rate list. Browse 106 lab tests, compare technologies and build your own custom health profile.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -37,7 +38,7 @@
   }
 
   *{ box-sizing:border-box; }
-  html{ scroll-behavior:smooth; }
+  html{ scroll-behavior:smooth; scroll-padding-top:78px; }
   body{
     margin:0;
     background:var(--paper);
@@ -53,6 +54,13 @@
   ul{ margin:0; padding:0; list-style:none; }
   button{ font-family:inherit; cursor:pointer; }
   :focus-visible{ outline:2.5px solid var(--amber); outline-offset:3px; }
+
+  .skip-link{
+    position:absolute; left:12px; top:-60px; z-index:200;
+    background:var(--navy); color:#fff; padding:10px 16px; border-radius:8px;
+    font-size:13.5px; font-weight:600; text-decoration:none; transition:top .15s ease;
+  }
+  .skip-link:focus{ top:12px; }
 
   .wrap{ max-width:1180px; margin:0 auto; padding:0 28px; }
   .eyebrow{
@@ -78,6 +86,7 @@
     border-bottom:1px solid var(--line);
   }
   .nav{
+    position:relative;
     max-width:1180px; margin:0 auto; padding:14px 28px;
     display:flex; align-items:center; justify-content:space-between; gap:20px;
   }
@@ -88,15 +97,28 @@
   .brand__word span{ color:var(--amber-dark); }
   .nav__links{
     display:flex; gap:26px; align-items:center;
-    overflow-x:auto; scrollbar-width:none;
   }
-  .nav__links::-webkit-scrollbar{ display:none; }
   .nav__links a{
     font-size:14.5px; font-weight:500; text-decoration:none; color:var(--ink-soft);
     white-space:nowrap; padding:6px 2px; border-bottom:2px solid transparent;
   }
   .nav__links a:hover{ color:var(--navy); border-bottom-color:var(--amber); }
   .nav__actions{ display:flex; align-items:center; gap:10px; flex:none; }
+  .nav__toggle{
+    display:none; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:10px; border:1.5px solid var(--line-dark);
+    background:#fff; flex:none; padding:0;
+  }
+  .nav__toggle span, .nav__toggle span::before, .nav__toggle span::after{
+    content:""; display:block; width:18px; height:2px; background:var(--navy); border-radius:2px;
+    transition:transform .2s ease, opacity .2s ease;
+  }
+  .nav__toggle span{ position:relative; }
+  .nav__toggle span::before{ position:absolute; top:-6px; left:0; }
+  .nav__toggle span::after{ position:absolute; top:6px; left:0; }
+  .nav__toggle[aria-expanded="true"] span{ background:transparent; }
+  .nav__toggle[aria-expanded="true"] span::before{ transform:translateY(6px) rotate(45deg); }
+  .nav__toggle[aria-expanded="true"] span::after{ transform:translateY(-6px) rotate(-45deg); }
   .cart-btn{
     display:flex; align-items:center; gap:8px;
     background:var(--navy); color:#fff; border:none; border-radius:100px;
@@ -226,59 +248,6 @@
   .section-head h2{ font-size:clamp(26px,3vw,36px); margin:14px 0 14px; color:var(--navy); }
   .section-head p{ color:var(--ink-soft); font-size:15.5px; }
 
-  /* ---------- About AVMLabs ---------- */
-  .about{ background:var(--paper); }
-  .about__lede{ font-size:17px; color:var(--ink); max-width:70ch; margin-bottom:40px; }
-  .pillars{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:44px; }
-  .pillar{
-    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:24px 22px;
-  }
-  .pillar__num{ font-family:var(--font-mono); font-size:12px; color:var(--amber-dark); font-weight:600; letter-spacing:.06em; }
-  .pillar h3{ font-size:18px; color:var(--navy); margin:10px 0 8px; }
-  .pillar p{ font-size:14px; color:var(--ink-soft); }
-
-  .tech-row{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
-  .tech-row__label{ font-family:var(--font-mono); font-size:12px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.08em; margin-right:6px; }
-  .tech-pill{
-    font-family:var(--font-mono); font-size:12.5px; font-weight:600; padding:6px 13px; border-radius:100px;
-    border:1.5px solid var(--navy); color:var(--navy); background:#fff;
-  }
-
-  /* ---------- Founder ---------- */
-  .founder{ background:var(--navy); color:#EAF0F3; }
-  .founder .eyebrow{ margin-bottom:0; }
-  .founder__grid{ display:grid; grid-template-columns:0.7fr 1.3fr; gap:56px; align-items:start; }
-  .founder__card{
-    background:linear-gradient(160deg, var(--navy-2), #0B1D30);
-    border:1px solid rgba(255,255,255,0.14); border-radius:var(--radius-lg);
-    padding:30px 26px; text-align:center;
-  }
-  .monogram{
-    width:104px; height:104px; margin:0 auto 18px; border-radius:50%;
-    border:1.5px dashed rgba(219,138,52,0.6);
-    display:flex; align-items:center; justify-content:center;
-    font-family:var(--font-display); font-size:34px; font-weight:700; color:var(--amber);
-  }
-  .founder__card h3{ font-size:19px; color:#fff; margin-bottom:4px; }
-  .founder__card .role{ font-size:13px; color:#9FB4C4; margin-bottom:18px; }
-  .founder__timeline{ text-align:left; display:flex; flex-direction:column; gap:12px; }
-  .founder__timeline li{
-    display:flex; gap:0; list-style:none;
-  }
-  .tl-row{ display:flex; gap:10px; align-items:flex-start; font-size:12.5px; }
-  .tl-year{ font-family:var(--font-mono); color:var(--amber); flex:none; width:78px; }
-  .tl-text{ color:#C9D6DE; }
-
-  .founder__bio p{ color:#C9D6DE; font-size:15.5px; margin-bottom:16px; max-width:64ch; }
-  .founder h2{ color:#fff; }
-  blockquote.pull{
-    margin:26px 0 8px; padding:18px 22px; border-left:3px solid var(--amber);
-    background:rgba(255,255,255,0.05); border-radius:0 var(--radius-sm) var(--radius-sm) 0;
-  }
-  blockquote.pull p{ font-family:var(--font-display); font-size:21px; color:#fff; font-style:normal; }
-  blockquote.pull cite{ display:block; margin-top:8px; font-size:12.5px; color:#9FB4C4; font-style:normal; font-family:var(--font-mono); }
-
   /* ---------- Rate list ---------- */
   .ratelist{ background:var(--paper-2); }
 
@@ -313,20 +282,6 @@
   .rl-sort select{
     font-family:var(--font-body); font-size:13.5px; padding:9px 12px; border-radius:100px; border:1px solid var(--line-dark); background:#fff;
   }
-  .rl-toggle{
-    display:flex; align-items:center; gap:9px; font-size:12.5px; font-family:var(--font-mono); color:var(--ink-soft);
-  }
-  .switch{ position:relative; width:42px; height:23px; }
-  .switch input{ opacity:0; width:0; height:0; }
-  .switch .track{
-    position:absolute; inset:0; background:var(--line-dark); border-radius:100px; transition:background .2s ease; cursor:pointer;
-  }
-  .switch .track::before{
-    content:""; position:absolute; width:17px; height:17px; left:3px; top:3px; background:#fff; border-radius:50%; transition:transform .2s ease;
-  }
-  .switch input:checked + .track{ background:var(--teal); }
-  .switch input:checked + .track::before{ transform:translateX(19px); }
-
   .rl-filters{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
   .rl-filter{
     font-family:var(--font-body); font-size:13.5px; font-weight:600; padding:8px 14px; border-radius:100px;
@@ -378,15 +333,6 @@
     transition:background .15s ease, transform .15s ease;
   }
   .view-more-btn:hover{ background:var(--paper-2); transform:translateY(-2px); }
-
-  /* ---------- CTA band ---------- */
-  .cta-band{
-    background:linear-gradient(120deg, var(--teal-dark), var(--teal));
-    color:#fff; border-radius:var(--radius-lg); padding:40px 40px;
-    display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap;
-  }
-  .cta-band h3{ font-size:23px; margin-bottom:6px; }
-  .cta-band p{ color:#D6E4F2; font-size:14.5px; }
 
   /* ---------- Footer ---------- */
   footer{ background:var(--navy); color:#B9C7D1; padding:56px 0 28px; }
@@ -452,8 +398,6 @@
   @media (max-width:960px){
     .hero__grid{ grid-template-columns:1fr; }
     .slip{ transform:none; max-width:420px; margin:0 auto; }
-    .pillars{ grid-template-columns:1fr; }
-    .founder__grid{ grid-template-columns:1fr; }
     .footer__top{ grid-template-columns:1fr 1fr; }
     .rl-head{ display:none; }
     .rl-row{
@@ -466,20 +410,32 @@
     .add-btn__label{ display:inline; }
     .rl-controls{ padding:14px; }
   }
+  @media (max-width:700px){
+    .nav__toggle{ display:flex; }
+    .nav__links{
+      display:none; position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0;
+      background:#fff; border-bottom:1px solid var(--line);
+      box-shadow:0 18px 30px -18px rgba(14,34,56,0.35);
+      padding:8px 20px 14px;
+    }
+    .nav__links.open{ display:flex; }
+    .nav__links a{
+      padding:13px 4px; border-bottom:1px solid var(--line); font-size:15px; min-height:44px; display:flex; align-items:center;
+    }
+    .nav__links a:last-child{ border-bottom:none; }
+  }
   @media (max-width:600px){
     .wrap{ padding:0 18px; }
     section{ padding:52px 0; }
     .nav{ padding:12px 16px; gap:10px; }
     .brand__word{ font-size:17px; }
-    .nav__links{ gap:18px; }
-    .nav__links a{ font-size:13.5px; }
     .cart-btn{ padding:8px 13px 8px 12px; font-size:12.5px; }
+    .rl-filter{ padding:10px 15px; min-height:40px; }
+    .cart-item__remove{ width:32px; height:32px; }
     .hero{ padding:48px 0 40px; }
     .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
     .footer__top{ grid-template-columns:1fr; }
-    .cta-band{ padding:26px 22px; flex-direction:column; align-items:flex-start; }
-    .cta-band .btn{ width:100%; justify-content:center; }
-    blockquote.pull p{ font-size:18px; }
     .rl-right{ width:100%; }
     .rl-sort{ width:100%; }
     .rl-sort select{ width:100%; }
@@ -498,26 +454,29 @@
 </head>
 <body>
 
+<a href="#top-content" class="skip-link">Skip to content</a>
+
 <header class="site-header">
   <nav class="nav">
     <a href="#top" class="brand">
       <span class="brand__word">AVM<span>Labs</span></span>
     </a>
-    <div class="nav__links">
-      <a href="#about">About</a>
+    <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu" type="button">
+      <span></span>
+    </button>
+    <div class="nav__links" id="navLinks">
       <a href="#ratelist">Rate List</a>
-      <a href="#ratelist-bundles">Build Profile</a>
-      <a href="#founder">Dr. Velumani</a>
+      <a href="#ratelist-bundles">Build a Profile</a>
     </div>
     <div class="nav__actions">
-      <button class="cart-btn" id="openCart" aria-haspopup="dialog">
-        My Profile <span class="cart-btn__badge" id="cartBadge">0</span>
+      <button class="cart-btn" id="openCart" aria-haspopup="dialog" type="button">
+        Cart <span class="cart-btn__badge" id="cartBadge" aria-live="polite">0</span>
       </button>
     </div>
   </nav>
 </header>
 
-<main>
+<main id="top-content">
 
   <!-- ================= HERO ================= -->
   <section class="hero" id="top">
@@ -557,46 +516,7 @@
     </div>
   </section>
 
-  <!-- ================= ABOUT AVMLABS ================= -->
-  <section class="about" id="about">
-    <div class="wrap">
-      <div class="section-head">
-        <p class="eyebrow">ABOUT AVMLABS</p>
-        <h2>A lab built around one instrument nobody talks about: honesty.</h2>
-      </div>
-      <p class="about__lede">AVMLabs is a diagnostic testing service built on a simple premise — every test on this list runs on validated, automated instrumentation, and every price on this list is the price you actually pay. No hidden handling fees, no "price varies," no fine print between the rate card and the bill.</p>
-
-      <div class="pillars">
-        <div class="pillar">
-          <p class="pillar__num">01</p>
-          <h3>Precision</h3>
-          <p>Samples are processed on calibrated Photometry, E.C.L.I.A, H.P.L.C, Immunoturbidimetry and Hematology platforms — the same instrument classes used across India's leading reference labs.</p>
-        </div>
-        <div class="pillar">
-          <p class="pillar__num">02</p>
-          <h3>Access</h3>
-          <p>One rate card for our B2B partners — clinics, hospitals and collection centres — showing your cost, the patient-facing B2C price, and the margin on every test. No negotiation needed.</p>
-        </div>
-        <div class="pillar">
-          <p class="pillar__num">03</p>
-          <h3>Automation</h3>
-          <p>Fewer manual handoffs between your sample and your report means fewer places for error to creep in, and faster turnaround on results.</p>
-        </div>
-      </div>
-
-      <div class="tech-row">
-        <span class="tech-row__label">Technologies in use</span>
-        <span class="tech-pill">Photometry</span>
-        <span class="tech-pill">E.C.L.I.A</span>
-        <span class="tech-pill">H.P.L.C</span>
-        <span class="tech-pill">Immunoturbidimetry</span>
-        <span class="tech-pill">Hematology</span>
-        <span class="tech-pill">Microscopy</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= FOUNDER ================= -->
+  <!-- ================= RATE LIST ================= -->
   <section class="ratelist" id="ratelist">
     <div class="wrap">
       <div class="section-head">
@@ -645,42 +565,6 @@
       <div id="viewMoreWrap" style="text-align:center;margin-top:22px;"></div>
 
       <p class="rl-disclaimer">Prices shown are indicative and subject to change without notice. Sample collection and reporting timelines vary by test and location.</p>
-
-      <div style="height:44px"></div>
-
-      <div class="cta-band">
-        <div>
-          <h3>Not sure where to start?</h3>
-          <p>Talk to our Business Development team — we'll help you set up B2B pricing, panels and onboarding.</p>
-        </div>
-        <a href="mailto:partnerships@avmlabs.example?subject=B2B%20Partnership%20Enquiry" class="btn btn--amber" id="ctaOpenCart">Connect with Our Team</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= RATE LIST ================= -->
-  <section class="founder" id="founder">
-    <div class="wrap founder__grid">
-      <div class="founder__card">
-        <div class="monogram">AV</div>
-        <h3>Dr. Arokiaswamy Velumani</h3>
-        <p class="role">Scientist · Founder, Thyrocare Technologies</p>
-        <ul class="founder__timeline">
-          <li class="tl-row"><span class="tl-year">1981–95</span><span class="tl-text">Research scientist, Bhabha Atomic Research Centre (BARC)</span></li>
-          <li class="tl-row"><span class="tl-year">1996</span><span class="tl-text">Founded Thyrocare Technologies with capital from his own provident fund</span></li>
-          <li class="tl-row"><span class="tl-year">2021</span><span class="tl-text">Exited as majority stakeholder; continues as an investor and mentor in diagnostics</span></li>
-        </ul>
-      </div>
-      <div class="founder__bio">
-        <p class="eyebrow on-dark">THE PHILOSOPHY BEHIND THE PRICE LIST</p>
-        <h2>Built on a scientist's conviction that testing shouldn't be a luxury.</h2>
-        <p>Dr. Velumani spent over a decade as a research scientist at BARC before turning his training in thyroid biochemistry into a business, founding Thyrocare Technologies in 1996. Over the next two decades it grew into one of India's largest diagnostic chains, built on a then-unconventional idea: centralise processing into one highly automated lab, and pass the savings on as lower prices rather than higher margins.</p>
-        <p>That same hub-and-spoke, volume-first logic is what AVMLabs carries forward — accurate, lab-grade diagnostics, priced for repeat use rather than one-off emergencies.</p>
-        <blockquote class="pull">
-          <p>"Poverty is the best MBA."</p>
-          <cite>— Dr. A. Velumani, widely cited in interviews on his approach to frugal, high-volume business</cite>
-        </blockquote>
-      </div>
     </div>
   </section>
 
@@ -696,8 +580,6 @@
       <div>
         <h4>Site</h4>
         <ul>
-          <li><a href="#about">About AVMLabs</a></li>
-          <li><a href="#founder">Dr. Velumani</a></li>
           <li><a href="#ratelist">Rate List</a></li>
           <li><a href="#ratelist-bundles">Build a Profile</a></li>
         </ul>
@@ -712,7 +594,7 @@
       </div>
     </div>
     <div class="footer__bottom">
-      <span>© 2026 AVMLabs. Placeholder contact details — update before publishing.</span>
+      <span>© 2026 AVMLabs</span>
       <span>Rates in INR (₹). Indicative rate card, not a medical prescription.</span>
     </div>
   </div>
@@ -720,13 +602,13 @@
 
 <!-- ================= CART DRAWER ================= -->
 <div class="cart-overlay" id="cartOverlay"></div>
-<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="My custom profile">
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="My Profile">
   <div class="cart-head">
     <div>
       <h3>My Profile</h3>
       <p class="sub" id="cartSub">0 tests selected</p>
     </div>
-    <button class="cart-close" id="closeCart" aria-label="Close">✕</button>
+    <button class="cart-close" id="closeCart" aria-label="Close" type="button">✕</button>
   </div>
   <div class="cart-body" id="cartBody">
     <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a panel.</p>
@@ -738,14 +620,14 @@
       <div class="ct-row ct-margin"><span>Your Margin</span><span id="cartMargin">₹0</span></div>
     </div>
     <div class="cart-actions">
-      <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
-      <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>
+      <button class="btn btn--outline btn--sm" id="copyList" type="button">Copy List</button>
+      <button class="btn btn--navy btn--sm" id="printList" type="button">Print Profile</button>
     </div>
-    <button class="cart-clear" id="clearCart">Clear all</button>
+    <button class="cart-clear" id="clearCart" type="button">Clear all</button>
   </div>
 </aside>
 
-<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span class="dot"></span><span id="toastText"></span></div>
 
 <script>
 const TESTS = [
@@ -898,13 +780,17 @@ const allTechs = [...new Set(TESTS.map(t=>t.tech))];
 function renderFilters(){
   filterRow.innerHTML = "";
   const allBtn = document.createElement("button");
+  allBtn.type = "button";
   allBtn.className = "rl-filter" + (activeFilters.size===0 ? " active" : "");
+  allBtn.setAttribute("aria-pressed", activeFilters.size===0 ? "true" : "false");
   allBtn.textContent = "All technologies";
   allBtn.onclick = () => { activeFilters.clear(); viewLimit = PAGE_SIZE; renderFilters(); renderTable(); };
   filterRow.appendChild(allBtn);
   allTechs.forEach(t => {
     const b = document.createElement("button");
+    b.type = "button";
     b.className = "rl-filter" + (activeFilters.has(t) ? " active" : "");
+    b.setAttribute("aria-pressed", activeFilters.has(t) ? "true" : "false");
     b.textContent = t;
     b.onclick = () => {
       activeFilters.has(t) ? activeFilters.delete(t) : activeFilters.add(t);
@@ -919,6 +805,7 @@ function renderFilters(){
 const bundleRow = document.getElementById("bundleRow");
 BUNDLES.forEach(b => {
   const chip = document.createElement("button");
+  chip.type = "button";
   chip.className = "bundle-chip";
   chip.innerHTML = `<span class="plus">+</span>${b.name}<span class="count">${b.codes.length} tests</span>`;
   chip.onclick = () => {
@@ -979,7 +866,7 @@ function renderTable(){
         <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(t.b2c)}</div>
         <div><span class="cell-margin">+${money(margin)}<small>${mult}x</small></span></div>
         <div class="cell-action">
-          <button class="add-btn ${isAdded?'added':''}" data-code="${t.code}" aria-label="${isAdded?'Remove':'Add'} ${t.name}"><span aria-hidden="true">${isAdded?'✓':'+'}</span><span class="add-btn__label">${isAdded?'Added':'Add to Profile'}</span></button>
+          <button class="add-btn ${isAdded?'added':''}" type="button" data-code="${t.code}" aria-pressed="${isAdded?'true':'false'}" aria-label="${isAdded?'Remove':'Add'} ${t.name}"><span aria-hidden="true">${isAdded?'✓':'+'}</span><span class="add-btn__label">${isAdded?'Added':'Add to Profile'}</span></button>
         </div>
       </div>`;
   }).join("");
@@ -1025,7 +912,7 @@ function renderCart(){
     <div class="cart-item">
       <div class="cart-item__name">${t.name}<small>${t.code} · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}</small></div>
       <div class="cart-item__margin">+${money(t.b2c-t.b2b)}</div>
-      <button class="cart-item__remove" data-code="${t.code}" aria-label="Remove ${t.name}">✕</button>
+      <button class="cart-item__remove" type="button" data-code="${t.code}" aria-label="Remove ${t.name}">✕</button>
     </div>
   `).join("");
 
@@ -1059,15 +946,48 @@ document.getElementById("searchInput").addEventListener("input", e => {
 });
 document.getElementById("sortSelect").addEventListener("change", e => { sortMode = e.target.value; viewLimit = PAGE_SIZE; renderTable(); });
 
+// -------- mobile nav menu --------
+const navToggle = document.getElementById("navToggle");
+const navLinks = document.getElementById("navLinks");
+function closeNav(){ navLinks.classList.remove("open"); navToggle.setAttribute("aria-expanded","false"); }
+navToggle.onclick = () => {
+  const isOpen = navLinks.classList.toggle("open");
+  navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+};
+navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", closeNav));
+
 // -------- drawer --------
 const cartDrawer = document.getElementById("cartDrawer");
 const cartOverlay = document.getElementById("cartOverlay");
-function openDrawer(){ cartDrawer.classList.add("open"); cartOverlay.classList.add("open"); }
-function closeDrawer(){ cartDrawer.classList.remove("open"); cartOverlay.classList.remove("open"); }
-document.getElementById("openCart").onclick = openDrawer;
-document.getElementById("closeCart").onclick = closeDrawer;
+const openCartBtn = document.getElementById("openCart");
+const closeCartBtn = document.getElementById("closeCart");
+let lastFocused = null;
+
+function openDrawer(){
+  lastFocused = document.activeElement;
+  closeNav();
+  cartDrawer.classList.add("open"); cartOverlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+  closeCartBtn.focus();
+}
+function closeDrawer(){
+  cartDrawer.classList.remove("open"); cartOverlay.classList.remove("open");
+  document.body.style.overflow = "";
+  if(lastFocused) lastFocused.focus();
+}
+openCartBtn.onclick = openDrawer;
+closeCartBtn.onclick = closeDrawer;
 cartOverlay.onclick = closeDrawer;
-document.addEventListener("keydown", e => { if(e.key==="Escape") closeDrawer(); });
+document.addEventListener("keydown", e => {
+  if(e.key==="Escape"){ closeDrawer(); closeNav(); }
+  if(e.key==="Tab" && cartDrawer.classList.contains("open")){
+    const focusable = cartDrawer.querySelectorAll('button, a[href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if(!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+});
 
 document.getElementById("clearCart").onclick = () => {
   cart.clear(); renderTable(); renderCart(); showToast("Profile cleared");
@@ -1079,7 +999,7 @@ document.getElementById("copyList").onclick = () => {
   const lines = items.map(t => `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c-t.b2b)}`);
   const totalB2B = items.reduce((s,t)=>s+t.b2b,0);
   const totalB2C = items.reduce((s,t)=>s+t.b2c,0);
-  const text = `AVMLabs — My Custom Profile\n\n` + lines.join("\n") + `\n\nB2B Cost: ${money(totalB2B)}\nB2C Value: ${money(totalB2C)}\nMargin: ${money(totalB2C-totalB2B)}`;
+  const text = `AVMLabs — My Profile\n\n` + lines.join("\n") + `\n\nB2B Cost: ${money(totalB2B)}\nB2C Value: ${money(totalB2C)}\nMargin: ${money(totalB2C-totalB2B)}`;
   navigator.clipboard?.writeText(text).then(()=>showToast("Profile copied to clipboard"))
     .catch(()=>showToast("Couldn't copy — select and copy manually"));
 };
@@ -1099,7 +1019,7 @@ document.getElementById("printList").onclick = () => {
       tfoot td{font-weight:bold;border-top:2px solid #16232F;border-bottom:none;}
       .profit{color:#0E7A4C;}
     </style></head><body>
-    <h1>AVMLabs — My Custom Profile</h1>
+    <h1>AVMLabs — My Profile</h1>
     <p class="sub">B2B cost, B2C price &amp; margin · Generated ${new Date().toLocaleDateString('en-IN')}</p>
     <table><thead><tr><th>Code</th><th>Test</th><th>Technology</th><th>B2B</th><th>B2C</th><th>Margin</th></tr></thead><tbody>
     ${items.map(t=>`<tr><td>${t.code}</td><td>${t.name}</td><td>${t.tech}</td><td>${money(t.b2b)}</td><td>${money(t.b2c)}</td><td class="profit">+${money(t.b2c-t.b2b)}</td></tr>`).join("")}

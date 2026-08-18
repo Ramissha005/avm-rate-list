@@ -10,7 +10,13 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
-    AVM.utils.storage.writeSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, [...state.cart]);
+    // Carries the cart's current Customer Copy setting over as the print
+    // page's starting view — it can still be flipped again from the print
+    // page's own toggle before actually printing.
+    AVM.utils.storage.writeSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, {
+      codes: [...state.cart],
+      customerView: state.customerView,
+    });
     // index.html sits at the project root; every page/* file sits one level down —
     // this project has no build step to resolve paths, so branch on where we are.
     const target = location.pathname.includes("/pages/") ? "print-profile.html" : "pages/print-profile.html";
@@ -35,17 +41,29 @@ AVM.modules = AVM.modules || {};
     }
   }
 
+  let cachedItems = null;
+
   async function renderPrintPage({
     tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
     refEl, countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
-    contentEl, emptyEl,
-  }) {
-    const codes = AVM.utils.storage.readSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, []);
-    const { money, pluralize } = AVM.utils.formatters;
-    await AVM.data.loadCatalog();
-    const { byCode } = AVM.data.getCatalog();
-    const items = codes.map(c => byCode[c]).filter(Boolean);
+    contentEl, emptyEl, sheetEl, titleEl, autoPrint,
+  }, customerViewOverride) {
+    const money = AVM.utils.formatters.money;
+    const pluralize = AVM.utils.formatters.pluralize;
+
+    if (!cachedItems) {
+      const saved = AVM.utils.storage.readSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, []);
+      const codes = Array.isArray(saved) ? saved : (saved.codes || []);
+      await AVM.data.loadCatalog();
+      const { byCode } = AVM.data.getCatalog();
+      cachedItems = { items: codes.map(c => byCode[c]).filter(Boolean), customerView: Array.isArray(saved) ? false : !!saved.customerView };
+    }
+    const items = cachedItems.items;
+    const customerView = customerViewOverride != null ? customerViewOverride : cachedItems.customerView;
     const sum = AVM.modules.calculations.totals(items);
+
+    if (sheetEl) sheetEl.classList.toggle("customer-view", customerView);
+    if (titleEl) titleEl.textContent = customerView ? "Custom Health Profile — Customer Copy" : "Custom Health Profile";
 
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
     if (refEl) refEl.textContent = makeRef();
@@ -63,9 +81,9 @@ AVM.modules = AVM.modules || {};
         <td class="name">${t.name}</td>
         <td class="tech">${t.tech}</td>
         <td class="sample">${t.sample}</td>
-        <td class="num">${money(t.b2b)}</td>
+        <td class="num c-b2b">${money(t.b2b)}</td>
         <td class="num">${money(t.b2c)}</td>
-        <td class="num profit">+${money(t.b2c - t.b2b)}</td>
+        <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
       </tr>
     `).join("");
 
@@ -79,7 +97,7 @@ AVM.modules = AVM.modules || {};
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.margin);
     if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.marginPercentage) + "%";
 
-    afterFontsReady(() => setTimeout(() => window.print(), 150));
+    if (autoPrint) afterFontsReady(() => setTimeout(() => window.print(), 150));
   }
 
   AVM.modules.print = { openPrintProfile, renderPrintPage };

@@ -5,6 +5,13 @@ AVM.state = {
   sortMode: "sr",
   activeFilters: { technology: new Set(), category: new Set(), sample: new Set(), priceBand: new Set() },
   cart: new Set(),
+  // "Customer copy" mode: hides B2B cost and margin everywhere a profile is
+  // shown or shared (cart drawer, Copy List, Export Excel, Print) so a B2B
+  // partner can hand this straight to their own customer without exposing
+  // their cost or markup. Off by default — resets each session on purpose,
+  // so it's never accidentally left on for the next person using this
+  // browser to view their own internal numbers.
+  customerView: false,
   currentPage: 1,
   pageSize: (AVM.CONFIG && AVM.CONFIG.DEFAULT_PAGE_SIZE) || 25,
 };
@@ -2152,14 +2159,31 @@ AVM.state = {
 };
   const TESTS = TESTS_WRAPPED.tests;
 
+  // Common profiles — sourced verbatim from AVMLabs' "Common Profiles" rate
+  // card (profile name + test codes). Prices are never stored here: each
+  // profile's cost is just the sum of its member tests' own B2B/B2C prices,
+  // computed on the fly (see calculations.js totals()) so it always tracks
+  // the rate list instead of drifting out of sync with a hardcoded number.
+  //
+  // calculatedParams: report line items the panel also produces that are
+  // NOT separately-priced tests of their own — they're derived/calculated
+  // from the priced codes above (e.g. eGFR from Creatinine, VLDL from
+  // Triglycerides) and come bundled in at no extra cost. They count toward
+  // the panel's total "test" count (per the source rate card) but never
+  // toward B2B/B2C/margin.
   const PACKAGES = [
-  { "id": "kidney-function", "name": "Kidney Function", "description": "Core markers of renal function.", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"], "active": true },
-  { "id": "liver-function", "name": "Liver Function", "description": "Full liver enzyme and protein panel.", "categoryId": "liver-function", "codes": ["BILD", "BILT", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "active": true },
-  { "id": "lipid-profile", "name": "Lipid Profile", "description": "Cholesterol and triglyceride panel for cardiovascular risk screening.", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL", "LPA", "APOA", "APOB"], "active": true },
-  { "id": "total-thyroid", "name": "Total Thyroid (T3, T4, TSH)", "description": "Standard total-hormone thyroid screen.", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH"], "active": true },
-  { "id": "free-thyroid", "name": "Free Thyroid (FT3, FT4, TSH)", "description": "Free-hormone thyroid screen.", "categoryId": "thyroid", "codes": ["FT3", "FT4", "UTSH"], "active": true },
-  { "id": "thyro-5", "name": "Thyro 5 (T3, T4, TSH, FT3, FT4)", "description": "Combined total and free thyroid panel.", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"], "active": true },
-  { "id": "iron-deficiency", "name": "Iron Deficiency", "description": "Iron status and storage panel.", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"], "active": true }
+  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "CALC", "SCRE", "URIC"],
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"], "active": true },
+  { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
+    "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"], "active": true },
+  { "id": "liver-profile", "name": "Liver Profile", "categoryId": "liver-function", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"],
+    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"], "active": true },
+  { "id": "thyro-5", "name": "Thyro 5", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"],
+    "calculatedParams": [], "active": true },
+  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC"],
+    "calculatedParams": [], "active": true },
+  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
+    "calculatedParams": [], "active": true }
 ];
 
   const PARAMETERS_WRAPPED = {
@@ -2237,6 +2261,14 @@ AVM.state = {
 
     const byCode = Object.fromEntries(joined.map(t => [t.code, t]));
     const techColors = Object.fromEntries(TECHNOLOGIES.map(t => [t.label, t]));
+    const packageById = Object.fromEntries(PACKAGES.map(p => [p.id, p]));
+
+    // Reverse-index each conflict group so a test's code resolves straight
+    // to the group it belongs to (most tests belong to none).
+    const conflictGroupByCode = {};
+    (AVM.CONFIG.CONFLICT_GROUPS || []).forEach(group => {
+      group.codes.forEach(code => { conflictGroupByCode[code] = group; });
+    });
 
     return {
       tests: joined, byCode,
@@ -2244,9 +2276,10 @@ AVM.state = {
       samples: SAMPLES, sampleById,
       categories: CATEGORIES, categoryById,
       departments: DEPARTMENTS, departmentById,
-      packages: PACKAGES,
+      packages: PACKAGES, packageById,
       parameters: PARAMETERS, parameterById,
       testParameters: TEST_PARAMETERS,
+      conflictGroupByCode,
     };
   }
 

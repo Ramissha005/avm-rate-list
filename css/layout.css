@@ -53,9 +53,34 @@ button{ font-family:inherit; cursor:pointer; }
 
 .nav__actions{ display:flex; align-items:center; gap:var(--space-2); flex:none; }
 
+/* ---------- Mobile nav toggle (hamburger) ----------
+   Pure-CSS checkbox hack — no JS dependency, since the header markup is
+   shared by static admin/login pages that don't load js/app.js. Hidden
+   entirely above the breakpoint where .nav__links fits inline; see
+   responsive.css for the collapsed/expanded dropdown behavior. */
+.nav-toggle{ position:absolute; opacity:0; pointer-events:none; }
+.nav-toggle-btn{
+  display:none; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:50%; border:1.5px solid var(--line-dark);
+  background:#fff; flex:none; -webkit-tap-highlight-color:transparent;
+}
+.nav-toggle-btn span{
+  position:relative; width:16px; height:2px; background:var(--navy); border-radius:2px;
+  transition:background var(--transition-fast);
+}
+.nav-toggle-btn span::before, .nav-toggle-btn span::after{
+  content:""; position:absolute; left:0; width:16px; height:2px; background:var(--navy); border-radius:2px;
+  transition:transform var(--transition-fast), top var(--transition-fast), opacity var(--transition-fast);
+}
+.nav-toggle-btn span::before{ top:-5px; }
+.nav-toggle-btn span::after{ top:5px; }
+.nav-toggle:checked ~ .nav-toggle-btn span{ background:transparent; }
+.nav-toggle:checked ~ .nav-toggle-btn span::before{ top:0; transform:rotate(45deg); }
+.nav-toggle:checked ~ .nav-toggle-btn span::after{ top:0; transform:rotate(-45deg); }
+
 /* ---------- Hero ---------- */
 .hero{
-  background:radial-gradient(120% 140% at 85% -10%, #1E4562 0%, var(--navy) 46%, #081522 100%);
+  background:linear-gradient(180deg, #0E2238, #173A5A);
   color:#EFF3F6;
   padding:var(--space-24) 0 var(--space-20);
   position:relative; overflow:hidden;
@@ -89,11 +114,100 @@ button{ font-family:inherit; cursor:pointer; }
   color:#fff;
 }
 
-.hero__sub{
-  font-size:var(--text-md); color:#C4D2DC; max-width:46ch; margin-bottom:var(--space-8);
+.hero__content{
+  max-width:720px;
 }
 
-.hero__ctas{ display:flex; gap:var(--space-4); flex-wrap:wrap; margin-bottom:var(--space-10); }
+.hero__brand-wrap{
+  display:flex;
+  align-items:center;
+  margin-bottom:var(--space-3);
+}
+
+.hero__brand{
+  display:inline-block;
+  font-size:clamp(2.4rem, 4vw, 4rem);
+  line-height:1;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  font-weight:900;
+  position:relative;
+  color:#fff;
+}
+
+.hero__brand-line{
+  display:block;
+  height:1px;
+  flex:1;
+  min-width:70px;
+  background:linear-gradient(90deg, rgba(255,180,71,0.8), rgba(255,180,71,0.15));
+}
+
+.hero__headline{
+  margin:0;
+  font-size:clamp(2.1rem, 3vw, 3.5rem);
+  line-height:1.05;
+  letter-spacing:-0.04em;
+  font-weight:600;
+  position:relative;
+  display:inline-block;
+  padding-bottom:1.2rem;
+  background:linear-gradient(135deg, #fff 0%, #dfeaf3 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero__headline::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:15%;
+  bottom:0;
+  height:4px;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(255,180,71,0.95), rgba(255,180,71,0.25));
+}
+
+.hero__sub{
+  font-size:var(--text-md); color:#C4D2DC; max-width:46ch; margin-bottom:var(--space-4);
+}
+
+.hero__sub--lead{
+  margin-top:var(--space-4);
+  margin-bottom:var(--space-5);
+  font-size:0.92rem;
+  color:#e4edf3;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:none;
+  font-family:var(--font-body);
+}
+
+.hero__focus-title{
+  margin:var(--space-6) 0 var(--space-3);
+  font-size:0.72rem;
+  line-height:1.3;
+  color:#dfeaf3;
+  letter-spacing:0.12em;
+  font-weight:700;
+  text-transform:uppercase;
+}
+
+.hero__ctas{ display:flex; gap:var(--space-3); flex-wrap:wrap; margin-bottom:var(--space-5); }
+
+.hero__specialties{
+  max-width:760px;
+  gap:var(--space-2);
+}
+
+.hero__specialties > span{
+  font-size:0.7rem;
+  padding:0.52rem 0.75rem;
+  background:rgba(255,255,255,0.04);
+  border-color:rgba(255,255,255,0.16);
+  letter-spacing:0.01em;
+}
 
 section{ padding:var(--space-20) 0; }
 
@@ -101,7 +215,7 @@ section{ padding:var(--space-20) 0; }
 
 .section-head h2{ font-size:var(--text-4xl); margin:var(--space-3) 0 var(--space-3); color:var(--navy); }
 
-.section-head p{ color:var(--ink-soft); font-size:var(--text-md); }
+.section-head p{ color:var(--ink-soft); font-size:var(--text-sm); margin-top:var(--space-2); }
 
 /* Section head with a visible CTA button alongside the copy — replaces the
    old pattern of burying a same-color, no-underline link inside the
@@ -148,6 +262,8 @@ section{ padding:var(--space-20) 0; }
 .rl-controls{
   display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center; justify-content:space-between;
   background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-4); margin-bottom:var(--space-6);
+  position:sticky; top:64px; z-index:40;
+  box-shadow:0 10px 24px -18px rgba(14,34,56,0.35);
 }
 
 .rl-right{ display:flex; gap:var(--space-4); align-items:center; flex-wrap:wrap; }
@@ -185,7 +301,7 @@ section{ padding:var(--space-20) 0; }
 
 .rl-head, .rl-row{
   display:grid;
-  grid-template-columns:70px minmax(0,1.7fr) 120px 68px 78px 78px 96px 54px;
+  grid-template-columns:70px minmax(0,1.7fr) 150px 68px 78px 78px 96px 54px;
   gap:var(--space-3); align-items:center; padding:var(--space-3) var(--space-4);
 }
 
@@ -237,7 +353,9 @@ footer a:hover{ color:#fff; }
 
 .cart-drawer.open{ transform:translateX(0); }
 
-.cart-head{ display:flex; justify-content:space-between; align-items:center; padding:var(--space-5) var(--space-6); border-bottom:1px solid var(--line); }
+.cart-head{ display:flex; justify-content:space-between; align-items:center; padding:var(--space-5) var(--space-6); border-bottom:1px solid var(--line); gap:var(--space-3); }
+
+.cart-head__left{ display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap; }
 
 .cart-body{ flex:1; overflow-y:auto; padding:var(--space-4) var(--space-6); }
 

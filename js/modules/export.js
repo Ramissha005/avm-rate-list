@@ -16,14 +16,17 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
+    const customerView = state.customerView;
 
-    const lines = items.map(t => `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
+    const lines = items.map(t => customerView
+      ? `${t.name} (${t.code}) — B2C ${money(t.b2c)}`
+      : `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
     const sum = AVM.modules.calculations.totals(items);
-    const text = `AVMLabs — My Custom Profile\n\n` + lines.join("\n") +
-      `\n\nB2B Cost: ${money(sum.b2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.margin)}`;
+    const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
+      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.b2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.margin)}`);
 
     navigator.clipboard?.writeText(text)
-      .then(() => AVM.utils.helpers.showToast("Profile copied to clipboard"))
+      .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
       .catch(() => AVM.utils.helpers.showToast("Couldn't copy — select and copy manually"));
   }
 
@@ -34,25 +37,31 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
+    const customerView = state.customerView;
     const sum = AVM.modules.calculations.totals(items);
+    const pricingColumns = customerView
+      ? [{ header: "B2C", key: "b2c", type: "currency", width: 12 }]
+      : [
+          { header: "B2B", key: "b2b", type: "currency", width: 12 },
+          { header: "B2C", key: "b2c", type: "currency", width: 12 },
+          { header: "Margin", key: "margin", type: "margin", width: 12 },
+        ];
     AVM.utils.xlsx.downloadWorkbook({
-      filename: "avmlabs-profile.xlsx",
+      filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
-      title: "AVMLabs — My Custom Profile",
+      title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
       subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}`,
       columns: [
         { header: "Code", key: "code", type: "text", width: 12 },
         { header: "Test", key: "name", type: "text", width: 36 },
         { header: "Technology", key: "tech", type: "text", width: 20 },
         { header: "Sample", key: "sample", type: "text", width: 12 },
-        { header: "B2B", key: "b2b", type: "currency", width: 12 },
-        { header: "B2C", key: "b2c", type: "currency", width: 12 },
-        { header: "Margin", key: "margin", type: "margin", width: 12 },
+        ...pricingColumns,
       ],
       rows: items.map(t => ({ code: t.code, name: t.name, tech: t.tech, sample: t.sample, b2b: t.b2b, b2c: t.b2c, margin: t.b2c - t.b2b })),
-      totals: { b2b: sum.b2b, b2c: sum.b2c, margin: sum.margin },
+      totals: customerView ? { b2c: sum.b2c } : { b2b: sum.b2b, b2c: sum.b2c, margin: sum.margin },
     });
-    AVM.utils.helpers.showToast("Profile exported to Excel");
+    AVM.utils.helpers.showToast(customerView ? "Customer copy exported to Excel" : "Profile exported to Excel");
   }
 
   function exportRateListCSV(tests) {

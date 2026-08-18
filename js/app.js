@@ -13,7 +13,6 @@ window.AVM = window.AVM || {};
 
     if ($("statTests")) $("statTests").textContent = catalog.tests.length;
     if ($("statTech")) $("statTech").textContent = catalog.technologies.length;
-    if ($("statCategories")) $("statCategories").textContent = catalog.categories.length;
     if ($("statPackages")) $("statPackages").textContent = catalog.packages.length;
 
     const hasRateList = !!$("rlBody");
@@ -27,6 +26,8 @@ window.AVM = window.AVM || {};
     const cartElements = hasCart ? {
       body: $("cartBody"), badge: $("cartBadge"), sub: $("cartSub"),
       b2b: $("cartB2B"), b2c: $("cartB2C"), margin: $("cartMargin"), marginPct: $("cartMarginPct"),
+      b2bRow: $("cartB2BRow"), marginBox: $("marginBox"),
+      b2cRow: $("cartB2CRow"), priceBox: $("priceBox"), price: $("cartPrice"),
       onChange: refreshAll,
     } : null;
 
@@ -36,6 +37,11 @@ window.AVM = window.AVM || {};
       }
       if (hasCart) {
         AVM.modules.profile.renderCart(cartElements);
+      }
+      // Bundle chips flip to their "✓ in profile" state once fully added, so
+      // they need to re-render on every cart change, not just once at init.
+      if ($("bundleRow")) {
+        AVM.modules.packages.renderPackages($("bundleRow"), catalog.packages, refreshAll);
       }
     }
 
@@ -72,10 +78,6 @@ window.AVM = window.AVM || {};
     }
     renderFilterGroups();
 
-    if ($("bundleRow")) {
-      AVM.modules.packages.renderPackages($("bundleRow"), catalog.packages, refreshAll);
-    }
-
     AVM.modules.search.wireSearch($("searchInput"), { onChange: refreshAll });
     AVM.modules.sorting.wireSort($("sortSelect"), { onChange: refreshAll });
     AVM.modules.pagination.wirePageSize($("pageSizeSelect"), { onChange: refreshAll });
@@ -99,11 +101,31 @@ window.AVM = window.AVM || {};
     wireDrawer($("testDetailDrawer"), $("testDetailOverlay"), null, null);
 
     if ($("clearCart")) $("clearCart").onclick = () => { AVM.modules.profile.clearProfile(); refreshAll(); };
+    if ($("customerViewToggle")) {
+      $("customerViewToggle").checked = AVM.state.customerView;
+      if ($("customerViewLabel")) $("customerViewLabel").classList.toggle("customer-view-toggle--active", AVM.state.customerView);
+      $("customerViewToggle").onchange = (e) => {
+        AVM.state.customerView = e.target.checked;
+        if ($("customerViewLabel")) $("customerViewLabel").classList.toggle("customer-view-toggle--active", e.target.checked);
+        refreshAll();
+      };
+    }
     if ($("copyList")) $("copyList").onclick = AVM.modules.exportProfile.copyProfileToClipboard;
     if ($("printList")) $("printList").onclick = AVM.modules.print.openPrintProfile;
     if ($("exportProfileCsv")) $("exportProfileCsv").onclick = AVM.modules.exportProfile.exportProfileCSV;
     if ($("exportRateListCsv")) {
       $("exportRateListCsv").onclick = () => AVM.modules.exportProfile.exportRateListCSV(AVM.modules.rateList.getFiltered(catalog.tests));
+    }
+
+    // Close the mobile hamburger dropdown after tapping one of its links —
+    // the CSS-only checkbox toggle has no way to react to in-page navigation
+    // on its own, so without this the drawer stays open over the section
+    // the anchor just scrolled to.
+    const navToggle = $("navToggle");
+    if (navToggle) {
+      document.querySelectorAll(".nav__links a").forEach(a => {
+        a.addEventListener("click", () => { navToggle.checked = false; });
+      });
     }
 
     // hero requisition-slip reveal (index.html only)

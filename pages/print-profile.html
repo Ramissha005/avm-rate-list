@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AVMLabs — My Profile</title>
+<title>My Profile — Health Profile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/print.css">
@@ -13,27 +13,21 @@
 <div class="sheet" id="sheet">
 
   <header class="letterhead">
-    <div class="letterhead__brand">
-      <img class="letterhead__logo" src="../assets/images/avm-logo.png" alt="AVMLabs">
+    <div class="letterhead__brand" id="brandBlock" style="display:none">
+      <img class="letterhead__logo" id="brandLogo" alt="" style="display:none">
+      <div class="letterhead__logo-fallback" id="brandLogoFallback" style="display:none"></div>
       <div>
-        <p class="letterhead__name">AVMLabs</p>
-        <p class="letterhead__tag">Automated Diagnostics · Transparent Rate Card</p>
+        <p class="letterhead__name" id="brandName"></p>
+        <p class="letterhead__tag" id="brandTag"></p>
       </div>
     </div>
     <div class="letterhead__doc">
-      <p class="letterhead__title">Custom Health Profile</p>
+      <p class="letterhead__title" id="printTitle">Health Profile</p>
       <p class="letterhead__meta">Ref <b id="printRef"></b> · Generated <b id="printDate"></b></p>
     </div>
   </header>
 
   <div id="printContent">
-    <section class="fields">
-      <div class="field"><span>Patient Name</span><i></i></div>
-      <div class="field"><span>Age / Sex</span><i></i></div>
-      <div class="field"><span>Referred By</span><i></i></div>
-      <div class="field"><span>Collection Date</span><i></i></div>
-    </section>
-
     <table>
       <colgroup>
         <col class="c-sr"><col class="c-code"><col class="c-name"><col class="c-tech">
@@ -42,25 +36,25 @@
       <thead>
         <tr>
           <th>#</th><th>Code</th><th>Test</th><th>Technology</th><th>Sample</th>
-          <th class="num">B2B</th><th class="num">B2C</th><th class="num">Margin</th>
+          <th class="num c-b2b">B2B</th><th class="num">B2C</th><th class="num c-margin">Margin</th>
         </tr>
       </thead>
       <tbody id="printBody"></tbody>
       <tfoot>
         <tr>
           <td colspan="5" class="foot-label">Total — <b id="printCount">0 tests</b></td>
-          <td class="num" id="printTotalB2B"></td>
+          <td class="num c-b2b" id="printTotalB2B"></td>
           <td class="num" id="printTotalB2C"></td>
-          <td class="num profit" id="printTotalMargin"></td>
+          <td class="num profit c-margin" id="printTotalMargin"></td>
         </tr>
       </tfoot>
     </table>
 
     <div class="summary">
-      <div class="summary__card"><span>B2B Cost</span><b id="sumB2B"></b></div>
+      <div class="summary__card c-b2b"><span>B2B Cost</span><b id="sumB2B"></b></div>
       <div class="summary__card"><span>B2C Value</span><b id="sumB2C"></b></div>
-      <div class="summary__card is-profit"><span>Your Margin</span><b id="sumMargin"></b></div>
-      <div class="summary__card is-profit"><span>Avg. Margin %</span><b id="sumMarginPct"></b></div>
+      <div class="summary__card is-profit c-margin"><span>Your Margin</span><b id="sumMargin"></b></div>
+      <div class="summary__card is-profit c-margin"><span>Avg. Margin %</span><b id="sumMarginPct"></b></div>
     </div>
   </div>
 
@@ -71,14 +65,59 @@
 
   <footer class="foot">
     <p>Rates in INR (₹). Indicative rate card, not a medical prescription — please confirm fasting and sample requirements at the time of collection.</p>
-    <p class="foot__brand">AVMLabs · care@avmlabs.example · +91 00000 00000</p>
+    <p class="foot__brand" id="footBrand" hidden></p>
   </footer>
 
 </div>
 
 <div class="toolbar no-print">
+  <label class="toolbar__toggle">
+    <input type="checkbox" id="customerViewToggle">
+    Customer copy — hide B2B cost &amp; margin
+  </label>
+  <button type="button" id="btnBranding">🏷 Branding</button>
   <button type="button" id="btnClose">Close</button>
   <button type="button" id="btnPrint" class="primary">🖨 Print</button>
+</div>
+
+<!-- ================= BRANDING EDITOR (screen-only) ================= -->
+<div class="branding-overlay no-print" id="brandingOverlay"></div>
+<div class="branding-modal no-print" id="brandingModal" role="dialog" aria-label="Your branding" hidden>
+  <div class="branding-modal__head">
+    <h3>Your branding</h3>
+    <p>Shown on this printed profile instead of AVMLabs — saved on this device so it's ready every time you print one for a customer.</p>
+  </div>
+  <div class="branding-modal__body">
+    <label class="branding-field">
+      <span>Logo</span>
+      <div class="branding-logo-row">
+        <div class="branding-logo-preview" id="brandingLogoPreview">No logo</div>
+        <div>
+          <input type="file" accept="image/*" id="brandingLogoInput">
+          <button type="button" class="branding-logo-clear" id="brandingLogoClear" hidden>Remove logo</button>
+        </div>
+      </div>
+    </label>
+    <label class="branding-field">
+      <span>Clinic / Business Name</span>
+      <input type="text" id="brandingNameInput" placeholder="e.g. Sunrise Diagnostics">
+    </label>
+    <label class="branding-field">
+      <span>Phone Number</span>
+      <input type="text" id="brandingPhoneInput" placeholder="e.g. +91 98765 43210">
+    </label>
+    <label class="branding-field">
+      <span>Address</span>
+      <textarea id="brandingAddressInput" rows="2" placeholder="e.g. 12 MG Road, Bengaluru"></textarea>
+    </label>
+  </div>
+  <div class="branding-modal__actions">
+    <button type="button" id="brandingRemove" class="branding-btn-text">Remove branding</button>
+    <div class="branding-modal__actions-right">
+      <button type="button" id="brandingCancel">Cancel</button>
+      <button type="button" id="brandingSave" class="primary">Save branding</button>
+    </div>
+  </div>
 </div>
 
 <script src="../js/config.js"></script>
@@ -87,9 +126,10 @@
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
+<script src="../js/modules/branding.js"></script>
 <script src="../js/modules/print.js"></script>
 <script>
-  AVM.modules.print.renderPrintPage({
+  const printElements = {
     tbody: document.getElementById("printBody"),
     dateEl: document.getElementById("printDate"),
     refEl: document.getElementById("printRef"),
@@ -103,10 +143,149 @@
     sumMarginPctEl: document.getElementById("sumMarginPct"),
     contentEl: document.getElementById("printContent"),
     emptyEl: document.getElementById("printEmpty"),
+    sheetEl: document.getElementById("sheet"),
+    titleEl: document.getElementById("printTitle"),
+  };
+
+  const customerViewToggle = document.getElementById("customerViewToggle");
+
+  AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: true }).then(() => {
+    // Reflect whatever view (internal/customer) actually got rendered —
+    // carried over from the cart's own toggle when Print Profile was clicked.
+    customerViewToggle.checked = printElements.sheetEl.classList.contains("customer-view");
+  });
+
+  customerViewToggle.addEventListener("change", (e) => {
+    AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: false }, e.target.checked);
   });
 
   document.getElementById("btnPrint").addEventListener("click", () => window.print());
   document.getElementById("btnClose").addEventListener("click", () => window.close());
+
+  // -------- letterhead branding --------
+  const brandBlock = document.getElementById("brandBlock");
+  const brandLogo = document.getElementById("brandLogo");
+  const brandLogoFallback = document.getElementById("brandLogoFallback");
+  const brandName = document.getElementById("brandName");
+  const brandTag = document.getElementById("brandTag");
+  const footBrand = document.getElementById("footBrand");
+
+  // `.letterhead__brand`/`.letterhead__logo-fallback` declare their own
+  // `display` (flex, for the layout) — that author rule wins the cascade
+  // over the UA's `[hidden]{display:none}` regardless of source order, so
+  // toggling `.hidden` alone silently fails to hide them. Inline
+  // `style.display` always wins instead.
+  function setVisible(el, visible) {
+    el.style.display = visible ? "" : "none";
+  }
+
+  function applyBranding(branding) {
+    const hasBranding = branding && (branding.name || branding.logo);
+    setVisible(brandBlock, hasBranding);
+    if (!hasBranding) {
+      setVisible(footBrand, false);
+      return;
+    }
+    if (branding.logo) {
+      brandLogo.src = branding.logo;
+      setVisible(brandLogo, true);
+      setVisible(brandLogoFallback, false);
+    } else {
+      setVisible(brandLogo, false);
+      setVisible(brandLogoFallback, true);
+      brandLogoFallback.textContent = AVM.modules.branding.initialsFor(branding.name) || "—";
+    }
+    brandName.textContent = branding.name || "";
+    brandTag.textContent = [branding.phone, branding.address].filter(Boolean).join(" · ");
+
+    const footLine = [branding.name, branding.phone, branding.address].filter(Boolean).join(" · ");
+    footBrand.textContent = footLine;
+    setVisible(footBrand, !!footLine);
+  }
+
+  applyBranding(AVM.modules.branding.getBranding());
+
+  // -------- branding editor modal --------
+  const brandingOverlay = document.getElementById("brandingOverlay");
+  const brandingModal = document.getElementById("brandingModal");
+  const logoInput = document.getElementById("brandingLogoInput");
+  const logoPreview = document.getElementById("brandingLogoPreview");
+  const logoClearBtn = document.getElementById("brandingLogoClear");
+  const nameInput = document.getElementById("brandingNameInput");
+  const phoneInput = document.getElementById("brandingPhoneInput");
+  const addressInput = document.getElementById("brandingAddressInput");
+
+  let pendingLogo = null; // data URL staged from the file input, not yet saved
+
+  function setLogoPreview(dataUrl) {
+    pendingLogo = dataUrl;
+    if (dataUrl) {
+      logoPreview.style.backgroundImage = `url(${dataUrl})`;
+      logoPreview.textContent = "";
+      logoClearBtn.hidden = false;
+    } else {
+      logoPreview.style.backgroundImage = "";
+      logoPreview.textContent = "No logo";
+      logoClearBtn.hidden = true;
+    }
+  }
+
+  function openBrandingModal() {
+    const current = AVM.modules.branding.getBranding() || {};
+    nameInput.value = current.name || "";
+    phoneInput.value = current.phone || "";
+    addressInput.value = current.address || "";
+    setLogoPreview(current.logo || null);
+    logoInput.value = "";
+    brandingOverlay.classList.add("open");
+    brandingModal.hidden = false;
+    nameInput.focus();
+  }
+
+  function closeBrandingModal() {
+    brandingOverlay.classList.remove("open");
+    brandingModal.hidden = true;
+  }
+
+  document.getElementById("btnBranding").addEventListener("click", openBrandingModal);
+  document.getElementById("brandingCancel").addEventListener("click", closeBrandingModal);
+  brandingOverlay.addEventListener("click", closeBrandingModal);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !brandingModal.hidden) closeBrandingModal(); });
+
+  logoInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const dataUrl = await AVM.modules.branding.readLogoAsDataURL(file);
+      setLogoPreview(dataUrl);
+    } catch (err) {
+      alert(err.message || "Couldn't read that image — try a different file.");
+    }
+  });
+
+  logoClearBtn.addEventListener("click", () => setLogoPreview(null));
+
+  document.getElementById("brandingSave").addEventListener("click", () => {
+    const branding = {
+      logo: pendingLogo,
+      name: nameInput.value.trim(),
+      phone: phoneInput.value.trim(),
+      address: addressInput.value.trim(),
+    };
+    if (!branding.logo && !branding.name && !branding.phone && !branding.address) {
+      AVM.modules.branding.clearBranding();
+    } else {
+      AVM.modules.branding.saveBranding(branding);
+    }
+    applyBranding(AVM.modules.branding.getBranding());
+    closeBrandingModal();
+  });
+
+  document.getElementById("brandingRemove").addEventListener("click", () => {
+    AVM.modules.branding.clearBranding();
+    applyBranding(null);
+    closeBrandingModal();
+  });
 </script>
 
 </body>

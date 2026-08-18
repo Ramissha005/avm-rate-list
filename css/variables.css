@@ -1,7 +1,7 @@
 /* AVMLabs design tokens — colors, spacing scale, type scale, radii, shadows, glass, motion */
 
 :root{
-  /* ---- Brand colors (unchanged) ---- */
+  /* ---- Brand colors (updated to cyan-green gradient) ---- */
   --navy:#0E2238;
   --navy-2:#173A5A;
   --navy-soft:#2A4C6B;
@@ -12,6 +12,8 @@
   --amber-dark:#B4701F;
   --teal:#1E63B4;
   --teal-dark:#123A66;
+  --cyan:#00D9FF;
+  --cyan-dark:#00B8D4;
   --ink:#101C27;
   --ink-soft:#39474F;
   --ink-faint:#5B6971;

@@ -31,29 +31,26 @@
   .footer__top{ grid-template-columns:1fr 1fr; }
   .rl-head{ display:none; }
 
-  /* Mobile test card — an explicit 2-column grid rather than every field
+  /* Mobile test card — an explicit 3-column grid rather than every field
      stacking full-width on its own line (which is what made B2B/B2C read as
      two huge, disconnected numbers with nothing tying them together). Each
      cell is placed by its fixed position in rate-list.js's markup — code,
      name, tech, sample, B2B, B2C, margin, action, in that order — so code
-     sits beside nothing, name spans the full card, tech pairs with sample,
-     and B2B pairs with B2C as a proper aligned price row. */
+     sits alone, name spans the full card, tech pairs with sample, and
+     B2B / B2C / Margin sit together on one row as three matching chips. */
   .rl-row{
-    display:grid; grid-template-columns:1fr 1fr;
-    column-gap:var(--space-3); row-gap:var(--space-2);
+    display:grid; grid-template-columns:repeat(3,1fr);
+    column-gap:var(--space-2); row-gap:var(--space-2);
     padding:var(--space-4); align-items:center;
   }
-  .rl-row > *:nth-child(1){ grid-column:1; grid-row:1; }                 /* code */
-  .rl-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }            /* name */
-  .rl-row > *:nth-child(3){ grid-column:1; grid-row:3; }                 /* technology */
-  .rl-row > *:nth-child(4){ grid-column:2; grid-row:3; text-align:right; } /* sample */
-  .rl-row > *:nth-child(5){ grid-column:1; grid-row:4; }                 /* B2B */
-  .rl-row > *:nth-child(6){ grid-column:2; grid-row:4; }                 /* B2C */
-  .rl-row > *:nth-child(7){
-    grid-column:1 / -1; grid-row:5;
-    padding-top:var(--space-2); border-top:1px dashed var(--line);
-  }                                                                       /* margin */
-  .rl-row > *:nth-child(8){ grid-column:1 / -1; grid-row:6; }            /* add-to-profile */
+  .rl-row > *:nth-child(1){ grid-column:1; grid-row:1; }                   /* code */
+  .rl-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }              /* name */
+  .rl-row > *:nth-child(3){ grid-column:1 / span 2; grid-row:3; }          /* technology */
+  .rl-row > *:nth-child(4){ grid-column:3; grid-row:3; text-align:right; } /* sample */
+  .rl-row > *:nth-child(5){ grid-column:1; grid-row:4; }                   /* B2B */
+  .rl-row > *:nth-child(6){ grid-column:2; grid-row:4; }                   /* B2C */
+  .rl-row > *:nth-child(7){ grid-column:3; grid-row:4; }                   /* margin */
+  .rl-row > *:nth-child(8){ grid-column:1 / -1; grid-row:5; }              /* add-to-profile */
 
   .cell-sample{ font-size:var(--text-sm); }
   .cell-sample::before{
@@ -61,16 +58,17 @@
     color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
   }
 
-  /* Price cells become compact, evenly-sized stat chips side by side instead
+  /* Price cells become compact, evenly-sized stat chips in one row instead
      of one oversized number per line. */
   .cell-price{
-    font-size:var(--text-md); background:var(--paper-2); border-radius:var(--radius-xs);
-    padding:var(--space-2) var(--space-3); line-height:1.25;
+    font-size:var(--text-base); background:var(--paper-2); border-radius:var(--radius-xs);
+    padding:var(--space-2); line-height:1.25;
   }
   .mobile-label{
     display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-faint);
     text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
   }
+  .cell-margin{ font-size:var(--text-sm); padding:var(--space-2); width:100%; box-sizing:border-box; }
 
   .cell-action{ text-align:left; }
   .add-btn{
@@ -78,13 +76,14 @@
     padding:var(--space-3) var(--space-4); font-size:var(--text-base); font-weight:600;
   }
   .add-btn__label{ display:inline; }
-  .rl-controls{ padding:var(--space-4); }
 
-  /* The sticky search bar assumes a fixed desktop header height (top:64px) —
-     the mobile header's own height varies with the hamburger row, so instead
-     of chasing that offset the bar just goes back to normal document flow
-     below ~768px. It still scrolls into view quickly; it just doesn't pin. */
-  .rl-controls{ position:static; box-shadow:none; }
+  /* Sort has its own control on the rate list toolbar already covered by
+     filters — dropping it from the mobile controls bar keeps the frozen
+     search row down to just search + page size instead of three stacked
+     controls. */
+  #sortWrap{ display:none; }
+
+  .rl-controls{ padding:var(--space-4); }
 
   .stat-cards{ grid-template-columns:repeat(3,1fr); gap:var(--space-2); }
   .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
@@ -111,6 +110,11 @@
   .rl-sort{ width:100%; }
   .rl-sort select{ width:100%; }
   .cart-drawer{ width:100vw; }
+
+  /* The frozen search bar's top offset tracks the header's real height —
+     it shrinks here as the logo drops to 36px and the hamburger button
+     (38px) becomes the tallest element in the row. */
+  .rl-controls{ top:60px; }
 
   .section-head{ margin-bottom:var(--space-6); }
   .stat-cards{ margin-bottom:var(--space-5); }

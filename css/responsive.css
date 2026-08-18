@@ -25,7 +25,9 @@
 
   .hero__grid{ grid-template-columns:1fr; }
   .hero::before{ width:360px; height:360px; right:-120px; top:-100px; }
-  .slip{ transform:none; max-width:420px; margin:0 auto; }
+  /* The specimen-requisition slip is a nice desktop flourish but just eats
+     scroll distance above the fold on a phone — drop it entirely here. */
+  .hero__slip-wrap{ display:none; }
   .pillars{ grid-template-columns:1fr; }
   .founder__grid{ grid-template-columns:1fr; }
   .footer__top{ grid-template-columns:1fr 1fr; }
@@ -77,11 +79,9 @@
   }
   .add-btn__label{ display:inline; }
 
-  /* Sort has its own control on the rate list toolbar already covered by
-     filters — dropping it from the mobile controls bar keeps the frozen
-     search row down to just search + page size instead of three stacked
-     controls. */
-  #sortWrap{ display:none; }
+  /* Sort and page-size drop out of the mobile controls bar entirely —
+     leaves .rl-right empty, so the frozen bar is just the search input. */
+  .rl-right{ display:none; }
 
   .rl-controls{ padding:var(--space-4); }
 
@@ -106,9 +106,6 @@
   .cta-band{ padding:var(--space-6); flex-direction:column; align-items:flex-start; }
   .cta-band .btn{ width:100%; justify-content:center; }
   blockquote.pull p{ font-size:var(--text-lg); }
-  .rl-right{ width:100%; }
-  .rl-sort{ width:100%; }
-  .rl-sort select{ width:100%; }
   .cart-drawer{ width:100vw; }
 
   /* The frozen search bar's top offset tracks the header's real height —

@@ -10,14 +10,18 @@ AVM.modules = AVM.modules || {};
   // first N chips plus a "+N more" toggle — keeps large facets (e.g. 20 categories)
   // from dominating the page on first load. Expanded state lives on the container
   // node itself (container._expanded) so it survives re-renders triggered by clicks.
-  function renderFilterGroup({ container, facetKey, options, onChange, collapsedCount }) {
+  // singleSelect (optional): radio-style instead of the default checkbox-style
+  // toggle — picking a chip replaces whatever was active instead of adding to
+  // it, and the underlying Set never holds more than one entry (still cleared
+  // back to "All" by clicking the active chip again, or the "All" chip itself).
+  function renderFilterGroup({ container, facetKey, options, onChange, collapsedCount, singleSelect }) {
     if (!container) return;
     const activeSet = state.activeFilters[facetKey];
     const isCollapsible = collapsedCount && options.length > collapsedCount;
     const expanded = container._expanded || !isCollapsible;
     container.innerHTML = "";
 
-    const rerender = () => renderFilterGroup({ container, facetKey, options, onChange, collapsedCount });
+    const rerender = () => renderFilterGroup({ container, facetKey, options, onChange, collapsedCount, singleSelect });
 
     const allBtn = document.createElement("button");
     allBtn.type = "button";
@@ -39,7 +43,13 @@ AVM.modules = AVM.modules || {};
       b.className = "rl-filter" + (activeSet.has(opt.id) ? " active" : "");
       b.textContent = opt.label;
       b.onclick = () => {
-        activeSet.has(opt.id) ? activeSet.delete(opt.id) : activeSet.add(opt.id);
+        if (singleSelect) {
+          const wasActive = activeSet.has(opt.id);
+          activeSet.clear();
+          if (!wasActive) activeSet.add(opt.id);
+        } else {
+          activeSet.has(opt.id) ? activeSet.delete(opt.id) : activeSet.add(opt.id);
+        }
         state.currentPage = 1;
         rerender();
         onChange();

@@ -76,6 +76,7 @@ window.AVM = window.AVM || {};
           container: $("filterPrice"), facetKey: "priceBand",
           options: CONFIG.PRICE_BANDS.map(b => ({ id: b.id, label: b.label })),
           onChange: refreshAll,
+          singleSelect: true,
         });
       }
     }

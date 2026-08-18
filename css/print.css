@@ -104,6 +104,7 @@ tfoot .profit{ color:var(--profit); }
 .summary__card b{ font-size:15px; color:var(--navy); font-variant-numeric:tabular-nums; }
 .summary__card.is-profit{ background:var(--profit-bg); }
 .summary__card.is-profit b{ color:var(--profit); }
+.summary__card.is-discount b{ color:var(--amber); }
 
 /* ================= EMPTY STATE ================= */
 .empty{ text-align:center; padding:60px 20px; color:var(--ink-soft); }

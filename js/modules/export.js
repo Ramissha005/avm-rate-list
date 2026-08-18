@@ -22,8 +22,11 @@ AVM.modules = AVM.modules || {};
       ? `${t.name} (${t.code}) — B2C ${money(t.b2c)}`
       : `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
     const sum = AVM.modules.calculations.totals(items);
+    const discountLines = sum.discountRate > 0
+      ? `\nBulk Discount (${Math.round(sum.discountRate * 100)}%): −${money(sum.discountAmount)}\nNet B2B Payable: ${money(sum.netB2b)}`
+      : "";
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
-      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.b2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.margin)}`);
+      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.b2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 
     navigator.clipboard?.writeText(text)
       .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
@@ -46,11 +49,19 @@ AVM.modules = AVM.modules || {};
           { header: "B2C", key: "b2c", type: "currency", width: 12 },
           { header: "Margin", key: "margin", type: "margin", width: 12 },
         ];
+    // The B2B/Margin columns below stay raw (each row summed by an actual
+    // Excel formula), so a discounted total can't be dropped into those
+    // footer cells without them disagreeing with their own SUM() once Excel
+    // recalculates. The bulk discount and net payable figure go in the
+    // subtitle instead, as a plain note alongside the raw column totals.
+    const discountNote = !customerView && sum.discountRate > 0
+      ? ` · Bulk Discount ${Math.round(sum.discountRate * 100)}% (−${AVM.utils.formatters.money(sum.discountAmount)}) → Net B2B ${AVM.utils.formatters.money(sum.netB2b)}`
+      : "";
     AVM.utils.xlsx.downloadWorkbook({
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}`,
+      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${discountNote}`,
       columns: [
         { header: "Code", key: "code", type: "text", width: 12 },
         { header: "Test", key: "name", type: "text", width: 36 },

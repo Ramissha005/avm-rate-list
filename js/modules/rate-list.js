@@ -34,7 +34,11 @@ AVM.modules = AVM.modules || {};
       if (activeFilters.priceBand.size && !inPriceBand(t, activeFilters.priceBand)) return false;
       if (searchTerm) {
         const s = searchTerm.toLowerCase();
-        const haystack = [t.name, t.code, t.category, t.tech, t.department].filter(Boolean).join(" ").toLowerCase();
+        // Aliases (e.g. "Complete Blood Count" for CBC) are never displayed
+        // in the table itself — they only widen what a search term can
+        // match, so a partner searching the full/expanded name still finds
+        // the test even though the row only shows its short display name.
+        const haystack = [t.name, t.code, t.category, t.tech, t.department, ...(t.aliases || [])].filter(Boolean).join(" ").toLowerCase();
         if (!haystack.includes(s)) return false;
       }
       return true;

@@ -42,6 +42,7 @@ AVM.modules = AVM.modules || {};
       <div class="td-head">
         <span class="cell-code">${test.code}</span>
         <h2>${test.name}</h2>
+        ${test.aliases && test.aliases.length ? `<p class="td-aliases">(also known as ${test.aliases.join(", ")})</p>` : ""}
         <div class="td-tags">
           <span class="tech-pill">${test.tech}</span>
         </div>

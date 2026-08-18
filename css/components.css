@@ -729,7 +729,12 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 /* ---------- Test-detail drawer ---------- */
 .td-head{ padding-bottom:var(--space-3); border-bottom:1px solid var(--line); margin-bottom:var(--space-3); }
-.td-head h2{ font-size:var(--text-xl); color:var(--navy); margin:var(--space-2) 0 var(--space-3); }
+.td-head h2{ font-size:var(--text-xl); color:var(--navy); margin:var(--space-2) 0 4px; }
+/* Alternate/expanded names (e.g. "Complete Blood Count" under CBC's display
+   name) — these only exist to widen search matching (see rate-list.js); the
+   only place they're ever shown to a person is this one small note under
+   the test's real name in its detail drawer. */
+.td-aliases{ font-size:var(--text-xs); color:var(--ink-faint); margin:0 0 var(--space-3); }
 .td-tags{ display:flex; gap:var(--space-2); flex-wrap:wrap; }
 .td-facts{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-3) var(--space-4); margin-bottom:var(--space-5); }
 .td-facts div{ display:flex; flex-direction:column; gap:2px; }

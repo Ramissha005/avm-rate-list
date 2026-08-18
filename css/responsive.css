@@ -114,6 +114,22 @@
   .hero{ padding:var(--space-12) 0 var(--space-9); }
   .hero::before{ width:280px; height:280px; right:-100px; top:-80px; }
   .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
+
+  /* "We focus & specialize in" pills — on desktop these are a flex row that
+     wraps whenever a pill runs out of room, but at phone widths every pill's
+     own text is already close to the full row width, so each one wraps onto
+     its own line (reads as a plain vertical list). An explicit 2-column
+     grid instead fixes each pill to a track width, wrapping its *text*
+     rather than the whole row — 5 items in 2 columns leaves the 5th alone
+     in the last row, left column, matching bullet lists elsewhere. */
+  .hero__specialties{
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--space-2);
+  }
+  .hero__specialties > span{
+    min-width:0; white-space:normal; align-items:flex-start;
+  }
+  .hero__specialties .dot{ margin-top:0.4em; }
+
   .footer__top{ grid-template-columns:1fr; }
   .cta-band{ padding:var(--space-6); flex-direction:column; align-items:flex-start; }
   .cta-band .btn{ width:100%; justify-content:center; }

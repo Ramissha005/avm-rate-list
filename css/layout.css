@@ -400,15 +400,15 @@ footer a:hover{ color:#fff; }
 
 .cart-body{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:var(--space-4) var(--space-6); }
 
-/* Capped so the test list above (.cart-body, flex:1) keeps the majority of
-   the drawer's height instead of shrinking to fit whatever the totals/
-   margin/actions below happen to need — a full B2B+MSB+discount+margin
-   stack could otherwise push the list down to just one or two visible
-   tests. If the footer's own content still can't fit under the cap (e.g.
-   several nudge hints all showing at once), it scrolls internally rather
-   than eating further into the list's space. */
+/* Capped at 40% (test list above keeps the other 60%, see .cart-body)
+   instead of shrinking to fit whatever the totals/margin/actions below
+   happen to need — a full B2B+MSB+discount+margin stack could otherwise
+   push the list down to just one or two visible tests. If the footer's
+   own content still can't fit under the cap (e.g. several nudge hints all
+   showing at once), it scrolls internally rather than eating further into
+   the list's space. */
 .cart-foot{
-  flex:0 0 auto; max-height:34%; overflow-y:auto;
+  flex:0 0 auto; max-height:40%; overflow-y:auto;
   border-top:1px solid var(--line); padding:var(--space-4) var(--space-6) var(--space-5);
 }
 

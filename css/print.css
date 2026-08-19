@@ -110,6 +110,9 @@ tfoot .profit{ color:var(--profit); }
 .summary__card.is-profit{ background:var(--profit-bg); }
 .summary__card.is-profit b{ color:var(--profit); }
 .summary__card.is-discount b{ color:var(--amber); }
+/* Original B2C figure once a customer-copy discounted price is entered
+   (see print.js) — the card right after it carries the discounted amount. */
+.summary__card b.summary__card--struck{ text-decoration:line-through; color:var(--ink-faint); }
 
 /* ================= EMPTY STATE ================= */
 .empty{ text-align:center; padding:60px 20px; color:var(--ink-soft); }

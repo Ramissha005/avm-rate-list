@@ -599,6 +599,42 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 }
 .price-box__amount{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--navy); }
 
+/* Original price, struck through, shown above the headline amount once a
+   discounted price is entered below — the headline amount itself becomes
+   the discounted figure at that point (see profile.js updatePriceBox). */
+.price-box__original-row{ display:flex; align-items:baseline; gap:var(--space-2); margin-bottom:2px; }
+.price-box__original-label{ font-size:var(--text-2xs); font-weight:600; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; }
+.price-box__original-amount{
+  font-family:var(--font-display); font-size:var(--text-md); font-weight:600; color:var(--ink-faint);
+  text-decoration:line-through; font-variant-numeric:tabular-nums;
+}
+
+/* Staff-facing control for typing a one-off B2C discount — B2C never gets
+   the B2B bulk-value discount, so this is the only way to hand a customer
+   a lower number. Lives inside the price box so it's visually tied to the
+   figure it changes. */
+.price-box__discount-editor{ margin-top:var(--space-3); padding-top:var(--space-3); border-top:1px dashed var(--line); }
+.price-box__discount-editor-label{
+  display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-soft);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;
+}
+.price-box__discount-editor-row{ display:flex; align-items:center; gap:6px; }
+.price-box__discount-currency{ font-weight:600; color:var(--ink-soft); }
+.price-box__discount-input{
+  flex:1; min-width:0; font-family:var(--font-body); font-size:var(--text-base); font-weight:600; color:var(--navy);
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-xs);
+  padding:7px 10px; -moz-appearance:textfield;
+}
+.price-box__discount-input:focus{ outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(30,99,180,0.15); }
+.price-box__discount-input::-webkit-outer-spin-button,
+.price-box__discount-input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.price-box__discount-clear{
+  flex:none; width:28px; height:28px; border-radius:50%; border:1px solid var(--line); background:var(--card);
+  color:var(--ink-faint); font-size:var(--text-xs); cursor:pointer; line-height:1;
+}
+.price-box__discount-clear:hover{ color:var(--ink); border-color:var(--ink-faint); }
+.price-box__discount-warn{ margin:6px 0 0; font-size:var(--text-2xs); font-weight:600; color:var(--amber-dark); }
+
 .margin-box__amount{
   font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--profit);
   line-height:1.1; font-variant-numeric:tabular-nums;

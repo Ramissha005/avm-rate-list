@@ -24,6 +24,7 @@ AVM.modules = AVM.modules || {};
     AVM.utils.storage.writeJSON(CONFIG.STORAGE_KEYS.PROFILE, {
       codes: [...state.cart],
       packageOf: Object.fromEntries(state.cartPackageOf),
+      discountedPrice: state.discountedPrice,
     });
   }
 
@@ -35,6 +36,34 @@ AVM.modules = AVM.modules || {};
     state.cart = new Set(codes);
     const packageOf = (saved && !Array.isArray(saved) && saved.packageOf) || {};
     state.cartPackageOf = new Map(Object.entries(packageOf));
+    const discountedPrice = saved && !Array.isArray(saved) && typeof saved.discountedPrice === "number"
+      ? saved.discountedPrice : null;
+    state.discountedPrice = discountedPrice;
+  }
+
+  // `value` comes straight from the discount input's raw string on every
+  // keystroke. Blank clears the discount; anything that doesn't parse to a
+  // finite, non-negative number is ignored rather than wiping out what was
+  // typed so far (e.g. a bare "-" mid-edit) — the field keeps showing what
+  // the user typed (see renderCart's focus guard) even though state hasn't
+  // caught up to it yet.
+  function setDiscountedPrice(value) {
+    const trimmed = String(value == null ? "" : value).trim();
+    if (trimmed === "") {
+      state.discountedPrice = null;
+      persistCart();
+      return;
+    }
+    const num = Number(trimmed);
+    if (Number.isFinite(num) && num >= 0) {
+      state.discountedPrice = num;
+      persistCart();
+    }
+  }
+
+  function clearDiscountedPrice() {
+    state.discountedPrice = null;
+    persistCart();
   }
 
   // The test already occupying the same conflict-group "slot" as `code`, if
@@ -143,6 +172,7 @@ AVM.modules = AVM.modules || {};
   function clearProfile() {
     state.cart.clear();
     state.cartPackageOf.clear();
+    state.discountedPrice = null;
     persistCart();
     AVM.utils.helpers.showToast("Profile cleared");
   }
@@ -167,6 +197,36 @@ AVM.modules = AVM.modules || {};
     });
     if (individual.length) groups.push({ pkg: null, items: individual });
     return groups;
+  }
+
+  // The customer-copy price box: plain "Price" (= B2C total) normally, or —
+  // once a discounted price is entered — "Original Price" (struck through)
+  // above a highlighted "Discounted Price". B2C never gets the B2B bulk
+  // discount (see calculations.js), so this manual figure is the only
+  // discount a customer copy can show. `original` is 0 for an empty cart.
+  // Only touches the price-box elements; caller still fills the plain B2C
+  // row above it.
+  function updatePriceBox(elements, customerView, original) {
+    if (!elements.priceBox) return;
+    const { money } = AVM.utils.formatters;
+    const discounted = state.discountedPrice;
+    const hasDiscount = discounted != null && discounted > 0;
+
+    if (elements.priceOriginalRow) elements.priceOriginalRow.style.display = hasDiscount ? "" : "none";
+    if (elements.priceOriginal) elements.priceOriginal.textContent = money(original);
+    if (elements.priceLabel) elements.priceLabel.textContent = hasDiscount ? "Discounted Price" : "Price";
+    if (elements.price) elements.price.textContent = money(hasDiscount ? discounted : original);
+
+    // Don't stomp on what's being typed — resetting `.value` mid-keystroke
+    // (every render goes through here) would fight the user's cursor.
+    if (elements.discountInput && document.activeElement !== elements.discountInput) {
+      elements.discountInput.value = discounted != null ? discounted : "";
+    }
+    if (elements.discountClear) elements.discountClear.hidden = discounted == null;
+    if (elements.discountWarn) {
+      const showWarn = hasDiscount && discounted >= original;
+      elements.discountWarn.style.display = showWarn ? "" : "none";
+    }
   }
 
   function renderCart(elements) {
@@ -200,7 +260,7 @@ AVM.modules = AVM.modules || {};
       elements.b2c.textContent = money(0);
       elements.margin.textContent = money(0);
       if (elements.marginPct) elements.marginPct.textContent = "+0%";
-      if (elements.price) elements.price.textContent = money(0);
+      updatePriceBox(elements, customerView, 0);
       return;
     }
 
@@ -278,7 +338,7 @@ AVM.modules = AVM.modules || {};
     // bulk B2B discount below, not before it.
     elements.margin.textContent = money(sum.netMargin);
     if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
-    if (elements.price) elements.price.textContent = money(sum.b2c);
+    updatePriceBox(elements, customerView, sum.b2c);
 
     // Minimum Sample Billing: surface it as its own line (not silently
     // folded into B2B Cost above) plus a hint telling the partner exactly
@@ -331,5 +391,6 @@ AVM.modules = AVM.modules || {};
   AVM.modules.profile = {
     persistCart, restoreCart, toggleTest, addPackage, removePackage, isPackageActive,
     removeFromProfile, clearProfile, renderCart, conflictingCodeFor,
+    setDiscountedPrice, clearDiscountedPrice,
   };
 })();

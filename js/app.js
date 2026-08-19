@@ -28,6 +28,8 @@ window.AVM = window.AVM || {};
       b2b: $("cartB2B"), b2c: $("cartB2C"), margin: $("cartMargin"), marginPct: $("cartMarginPct"),
       b2bRow: $("cartB2BRow"), marginBox: $("marginBox"),
       b2cRow: $("cartB2CRow"), priceBox: $("priceBox"), price: $("cartPrice"),
+      priceLabel: $("priceLabel"), priceOriginalRow: $("priceOriginalRow"), priceOriginal: $("priceOriginal"),
+      discountInput: $("discountedPriceInput"), discountClear: $("clearDiscountedPrice"), discountWarn: $("discountWarn"),
       discountRow: $("cartDiscountRow"), discountLabel: $("cartDiscountLabel"), discountAmt: $("cartDiscountAmt"),
       netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"), discountHint: $("cartDiscountHint"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
@@ -135,6 +137,18 @@ window.AVM = window.AVM || {};
       $("customerViewToggle").onchange = (e) => {
         AVM.state.customerView = e.target.checked;
         if ($("customerViewLabel")) $("customerViewLabel").classList.toggle("customer-view-toggle--active", e.target.checked);
+        refreshAll();
+      };
+    }
+    if ($("discountedPriceInput")) {
+      $("discountedPriceInput").oninput = (e) => {
+        AVM.modules.profile.setDiscountedPrice(e.target.value);
+        refreshAll();
+      };
+    }
+    if ($("clearDiscountedPrice")) {
+      $("clearDiscountedPrice").onclick = () => {
+        AVM.modules.profile.clearDiscountedPrice();
         refreshAll();
       };
     }

@@ -25,11 +25,20 @@ AVM.modules = AVM.modules || {};
     const discountLines = sum.discountRate > 0
       ? `\nBulk Discount (${Math.round(sum.discountRate * 100)}%): −${money(sum.discountAmount)}\nNet B2B Payable: ${money(sum.netB2b)}`
       : "";
+    // The manually-entered customer-copy discount (see profile.js) — only
+    // surfaces here in customer view, and only when it's actually lower
+    // than the B2C total.
+    const discountedPrice = state.discountedPrice;
+    const hasCustomerDiscount = customerView && typeof discountedPrice === "number"
+      && discountedPrice > 0 && discountedPrice < sum.b2c;
+    const b2cLine = hasCustomerDiscount
+      ? `Original Price: ${money(sum.b2c)}\nDiscounted Price: ${money(discountedPrice)}`
+      : `B2C Value: ${money(sum.b2c)}`;
     // B2B Cost is the MSB-adjusted figure (grouped by sample type, floored
     // at ₹25/sample type) — the actual billable amount before any bulk
     // discount, not a raw per-test sum.
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
-      (customerView ? `\n\nB2C Value: ${money(sum.b2c)}` : `\n\nB2B Cost: ${money(sum.msbB2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
+      (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.msbB2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 
     navigator.clipboard?.writeText(text)
       .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
@@ -64,11 +73,22 @@ AVM.modules = AVM.modules || {};
     const discountNote = !customerView && sum.discountRate > 0
       ? ` · Bulk Discount ${Math.round(sum.discountRate * 100)}% (−${AVM.utils.formatters.money(sum.discountAmount)}) → Net B2B ${AVM.utils.formatters.money(sum.netB2b)}`
       : "";
+    // The manually-entered customer-copy discount (see profile.js) — only
+    // in customer view, and only when it's actually lower than the B2C
+    // total. The B2C column itself stays a raw per-row figure (same reason
+    // B2B/Margin do above) so it still matches its own SUM() footer; this
+    // note is where the discounted price surfaces instead.
+    const discountedPrice = state.discountedPrice;
+    const hasCustomerDiscount = customerView && typeof discountedPrice === "number"
+      && discountedPrice > 0 && discountedPrice < sum.b2c;
+    const customerDiscountNote = hasCustomerDiscount
+      ? ` · Discounted Price ${AVM.utils.formatters.money(discountedPrice)} (Original ${AVM.utils.formatters.money(sum.b2c)})`
+      : "";
     AVM.utils.xlsx.downloadWorkbook({
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${discountNote}`,
+      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${discountNote}${customerDiscountNote}`,
       columns: [
         { header: "Code", key: "code", type: "text", width: 12 },
         { header: "Test", key: "name", type: "text", width: 36 },

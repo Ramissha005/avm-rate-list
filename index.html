@@ -248,8 +248,21 @@
       <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
     </div>
     <div class="price-box" id="priceBox" style="display:none">
-      <span class="price-box__label">Price</span>
+      <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
+        <span class="price-box__original-label">Original Price</span>
+        <span class="price-box__original-amount" id="priceOriginal">₹0</span>
+      </div>
+      <span class="price-box__label" id="priceLabel">Price</span>
       <span class="price-box__amount" id="cartPrice">₹0</span>
+      <div class="price-box__discount-editor">
+        <label class="price-box__discount-editor-label" for="discountedPriceInput">Enter Discounted Price</label>
+        <div class="price-box__discount-editor-row">
+          <span class="price-box__discount-currency" aria-hidden="true">₹</span>
+          <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="price-box__discount-input" placeholder="e.g. 450">
+          <button type="button" class="price-box__discount-clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+        </div>
+        <p class="price-box__discount-warn" id="discountWarn" style="display:none">Should be lower than the original price</p>
+      </div>
     </div>
     <div class="margin-box" id="marginBox">
       <div class="margin-box__top">

@@ -12,6 +12,18 @@ AVM.state = {
   // so it's never accidentally left on for the next person using this
   // browser to view their own internal numbers.
   customerView: false,
+  // A manually-entered discounted price for the customer copy — B2C rates
+  // never get the B2B bulk-value discount, so this is the only way to show
+  // a customer a lower number: whoever's building the profile types one in
+  // (Make My Profile → Customer copy), and every customer-facing surface
+  // (cart drawer, Print Profile, Copy List, Export Excel) then shows the
+  // original B2C value alongside it instead of swapping it outright. Kept
+  // in rupees (not a %) since it's a one-off negotiated price, not a tiered
+  // rule like the B2B discount. null means no discount is set. Persisted
+  // alongside the cart (see profile.js) so it survives a reload and carries
+  // into Print Profile, but — like the cart itself, and unlike
+  // `customerView` above — isn't reset on purpose each session.
+  discountedPrice: null,
   currentPage: 1,
   pageSize: (AVM.CONFIG && AVM.CONFIG.DEFAULT_PAGE_SIZE) || 25,
 };

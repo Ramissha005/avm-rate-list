@@ -16,6 +16,7 @@ AVM.modules = AVM.modules || {};
     AVM.utils.storage.writeSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, {
       codes: [...state.cart],
       customerView: state.customerView,
+      discountedPrice: state.discountedPrice,
     });
     // index.html sits at the project root; every page/* file sits one level down —
     // this project has no build step to resolve paths, so branch on where we are.
@@ -52,6 +53,7 @@ AVM.modules = AVM.modules || {};
     tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
     refEl, countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
     sumDiscountCardEl, sumDiscountLabelEl, sumDiscountEl,
+    sumB2CLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
     contentEl, emptyEl, sheetEl, titleEl, autoPrint,
   }, customerViewOverride) {
     const money = AVM.utils.formatters.money;
@@ -63,7 +65,14 @@ AVM.modules = AVM.modules || {};
       const codes = Array.isArray(saved) ? saved : (saved.codes || []);
       await AVM.data.loadCatalog();
       const { byCode } = AVM.data.getCatalog();
-      cachedItems = { items: codes.map(c => byCode[c]).filter(Boolean), customerView: Array.isArray(saved) ? false : !!saved.customerView };
+      cachedItems = {
+        items: codes.map(c => byCode[c]).filter(Boolean),
+        customerView: Array.isArray(saved) ? false : !!saved.customerView,
+        // Same "one-off B2C price, not a tiered rule" figure as the cart
+        // drawer's price box — carried over via the print payload above so
+        // it survives opening in a new tab/window.
+        discountedPrice: Array.isArray(saved) || typeof saved.discountedPrice !== "number" ? null : saved.discountedPrice,
+      };
     }
     const items = cachedItems.items;
     const customerView = customerViewOverride != null ? customerViewOverride : cachedItems.customerView;
@@ -120,6 +129,21 @@ AVM.modules = AVM.modules || {};
         if (sumDiscountLabelEl) sumDiscountLabelEl.textContent = `Bulk Discount (${Math.round(sum.discountRate * 100)}%)`;
         if (sumDiscountEl) sumDiscountEl.textContent = "−" + money(sum.discountAmount);
       }
+    }
+
+    // The manually-entered customer-copy discount (see profile.js) — B2C
+    // never gets the B2B bulk discount above, so this is the only discount
+    // a customer copy ever shows. Only takes effect when it's actually
+    // lower than the B2C total; otherwise this prints exactly like before
+    // (plain "B2C Value" card, no strike-through).
+    const discountedPrice = cachedItems.discountedPrice;
+    const hasCustomerDiscount = customerView && typeof discountedPrice === "number"
+      && discountedPrice > 0 && discountedPrice < sum.b2c;
+    if (sumB2CLabelEl) sumB2CLabelEl.textContent = hasCustomerDiscount ? "Original Price" : "B2C Value";
+    if (sumB2CEl) sumB2CEl.classList.toggle("summary__card--struck", hasCustomerDiscount);
+    if (sumDiscountedCardEl) {
+      sumDiscountedCardEl.hidden = !hasCustomerDiscount;
+      if (hasCustomerDiscount && sumDiscountedPriceEl) sumDiscountedPriceEl.textContent = money(discountedPrice);
     }
 
     if (autoPrint) afterFontsReady(() => setTimeout(() => window.print(), 150));

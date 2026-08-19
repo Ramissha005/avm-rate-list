@@ -248,18 +248,29 @@
       <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
       <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
     </div>
-    <!-- Staff-only: type a one-off B2C discount here and see its effect on
-         Your Margin below immediately — never shown in Customer copy (the
-         customer just sees Original/Discounted Price in the box below,
-         with no editing controls). -->
-    <div class="discount-editor" id="discountEditor">
-      <label class="discount-editor__label" for="discountedPriceInput">Enter Discounted Price for Customer</label>
-      <div class="discount-editor__row">
-        <span class="discount-editor__currency" aria-hidden="true">₹</span>
-        <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
-        <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+    <!-- Staff-only row: type a one-off B2C discount on the left and watch
+         Your Margin react on the right, side by side so neither eats the
+         test list's space above. Never shown in Customer copy (the
+         customer just sees the read-only Original/Discounted Price box
+         below instead). -->
+    <div class="discount-margin-row" id="discountMarginRow">
+      <div class="discount-editor" id="discountEditor">
+        <label class="discount-editor__label" for="discountedPriceInput">Discounted Price</label>
+        <div class="discount-editor__row">
+          <span class="discount-editor__currency" aria-hidden="true">₹</span>
+          <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
+          <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+        </div>
+        <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
       </div>
-      <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
+      <div class="margin-box" id="marginBox">
+        <div class="margin-box__top">
+          <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
+          <span class="margin-box__pct" id="cartMarginPct">+0%</span>
+        </div>
+        <div class="margin-box__amount" id="cartMargin">₹0</div>
+        <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
+      </div>
     </div>
     <div class="price-box" id="priceBox" style="display:none">
       <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
@@ -269,15 +280,10 @@
       <span class="price-box__label" id="priceLabel">Price</span>
       <span class="price-box__amount" id="cartPrice">₹0</span>
     </div>
-    <div class="margin-box" id="marginBox">
-      <div class="margin-box__top">
-        <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
-        <span class="margin-box__pct" id="cartMarginPct">+0%</span>
-      </div>
-      <div class="margin-box__amount" id="cartMargin">₹0</div>
-      <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
-    </div>
-    <div class="cart-actions">
+    <!-- Copy List / Export Excel / Print Profile are customer-handoff
+         actions — only meaningful once Customer copy is on, so they're
+         hidden the rest of the time (see renderCart's customerView toggle). -->
+    <div class="cart-actions" id="cartActions" style="display:none">
       <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
       <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
       <button class="btn btn--navy btn--sm" id="printList">Print Profile</button>

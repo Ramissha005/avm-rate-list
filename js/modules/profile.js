@@ -274,7 +274,14 @@ AVM.modules = AVM.modules || {};
     if (elements.b2bRow) elements.b2bRow.style.display = customerView ? "none" : "";
     if (elements.b2cRow) elements.b2cRow.style.display = customerView ? "none" : "";
     if (elements.marginBox) elements.marginBox.style.display = customerView ? "none" : "";
+    // The row wrapping the discount editor + margin box side by side —
+    // hidden as a whole in customer view (both children would be empty
+    // anyway) rather than leaving a blank flex row behind.
+    if (elements.discountMarginRow) elements.discountMarginRow.style.display = customerView ? "none" : "";
     if (elements.priceBox) elements.priceBox.style.display = customerView ? "" : "none";
+    // Copy List / Export Excel / Print Profile are customer-handoff
+    // actions — only relevant once there's a customer copy to hand off.
+    if (elements.cartActions) elements.cartActions.style.display = customerView ? "" : "none";
     // Reset every render — shown again below only when a bulk discount is
     // actually in effect (and never in customer view, alongside B2B/margin).
     if (elements.discountRow) elements.discountRow.style.display = "none";

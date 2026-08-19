@@ -50,10 +50,18 @@
         <p class="hero__sub hero__sub--lead">Grow More. Earn More. Build with AVMLabs.</p>
         <p class="hero__sub">Become an AVMLabs Franchise Partner and unlock the commercial advantages, technology, marketing support and business opportunities you need to grow your laboratory business.</p>
 
-        <div class="offer-banner">
+        <div class="offer-banner" tabindex="0">
           <span class="offer-banner__tag">🚀 Launch Offer</span>
-          <p class="offer-banner__headline"><span class="offer-banner__price">₹1 Lakh</span> Franchise Fee for the First 100 Partners</p>
+          <p class="offer-banner__headline"><span class="offer-banner__price">₹1 Lakh</span> Franchise Fee for First 100</p>
           <p class="offer-banner__regular">Regular Fee: <s>₹5 Lakh</s></p>
+          <!-- Hover reveal: a colored panel sweeps in to fully cover the
+               banner, then this message fades in on top of it — the
+               "book soon" urgency line stays hidden until someone's
+               actually engaging with the offer instead of always-on
+               competing with the price for attention. -->
+          <div class="offer-banner__urgency" aria-hidden="true">
+            <span>⏳ Book Soon! Limited Seats Available</span>
+          </div>
         </div>
 
         <div class="hero__ctas">

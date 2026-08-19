@@ -6,7 +6,14 @@ AVM.modules = AVM.modules || {};
     return test.b2c - test.b2b;
   }
 
+  // A free/promotional test (b2b: 0 is a real, legitimate value — not
+  // missing data) would otherwise divide by zero and render the literal
+  // string "Infinity×" in the UI — there's no finite multiplier to report,
+  // so say so rather than showing a number. Callers interpolate this
+  // directly (e.g. `${multiplier(test)}x`), so it stays a pre-formatted
+  // string either way, same as before.
   function multiplier(test) {
+    if (!test.b2b) return "—";
     return (test.b2c / test.b2b).toFixed(1);
   }
 

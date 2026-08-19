@@ -116,6 +116,16 @@ AVM.modules = AVM.modules || {};
   function removePackage(pkg) {
     let removed = 0;
     pkg.codes.forEach(code => {
+      // A code shared by two overlapping packages (e.g. UTSH in both Total
+      // Thyroid and Free Thyroid) gets re-tagged to whichever was added
+      // most recently (see addPackage) — so it's currently displayed under
+      // *that* package's group, not this one. If it's now tagged to a
+      // different package, leave it alone; removing this panel shouldn't
+      // silently pull a test out from under a different, still-active
+      // group. Untagged codes (added individually) and codes still tagged
+      // to this package are removed as normal.
+      const taggedTo = state.cartPackageOf.get(code);
+      if (taggedTo && taggedTo !== pkg.id) return;
       if (state.cart.delete(code)) removed++;
       state.cartPackageOf.delete(code);
     });
@@ -161,7 +171,7 @@ AVM.modules = AVM.modules || {};
 
   function renderCart(elements) {
     const { byCode } = AVM.data.getCatalog();
-    const { money } = AVM.utils.formatters;
+    const { money, escapeHtml: esc } = AVM.utils.formatters;
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
     const customerView = state.customerView;
 
@@ -199,9 +209,9 @@ AVM.modules = AVM.modules || {};
     elements.body.innerHTML = groups.map(group => {
       const rows = group.items.map(t => `
         <div class="cart-item">
-          <div class="cart-item__name">${t.name}<small>${t.code}${customerView ? ` · Price ${money(t.b2c)}` : ` · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}`}</small></div>
+          <div class="cart-item__name">${esc(t.name)}<small>${esc(t.code)}${customerView ? ` · Price ${money(t.b2c)}` : ` · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}`}</small></div>
           ${customerView ? "" : `<div class="cart-item__margin">+${money(t.b2c - t.b2b)}</div>`}
-          <button type="button" class="cart-item__remove" data-code="${t.code}" aria-label="Remove ${t.name}">✕</button>
+          <button type="button" class="cart-item__remove" data-code="${esc(t.code)}" aria-label="Remove ${esc(t.name)}">✕</button>
         </div>
       `).join("");
 
@@ -214,19 +224,19 @@ AVM.modules = AVM.modules || {};
       const testCount = AVM.modules.calculations.packageTestCount(group.pkg);
       const calcRows = (group.pkg.calculatedParams || []).map(name => `
         <div class="cart-item cart-item--calc">
-          <div class="cart-item__name">${name}<small>Calculated from the tests above</small></div>
+          <div class="cart-item__name">${esc(name)}<small>Calculated from the tests above</small></div>
         </div>
       `).join("");
 
       return `
         <div class="cart-group ${collapsed ? "is-collapsed" : ""}">
           <div class="cart-group__header">
-            <button type="button" class="cart-group__title" data-toggle-group="${groupKey}" aria-expanded="${!collapsed}">
+            <button type="button" class="cart-group__title" data-toggle-group="${esc(groupKey)}" aria-expanded="${!collapsed}">
               <span class="cart-group__chevron" aria-hidden="true">▾</span>
-              <span class="cart-group__title-text">${group.pkg.name}</span>
+              <span class="cart-group__title-text">${esc(group.pkg.name)}</span>
               <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""}</span>
             </button>
-            <button type="button" class="cart-group__remove" data-remove-pkg="${group.pkg.id}" aria-label="Remove ${group.pkg.name} panel">✕</button>
+            <button type="button" class="cart-group__remove" data-remove-pkg="${esc(group.pkg.id)}" aria-label="Remove ${esc(group.pkg.name)} panel">✕</button>
           </div>
           <div class="cart-group__items" ${collapsed ? "hidden" : ""}>${rows}${calcRows}</div>
         </div>`;

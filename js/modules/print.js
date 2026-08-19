@@ -20,7 +20,12 @@ AVM.modules = AVM.modules || {};
     // index.html sits at the project root; every page/* file sits one level down —
     // this project has no build step to resolve paths, so branch on where we are.
     const target = location.pathname.includes("/pages/") ? "print-profile.html" : "pages/print-profile.html";
-    window.open(target, "_blank");
+    // A popup blocker (or a browser that doesn't treat this click handler
+    // as a "direct" user gesture) makes window.open() return null with no
+    // error thrown — silently doing nothing otherwise, so the user just
+    // sees the button appear broken with no explanation.
+    const win = window.open(target, "_blank");
+    if (!win) AVM.utils.helpers.showToast("Pop-up blocked — allow pop-ups to open the print view");
   }
 
   // Short human-friendly reference for the printed sheet — not a persisted ID,
@@ -51,6 +56,7 @@ AVM.modules = AVM.modules || {};
   }, customerViewOverride) {
     const money = AVM.utils.formatters.money;
     const pluralize = AVM.utils.formatters.pluralize;
+    const esc = AVM.utils.formatters.escapeHtml;
 
     if (!cachedItems) {
       const saved = AVM.utils.storage.readSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, []);
@@ -75,27 +81,29 @@ AVM.modules = AVM.modules || {};
       return;
     }
 
-    tbody.innerHTML = items.map((t, i) => `
-      <tr>
-        <td class="sr">${i + 1}</td>
-        <td><span class="code">${t.code}</span></td>
-        <td class="name">${t.name}</td>
-        <td class="tech">${t.tech}</td>
-        <td class="sample">${t.sample}</td>
-        <td class="num c-b2b">${money(t.b2b)}</td>
-        <td class="num">${money(t.b2c)}</td>
-        <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
-      </tr>
-    `).join("");
+    if (tbody) {
+      tbody.innerHTML = items.map((t, i) => `
+        <tr>
+          <td class="sr">${i + 1}</td>
+          <td><span class="code">${esc(t.code)}</span></td>
+          <td class="name">${esc(t.name)}</td>
+          <td class="tech">${esc(t.tech)}</td>
+          <td class="sample">${esc(t.sample)}</td>
+          <td class="num c-b2b">${money(t.b2b)}</td>
+          <td class="num">${money(t.b2c)}</td>
+          <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
+        </tr>
+      `).join("");
+    }
 
     // The table's own rows list each test's raw B2B/margin, so its footer
     // total stays raw too (it's a plain sum of what's printed above it).
     // The bulk discount is a whole-profile figure, not a per-test one — it
     // surfaces in the summary cards below instead, alongside the partner's
     // real (post-discount) margin.
-    totalB2BEl.textContent = money(sum.b2b);
-    totalB2CEl.textContent = money(sum.b2c);
-    totalMarginEl.textContent = "+" + money(sum.margin);
+    if (totalB2BEl) totalB2BEl.textContent = money(sum.b2b);
+    if (totalB2CEl) totalB2CEl.textContent = money(sum.b2c);
+    if (totalMarginEl) totalMarginEl.textContent = "+" + money(sum.margin);
     if (countEl) countEl.textContent = pluralize(items.length, "test");
 
     // Unlike the table footer above (raw, row-matching), this summary card

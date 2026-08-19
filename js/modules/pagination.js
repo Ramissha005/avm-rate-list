@@ -64,7 +64,11 @@ AVM.modules = AVM.modules || {};
       `<option value="${n}" ${n === state.pageSize ? "selected" : ""}>${n} per page</option>`
     ).join("");
     select.addEventListener("change", (e) => {
-      state.pageSize = parseInt(e.target.value, 10);
+      const parsed = parseInt(e.target.value, 10);
+      // A NaN/zero pageSize would turn totalPages into NaN (renderPagination
+      // above), which fails every numeric comparison silently — the clamp
+      // never fires and getPageWindow ends up pushing NaN as a page button.
+      state.pageSize = Number.isFinite(parsed) && parsed > 0 ? parsed : AVM.CONFIG.DEFAULT_PAGE_SIZE;
       state.currentPage = 1;
       onChange();
     });

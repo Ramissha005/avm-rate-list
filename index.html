@@ -238,47 +238,53 @@
     <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a panel.</p>
   </div>
   <div class="cart-foot">
-    <div class="cart-totals">
-      <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
-      <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>
-      <p class="ct-hint ct-hint--msb" id="cartMsbHint" style="display:none"></p>
-      <div class="ct-row ct-row--discount" id="cartDiscountRow" style="display:none"><span id="cartDiscountLabel">Bulk Discount</span><span id="cartDiscountAmt">−₹0</span></div>
-      <div class="ct-row ct-row--net" id="cartNetB2BRow" style="display:none"><span>Net B2B Payable</span><span id="cartNetB2B">₹0</span></div>
-      <p class="ct-hint ct-hint--discount" id="cartDiscountHint" style="display:none"></p>
-      <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
-      <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
-    </div>
-    <!-- Staff-only row: type a one-off B2C discount on the left and watch
-         Your Margin react on the right, side by side so neither eats the
-         test list's space above. Never shown in Customer copy (the
-         customer just sees the read-only Original/Discounted Price box
-         below instead). -->
-    <div class="discount-margin-row" id="discountMarginRow">
-      <div class="discount-editor" id="discountEditor">
-        <label class="discount-editor__label" for="discountedPriceInput">Discounted Price</label>
-        <div class="discount-editor__row">
-          <span class="discount-editor__currency" aria-hidden="true">₹</span>
-          <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
-          <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+    <!-- Everything here can scroll internally if it overflows (see
+         .cart-foot__summary) — Copy List/Export/Print and Clear all below
+         are deliberately kept out of this wrapper so they're never pushed
+         down out of view by that scroll. -->
+    <div class="cart-foot__summary" id="cartFootSummary">
+      <div class="cart-totals">
+        <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
+        <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>
+        <p class="ct-hint ct-hint--msb" id="cartMsbHint" style="display:none"></p>
+        <div class="ct-row ct-row--discount" id="cartDiscountRow" style="display:none"><span id="cartDiscountLabel">Bulk Discount</span><span id="cartDiscountAmt">−₹0</span></div>
+        <div class="ct-row ct-row--net" id="cartNetB2BRow" style="display:none"><span>Net B2B Payable</span><span id="cartNetB2B">₹0</span></div>
+        <p class="ct-hint ct-hint--discount" id="cartDiscountHint" style="display:none"></p>
+        <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
+        <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
+      </div>
+      <!-- Staff-only row: type a one-off B2C discount on the left and watch
+           Your Margin react on the right, side by side so neither eats the
+           test list's space above. Never shown in Customer copy (the
+           customer just sees the read-only Original/Discounted Price box
+           below instead). -->
+      <div class="discount-margin-row" id="discountMarginRow">
+        <div class="discount-editor" id="discountEditor">
+          <label class="discount-editor__label" for="discountedPriceInput">Discounted Price</label>
+          <div class="discount-editor__row">
+            <span class="discount-editor__currency" aria-hidden="true">₹</span>
+            <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
+            <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+          </div>
+          <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
         </div>
-        <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
-      </div>
-      <div class="margin-box" id="marginBox">
-        <div class="margin-box__top">
-          <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
-          <span class="margin-box__pct" id="cartMarginPct">+0%</span>
+        <div class="margin-box" id="marginBox">
+          <div class="margin-box__top">
+            <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
+            <span class="margin-box__pct" id="cartMarginPct">+0%</span>
+          </div>
+          <div class="margin-box__amount" id="cartMargin">₹0</div>
+          <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
         </div>
-        <div class="margin-box__amount" id="cartMargin">₹0</div>
-        <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
       </div>
-    </div>
-    <div class="price-box" id="priceBox" style="display:none">
-      <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
-        <span class="price-box__original-label">Original Price</span>
-        <span class="price-box__original-amount" id="priceOriginal">₹0</span>
+      <div class="price-box" id="priceBox" style="display:none">
+        <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
+          <span class="price-box__original-label">Original Price</span>
+          <span class="price-box__original-amount" id="priceOriginal">₹0</span>
+        </div>
+        <span class="price-box__label" id="priceLabel">Price</span>
+        <span class="price-box__amount" id="cartPrice">₹0</span>
       </div>
-      <span class="price-box__label" id="priceLabel">Price</span>
-      <span class="price-box__amount" id="cartPrice">₹0</span>
     </div>
     <!-- Copy List / Export Excel / Print Profile are customer-handoff
          actions — only meaningful once Customer copy is on, so they're

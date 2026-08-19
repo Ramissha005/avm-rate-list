@@ -400,16 +400,17 @@ footer a:hover{ color:#fff; }
 
 .cart-body{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:var(--space-4) var(--space-6); }
 
-/* Capped at 40% (test list above keeps the other 60%, see .cart-body)
-   instead of shrinking to fit whatever the totals/margin/actions below
-   happen to need — a full B2B+MSB+discount+margin stack could otherwise
-   push the list down to just one or two visible tests. If the footer's
-   own content still can't fit under the cap (e.g. several nudge hints all
-   showing at once), it scrolls internally rather than eating further into
-   the list's space. */
 .cart-foot{
-  flex:0 0 auto; max-height:40%; overflow-y:auto;
+  flex:0 0 auto;
   border-top:1px solid var(--line); padding:var(--space-4) var(--space-6) var(--space-5);
 }
 
-.cart-actions{ display:flex; gap:var(--space-3); flex-wrap:wrap; }
+/* The totals/discount/margin stack — capped so the test list above
+   (.cart-body) keeps the majority (60%) of the drawer's height instead of
+   shrinking to fit whatever this needs. Only *this* part scrolls when it
+   overflows the cap; Copy List/Export/Print and Clear all below it are
+   deliberately outside this wrapper so they're always fully visible,
+   never pushed down or clipped by that scroll. */
+.cart-foot__summary{ max-height:30vh; overflow-y:auto; }
+
+.cart-actions{ display:flex; gap:var(--space-3); flex-wrap:wrap; margin-top:var(--space-4); }

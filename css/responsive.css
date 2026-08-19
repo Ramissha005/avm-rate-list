@@ -142,16 +142,6 @@
   .footer__top{ grid-template-columns:1fr; }
   .cta-band{ padding:var(--space-6); flex-direction:column; align-items:flex-start; }
   .cta-band .btn{ width:100%; justify-content:center; }
-
-  .franchise-marquee{ margin-top:var(--space-7); }
-  .franchise-marquee__head{ padding:var(--space-5) var(--space-5) var(--space-3); gap:var(--space-2); }
-  .franchise-marquee__badge{ font-size:var(--text-lg); }
-  /* "Know more →" reads fine at full size on a narrow head row once the
-     badge itself has wrapped to two lines — dropping to just the arrow
-     would look like a stray glyph, not a shrink. */
-  .franchise-marquee__viewport{ padding:var(--space-3) 0 var(--space-5); }
-  .franchise-marquee__seq{ gap:var(--space-4); padding-right:var(--space-4); }
-  .franchise-marquee__item{ font-size:var(--text-md); }
   blockquote.pull p{ font-size:var(--text-lg); }
   .cart-drawer{ width:100vw; }
 

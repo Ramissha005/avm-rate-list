@@ -75,56 +75,18 @@
       </div>
     </div>
 
-    <!-- Franchise marquee, folded into the hero itself — a static headline
-         plus a continuously-scrolling benefits ticker below it, both
-         wrapped in one link through to the franchise page. The ticker's
-         content is duplicated once (two identical .franchise-marquee__seq
-         blocks) so the loop point is invisible: at -50% translateX the
-         second copy lines up exactly where the first started. -->
-    <a
-      class="franchise-marquee"
-      href="pages/franchise.html"
-      aria-label="Become an AVMLabs Franchisee — better rates, higher margins, more leads, more business and exclusive benefits. Know more."
-    >
-      <div class="franchise-marquee__head">
-        <span class="franchise-marquee__badge">Become an AVMLabs Franchisee</span>
-        <span class="franchise-marquee__cta">Know More <span aria-hidden="true">→</span></span>
-      </div>
-      <div class="franchise-marquee__viewport" aria-hidden="true">
-        <div class="franchise-marquee__track">
-          <div class="franchise-marquee__seq">
-            <span class="franchise-marquee__dot"></span>
-            <span class="franchise-marquee__arrow">→</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">Better Rates</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">Higher Margins</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">More Leads</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">More Business</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">Exclusive Benefits</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">Become an AVMLabs Franchisee</span>
-          </div>
-          <div class="franchise-marquee__seq">
-            <span class="franchise-marquee__dot"></span>
-            <span class="franchise-marquee__arrow">→</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">Better Rates</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">Higher Margins</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item franchise-marquee__item--accent">More Leads</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">More Business</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">Exclusive Benefits</span>
-            <span class="franchise-marquee__star">✦</span>
-            <span class="franchise-marquee__item">Become an AVMLabs Franchisee</span>
-          </div>
+    <!-- Franchise CTA, folded into the hero itself. -->
+    <div class="wrap hero__franchise">
+      <div class="cta-band">
+        <div>
+          <h3>Become an AVMLabs Franchisee</h3>
+          <p>Grow your business with AVMLabs and unlock exclusive discounts, business benefits &amp; more!</p>
         </div>
+        <a class="btn btn--amber" href="pages/franchise.html">
+          Know More →
+        </a>
       </div>
-    </a>
+    </div>
   </section>
 
   <!-- ================= RATE LIST ================= -->

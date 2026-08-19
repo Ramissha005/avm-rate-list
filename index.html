@@ -246,6 +246,20 @@
       <div class="ct-row ct-row--net" id="cartNetB2BRow" style="display:none"><span>Net B2B Payable</span><span id="cartNetB2B">₹0</span></div>
       <p class="ct-hint ct-hint--discount" id="cartDiscountHint" style="display:none"></p>
       <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
+      <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
+    </div>
+    <!-- Staff-only: type a one-off B2C discount here and see its effect on
+         Your Margin below immediately — never shown in Customer copy (the
+         customer just sees Original/Discounted Price in the box below,
+         with no editing controls). -->
+    <div class="discount-editor" id="discountEditor">
+      <label class="discount-editor__label" for="discountedPriceInput">Enter Discounted Price for Customer</label>
+      <div class="discount-editor__row">
+        <span class="discount-editor__currency" aria-hidden="true">₹</span>
+        <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
+        <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+      </div>
+      <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
     </div>
     <div class="price-box" id="priceBox" style="display:none">
       <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
@@ -254,22 +268,14 @@
       </div>
       <span class="price-box__label" id="priceLabel">Price</span>
       <span class="price-box__amount" id="cartPrice">₹0</span>
-      <div class="price-box__discount-editor">
-        <label class="price-box__discount-editor-label" for="discountedPriceInput">Enter Discounted Price</label>
-        <div class="price-box__discount-editor-row">
-          <span class="price-box__discount-currency" aria-hidden="true">₹</span>
-          <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="price-box__discount-input" placeholder="e.g. 450">
-          <button type="button" class="price-box__discount-clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
-        </div>
-        <p class="price-box__discount-warn" id="discountWarn" style="display:none">Should be lower than the original price</p>
-      </div>
     </div>
     <div class="margin-box" id="marginBox">
       <div class="margin-box__top">
-        <span class="margin-box__label"><span class="margin-box__dot"></span>Your Margin</span>
+        <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
         <span class="margin-box__pct" id="cartMarginPct">+0%</span>
       </div>
       <div class="margin-box__amount" id="cartMargin">₹0</div>
+      <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
     </div>
     <div class="cart-actions">
       <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>

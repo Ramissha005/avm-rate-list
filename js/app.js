@@ -29,7 +29,10 @@ window.AVM = window.AVM || {};
       b2bRow: $("cartB2BRow"), marginBox: $("marginBox"),
       b2cRow: $("cartB2CRow"), priceBox: $("priceBox"), price: $("cartPrice"),
       priceLabel: $("priceLabel"), priceOriginalRow: $("priceOriginalRow"), priceOriginal: $("priceOriginal"),
+      discountEditor: $("discountEditor"),
       discountInput: $("discountedPriceInput"), discountClear: $("clearDiscountedPrice"), discountWarn: $("discountWarn"),
+      discountedRow: $("cartDiscountedRow"), discountedAmt: $("cartDiscountedAmt"),
+      marginLabel: $("cartMarginLabel"), marginNote: $("cartMarginNote"),
       discountRow: $("cartDiscountRow"), discountLabel: $("cartDiscountLabel"), discountAmt: $("cartDiscountAmt"),
       netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"), discountHint: $("cartDiscountHint"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
@@ -142,7 +145,11 @@ window.AVM = window.AVM || {};
     }
     if ($("discountedPriceInput")) {
       $("discountedPriceInput").oninput = (e) => {
-        AVM.modules.profile.setDiscountedPrice(e.target.value);
+        const applied = AVM.modules.profile.setDiscountedPrice(e.target.value);
+        // Typing past the profile's B2C total gets capped in state — snap
+        // the field itself back to what was actually applied so it never
+        // shows a number bigger than what's actually in effect.
+        if (applied != null && Number(e.target.value) > applied) e.target.value = applied;
         refreshAll();
       };
     }

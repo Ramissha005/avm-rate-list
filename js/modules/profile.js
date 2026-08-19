@@ -46,19 +46,25 @@ AVM.modules = AVM.modules || {};
   // finite, non-negative number is ignored rather than wiping out what was
   // typed so far (e.g. a bare "-" mid-edit) — the field keeps showing what
   // the user typed (see renderCart's focus guard) even though state hasn't
-  // caught up to it yet.
+  // caught up to it yet. A discount can't exceed the profile's own B2C
+  // total — it's a discount, not a markup — so anything higher is capped
+  // at that total; the caller uses the returned value to snap the input's
+  // displayed text back down to what was actually applied.
   function setDiscountedPrice(value) {
     const trimmed = String(value == null ? "" : value).trim();
     if (trimmed === "") {
       state.discountedPrice = null;
       persistCart();
-      return;
+      return null;
     }
     const num = Number(trimmed);
-    if (Number.isFinite(num) && num >= 0) {
-      state.discountedPrice = num;
-      persistCart();
-    }
+    if (!Number.isFinite(num) || num < 0) return state.discountedPrice;
+    const { byCode } = AVM.data.getCatalog();
+    const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
+    const original = AVM.modules.calculations.totals(items).b2c;
+    state.discountedPrice = original > 0 ? Math.min(num, original) : num;
+    persistCart();
+    return state.discountedPrice;
   }
 
   function clearDiscountedPrice() {
@@ -201,12 +207,11 @@ AVM.modules = AVM.modules || {};
 
   // The customer-copy price box: plain "Price" (= B2C total) normally, or —
   // once a discounted price is entered — "Original Price" (struck through)
-  // above a highlighted "Discounted Price". B2C never gets the B2B bulk
-  // discount (see calculations.js), so this manual figure is the only
-  // discount a customer copy can show. `original` is 0 for an empty cart.
-  // Only touches the price-box elements; caller still fills the plain B2C
-  // row above it.
-  function updatePriceBox(elements, customerView, original) {
+  // above a highlighted "Discounted Price". Read-only display only, no
+  // editing controls — the customer copy is what gets handed over, not
+  // where the discount gets typed in (see updateDiscountEditor below).
+  // `original` is 0 for an empty cart.
+  function updatePriceBox(elements, original) {
     if (!elements.priceBox) return;
     const { money } = AVM.utils.formatters;
     const discounted = state.discountedPrice;
@@ -216,17 +221,44 @@ AVM.modules = AVM.modules || {};
     if (elements.priceOriginal) elements.priceOriginal.textContent = money(original);
     if (elements.priceLabel) elements.priceLabel.textContent = hasDiscount ? "Discounted Price" : "Price";
     if (elements.price) elements.price.textContent = money(hasDiscount ? discounted : original);
+  }
+
+  // The staff-facing side of the same discount: the input itself, the
+  // "Discounted Price" row under B2C Value, and the over-limit warning —
+  // all live in the internal view only (never Customer copy), right next
+  // to B2B/B2C/Margin so whoever types a discount can immediately see what
+  // it does to their margin below (see renderCart's margin block).
+  function updateDiscountEditor(elements, customerView, original) {
+    const { money } = AVM.utils.formatters;
+    const discounted = state.discountedPrice;
+    const hasDiscount = discounted != null && discounted > 0;
+
+    if (elements.discountEditor) elements.discountEditor.style.display = customerView ? "none" : "";
 
     // Don't stomp on what's being typed — resetting `.value` mid-keystroke
-    // (every render goes through here) would fight the user's cursor.
-    if (elements.discountInput && document.activeElement !== elements.discountInput) {
-      elements.discountInput.value = discounted != null ? discounted : "";
+    // (every render goes through here) would fight the user's cursor. `max`
+    // is safe to keep in sync regardless of focus — it doesn't touch the
+    // typed text, just the native up/down-arrow ceiling and validity state.
+    if (elements.discountInput) {
+      elements.discountInput.max = original > 0 ? original : "";
+      if (document.activeElement !== elements.discountInput) {
+        elements.discountInput.value = discounted != null ? discounted : "";
+      }
     }
     if (elements.discountClear) elements.discountClear.hidden = discounted == null;
     if (elements.discountWarn) {
       const showWarn = hasDiscount && discounted >= original;
       elements.discountWarn.style.display = showWarn ? "" : "none";
     }
+
+    if (elements.discountedRow) {
+      const showRow = !customerView && hasDiscount;
+      elements.discountedRow.style.display = showRow ? "" : "none";
+      if (showRow && elements.discountedAmt) elements.discountedAmt.textContent = money(discounted);
+    }
+    // Struck through above the new "Discounted Price" row once it's showing,
+    // same treatment the customer-copy price box gives it.
+    if (elements.b2c) elements.b2c.classList.toggle("ct-amount--struck", !customerView && hasDiscount);
   }
 
   function renderCart(elements) {
@@ -260,7 +292,10 @@ AVM.modules = AVM.modules || {};
       elements.b2c.textContent = money(0);
       elements.margin.textContent = money(0);
       if (elements.marginPct) elements.marginPct.textContent = "+0%";
-      updatePriceBox(elements, customerView, 0);
+      if (elements.marginLabel) elements.marginLabel.textContent = "Your Margin";
+      if (elements.marginNote) elements.marginNote.style.display = "none";
+      updatePriceBox(elements, 0);
+      updateDiscountEditor(elements, customerView, 0);
       return;
     }
 
@@ -335,10 +370,28 @@ AVM.modules = AVM.modules || {};
     elements.b2b.textContent = money(sum.msbB2b);
     elements.b2c.textContent = money(sum.b2c);
     // The headline margin is the partner's real bottom line — after the
-    // bulk B2B discount below, not before it.
-    elements.margin.textContent = money(sum.netMargin);
-    if (elements.marginPct) elements.marginPct.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
-    updatePriceBox(elements, customerView, sum.b2c);
+    // bulk B2B discount, and (if set) after a staff-entered customer
+    // discount too: what the customer actually pays, minus the partner's
+    // own (already bulk-discounted) B2B cost. The discount only takes
+    // effect once it's genuinely lower than the B2C total it would
+    // otherwise be based on.
+    const discountedPrice = state.discountedPrice;
+    const hasCustomerDiscount = discountedPrice != null && discountedPrice > 0 && discountedPrice < sum.b2c;
+    const marginBase = hasCustomerDiscount ? discountedPrice : sum.b2c;
+    const finalMargin = marginBase - sum.netB2b;
+    const finalMarginPct = AVM.modules.calculations.marginPercentage(sum.netB2b, marginBase);
+    elements.margin.textContent = money(finalMargin);
+    if (elements.marginPct) elements.marginPct.textContent = (finalMargin >= 0 ? "+" : "") + Math.round(finalMarginPct) + "%";
+    if (elements.marginLabel) elements.marginLabel.textContent = hasCustomerDiscount ? "Your Margin (after discount)" : "Your Margin";
+    if (elements.marginBox) elements.marginBox.classList.toggle("margin-box--loss", finalMargin < 0);
+    if (elements.marginNote) {
+      elements.marginNote.style.display = hasCustomerDiscount ? "" : "none";
+      if (hasCustomerDiscount) {
+        elements.marginNote.textContent = `Based on the ${money(discountedPrice)} discounted price (was ${money(sum.b2c)})`;
+      }
+    }
+    updatePriceBox(elements, sum.b2c);
+    updateDiscountEditor(elements, customerView, sum.b2c);
 
     // Minimum Sample Billing: surface it as its own line (not silently
     // folded into B2B Cost above) plus a hint telling the partner exactly

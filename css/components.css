@@ -609,36 +609,59 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   text-decoration:line-through; font-variant-numeric:tabular-nums;
 }
 
-/* Staff-facing control for typing a one-off B2C discount — B2C never gets
-   the B2B bulk-value discount, so this is the only way to hand a customer
-   a lower number. Lives inside the price box so it's visually tied to the
-   figure it changes. */
-.price-box__discount-editor{ margin-top:var(--space-3); padding-top:var(--space-3); border-top:1px dashed var(--line); }
-.price-box__discount-editor-label{
+/* ---------- Discount editor — staff-only control for typing a one-off B2C
+   discount (B2C never gets the B2B bulk-value discount). Sits between the
+   B2B/B2C totals and the margin callout in the internal view only, so
+   typing a number here and watching Your Margin react below are right next
+   to each other. Never shown in Customer copy — that view only shows the
+   read-only Original/Discounted Price in the price box. ---------- */
+.discount-editor{
+  background:var(--paper-2); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
+  margin-bottom:var(--space-3);
+}
+.discount-editor__label{
   display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-soft);
   text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;
 }
-.price-box__discount-editor-row{ display:flex; align-items:center; gap:6px; }
-.price-box__discount-currency{ font-weight:600; color:var(--ink-soft); }
-.price-box__discount-input{
+.discount-editor__row{ display:flex; align-items:center; gap:6px; }
+.discount-editor__currency{ font-weight:600; color:var(--ink-soft); }
+.discount-editor__input{
   flex:1; min-width:0; font-family:var(--font-body); font-size:var(--text-base); font-weight:600; color:var(--navy);
   background:var(--card); border:1px solid var(--line); border-radius:var(--radius-xs);
   padding:7px 10px; -moz-appearance:textfield;
 }
-.price-box__discount-input:focus{ outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(30,99,180,0.15); }
-.price-box__discount-input::-webkit-outer-spin-button,
-.price-box__discount-input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
-.price-box__discount-clear{
+.discount-editor__input:focus{ outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(30,99,180,0.15); }
+.discount-editor__input::-webkit-outer-spin-button,
+.discount-editor__input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.discount-editor__clear{
   flex:none; width:28px; height:28px; border-radius:50%; border:1px solid var(--line); background:var(--card);
   color:var(--ink-faint); font-size:var(--text-xs); cursor:pointer; line-height:1;
 }
-.price-box__discount-clear:hover{ color:var(--ink); border-color:var(--ink-faint); }
-.price-box__discount-warn{ margin:6px 0 0; font-size:var(--text-2xs); font-weight:600; color:var(--amber-dark); }
+.discount-editor__clear:hover{ color:var(--ink); border-color:var(--ink-faint); }
+.discount-editor__hint{ margin:6px 0 0; font-size:var(--text-2xs); font-weight:600; color:var(--amber-dark); }
+
+/* "Discounted Price" row under B2C Value once the discount editor above has
+   a value in it — teal (not the bulk-discount amber) so it doesn't read as
+   the same kind of discount as the B2B tier row. The B2C Value amount right
+   above it gets struck through via .ct-amount--struck at the same time. */
+.ct-row--customer-discount span:last-child{ color:var(--teal-dark); }
+.ct-amount--struck{ text-decoration:line-through; color:var(--ink-faint) !important; }
 
 .margin-box__amount{
   font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--profit);
   line-height:1.1; font-variant-numeric:tabular-nums;
 }
+.margin-box__note{ margin:4px 0 0; font-size:var(--text-2xs); color:var(--ink-faint); }
+
+/* A discount typed below cost — margin box flips to a warning treatment so
+   it reads as "you're now losing money on this" rather than a normal
+   (lower) profit figure. */
+.margin-box--loss{ background:#FBE7E5; }
+.margin-box--loss::before{ background:#C0392B; }
+.margin-box--loss .margin-box__label,
+.margin-box--loss .margin-box__amount{ color:#C0392B; }
+.margin-box--loss .margin-box__dot{ background:#C0392B; }
+.margin-box--loss .margin-box__pct{ background:#C0392B; }
 
 .cart-item__margin{
   font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:var(--profit); white-space:nowrap;

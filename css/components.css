@@ -429,11 +429,9 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .view-more-btn:hover{ background:var(--paper-2); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
 
-/* Static four-stop sweep (navy -> teal-dark -> teal -> cyan-dark) — more
-   depth than a flat two-color fill without the animated version's motion. */
 .cta-band{
   position:relative; overflow:hidden;
-  background:linear-gradient(120deg, var(--navy) 0%, var(--teal-dark) 38%, var(--teal) 68%, var(--cyan-dark) 100%);
+  background:var(--teal-dark);
   color:#fff; border-radius:var(--radius-lg); padding:var(--space-7);
   display:flex; align-items:center; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;
   box-shadow:var(--shadow-lg);

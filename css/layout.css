@@ -121,6 +121,15 @@ button{ font-family:inherit; cursor:pointer; }
 
 .hero__content{
   max-width:720px;
+  /* Grid items default to `min-width:auto`, which means the item won't
+     shrink below its content's own minimum intrinsic width — so a single
+     wide-content descendant (e.g. an overflow-x:auto scroll strip that
+     miscalculates, or just a long unbreakable string) can silently stretch
+     this whole grid column past the viewport and drag every sibling in it
+     (headline, CTAs) along, well past `.hero`'s own edge-to-edge overflow
+     clip. Overriding it to 0 is what actually lets `.hero__specialties`
+     scroll internally instead of inflating this column's width. */
+  min-width:0;
 }
 
 .hero__brand-wrap{

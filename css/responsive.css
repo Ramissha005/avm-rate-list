@@ -130,23 +130,18 @@
   .hero::before{ width:280px; height:280px; right:-100px; top:-80px; }
   .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
 
-  /* "We focus & specialize in" tags — one per line at phone widths ran the
-     hero much taller than it needed to be (5 full-width rows; even a
-     2-column grid still wrapped the longer phrases to 2 lines each,
-     costing 3 tall rows). A single horizontally-scrollable row instead —
-     same idiom already used for .nav__links above — keeps every tag on
-     one line at full size and collapses the whole section to one short
-     row a thumb can swipe through, rather than stacking readable text
-     vertically down the screen. */
   .hero__focus-title{ margin-top:var(--space-3); }
-  .hero__specialties{
-    flex-wrap:nowrap; overflow-x:auto; max-width:none; padding-bottom:4px; scrollbar-width:none;
-  }
-  .hero__specialties::-webkit-scrollbar{ display:none; }
-  .hero__specialties > span{ white-space:nowrap; flex:none; }
+  /* Left-to-right, wrapping to the next line as needed (the default
+     .stat-strip behavior) — a swipeable single-row "slider" hid tags off
+     the right edge with no visible cue to scroll for them. */
   .footer__top{ grid-template-columns:1fr; }
-  .cta-band{ padding:var(--space-6); flex-direction:column; align-items:flex-start; }
-  .cta-band .btn{ width:100%; justify-content:center; }
+  /* Smaller heading/copy/button and tighter padding — the full desktop
+     sizing ran this CTA taller than the hero content above it on a phone
+     screen. */
+  .cta-band{ padding:var(--space-5); flex-direction:column; align-items:flex-start; }
+  .cta-band h3{ font-size:var(--text-lg); margin-bottom:var(--space-1); }
+  .cta-band p{ font-size:var(--text-sm); }
+  .cta-band .btn{ width:100%; justify-content:center; padding:var(--space-3) var(--space-5); font-size:var(--text-sm); }
   blockquote.pull p{ font-size:var(--text-lg); }
   .cart-drawer{ width:100vw; }
 

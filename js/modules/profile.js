@@ -211,16 +211,27 @@ AVM.modules = AVM.modules || {};
   // editing controls — the customer copy is what gets handed over, not
   // where the discount gets typed in (see updateDiscountEditor below).
   // `original` is 0 for an empty cart.
+  //
+  // `hasStoredDiscount` (a value exists) and `hasValidDiscount` (that value
+  // is still lower than `original`) are deliberately separate: a discount
+  // typed against a bigger cart stays in state even after tests are
+  // removed and the total shrinks under it (removeFromProfile/toggleTest/
+  // removePackage don't touch state.discountedPrice — see there). Gating
+  // the *display* on validity, same as renderCart's margin calc and the
+  // export/print paths already do, means a stale discount quietly falls
+  // back to showing the plain (correct) total instead of presenting an
+  // out-of-date — and possibly now-higher-than-original — number as if it
+  // were still active.
   function updatePriceBox(elements, original) {
     if (!elements.priceBox) return;
     const { money } = AVM.utils.formatters;
     const discounted = state.discountedPrice;
-    const hasDiscount = discounted != null && discounted > 0;
+    const hasValidDiscount = discounted != null && discounted > 0 && discounted < original;
 
-    if (elements.priceOriginalRow) elements.priceOriginalRow.style.display = hasDiscount ? "" : "none";
+    if (elements.priceOriginalRow) elements.priceOriginalRow.style.display = hasValidDiscount ? "" : "none";
     if (elements.priceOriginal) elements.priceOriginal.textContent = money(original);
-    if (elements.priceLabel) elements.priceLabel.textContent = hasDiscount ? "Discounted Price" : "Price";
-    if (elements.price) elements.price.textContent = money(hasDiscount ? discounted : original);
+    if (elements.priceLabel) elements.priceLabel.textContent = hasValidDiscount ? "Discounted Price" : "Price";
+    if (elements.price) elements.price.textContent = money(hasValidDiscount ? discounted : original);
   }
 
   // The staff-facing side of the same discount: the input itself, the
@@ -231,7 +242,8 @@ AVM.modules = AVM.modules || {};
   function updateDiscountEditor(elements, customerView, original) {
     const { money } = AVM.utils.formatters;
     const discounted = state.discountedPrice;
-    const hasDiscount = discounted != null && discounted > 0;
+    const hasStoredDiscount = discounted != null && discounted > 0;
+    const hasValidDiscount = hasStoredDiscount && discounted < original;
 
     if (elements.discountEditor) elements.discountEditor.style.display = customerView ? "none" : "";
 
@@ -239,6 +251,9 @@ AVM.modules = AVM.modules || {};
     // (every render goes through here) would fight the user's cursor. `max`
     // is safe to keep in sync regardless of focus — it doesn't touch the
     // typed text, just the native up/down-arrow ceiling and validity state.
+    // The input always echoes the raw stored value (valid or not) so
+    // there's something to see and correct; validity only gates the
+    // read-only displays below.
     if (elements.discountInput) {
       elements.discountInput.max = original > 0 ? original : "";
       if (document.activeElement !== elements.discountInput) {
@@ -247,18 +262,21 @@ AVM.modules = AVM.modules || {};
     }
     if (elements.discountClear) elements.discountClear.hidden = discounted == null;
     if (elements.discountWarn) {
-      const showWarn = hasDiscount && discounted >= original;
+      // Covers both "just typed a value that isn't lower" and "the cart
+      // shrank under a discount that used to be valid" — either way, a
+      // stored value that isn't currently < original gets flagged here.
+      const showWarn = hasStoredDiscount && discounted >= original;
       elements.discountWarn.style.display = showWarn ? "" : "none";
     }
 
     if (elements.discountedRow) {
-      const showRow = !customerView && hasDiscount;
+      const showRow = !customerView && hasValidDiscount;
       elements.discountedRow.style.display = showRow ? "" : "none";
       if (showRow && elements.discountedAmt) elements.discountedAmt.textContent = money(discounted);
     }
     // Struck through above the new "Discounted Price" row once it's showing,
     // same treatment the customer-copy price box gives it.
-    if (elements.b2c) elements.b2c.classList.toggle("ct-amount--struck", !customerView && hasDiscount);
+    if (elements.b2c) elements.b2c.classList.toggle("ct-amount--struck", !customerView && hasValidDiscount);
   }
 
   function renderCart(elements) {

@@ -132,6 +132,14 @@ button{ font-family:inherit; cursor:pointer; }
   min-width:0;
 }
 
+/* Franchise page's hero image (right column) — same rounded/shadowed
+   treatment as the homepage's requisition slip, without the paper-card
+   background since a photo already provides its own visual weight. */
+.hero__image{
+  display:block; width:100%; height:100%; max-height:520px;
+  object-fit:cover; border-radius:var(--radius-lg); box-shadow:var(--shadow-lg);
+}
+
 .hero__brand-wrap{
   display:flex;
   align-items:center;

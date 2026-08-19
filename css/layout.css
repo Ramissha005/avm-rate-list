@@ -120,6 +120,7 @@ button{ font-family:inherit; cursor:pointer; }
 }
 
 .hero__content{
+  position:relative; z-index:1;
   max-width:720px;
   /* Grid items default to `min-width:auto`, which means the item won't
      shrink below its content's own minimum intrinsic width — so a single
@@ -128,16 +129,26 @@ button{ font-family:inherit; cursor:pointer; }
      this whole grid column past the viewport and drag every sibling in it
      (headline, CTAs) along, well past `.hero`'s own edge-to-edge overflow
      clip. Overriding it to 0 is what actually lets `.hero__specialties`
-     scroll internally instead of inflating this column's width. */
+     scroll internally instead of inflating this column's width.
+     The z-index bump keeps the copy above .hero__image-wrap below, which
+     is also absolutely positioned inside .hero. */
   min-width:0;
 }
 
-/* Franchise page's hero image (right column) — same rounded/shadowed
-   treatment as the homepage's requisition slip, without the paper-card
-   background since a photo already provides its own visual weight. */
+/* Franchise page's hero image — bleeds to the right edge of the viewport
+   and fills the hero's full height (an absolutely-positioned layer inside
+   .hero, not a grid column), rather than sitting in a separate rounded
+   card. Its left edge fades into the hero's own navy backdrop via
+   mask-image, so text and photo blend into one scene instead of reading
+   as two stacked boxes. */
+.hero__image-wrap{
+  position:absolute; top:0; right:0; bottom:0; z-index:0;
+  width:min(48%, 760px); pointer-events:none;
+}
 .hero__image{
-  display:block; width:100%; height:100%; max-height:520px;
-  object-fit:cover; border-radius:var(--radius-lg); box-shadow:var(--shadow-lg);
+  display:block; width:100%; height:100%; object-fit:cover; object-position:center;
+  -webkit-mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 45%);
+  mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 45%);
 }
 
 .hero__brand-wrap{

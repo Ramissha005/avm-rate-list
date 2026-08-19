@@ -29,8 +29,21 @@
 <main>
 
   <!-- ================= HERO ================= -->
+  <!-- The hero photo is a direct child of .hero (not nested in .wrap), so
+       it isn't constrained by .wrap's max-width/padding and can bleed all
+       the way to the browser's right edge, full hero height — see
+       .hero__image-wrap in layout.css. -->
   <section class="hero">
-    <div class="wrap hero__grid">
+    <div class="hero__image-wrap">
+      <!-- assets/images/franchise/franchise-hero.png -->
+      <img
+        class="hero__image"
+        src="../assets/images/franchise/franchise-hero.png"
+        alt="AVMLabs franchise laboratory storefront"
+        loading="lazy"
+      >
+    </div>
+    <div class="wrap">
       <div class="hero__content">
         <p class="eyebrow on-dark">AVMLABS FRANCHISE</p>
         <h1>Become a Franchise of AVMLabs</h1>
@@ -50,18 +63,6 @@
           </a>
           <a href="#benefits" class="btn btn--ghost-dark">See What You Get ↓</a>
         </div>
-      </div>
-      <div class="hero__image-wrap">
-        <!-- Drop the image at assets/images/franchise/franchise-hero.jpg
-             (project root) — it'll appear here automatically, no code
-             changes needed. Swap the extension in src/alt below if it's a
-             .png or .webp instead. -->
-        <img
-          class="hero__image"
-          src="../assets/images/franchise/franchise-hero.jpg"
-          alt="AVMLabs franchise partner at work"
-          loading="lazy"
-        >
       </div>
     </div>
   </section>

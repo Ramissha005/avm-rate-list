@@ -28,6 +28,11 @@
   /* The specimen-requisition slip is a nice desktop flourish but just eats
      scroll distance above the fold on a phone — drop it entirely here. */
   .hero__slip-wrap{ display:none; }
+  /* Same reasoning for the franchise page's full-bleed hero photo — it's
+     absolutely positioned behind the copy specifically because there's
+     enough side-by-side width for it not to compete with the text; below
+     that width it would just sit awkwardly under/behind the paragraph. */
+  .hero__image-wrap{ display:none; }
 
   /* Same reasoning for the bundle chip's hover tooltip — it's a hover-only
      desktop flourish, and touch devices can't hover it open anyway. It also

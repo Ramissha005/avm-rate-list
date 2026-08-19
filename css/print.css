@@ -1,5 +1,10 @@
 /* AVMLabs print-profile page — standalone, loaded only by pages/print-profile.html */
 
+/* Kept as its own standalone token set (not @import-ing variables.css) so
+   the print page never depends on the main site's 4-file import chain —
+   but the values themselves should still match the current brand tokens.
+   Sync these by hand against css/variables.css if the brand palette ever
+   changes; --line/--paper/--profit-bg had drifted from it before. */
 :root{
   --navy:#0E2238;
   --navy-2:#173A5A;
@@ -7,10 +12,10 @@
   --ink:#101C27;
   --ink-soft:#39474F;
   --ink-faint:#5B6971;
-  --line:#D7DADD;
-  --paper:#F0F1F3;
+  --line:#D2D5D9;
+  --paper:#EFF0F2;
   --profit:#1B5FA8;
-  --profit-bg:#E9F1FA;
+  --profit-bg:#E2ECF7;
   --zebra:#F6F7F8;
 }
 

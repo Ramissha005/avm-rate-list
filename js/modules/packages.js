@@ -35,7 +35,7 @@ AVM.modules = AVM.modules || {};
       chip.type = "button";
       chip.className = "bundle-chip" + (isActive ? " bundle-chip--active" : "");
       chip.innerHTML = `
-        <span class="plus">${isActive ? "✓" : "+"}</span>${pkg.name}<span class="count">${testCount} tests</span>
+        <span class="plus">${isActive ? "✓" : "+"}</span><span class="bundle-chip__name">${pkg.name}</span><span class="count">${testCount} tests</span>
         <span class="bundle-tip" role="tooltip">
           <span class="bundle-tip__title">${pkg.name} <span class="bundle-tip__total">B2B ${money(sum.msbB2b)} · B2C ${money(sum.b2c)}</span></span>
           <ul>${testLines}${calcLines}</ul>

@@ -241,6 +241,8 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .bundle-chip:hover{ border-color:var(--teal); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
 
+.bundle-chip__name{ flex:1; min-width:0; }
+
 .bundle-chip .count{
   font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--teal-dark);
   background:var(--profit-bg); border-radius:var(--radius-full); padding:2px 8px;

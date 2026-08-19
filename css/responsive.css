@@ -131,9 +131,18 @@
   .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
 
   .hero__focus-title{ margin-top:var(--space-3); }
-  /* Left-to-right, wrapping to the next line as needed (the default
-     .stat-strip behavior) — a swipeable single-row "slider" hid tags off
-     the right edge with no visible cue to scroll for them. */
+  /* Two tags per row (a fixed grid, not flex-wrap — at this width each
+     tag's own content is close enough to full-width that wrapping just
+     produces one per row anyway) so five tags cost 3 short rows instead
+     of 5 full-width ones or a swipeable slider that hides tags off the
+     right edge with no cue to scroll for them. Smaller type/padding is
+     what actually makes two fit per row without truncating. */
+  .hero__specialties{
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--space-2); max-width:none;
+  }
+  .hero__specialties > span{
+    font-size:0.62rem; padding:0.42rem 0.55rem; white-space:normal; line-height:1.25;
+  }
   .footer__top{ grid-template-columns:1fr; }
   /* Smaller heading/copy/button and tighter padding — the full desktop
      sizing ran this CTA taller than the hero content above it on a phone

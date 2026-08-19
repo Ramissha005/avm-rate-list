@@ -218,11 +218,6 @@
   width:54%; background:linear-gradient(135deg, var(--navy), var(--navy-2)); color:#fff;
 }
 .compare-table thead th.is-no{ background:var(--paper-2); color:var(--ink-soft); }
-.compare-table__badge{
-  display:inline-block; margin-bottom:var(--space-2); font-family:var(--font-mono);
-  font-size:var(--text-2xs); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-  color:#241300; background:var(--amber); padding:3px 10px; border-radius:var(--radius-full);
-}
 .compare-table__col-title{ display:block; }
 
 .compare-table tbody tr:nth-child(even) td.is-yes{ background:#D6E5F5; }

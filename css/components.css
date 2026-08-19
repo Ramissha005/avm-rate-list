@@ -196,36 +196,79 @@
    the margin callout) for the partner column rather than introducing an
    off-palette green, and the same red the margin box's loss state uses for
    the "no" column, so both read as extensions of the existing system
-   instead of a one-off. overflow-x:auto + min-width keeps the two columns
-   from getting crushed on a phone — it scrolls horizontally there instead
-   of wrapping every cell into a ragged mess. ---------- */
+   instead of a one-off. The partner column reads as the "featured" one —
+   navy header, Recommended badge, tinted cells — the same visual move
+   .package-card--featured uses elsewhere to mark the better option. ---------- */
 .compare-table-wrap{
-  overflow-x:auto; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); border:1px solid var(--line);
+  overflow-x:auto; border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); border:1px solid var(--line);
+  position:relative;
+}
+.compare-table-wrap::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:4px; z-index:1;
+  background:linear-gradient(90deg, var(--amber), var(--amber-dark));
 }
 .compare-table{
-  width:100%; min-width:560px; border-collapse:collapse; background:var(--card);
+  width:100%; min-width:560px; border-collapse:separate; border-spacing:0; background:var(--card);
 }
 .compare-table thead th{
-  background:var(--navy); color:#fff; text-align:left;
+  text-align:left; padding:var(--space-5) var(--space-5) var(--space-4);
   font-family:var(--font-display); font-size:var(--text-lg); font-weight:700;
-  padding:var(--space-4) var(--space-5);
 }
-.compare-table thead th:first-child{ width:52%; }
-.compare-table tbody tr + tr td{ border-top:1px solid var(--line); }
-.compare-table tbody td{ padding:var(--space-4) var(--space-5); vertical-align:top; }
+.compare-table thead th.is-yes{
+  width:54%; background:linear-gradient(135deg, var(--navy), var(--navy-2)); color:#fff;
+}
+.compare-table thead th.is-no{ background:var(--paper-2); color:var(--ink-soft); }
+.compare-table__badge{
+  display:inline-block; margin-bottom:var(--space-2); font-family:var(--font-mono);
+  font-size:var(--text-2xs); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+  color:#241300; background:var(--amber); padding:3px 10px; border-radius:var(--radius-full);
+}
+.compare-table__col-title{ display:block; }
+
+.compare-table tbody tr:nth-child(even) td.is-yes{ background:#D6E5F5; }
+.compare-table tbody tr:nth-child(odd) td.is-yes{ background:var(--profit-bg); }
+.compare-table tbody tr:nth-child(even) td.is-no{ background:#EDEEF0; }
+.compare-table tbody tr:nth-child(odd) td.is-no{ background:var(--paper-2); }
+.compare-table tbody tr:hover td.is-yes{ background:#C7DCF2; }
+.compare-table tbody tr:hover td.is-no{ background:#E4E5E8; }
+.compare-table tbody tr + tr td{ border-top:1px solid rgba(255,255,255,0.6); }
+.compare-table tbody td{ padding:var(--space-4) var(--space-5); vertical-align:top; transition:background var(--transition-fast); }
 .compare-table__row{ display:flex; align-items:flex-start; gap:var(--space-3); font-size:var(--text-base); }
 .compare-table__icon{
   display:inline-flex; align-items:center; justify-content:center; flex:none;
-  width:22px; height:22px; border-radius:50%; margin-top:1px;
+  width:22px; height:22px; border-radius:50%; margin-top:1px; box-shadow:var(--shadow-xs);
   font-size:12px; font-weight:700; color:#fff;
 }
-.compare-table td.is-yes{ background:var(--profit-bg); }
-.compare-table td.is-yes .compare-table__row{ color:var(--ink); }
+.compare-table td.is-yes .compare-table__row{ color:var(--ink); font-weight:500; }
 .compare-table td.is-yes .compare-table__row b{ color:var(--profit); }
 .compare-table td.is-yes .compare-table__icon{ background:var(--profit); }
-.compare-table td.is-no{ background:var(--paper-2); }
 .compare-table td.is-no .compare-table__row{ color:var(--ink-faint); }
 .compare-table td.is-no .compare-table__icon{ background:#C0392B; }
+
+/* Below ~640px the two side-by-side columns get too narrow to read even
+   with horizontal scroll — each row becomes its own labeled card instead
+   (attr(data-label) reads the label straight off the cell, no markup
+   duplication needed), so scanning is top-to-bottom rather than a scroll
+   dead-end. */
+@media (max-width:640px){
+  .compare-table-wrap{ overflow-x:visible; box-shadow:none; border:none; border-radius:0; }
+  .compare-table-wrap::before{ display:none; }
+  .compare-table{ min-width:0; display:block; border-spacing:0 var(--space-4); }
+  .compare-table thead{ display:none; }
+  .compare-table tbody{ display:block; }
+  .compare-table tbody tr{
+    display:block; margin-bottom:var(--space-4); border-radius:var(--radius); overflow:hidden;
+    border:1px solid var(--line); box-shadow:var(--shadow-sm);
+  }
+  .compare-table tbody tr + tr td{ border-top:none; }
+  .compare-table td{ display:block; padding:var(--space-3) var(--space-4) !important; }
+  .compare-table td::before{
+    content:attr(data-label); display:block; margin-bottom:4px;
+    font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+  }
+  .compare-table td.is-yes::before{ color:var(--profit); }
+  .compare-table td.is-no::before{ color:#C0392B; }
+}
 
 .tech-pill{
   font-family:var(--font-mono); font-size:var(--text-sm); font-weight:600; padding:var(--space-2) var(--space-4); border-radius:var(--radius-full);

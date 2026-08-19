@@ -251,28 +251,37 @@ button{ font-family:inherit; cursor:pointer; }
 .offer-banner__regular{ font-size:var(--text-base); font-weight:600; margin:4px 0 0; color:#D6E4F2; }
 .offer-banner__regular s{ text-decoration-thickness:2px; }
 
-/* Hover: a red urgency panel sweeps in from the left to fully cover the
-   banner (width 0 -> 100%, not opacity — a fill, not a fade), then the
-   "book soon" message fades in on top of it once the sweep's mostly done.
-   Reversed with the same feel on the way out. */
+/* Hover: a red panel wipes in from the left to fully cover the banner,
+   then the "book soon" message fades in on top of it once the wipe's
+   mostly done — reversed the same way on the way out. The fill and the
+   text are two separate layers on purpose: the fill uses `transform:
+   scaleX()` (GPU-composited, no layout/box-model math involved) instead
+   of animating `width`, so it's genuinely zero-footprint at rest with no
+   sub-pixel sliver ever visible, and the text sits in its own unscaled
+   layer so it doesn't get horizontally squashed while the fill is
+   mid-wipe. */
 .offer-banner__urgency{
-  position:absolute; inset:0; width:0; overflow:hidden;
-  background:linear-gradient(135deg, #C0392B, #96281D);
+  position:absolute; inset:0; overflow:hidden;
   display:flex; align-items:center; justify-content:center; text-align:center;
-  padding:0 var(--space-4);
-  transition:width .45s cubic-bezier(.4,0,.2,1);
+  padding:0 var(--space-4); pointer-events:none;
 }
-.offer-banner__urgency span{
-  font-size:var(--text-base); font-weight:800; white-space:nowrap; color:#fff;
-  opacity:0; transition:opacity .25s ease;
+.offer-banner__urgency-fill{
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, #C0392B, #96281D);
+  transform:scaleX(0); transform-origin:left center;
+  transition:transform .4s cubic-bezier(.65,0,.35,1);
 }
-.offer-banner:hover .offer-banner__urgency,
-.offer-banner:focus-visible .offer-banner__urgency{ width:100%; }
-.offer-banner:hover .offer-banner__urgency span,
-.offer-banner:focus-visible .offer-banner__urgency span{ opacity:1; transition-delay:.25s; }
+.offer-banner__urgency-text{
+  position:relative; font-size:var(--text-base); font-weight:800; white-space:nowrap; color:#fff;
+  opacity:0; transition:opacity .2s ease;
+}
+.offer-banner:hover .offer-banner__urgency-fill,
+.offer-banner:focus-visible .offer-banner__urgency-fill{ transform:scaleX(1); }
+.offer-banner:hover .offer-banner__urgency-text,
+.offer-banner:focus-visible .offer-banner__urgency-text{ opacity:1; transition-delay:.22s; }
 @media (prefers-reduced-motion: reduce){
-  .offer-banner__urgency{ transition:none; }
-  .offer-banner__urgency span{ transition:none; }
+  .offer-banner__urgency-fill,
+  .offer-banner__urgency-text{ transition:none; }
 }
 
 .hero__specialties{

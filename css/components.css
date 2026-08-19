@@ -176,11 +176,14 @@
 }
 .pillar:hover{ transform:translateY(-4px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
 
+/* Doubles as a numbered badge (mono digits, e.g. "01") or an emoji icon —
+   emoji need real size to read as an icon rather than a stray character,
+   so this sits a step larger than a typical text badge. */
 .pillar__num{
   display:inline-flex; align-items:center; justify-content:center;
-  width:34px; height:34px; border-radius:50%;
+  width:44px; height:44px; border-radius:50%;
   background:#FBEEDF; border:1.5px solid var(--amber);
-  font-family:var(--font-mono); font-size:var(--text-sm); color:var(--amber-dark); font-weight:700; letter-spacing:0;
+  font-family:var(--font-mono); font-size:var(--text-lg); line-height:1; color:var(--amber-dark); font-weight:700; letter-spacing:0;
 }
 
 .pillar h3{ font-size:var(--text-lg); color:var(--navy); margin:var(--space-4) 0 var(--space-2); }

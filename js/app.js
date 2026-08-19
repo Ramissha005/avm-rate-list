@@ -74,21 +74,6 @@ window.AVM = window.AVM || {};
           onChange: refreshAll,
         });
       }
-      if ($("filterCategory")) {
-        AVM.modules.filters.renderFilterGroup({
-          container: $("filterCategory"), facetKey: "category",
-          options: catalog.categories.map(c => ({ id: c.id, label: c.label })),
-          onChange: refreshAll,
-          collapsedCount: 8,
-        });
-      }
-      if ($("filterSample")) {
-        AVM.modules.filters.renderFilterGroup({
-          container: $("filterSample"), facetKey: "sample",
-          options: catalog.samples.map(s => ({ id: s.id, label: s.label })),
-          onChange: refreshAll,
-        });
-      }
       if ($("filterPrice")) {
         AVM.modules.filters.renderFilterGroup({
           container: $("filterPrice"), facetKey: "priceBand",

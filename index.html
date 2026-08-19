@@ -238,10 +238,10 @@
     <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a panel.</p>
   </div>
   <div class="cart-foot">
-    <!-- Everything here can scroll internally if it overflows (see
-         .cart-foot__summary) — Copy List/Export/Print and Clear all below
-         are deliberately kept out of this wrapper so they're never pushed
-         down out of view by that scroll. -->
+    <!-- Grouped separately from Copy List/Export/Print and Clear all below
+         purely so those stay visually distinct from the totals — this
+         wrapper doesn't scroll on its own; the whole drawer just grows
+         and lets the test list above (.cart-body) shrink to fit. -->
     <div class="cart-foot__summary" id="cartFootSummary">
       <div class="cart-totals">
         <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
@@ -274,7 +274,6 @@
             <span class="margin-box__pct" id="cartMarginPct">+0%</span>
           </div>
           <div class="margin-box__amount" id="cartMargin">₹0</div>
-          <p class="margin-box__note" id="cartMarginNote" style="display:none"></p>
         </div>
       </div>
       <div class="price-box" id="priceBox" style="display:none">

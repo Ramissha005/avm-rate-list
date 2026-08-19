@@ -405,12 +405,4 @@ footer a:hover{ color:#fff; }
   border-top:1px solid var(--line); padding:var(--space-4) var(--space-6) var(--space-5);
 }
 
-/* The totals/discount/margin stack — capped so the test list above
-   (.cart-body) keeps the majority (60%) of the drawer's height instead of
-   shrinking to fit whatever this needs. Only *this* part scrolls when it
-   overflows the cap; Copy List/Export/Print and Clear all below it are
-   deliberately outside this wrapper so they're always fully visible,
-   never pushed down or clipped by that scroll. */
-.cart-foot__summary{ max-height:30vh; overflow-y:auto; }
-
 .cart-actions{ display:flex; gap:var(--space-3); flex-wrap:wrap; margin-top:var(--space-4); }

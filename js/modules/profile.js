@@ -300,7 +300,6 @@ AVM.modules = AVM.modules || {};
       elements.margin.textContent = money(0);
       if (elements.marginPct) elements.marginPct.textContent = "+0%";
       if (elements.marginLabel) elements.marginLabel.textContent = "Your Margin";
-      if (elements.marginNote) elements.marginNote.style.display = "none";
       updatePriceBox(elements, 0);
       updateDiscountEditor(elements, customerView, 0);
       return;
@@ -391,12 +390,6 @@ AVM.modules = AVM.modules || {};
     if (elements.marginPct) elements.marginPct.textContent = (finalMargin >= 0 ? "+" : "") + Math.round(finalMarginPct) + "%";
     if (elements.marginLabel) elements.marginLabel.textContent = hasCustomerDiscount ? "Your Margin (after discount)" : "Your Margin";
     if (elements.marginBox) elements.marginBox.classList.toggle("margin-box--loss", finalMargin < 0);
-    if (elements.marginNote) {
-      elements.marginNote.style.display = hasCustomerDiscount ? "" : "none";
-      if (hasCustomerDiscount) {
-        elements.marginNote.textContent = `Based on the ${money(discountedPrice)} discounted price (was ${money(sum.b2c)})`;
-      }
-    }
     updatePriceBox(elements, sum.b2c);
     updateDiscountEditor(elements, customerView, sum.b2c);
 

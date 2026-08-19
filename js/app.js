@@ -32,7 +32,7 @@ window.AVM = window.AVM || {};
       discountMarginRow: $("discountMarginRow"), discountEditor: $("discountEditor"),
       discountInput: $("discountedPriceInput"), discountClear: $("clearDiscountedPrice"), discountWarn: $("discountWarn"),
       discountedRow: $("cartDiscountedRow"), discountedAmt: $("cartDiscountedAmt"),
-      marginLabel: $("cartMarginLabel"), marginNote: $("cartMarginNote"),
+      marginLabel: $("cartMarginLabel"),
       cartActions: $("cartActions"),
       discountRow: $("cartDiscountRow"), discountLabel: $("cartDiscountLabel"), discountAmt: $("cartDiscountAmt"),
       netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"), discountHint: $("cartDiscountHint"),

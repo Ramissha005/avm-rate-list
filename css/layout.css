@@ -229,6 +229,19 @@ button{ font-family:inherit; cursor:pointer; }
 
 .hero__ctas{ display:flex; gap:var(--space-3); flex-wrap:wrap; margin-bottom:var(--space-4); }
 
+/* Franchise hero: "See What You Get" and the offer banner side by side
+   instead of stacked — a whole extra row of height wasn't earning its
+   keep and made the hero read as tall/square rather than a wide band.
+   Each child keeps its own margin for when it's used standalone
+   elsewhere (e.g. .hero__ctas on the homepage hero), so they're zeroed
+   out here and the row's own margin does the spacing instead. */
+.hero__offer-row{
+  display:flex; align-items:center; flex-wrap:wrap; gap:var(--space-4);
+  margin-bottom:var(--space-4);
+}
+.hero__offer-row .hero__ctas{ margin-bottom:0; }
+.hero__offer-row .offer-banner{ margin:0; }
+
 /* Franchise hero's launch-offer callout — a real link (to WhatsApp) styled
    to read as a clickable card/button, not just a static badge. Same blue
    as the homepage's franchise CTA band (--teal), not amber, so it matches

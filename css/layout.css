@@ -217,6 +217,15 @@ button{ font-family:inherit; cursor:pointer; }
   font-family:var(--font-body);
 }
 
+/* Same gold gradient as .hero__headline::after (the homepage hero's
+   underline), as a standalone bar for pages that don't have a headline
+   to attach the pseudo-element to. */
+.hero__gold-rule{
+  width:120px; height:4px; border-radius:999px;
+  background:linear-gradient(90deg, rgba(255,180,71,0.95), rgba(255,180,71,0.25));
+  margin:calc(var(--space-4) * -1) 0 var(--space-4);
+}
+
 .hero__focus-title{
   margin:var(--space-5) 0 var(--space-3);
   font-size:0.72rem;
@@ -252,9 +261,9 @@ button{ font-family:inherit; cursor:pointer; }
    number in the block. */
 .offer-banner{
   position:relative; overflow:hidden; cursor:pointer;
-  display:inline-block; max-width:480px; text-decoration:none;
+  display:inline-block; min-width:360px; max-width:520px; text-decoration:none;
   background:var(--teal);
-  color:#fff; border-radius:var(--radius); padding:var(--space-3) var(--space-4);
+  color:#fff; border-radius:var(--radius); padding:var(--space-2) var(--space-5);
   margin:var(--space-1) 0 var(--space-4); box-shadow:var(--shadow-teal);
   transition:transform var(--transition-fast), box-shadow var(--transition);
 }
@@ -264,10 +273,12 @@ button{ font-family:inherit; cursor:pointer; }
   display:block; font-family:var(--font-mono); font-size:var(--text-xs); font-weight:800;
   text-transform:uppercase; letter-spacing:.08em;
 }
-.offer-banner__headline{ font-size:var(--text-base); font-weight:700; line-height:1.3; margin:4px 0 0; }
-.offer-banner__price{ font-family:var(--font-display); font-size:var(--text-4xl); font-weight:800; margin-right:2px; }
-.offer-banner__sub{ font-size:var(--text-base); font-weight:700; margin:0; }
-.offer-banner__regular{ font-size:var(--text-base); font-weight:600; margin:4px 0 0; color:#D6E4F2; }
+/* Price and "For First 100" sit in one row rather than stacked — a wider,
+   shorter box reads as a rectangle instead of a near-square block. */
+.offer-banner__headline{ display:flex; align-items:baseline; flex-wrap:wrap; gap:8px; margin:2px 0 0; }
+.offer-banner__price{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:800; line-height:1; }
+.offer-banner__sub{ font-size:var(--text-base); font-weight:700; }
+.offer-banner__regular{ font-size:var(--text-base); font-weight:600; margin:2px 0 0; color:#D6E4F2; }
 .offer-banner__regular-price{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:800; }
 .offer-banner__regular-price s{ text-decoration-thickness:2px; }
 

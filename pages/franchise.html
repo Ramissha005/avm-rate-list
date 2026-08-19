@@ -48,16 +48,19 @@
         <p class="eyebrow on-dark">AVMLABS FRANCHISE</p>
         <h1>Become a Franchise of AVMLabs</h1>
         <p class="hero__sub hero__sub--lead">Grow More. Earn More. Build with AVMLabs.</p>
+        <!-- Same gold gradient bar the homepage hero uses under its own
+             headline (.hero__headline::after) — a standalone element here
+             instead, since this page has no equivalent second headline
+             for a pseudo-element underline to attach to, and reusing
+             .hero__sub--lead itself would also underline the homepage's
+             "Truth. Trust. Transparency" line, not just this page's. -->
+        <div class="hero__gold-rule" aria-hidden="true"></div>
         <p class="hero__sub">Become an AVMLabs Franchise Partner and unlock the commercial advantages, technology, marketing support and business opportunities you need to grow your laboratory business.</p>
 
         <!-- Side by side rather than stacked (button, then banner below
              it) — a full extra row of height wasn't earning its keep and
              made the hero read as tall/square instead of a wide band. -->
         <div class="hero__offer-row">
-          <div class="hero__ctas">
-            <a href="#compare" class="btn btn--ghost-dark">See What You Get ↓</a>
-          </div>
-
           <a
             class="offer-banner"
             href="https://wa.me/919629236386?text=Hi%20AVMLabs%2C%20I%27m%20interested%20in%20the%20%E2%82%B91%20Lakh%20launch%20offer%20franchise%20fee."
@@ -65,8 +68,10 @@
             aria-label="Launch Offer: ₹1 Lakh Franchise Fee for the first 100 partners, regular fee ₹5 Lakh. Connect on WhatsApp."
           >
             <span class="offer-banner__tag">🚀 Launch Offer</span>
-            <p class="offer-banner__headline"><span class="offer-banner__price">₹1 Lakh</span></p>
-            <p class="offer-banner__sub">For First 100</p>
+            <p class="offer-banner__headline">
+              <span class="offer-banner__price">₹1 Lakh</span>
+              <span class="offer-banner__sub">For First 100</span>
+            </p>
             <p class="offer-banner__regular">Regular Fee: <span class="offer-banner__regular-price"><s>₹5 Lakh</s></span></p>
             <!-- Hover reveal: a gold panel wipes in from the left
                  (transform, not width — genuinely 0 at rest with no
@@ -80,6 +85,10 @@
               <span class="offer-banner__urgency-text">⏳ Book Soon!<br>Limited Seats Available</span>
             </div>
           </a>
+
+          <div class="hero__ctas">
+            <a href="#compare" class="btn btn--ghost-dark">See What You Get ↓</a>
+          </div>
         </div>
       </div>
     </div>

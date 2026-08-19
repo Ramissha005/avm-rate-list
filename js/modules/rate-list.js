@@ -51,7 +51,7 @@ AVM.modules = AVM.modules || {};
   }
 
   function renderTable({ tests, techColors, elements, onChange }) {
-    const { money } = AVM.utils.formatters;
+    const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { margin, multiplier } = AVM.modules.calculations;
     const list = getFiltered(tests);
     const totalItems = list.length;
@@ -78,25 +78,25 @@ AVM.modules = AVM.modules || {};
       let btnClass = "add-btn";
       let btnLabel = "Add to Profile";
       let btnIcon = "+";
-      let btnAttrs = `data-code="${t.code}" aria-label="Add ${t.name}"`;
+      let btnAttrs = `data-code="${esc(t.code)}" aria-label="Add ${esc(t.name)}"`;
       if (isAdded) {
         btnClass += " added";
         btnLabel = "Added";
         btnIcon = "✓";
-        btnAttrs = `data-code="${t.code}" aria-label="Remove ${t.name}"`;
+        btnAttrs = `data-code="${esc(t.code)}" aria-label="Remove ${esc(t.name)}"`;
       } else if (conflictTest) {
         btnClass += " blocked";
         btnLabel = "Blocked";
         btnIcon = "⊘";
-        btnAttrs = `data-code="${t.code}" data-conflict="1" aria-label="${t.name} conflicts with ${conflictTest.name}, already in your profile" title="Already covered by ${conflictTest.name} in your profile"`;
+        btnAttrs = `data-code="${esc(t.code)}" data-conflict="1" aria-label="${esc(t.name)} conflicts with ${esc(conflictTest.name)}, already in your profile" title="Already covered by ${esc(conflictTest.name)} in your profile"`;
       }
 
       return `
-        <div class="rl-row ${isAdded ? "is-added" : ""}" data-code="${t.code}">
-          <div><span class="cell-code">${t.code}</span></div>
-          <div class="cell-name cell-name--clickable" data-code="${t.code}">${t.name}${t.category ? `<small>${t.category}</small>` : ""}</div>
-          <div><span class="cell-tech" style="color:${col.fg};border-color:${col.bd};background:${col.bg}">${t.tech}</span></div>
-          <div class="cell-sample">${t.sample}</div>
+        <div class="rl-row ${isAdded ? "is-added" : ""}" data-code="${esc(t.code)}">
+          <div><span class="cell-code">${esc(t.code)}</span></div>
+          <div class="cell-name cell-name--clickable" data-code="${esc(t.code)}">${esc(t.name)}${t.category ? `<small>${esc(t.category)}</small>` : ""}</div>
+          <div><span class="cell-tech" style="color:${col.fg};border-color:${col.bd};background:${col.bg}">${esc(t.tech)}</span></div>
+          <div class="cell-sample">${esc(t.sample)}</div>
           <div class="cell-price"><span class="mobile-label">B2B</span>${money(t.b2b)}</div>
           <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(t.b2c)}</div>
           <div><span class="cell-margin">+${money(margin(t))}<small>${multiplier(t)}x</small></span></div>

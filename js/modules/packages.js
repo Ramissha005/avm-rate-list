@@ -20,7 +20,7 @@ AVM.modules = AVM.modules || {};
   function renderPackages(container, packages, onChange) {
     if (!container) return;
     const { byCode } = AVM.data.getCatalog();
-    const { money } = AVM.utils.formatters;
+    const { money, escapeHtml: esc } = AVM.utils.formatters;
     container.innerHTML = "";
     packages.forEach(pkg => {
       const items = pkg.codes.map(c => byCode[c]).filter(Boolean);
@@ -28,16 +28,16 @@ AVM.modules = AVM.modules || {};
       const testCount = AVM.modules.calculations.packageTestCount(pkg);
       const isActive = AVM.modules.profile.isPackageActive(pkg);
 
-      const testLines = items.map(t => `<li><span class="bundle-tip__code">${t.code}</span>${cleanName(t)}<span class="bundle-tip__price">${money(t.b2c)}</span></li>`).join("");
-      const calcLines = (pkg.calculatedParams || []).map(name => `<li class="bundle-tip__calc"><em>${name}</em><span class="bundle-tip__price">included</span></li>`).join("");
+      const testLines = items.map(t => `<li><span class="bundle-tip__code">${esc(t.code)}</span>${esc(cleanName(t))}<span class="bundle-tip__price">${money(t.b2c)}</span></li>`).join("");
+      const calcLines = (pkg.calculatedParams || []).map(name => `<li class="bundle-tip__calc"><em>${esc(name)}</em><span class="bundle-tip__price">included</span></li>`).join("");
 
       const chip = document.createElement("button");
       chip.type = "button";
       chip.className = "bundle-chip" + (isActive ? " bundle-chip--active" : "");
       chip.innerHTML = `
-        <span class="plus">${isActive ? "✓" : "+"}</span><span class="bundle-chip__name">${pkg.name}</span><span class="count">${testCount} tests</span>
+        <span class="plus">${isActive ? "✓" : "+"}</span><span class="bundle-chip__name">${esc(pkg.name)}</span><span class="count">${testCount} tests</span>
         <span class="bundle-tip" role="tooltip">
-          <span class="bundle-tip__title">${pkg.name} <span class="bundle-tip__total">B2B ${money(sum.msbB2b)} · B2C ${money(sum.b2c)}</span></span>
+          <span class="bundle-tip__title">${esc(pkg.name)} <span class="bundle-tip__total">B2B ${money(sum.msbB2b)} · B2C ${money(sum.b2c)}</span></span>
           <ul>${testLines}${calcLines}</ul>
         </span>`;
       chip.setAttribute("aria-pressed", isActive ? "true" : "false");

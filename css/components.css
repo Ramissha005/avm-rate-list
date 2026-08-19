@@ -190,6 +190,43 @@
 
 .pillar p{ font-size:var(--text-base); color:var(--ink-soft); }
 
+/* ---------- Franchise vs. B2B comparison table — two columns, each row a
+   franchise-partner benefit against what a regular B2B client doesn't get.
+   Reuses --profit (already this app's "good financial outcome" color, e.g.
+   the margin callout) for the partner column rather than introducing an
+   off-palette green, and the same red the margin box's loss state uses for
+   the "no" column, so both read as extensions of the existing system
+   instead of a one-off. overflow-x:auto + min-width keeps the two columns
+   from getting crushed on a phone — it scrolls horizontally there instead
+   of wrapping every cell into a ragged mess. ---------- */
+.compare-table-wrap{
+  overflow-x:auto; border-radius:var(--radius-lg); box-shadow:var(--shadow-sm); border:1px solid var(--line);
+}
+.compare-table{
+  width:100%; min-width:560px; border-collapse:collapse; background:var(--card);
+}
+.compare-table thead th{
+  background:var(--navy); color:#fff; text-align:left;
+  font-family:var(--font-display); font-size:var(--text-lg); font-weight:700;
+  padding:var(--space-4) var(--space-5);
+}
+.compare-table thead th:first-child{ width:52%; }
+.compare-table tbody tr + tr td{ border-top:1px solid var(--line); }
+.compare-table tbody td{ padding:var(--space-4) var(--space-5); vertical-align:top; }
+.compare-table__row{ display:flex; align-items:flex-start; gap:var(--space-3); font-size:var(--text-base); }
+.compare-table__icon{
+  display:inline-flex; align-items:center; justify-content:center; flex:none;
+  width:22px; height:22px; border-radius:50%; margin-top:1px;
+  font-size:12px; font-weight:700; color:#fff;
+}
+.compare-table td.is-yes{ background:var(--profit-bg); }
+.compare-table td.is-yes .compare-table__row{ color:var(--ink); }
+.compare-table td.is-yes .compare-table__row b{ color:var(--profit); }
+.compare-table td.is-yes .compare-table__icon{ background:var(--profit); }
+.compare-table td.is-no{ background:var(--paper-2); }
+.compare-table td.is-no .compare-table__row{ color:var(--ink-faint); }
+.compare-table td.is-no .compare-table__icon{ background:#C0392B; }
+
 .tech-pill{
   font-family:var(--font-mono); font-size:var(--text-sm); font-weight:600; padding:var(--space-2) var(--space-4); border-radius:var(--radius-full);
   border:1.5px solid var(--navy); color:var(--navy); background:#fff;

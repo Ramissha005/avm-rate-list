@@ -251,10 +251,11 @@ button{ font-family:inherit; cursor:pointer; }
 .offer-banner__regular{ font-size:var(--text-base); font-weight:600; margin:4px 0 0; color:#D6E4F2; }
 .offer-banner__regular s{ text-decoration-thickness:2px; }
 
-/* Hover: a red panel wipes in from the left to fully cover the banner,
-   then the "book soon" message fades in on top of it once the wipe's
-   mostly done — reversed the same way on the way out. The fill and the
-   text are two separate layers on purpose: the fill uses `transform:
+/* Hover: a gold panel wipes in from the left to cover most (not all — 90%
+   reads as "nearly full" without needing the very last sliver) of the
+   banner, then the "book soon" message fades in on top of it once the
+   wipe's mostly done — reversed the same way on the way out. The fill and
+   the text are two separate layers on purpose: the fill uses `transform:
    scaleX()` (GPU-composited, no layout/box-model math involved) instead
    of animating `width`, so it's genuinely zero-footprint at rest with no
    sub-pixel sliver ever visible, and the text sits in its own unscaled
@@ -267,16 +268,16 @@ button{ font-family:inherit; cursor:pointer; }
 }
 .offer-banner__urgency-fill{
   position:absolute; inset:0;
-  background:linear-gradient(135deg, #C0392B, #96281D);
+  background:linear-gradient(135deg, var(--amber), var(--amber-dark));
   transform:scaleX(0); transform-origin:left center;
   transition:transform .4s cubic-bezier(.65,0,.35,1);
 }
 .offer-banner__urgency-text{
-  position:relative; font-size:var(--text-base); font-weight:800; white-space:nowrap; color:#fff;
+  position:relative; font-size:var(--text-base); font-weight:800; white-space:nowrap; color:#241300;
   opacity:0; transition:opacity .2s ease;
 }
 .offer-banner:hover .offer-banner__urgency-fill,
-.offer-banner:focus-visible .offer-banner__urgency-fill{ transform:scaleX(1); }
+.offer-banner:focus-visible .offer-banner__urgency-fill{ transform:scaleX(.9); }
 .offer-banner:hover .offer-banner__urgency-text,
 .offer-banner:focus-visible .offer-banner__urgency-text{ opacity:1; transition-delay:.22s; }
 @media (prefers-reduced-motion: reduce){

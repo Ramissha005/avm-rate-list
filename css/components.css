@@ -657,10 +657,11 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    gold button) so the two cards read as a matched pair, not duplicates
    of the same block. Scoped modifier, not a change to .cta-band itself —
    franchise.html and sarc.html's own closing .cta-band stay the default
-   blue/gold. */
-.cta-band--gold{ background:var(--amber); }
-.cta-band--gold h3{ color:#241300; }
-.cta-band--gold p{ color:#6B4A18; }
+   blue/gold. Warm gradient (not flat amber) so it still has some depth
+   next to the flat-blue Franchise card; h3 keeps the base .cta-band's
+   white, p gets a warm cream instead of the base's cool light-blue tint. */
+.cta-band--gold{ background:linear-gradient(135deg, var(--amber), #C1531E); }
+.cta-band--gold p{ color:#FBE3C4; }
 
 /* The franchise band now lives inside the hero itself, sitting below the
    two-column grid — it shares the hero's dark backdrop rather than

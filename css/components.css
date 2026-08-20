@@ -62,6 +62,12 @@
 .btn--navy{ background:var(--navy); color:#fff; }
 .btn--navy:hover{ background:var(--navy-2); box-shadow:var(--shadow-navy); }
 
+/* Blue button for the gold-filled .cta-band--gold card below — the same
+   blue the card itself would otherwise be, so the pair reads as one
+   colour swapped, not an unrelated third colour. */
+.btn--teal{ background:var(--teal); color:#fff; }
+.btn--teal:hover{ background:var(--teal-dark); box-shadow:var(--shadow-navy); }
+
 .btn--outline{ border-color:var(--line-dark); color:var(--navy); background:transparent; box-shadow:none; }
 .btn--outline:hover{ background:var(--paper-2); border-color:var(--navy-soft); }
 
@@ -640,13 +646,21 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .cta-band .btn{ padding:var(--space-3) var(--space-5); font-size:var(--text-sm); flex:none; }
 
-/* Two .cta-band cards side by side (Franchise + SARC) — same background,
-   same button style, on purpose: the point is that the second card reads
-   as "the rest of this CTA section," not a visually distinct block bolted
-   on next to it. Grid's default align-items:stretch already equalizes
-   their height without extra rules. Collapses to one column at the same
-   960px breakpoint the rest of the site's 2-up sections use. */
+/* Two .cta-band cards side by side (Franchise + SARC). Grid's default
+   align-items:stretch equalizes their height without extra rules.
+   Collapses to one column at the same 960px breakpoint the rest of the
+   site's 2-up sections use. */
 .cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
+
+/* .cta-band--gold: the SARC card's colours flipped relative to its
+   Franchise neighbour (gold fill + blue button, instead of blue fill +
+   gold button) so the two cards read as a matched pair, not duplicates
+   of the same block. Scoped modifier, not a change to .cta-band itself —
+   franchise.html and sarc.html's own closing .cta-band stay the default
+   blue/gold. */
+.cta-band--gold{ background:var(--amber); }
+.cta-band--gold h3{ color:#241300; }
+.cta-band--gold p{ color:#6B4A18; }
 
 /* The franchise band now lives inside the hero itself, sitting below the
    two-column grid — it shares the hero's dark backdrop rather than

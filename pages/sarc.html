@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SARC Explained</title>
-<meta name="description" content="Services At Reagent Cost — the numbers behind how AVMLabs prices testing at or near reagent cost as volume rises.">
+<meta name="description" content="Services At Reagent Cost — how AVMLabs prices testing at or near reagent cost, and the numbers behind it as volume rises.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
@@ -29,6 +29,41 @@
 
 <main>
 
+  <!-- ================= HERO ================= -->
+  <!-- Same SARC brand mark / headline / tagline as the homepage hero
+       (.hero__brand-wrap, .hero__headline, .hero__sub--lead) — this page
+       is the "explain the concept" landing point for that same brand.
+       .reveal fades/rises the whole block in on load (see reveal.js); the
+       three chips condense what used to be a full 5-card "How SARC
+       Works" section into one line, and the scroll cue hands off into
+       the chapters below. -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero__content reveal">
+        <div class="hero__brand-wrap">
+          <span class="hero__brand">SARC</span>
+        </div>
+        <h1 class="hero__headline">Services At Reagent Cost</h1>
+        <p class="hero__sub hero__sub--lead">Truth. Trust. Transparency.</p>
+        <p class="hero__sub">
+          SARC is how AVMLabs prices testing at, or near, the cost of the reagent itself — not a discount, a
+          different cost structure. Higher volume and better utilization push the effective cost per test down
+          far enough that reagent cost becomes the number that matters, while the business stays sustainable on
+          overheads and scale rather than on markup.
+        </p>
+        <div class="stat-strip hero__specialties">
+          <span><span class="dot"></span>Higher Testing Volumes</span>
+          <span><span class="dot"></span>Better Reagent Utilization</span>
+          <span><span class="dot"></span>Analyzer Utilization at Scale</span>
+        </div>
+        <a href="#cost-tables" class="hero__scroll-cue">
+          <span>See the numbers behind it</span>
+          <span class="hero__scroll-cue__arrow" aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= COST TABLES ================= -->
   <!-- Three "chapters," each its own heading + one-line description +
        full-width table card, stacked top to bottom rather than side by
@@ -36,16 +71,22 @@
        volume), then Chapter 2 (reagent cost falls with volume), then
        arrives at Chapter 3 (so does SARC's margin) already primed for
        why that pattern holds, instead of three tables competing for
-       attention on one row. -->
+       attention on one row. Each chapter (and the connectors between
+       them) is .reveal, so they fade/rise into place as you scroll. -->
   <section class="ratelist" id="cost-tables">
     <div class="wrap">
-      <div class="section-head section-head--roomy">
+      <div class="section-head section-head--roomy reveal">
         <p class="eyebrow">THE NUMBERS BEHIND SARC</p>
         <h2>Cost per test falls as volume rises</h2>
         <p>The same pattern shows up whether the cost driver is quality control, reagent purchasing, or the full services-cost breakdown — more volume through the same fixed base, lower cost per test.</p>
+        <div class="sarc-jumpnav">
+          <a href="#chapter-01">01 · CBC Quality Control</a>
+          <a href="#chapter-02">02 · Vitamin D Reagent Cost</a>
+          <a href="#chapter-03">03 · SARC Economics</a>
+        </div>
       </div>
 
-      <div class="sarc-chapter">
+      <div class="sarc-chapter reveal" id="chapter-01">
         <div class="sarc-chapter__head">
           <span class="sarc-chapter__num" aria-hidden="true">01</span>
           <div>
@@ -77,9 +118,9 @@
         </div>
       </div>
 
-      <div class="sarc-chapter__connector" aria-hidden="true">↓</div>
+      <div class="sarc-chapter__connector reveal" aria-hidden="true"><span>↓</span></div>
 
-      <div class="sarc-chapter">
+      <div class="sarc-chapter reveal" id="chapter-02">
         <div class="sarc-chapter__head">
           <span class="sarc-chapter__num" aria-hidden="true">02</span>
           <div>
@@ -110,9 +151,9 @@
         </div>
       </div>
 
-      <div class="sarc-chapter__connector" aria-hidden="true">↓</div>
+      <div class="sarc-chapter__connector reveal" aria-hidden="true"><span>↓</span></div>
 
-      <div class="sarc-chapter">
+      <div class="sarc-chapter reveal" id="chapter-03">
         <div class="sarc-chapter__head">
           <span class="sarc-chapter__num" aria-hidden="true">03</span>
           <div>
@@ -145,6 +186,19 @@
     </div>
   </section>
 
+  <!-- ================= CLOSING CTA ================= -->
+  <section>
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div class="cta-band__text">
+          <h3>See SARC Pricing on the Rate List</h3>
+          <p>Every test on the rate list already reflects the SARC advantage — browse the full list or start building a profile.</p>
+        </div>
+        <a href="../index.html#ratelist" class="btn btn--amber">Browse the Rate List →</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer>
@@ -156,5 +210,6 @@
   </div>
 </footer>
 
+<script src="../js/modules/reveal.js"></script>
 </body>
 </html>

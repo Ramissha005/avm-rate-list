@@ -279,11 +279,12 @@
    than a routine content card, and the same amber top-accent bar
    .pillar/.compare-table-wrap already use elsewhere on the site — so
    these read as the same card language, not a one-off table style.
-   The card itself is capped and left-aligned (flush with the chapter
-   heading above it), not stretched to the section's full ~1140px — a
-   full-width card around a 3-column table was just a bigger empty shell
-   around the same narrow table. .data-table-card--wide gives the
-   5-column SARC table the extra room the two 3-column tables don't need. */
+   Chapters 01/02's cards are capped and left-aligned (flush with their
+   own column's heading) — they already fill their half of the
+   .sarc-chapter-pair grid, so there's no leftover width to center within.
+   Chapter 03's wide card sits alone in the section instead, so its extra
+   room (920px inside a ~1140px section) is centered rather than left as
+   one lopsided gap on the right. */
 .data-table-card{
   position:relative;
   background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg);
@@ -297,7 +298,7 @@
      each end instead of the amber reaching flush into the rounded corner. */
   border-radius:var(--radius-lg) var(--radius-lg) 0 0;
 }
-.data-table-card--wide{ max-width:920px; }
+.data-table-card--wide{ max-width:920px; margin:0 auto; }
 .data-table-wrap{ overflow-x:auto; padding:0 var(--space-4); }
 /* Same rounded-corner clipping problem the top amber bar had, now at the
    bottom: chapter 01/03's .data-table-wrap is followed by a .data-table__note,

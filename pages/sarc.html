@@ -30,13 +30,11 @@
 <main>
 
   <!-- ================= HERO ================= -->
-  <!-- Same SARC brand mark / headline / tagline as the homepage hero
-       (.hero__brand-wrap, .hero__headline, .hero__sub--lead) — this page
-       is the "explain the concept" landing point for that same brand.
-       .reveal fades/rises the whole block in on load (see reveal.js); the
-       three chips condense what used to be a full 5-card "How SARC
-       Works" section into one line, and the scroll cue hands off into
-       the chapters below. -->
+  <!-- Same SARC brand mark / headline / tagline as the homepage hero. The
+       three stat callouts are real, computed figures — one per chapter
+       below (500x from Ch.01, 61% from Ch.02, +37% from Ch.03) — so the
+       hero carries actual substance instead of an empty right side, a
+       decorative chart, or filler chips. -->
   <section class="hero">
     <div class="wrap">
       <div class="hero__content hero__content--wide reveal">
@@ -51,13 +49,24 @@
           far enough that reagent cost becomes the number that matters, while the business stays sustainable on
           overheads and scale rather than on markup.
         </p>
-        <div class="stat-strip hero__specialties">
-          <span><span class="dot"></span>Higher Testing Volumes</span>
-          <span><span class="dot"></span>Better Reagent Utilization</span>
-          <span><span class="dot"></span>Analyzer Utilization at Scale</span>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span class="hero-stat__num">500×</span>
+            <span class="hero-stat__label">Lower cost of quality control at full daily volume</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat__num">61%</span>
+            <span class="hero-stat__label">Lower reagent purchase cost at scale</span>
+          </div>
+          <div class="hero-stat">
+            <span class="hero-stat__num">+37%</span>
+            <span class="hero-stat__label">Best-case SARC margin — up from −50% at low utilization</span>
+          </div>
         </div>
+
         <a href="#cost-tables" class="hero__scroll-cue">
-          <span>See the numbers behind it</span>
+          <span>See the full cost tables</span>
           <span class="hero__scroll-cue__arrow" aria-hidden="true">↓</span>
         </a>
       </div>
@@ -65,42 +74,26 @@
   </section>
 
   <!-- ================= COST TABLES ================= -->
-  <!-- Three "chapters," each its own heading + one-line description +
-       full-width table card, stacked top to bottom rather than side by
-       side — the point is a visitor reads Chapter 1 (QC cost falls with
-       volume), then Chapter 2 (reagent cost falls with volume), then
-       arrives at Chapter 3 (so does SARC's margin) already primed for
-       why that pattern holds, instead of three tables competing for
-       attention on one row. Each chapter (and the connectors between
-       them) is .reveal, so they fade/rise into place as you scroll. -->
+  <!-- Three chapters, each an .eyebrow label ("CHAPTER 0N · ...", reusing
+       the same component every other section on the site uses for its
+       label) + heading + one-line description above a full-width table
+       card. Chapters 01/02 (same 3-column shape) sit side by side;
+       Chapter 03 (the 5-column synthesis) is full-width on its own
+       below. Each chapter is .reveal, so they fade/rise in as you
+       scroll (see reveal.js). -->
   <section class="ratelist" id="cost-tables">
     <div class="wrap">
       <div class="section-head section-head--roomy reveal">
         <p class="eyebrow">THE NUMBERS BEHIND SARC</p>
         <h2>Cost per test falls as volume rises</h2>
         <p>The same pattern shows up whether the cost driver is quality control, reagent purchasing, or the full services-cost breakdown — more volume through the same fixed base, lower cost per test.</p>
-        <div class="sarc-jumpnav">
-          <a href="#chapter-01">01 · CBC Quality Control</a>
-          <a href="#chapter-02">02 · Vitamin D Reagent Cost</a>
-          <a href="#chapter-03">03 · SARC Economics</a>
-        </div>
       </div>
 
-      <!-- Chapters 01 and 02 side by side — both are the same short
-           3-column shape (a volume tier vs. a falling cost), so pairing
-           them reads as "here are two examples of the same pattern"
-           rather than forcing a scroll between two nearly-identical-
-           looking tables. Chapter 03 (5 columns, the actual SARC
-           synthesis) stays full-width below on its own. -->
       <div class="sarc-chapter-pair">
         <div class="sarc-chapter-pair__col reveal" id="chapter-01">
-          <div class="sarc-chapter__head">
-            <span class="sarc-chapter__num" aria-hidden="true">01</span>
-            <div>
-              <h3>Cost of CBC with 3-Level Controls</h3>
-              <p>See how the cost of quality control decreases as daily testing volume increases.</p>
-            </div>
-          </div>
+          <p class="eyebrow">CHAPTER 01 · QUALITY CONTROL</p>
+          <h3 class="sarc-chapter__title">Cost of CBC with 3-Level Controls</h3>
+          <p class="sarc-chapter__desc">See how the cost of quality control decreases as daily testing volume increases.</p>
           <div class="data-table-card">
             <div class="data-table-wrap">
               <table class="data-table data-table--highlight-last">
@@ -130,13 +123,9 @@
         </div>
 
         <div class="sarc-chapter-pair__col reveal" id="chapter-02">
-          <div class="sarc-chapter__head">
-            <span class="sarc-chapter__num" aria-hidden="true">02</span>
-            <div>
-              <h3>Purchase Cost of Vitamin D</h3>
-              <p>Higher purchase volumes reduce the reagent cost per test.</p>
-            </div>
-          </div>
+          <p class="eyebrow">CHAPTER 02 · REAGENT PURCHASING</p>
+          <h3 class="sarc-chapter__title">Purchase Cost of Vitamin D</h3>
+          <p class="sarc-chapter__desc">Higher purchase volumes reduce the reagent cost per test.</p>
           <div class="data-table-card">
             <div class="data-table-wrap">
               <table class="data-table data-table--highlight-last">
@@ -165,16 +154,10 @@
         </div>
       </div>
 
-      <div class="sarc-chapter__connector reveal" aria-hidden="true"><span>↓</span></div>
-
       <div class="sarc-chapter reveal" id="chapter-03">
-        <div class="sarc-chapter__head">
-          <span class="sarc-chapter__num" aria-hidden="true">03</span>
-          <div>
-            <h3>Services At Reagent Cost (SARC) – Simplified</h3>
-            <p>See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
-          </div>
-        </div>
+        <p class="eyebrow">CHAPTER 03 · SARC ECONOMICS</p>
+        <h3 class="sarc-chapter__title">Services At Reagent Cost (SARC) – Simplified</h3>
+        <p class="sarc-chapter__desc">See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
         <div class="data-table-card data-table-card--wide">
           <div class="data-table-wrap">
             <table class="data-table data-table--wide">

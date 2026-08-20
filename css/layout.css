@@ -338,6 +338,25 @@ button{ font-family:inherit; cursor:pointer; }
   letter-spacing:0.01em;
 }
 
+/* SARC hero's stat row — three real, computed figures (500x / 61% / +37%,
+   each pulled straight from one of the three chapters below) rather than
+   a decorative chart or empty space. Same glass-chip material as
+   .stat-strip's chips, just scaled up into a real callout, so the hero
+   gains substance without introducing a new visual language. */
+.hero-stats{ display:flex; flex-wrap:wrap; gap:var(--space-4); margin:var(--space-6) 0 0; }
+.hero-stat{
+  flex:1 1 220px; min-width:200px;
+  background:var(--glass-dark-bg); border:1px solid var(--glass-dark-border);
+  backdrop-filter:blur(var(--glass-blur-sm)); -webkit-backdrop-filter:blur(var(--glass-blur-sm));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.1);
+  border-radius:var(--radius); padding:var(--space-5);
+}
+.hero-stat__num{
+  display:block; font-family:var(--font-display); font-size:var(--text-3xl); font-weight:800;
+  color:var(--amber); line-height:1.1; margin-bottom:6px;
+}
+.hero-stat__label{ display:block; font-size:var(--text-xs); color:#C4D2DC; line-height:1.45; }
+
 /* SARC page hero's hand-off into the chapters below — a small animated
    cue rather than another full-size button, since it's pointing at
    content already on the same page, not a separate destination. */

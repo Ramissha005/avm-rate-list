@@ -281,6 +281,13 @@
 .sarc-chapter__head{
   display:flex; align-items:flex-start; gap:var(--space-4); margin-bottom:var(--space-5);
 }
+/* Chapter 03 sits alone (full-width), not paired in a 2-up grid like
+   01/02 — its icon+heading read as flush-left-in-a-half-column there,
+   but flush-left against the whole wide section here just looks
+   off-centre relative to the centred table card below it. Scoped to
+   .sarc-chapter (chapter 03's own wrapper, not .sarc-chapter-pair__col)
+   so 01/02 keep their left-aligned icon+heading as-is. */
+.sarc-chapter > .sarc-chapter__head{ justify-content:center; }
 .sarc-chapter__icon{
   flex:none; width:56px; height:56px; border-radius:50%;
   display:flex; align-items:center; justify-content:center;

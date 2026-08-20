@@ -136,16 +136,13 @@ button{ font-family:inherit; cursor:pointer; }
 }
 
 /* SARC hero has no second grid column (no image/slip/chart) — rather than
-   leave the text pinned left with the rest of the row empty, this
-   modifier centers the whole block as one column in the middle of the
-   hero instead. Scoped to this modifier (not the bare .hero__content
-   rule above) so it doesn't touch the homepage/franchise heroes, which
-   *do* have a second column and need to stay left-aligned against it. */
-.hero__content--centered{
-  max-width:640px; margin:0 auto; text-align:center;
-}
-.hero__content--centered .hero__brand-wrap,
-.hero__content--centered .hero__specialties{ justify-content:center; }
+   cap the text at a narrow reading width and leave the rest of the row
+   empty, this modifier drops the 720px cap so the headline/paragraph run
+   left-to-right across the full hero instead. Scoped to this modifier
+   (not the bare .hero__content rule above) so it doesn't touch the
+   homepage/franchise heroes, which *do* have a second column and need to
+   stay capped against it. */
+.hero__content--wide{ max-width:none; }
 
 /* Franchise page's hero image — bleeds to the right edge of the viewport
    and fills the hero's full height (an absolutely-positioned layer inside

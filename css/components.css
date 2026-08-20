@@ -318,17 +318,22 @@
 .data-table td.is-neutral{ color:var(--ink); font-weight:700; }
 
 /* Each table's "chapter": a heading + one-line description above its
-   table card, with real vertical space between chapters. */
+   table card, with real vertical space between chapters. Centered to
+   match the table card below (both the paired 01/02 cards and chapter
+   03's centered wide card), not left-flush against a centered card. */
 .sarc-chapter{ margin-bottom:var(--space-10); }
-.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; }
+.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; text-align:center; }
 /* min-height reserves 2 lines regardless of how long the sentence actually
    is — chapter 01's description wraps to 2 lines, chapter 02's is short
    enough to fit 1. Without this, chapter 02's card started higher than
    chapter 01's, since .sarc-chapter-pair's grid only aligns each column's
-   own top edge (align-items:start), not the card inside it. */
+   own top edge (align-items:start), not the card inside it.
+   margin:auto (not just text-align) centers the 520px-capped box itself —
+   matters on chapter 03, where that cap is narrower than the section, so
+   centered text in a left-flush box would still look off-center overall. */
 .sarc-chapter__desc{
-  font-size:var(--text-base); line-height:1.5; color:var(--ink-soft);
-  margin-bottom:var(--space-5); max-width:520px; min-height:3em;
+  font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); text-align:center;
+  margin:0 auto var(--space-5); max-width:520px; min-height:3em;
 }
 
 /* Chapters 01/02 side by side — both are the same short 3-column shape,

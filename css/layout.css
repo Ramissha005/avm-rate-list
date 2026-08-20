@@ -348,42 +348,6 @@ button{ font-family:inherit; cursor:pointer; }
   50%{ transform:translateY(6px); }
 }
 
-/* SARC hero's right-hand visual — same "light card floating on the dark
-   hero" treatment as the homepage's .slip, so the hero has something to
-   balance the headline column instead of empty navy on wide screens.
-   Bar heights come from the HTML's inline --h custom property (see
-   sarc.html) rather than being hardcoded here, since each bar's height
-   is specific to that one chart. */
-.hero__visual-wrap{ display:flex; align-items:center; justify-content:center; }
-.sarc-chart{
-  width:100%; max-width:400px;
-  background:#FBFAF5; color:var(--ink); border-radius:var(--radius-lg);
-  padding:var(--space-6) var(--space-6) var(--space-5); box-shadow:var(--shadow-lg);
-  transform:rotate(-1deg);
-  font-family:var(--font-mono);
-}
-.sarc-chart__head{
-  display:flex; justify-content:space-between; align-items:baseline;
-  font-size:var(--text-2xs); letter-spacing:.1em; text-transform:uppercase; color:var(--ink-faint);
-  padding-bottom:var(--space-3); border-bottom:1px dashed #C9CDBC; margin-bottom:var(--space-5);
-}
-.sarc-chart__bars{ display:flex; align-items:flex-end; gap:var(--space-2); height:150px; }
-.sarc-chart__bar{
-  flex:1; height:var(--h); min-height:6px; border-radius:5px 5px 0 0;
-  background:linear-gradient(180deg, var(--teal), var(--navy));
-  position:relative; display:flex; justify-content:center;
-}
-.sarc-chart__val{
-  position:absolute; top:-18px; left:50%; transform:translateX(-50%);
-  font-size:10px; font-weight:700; color:var(--ink-soft); white-space:nowrap;
-}
-.sarc-chart__foot{
-  display:flex; justify-content:space-between; margin-top:var(--space-3);
-  padding-top:var(--space-2); border-top:1px dashed #C9CDBC;
-  font-size:10px; color:var(--ink-faint);
-}
-.sarc-chart__caption{ margin:var(--space-4) 0 0; font-family:var(--font-body); font-size:var(--text-2xs); color:var(--ink-faint); text-align:center; }
-
 section{ padding:var(--space-20) 0; }
 
 .section-head{ max-width:640px; margin-bottom:var(--space-10); }

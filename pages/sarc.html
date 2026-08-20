@@ -38,7 +38,7 @@
        Works" section into one line, and the scroll cue hands off into
        the chapters below. -->
   <section class="hero">
-    <div class="wrap hero__grid">
+    <div class="wrap">
       <div class="hero__content reveal">
         <div class="hero__brand-wrap">
           <span class="hero__brand">SARC</span>
@@ -60,29 +60,6 @@
           <span>See the numbers behind it</span>
           <span class="hero__scroll-cue__arrow" aria-hidden="true">↓</span>
         </a>
-      </div>
-      <!-- Mini "cost falls as volume rises" chart — real figures from
-           Chapter 01's table, bar height sqrt-scaled purely for legible
-           proportions (each bar is still labeled with its real, exact
-           number; the full precise table is one scroll away). Same
-           "light card floating on the dark hero" treatment as the
-           homepage's specimen slip, so the hero has a right-hand visual
-           instead of empty navy space, and previews the page's core
-           point before you've scrolled at all. -->
-      <div class="hero__visual-wrap">
-        <div class="sarc-chart reveal">
-          <div class="sarc-chart__head"><span>Cost of Quality (₹)</span><span>vs. Tests/Day</span></div>
-          <div class="sarc-chart__bars">
-            <div class="sarc-chart__bar" style="--h:100%"><span class="sarc-chart__val">300</span></div>
-            <div class="sarc-chart__bar" style="--h:70%"><span class="sarc-chart__val">150</span></div>
-            <div class="sarc-chart__bar" style="--h:50%"><span class="sarc-chart__val">75</span></div>
-            <div class="sarc-chart__bar" style="--h:35%"><span class="sarc-chart__val">37.5</span></div>
-            <div class="sarc-chart__bar" style="--h:25%"><span class="sarc-chart__val">18.8</span></div>
-            <div class="sarc-chart__bar" style="--h:18%"><span class="sarc-chart__val">9.4</span></div>
-          </div>
-          <div class="sarc-chart__foot"><span>1</span><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span></div>
-          <p class="sarc-chart__caption">From the CBC quality-control table below — see Chapter 01</p>
-        </div>
       </div>
     </div>
   </section>
@@ -109,67 +86,73 @@
         </div>
       </div>
 
-      <div class="sarc-chapter reveal" id="chapter-01">
-        <div class="sarc-chapter__head">
-          <span class="sarc-chapter__num" aria-hidden="true">01</span>
-          <div>
-            <h3>Cost of CBC with 3-Level Controls</h3>
-            <p>See how the cost of quality control decreases as daily testing volume increases.</p>
+      <!-- Chapters 01 and 02 side by side — both are the same short
+           3-column shape (a volume tier vs. a falling cost), so pairing
+           them reads as "here are two examples of the same pattern"
+           rather than forcing a scroll between two nearly-identical-
+           looking tables. Chapter 03 (5 columns, the actual SARC
+           synthesis) stays full-width below on its own. -->
+      <div class="sarc-chapter-pair">
+        <div class="sarc-chapter-pair__col reveal" id="chapter-01">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__num" aria-hidden="true">01</span>
+            <div>
+              <h3>Cost of CBC with 3-Level Controls</h3>
+              <p>See how the cost of quality control decreases as daily testing volume increases.</p>
+            </div>
+          </div>
+          <div class="data-table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>S.No</th><th>Test/Day</th><th>Cost of Quality</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>1</td><td>300.0</td></tr>
+                  <tr><td>2</td><td>2</td><td>150.0</td></tr>
+                  <tr><td>3</td><td>4</td><td>75.0</td></tr>
+                  <tr><td>4</td><td>8</td><td>37.5</td></tr>
+                  <tr><td>5</td><td>16</td><td>18.8</td></tr>
+                  <tr><td>6</td><td>32</td><td>9.4</td></tr>
+                  <tr><td>7</td><td>64</td><td>4.7</td></tr>
+                  <tr><td>8</td><td>128</td><td>2.3</td></tr>
+                  <tr><td>9</td><td>256</td><td>1.2</td></tr>
+                  <tr><td>10</td><td>512</td><td>0.6</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="data-table__note">Cost of reagent not included.</p>
           </div>
         </div>
-        <div class="data-table-card">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr><th>S.No</th><th>Test/Day</th><th>Cost of Quality</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>1</td><td>300.0</td></tr>
-                <tr><td>2</td><td>2</td><td>150.0</td></tr>
-                <tr><td>3</td><td>4</td><td>75.0</td></tr>
-                <tr><td>4</td><td>8</td><td>37.5</td></tr>
-                <tr><td>5</td><td>16</td><td>18.8</td></tr>
-                <tr><td>6</td><td>32</td><td>9.4</td></tr>
-                <tr><td>7</td><td>64</td><td>4.7</td></tr>
-                <tr><td>8</td><td>128</td><td>2.3</td></tr>
-                <tr><td>9</td><td>256</td><td>1.2</td></tr>
-                <tr><td>10</td><td>512</td><td>0.6</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="data-table__note">Cost of reagent not included.</p>
-        </div>
-      </div>
 
-      <div class="sarc-chapter__connector reveal" aria-hidden="true"><span>↓</span></div>
-
-      <div class="sarc-chapter reveal" id="chapter-02">
-        <div class="sarc-chapter__head">
-          <span class="sarc-chapter__num" aria-hidden="true">02</span>
-          <div>
-            <h3>Purchase Cost of Vitamin D</h3>
-            <p>Higher purchase volumes reduce the reagent cost per test.</p>
+        <div class="sarc-chapter-pair__col reveal" id="chapter-02">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__num" aria-hidden="true">02</span>
+            <div>
+              <h3>Purchase Cost of Vitamin D</h3>
+              <p>Higher purchase volumes reduce the reagent cost per test.</p>
+            </div>
           </div>
-        </div>
-        <div class="data-table-card">
-          <div class="data-table-wrap">
-            <table class="data-table">
-              <thead>
-                <tr><th>S.No</th><th>Tests/Month</th><th>Cost of Reagents</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>100</td><td>100</td></tr>
-                <tr><td>2</td><td>200</td><td>90</td></tr>
-                <tr><td>3</td><td>400</td><td>81</td></tr>
-                <tr><td>4</td><td>800</td><td>73</td></tr>
-                <tr><td>5</td><td>1,600</td><td>66</td></tr>
-                <tr><td>6</td><td>3,200</td><td>59</td></tr>
-                <tr><td>7</td><td>6,400</td><td>53</td></tr>
-                <tr><td>8</td><td>12,800</td><td>48</td></tr>
-                <tr><td>9</td><td>25,600</td><td>43</td></tr>
-                <tr><td>10</td><td>51,200</td><td>39</td></tr>
-              </tbody>
-            </table>
+          <div class="data-table-card">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr><th>S.No</th><th>Tests/Month</th><th>Cost of Reagents</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>100</td><td>100</td></tr>
+                  <tr><td>2</td><td>200</td><td>90</td></tr>
+                  <tr><td>3</td><td>400</td><td>81</td></tr>
+                  <tr><td>4</td><td>800</td><td>73</td></tr>
+                  <tr><td>5</td><td>1,600</td><td>66</td></tr>
+                  <tr><td>6</td><td>3,200</td><td>59</td></tr>
+                  <tr><td>7</td><td>6,400</td><td>53</td></tr>
+                  <tr><td>8</td><td>12,800</td><td>48</td></tr>
+                  <tr><td>9</td><td>25,600</td><td>43</td></tr>
+                  <tr><td>10</td><td>51,200</td><td>39</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>

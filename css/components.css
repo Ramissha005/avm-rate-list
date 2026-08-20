@@ -329,6 +329,19 @@
    reagent cost falls with volume -> so does SARC's margin) rather than
    three unrelated tables competing for attention. */
 .sarc-chapter{ margin-bottom:var(--space-8); }
+
+/* Chapters 01/02 side by side — both are the same short 3-column shape,
+   so a visitor reads them as two examples of one pattern rather than
+   two nearly-identical tables forcing a scroll between them. Each
+   column's own .data-table-card still caps its own width (see above),
+   so on a wide screen there's a bit of column gutter beyond the card
+   too, not just between the two cards' outer edges. */
+.sarc-chapter-pair{
+  display:grid; grid-template-columns:1fr 1fr; gap:var(--space-6); align-items:start;
+  margin-bottom:var(--space-8);
+}
+.sarc-chapter-pair__col .data-table-card{ max-width:none; }
+
 .sarc-chapter__head{
   display:flex; align-items:flex-start; gap:var(--space-4);
   max-width:760px; margin-bottom:var(--space-5);

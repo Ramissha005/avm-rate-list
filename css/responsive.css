@@ -25,7 +25,14 @@
 
   .hero__grid{ grid-template-columns:1fr; }
   .cta-grid{ grid-template-columns:1fr; }
-  .data-table-grid{ grid-template-columns:1fr; }
+  /* Tighter padding/type so the SARC reference tables (only 3-5 short
+     numeric columns each) have a real shot at fitting a phone's width
+     without falling back to .data-table-wrap's horizontal scroll. */
+  .sarc-chapter__head{ gap:var(--space-3); }
+  .sarc-chapter__num{ width:32px; height:32px; font-size:var(--text-sm); }
+  .data-table thead th{ padding:var(--space-2) var(--space-3); font-size:10px; }
+  .data-table thead th:first-child{ width:64px; }
+  .data-table tbody td{ padding:var(--space-2) var(--space-3); font-size:var(--text-sm); }
   .hero::before{ width:360px; height:360px; right:-120px; top:-100px; }
   /* The specimen-requisition slip is a nice desktop flourish but just eats
      scroll distance above the fold on a phone — drop it entirely here. */

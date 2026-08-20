@@ -296,8 +296,11 @@
    its last row would sit flush against the card's bottom edge — a bit
    of breathing room instead of the row butting straight into the border. */
 .data-table-card > .data-table-wrap:last-child{ padding-bottom:var(--space-4); }
-.data-table{ width:100%; max-width:600px; margin:0 auto; border-collapse:collapse; min-width:280px; }
-.data-table--wide{ max-width:800px; }
+/* No max-width here on purpose — a capped table centered inside a wider
+   card left the header rule, row dividers and zebra tint all stopping
+   short of the card's edges instead of reaching it. Full width of
+   .data-table-wrap (card minus its side padding) for every chapter now. */
+.data-table{ width:100%; border-collapse:collapse; min-width:280px; }
 /* Centered (not right-aligned), plain uppercase text headings — no icons,
    kept deliberately minimal/technical for a B2B lab-services page rather
    than reading as promotional. */
@@ -310,11 +313,16 @@
   text-align:center; padding:var(--space-3) var(--space-5); border-bottom:1px solid var(--line);
   font-family:var(--font-mono); font-size:var(--text-base); font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink);
 }
-.data-table tbody td:first-child{ color:var(--navy); font-weight:700; }
 /* Faint alternating tint (the same --paper used for the header band, not
    a separate colour) so the eye can track one row across several columns
    — subtle enough to stay behind the numbers, not compete with them. */
 .data-table tbody tr:nth-child(even) td{ background:var(--paper); }
+/* The leading (S.No/HPD) column gets its own tint — .paper-2 is a step
+   darker than the even-row .paper, so it reads as a distinct label
+   column rather than blending into whichever stripe its row happens to
+   land on. tr td (not just td) matches nth-child(even)'s specificity so
+   this consistently wins on both odd and even rows. */
+.data-table tbody tr td:first-child{ color:var(--navy); font-weight:700; background:var(--paper-2); }
 .data-table tbody tr:hover td{ background:var(--profit-bg); }
 .data-table__note{
   padding:var(--space-3) var(--space-5) var(--space-4); font-size:var(--text-xs); font-style:italic; color:var(--ink-faint);

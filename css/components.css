@@ -552,16 +552,22 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cta-band{
   position:relative; overflow:hidden;
   background:var(--teal);
-  color:#fff; border-radius:var(--radius-lg); padding:var(--space-5);
-  display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap;
+  color:#fff; border-radius:var(--radius-lg); padding:var(--space-4);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); flex-wrap:nowrap;
   box-shadow:var(--shadow-lg);
 }
 
-.cta-band h3{ font-size:var(--text-lg); margin-bottom:4px; }
+.cta-band h3{ font-size:var(--text-base); margin-bottom:2px; }
 
-.cta-band p{ color:#D6E4F2; font-size:var(--text-sm); }
+.cta-band p{ color:#D6E4F2; font-size:var(--text-xs); line-height:1.35; }
 
-.cta-band .btn{ padding:var(--space-3) var(--space-5); font-size:var(--text-sm); flex:none; }
+/* Lets the button hold its own width while the text column shrinks/wraps
+   instead of the whole row wrapping the button onto its own line below —
+   text stays on the left, button stays on the right, even in the
+   half-width .cta-grid cards. */
+.cta-band__text{ flex:1; min-width:0; }
+
+.cta-band .btn{ padding:var(--space-2) var(--space-4); font-size:var(--text-xs); flex:none; }
 
 /* Two .cta-band cards side by side (Franchise + SARC) — same background,
    same button style, on purpose: the point is that the second card reads

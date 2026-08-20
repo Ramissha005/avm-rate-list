@@ -286,6 +286,10 @@
 .data-table-card::before{
   content:""; position:absolute; top:0; left:0; right:0; height:3px; z-index:1;
   background:linear-gradient(90deg, var(--amber), var(--amber-dark));
+  /* Matches the card's own top corners — without this, overflow:hidden clips
+     the flat bar along the 24px corner curve and leaves a white notch at
+     each end instead of the amber reaching flush into the rounded corner. */
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
 }
 .data-table-card--wide{ max-width:920px; }
 .data-table-wrap{ overflow-x:auto; padding:0 var(--space-4); }
@@ -319,6 +323,14 @@
    promotional look. Text stays the same navy as the first column, so the
    only new thing is the tint, not another accent hue. */
 .data-table--highlight-last tbody td:last-child{ background:var(--profit-bg); color:var(--navy); font-weight:700; }
+/* Without this, the last column stayed one flat blue for every row while
+   columns 1-2 kept alternating white/grey — the striping rhythm broke at
+   the column boundary and made rows look uneven when scanned across.
+   A slightly deeper tint on even rows keeps the same alternating beat
+   running through all three columns. */
+.data-table--highlight-last tbody tr:nth-child(even) td:last-child{
+  background:color-mix(in srgb, var(--profit-bg) 78%, var(--profit) 22%);
+}
 
 /* Each table's "chapter": a heading + one-line description above its
    table card, with real vertical space between chapters. */

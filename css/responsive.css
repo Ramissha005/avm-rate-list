@@ -24,6 +24,8 @@
   .nav__links a:last-child{ border-bottom:none; }
 
   .hero__grid{ grid-template-columns:1fr; }
+  .cta-grid{ grid-template-columns:1fr; }
+  .data-table-grid{ grid-template-columns:1fr; }
   .hero::before{ width:360px; height:360px; right:-120px; top:-100px; }
   /* The specimen-requisition slip is a nice desktop flourish but just eats
      scroll distance above the fold on a phone — drop it entirely here. */

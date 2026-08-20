@@ -265,6 +265,48 @@
   .compare-table td.is-no::before{ color:#C0392B; }
 }
 
+/* ---------- SARC page reference tables — plain numeric data (cost per
+   volume tiers), not a yes/no comparison like .compare-table, so it's a
+   simpler card: navy header, zebra rows, tabular-numeral alignment. Each
+   table sits in its own .data-table-card so uneven row counts between the
+   three tables don't force them all to match height. ---------- */
+.data-table-card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-sm); overflow:hidden;
+}
+.data-table-card__title{
+  background:var(--navy); color:#fff; font-family:var(--font-display); font-weight:700;
+  font-size:var(--text-base); padding:var(--space-3) var(--space-4); text-align:center;
+}
+.data-table-wrap{ overflow-x:auto; }
+.data-table{ width:100%; border-collapse:collapse; min-width:280px; }
+.data-table thead th{
+  background:var(--paper-2); color:var(--ink-soft); text-align:right;
+  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; letter-spacing:.04em; text-transform:uppercase;
+  padding:var(--space-2) var(--space-4); border-bottom:1px solid var(--line);
+}
+.data-table thead th:first-child{ text-align:left; }
+.data-table tbody td{
+  text-align:right; padding:var(--space-2) var(--space-4);
+  font-family:var(--font-mono); font-variant-numeric:tabular-nums; color:var(--ink);
+}
+.data-table tbody td:first-child{ text-align:left; color:var(--ink-soft); }
+.data-table tbody tr:nth-child(even){ background:var(--paper); }
+.data-table tbody tr:hover{ background:var(--profit-bg); }
+.data-table__note{
+  padding:var(--space-2) var(--space-4) var(--space-3); font-size:var(--text-2xs); font-style:italic; color:var(--ink-faint);
+}
+.data-table td.is-negative{ color:#C0392B; font-weight:700; }
+.data-table td.is-positive{ color:#1E8449; font-weight:700; }
+.data-table td.is-neutral{ color:var(--ink); font-weight:700; }
+
+/* The two 3-column volume tables sit narrower than the 5-column SARC
+   summary table, matching the proportions of the reference sheet — the
+   1.3fr slot is where the numbers actually need the room. */
+.data-table-grid{
+  display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:var(--space-5); align-items:start;
+}
+
 .tech-pill{
   font-family:var(--font-mono); font-size:var(--text-sm); font-weight:600; padding:var(--space-2) var(--space-4); border-radius:var(--radius-full);
   border:1.5px solid var(--navy); color:var(--navy); background:#fff;
@@ -518,6 +560,14 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cta-band h3{ font-size:var(--text-2xl); margin-bottom:var(--space-2); }
 
 .cta-band p{ color:#D6E4F2; font-size:var(--text-base); }
+
+/* Two .cta-band cards side by side (Franchise + SARC) — same background,
+   same button style, on purpose: the point is that the second card reads
+   as "the rest of this CTA section," not a visually distinct block bolted
+   on next to it. Grid's default align-items:stretch already equalizes
+   their height without extra rules. Collapses to one column at the same
+   960px breakpoint the rest of the site's 2-up sections use. */
+.cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5); }
 
 /* The franchise band now lives inside the hero itself, sitting below the
    two-column grid — it shares the hero's dark backdrop rather than

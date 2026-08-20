@@ -293,6 +293,15 @@
 }
 .data-table-card--wide{ max-width:920px; }
 .data-table-wrap{ overflow-x:auto; padding:0 var(--space-4); }
+/* Same rounded-corner clipping problem the top amber bar had, now at the
+   bottom: chapter 01/03's .data-table-wrap is followed by a .data-table__note,
+   which already sits between the last row and the card's rounded bottom
+   edge. Chapter 02 has no note, so its last row's grey/blue backgrounds
+   sat flush against the corner and got cut by the curve. This bottom
+   padding only applies when .data-table-wrap is the final thing in the
+   card, so it doesn't add extra empty space above a note that's already
+   there. */
+.data-table-card > .data-table-wrap:last-child{ padding-bottom:var(--space-4); }
 .data-table{ width:100%; max-width:600px; margin:0 auto; border-collapse:collapse; min-width:280px; }
 .data-table--wide{ max-width:800px; }
 /* Centered (not right-aligned), plain uppercase text headings — no icons,
@@ -336,7 +345,15 @@
    table card, with real vertical space between chapters. */
 .sarc-chapter{ margin-bottom:var(--space-10); }
 .sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; }
-.sarc-chapter__desc{ font-size:var(--text-base); color:var(--ink-soft); margin-bottom:var(--space-5); max-width:520px; }
+/* min-height reserves 2 lines regardless of how long the sentence actually
+   is — chapter 01's description wraps to 2 lines, chapter 02's is short
+   enough to fit 1. Without this, chapter 02's card started higher than
+   chapter 01's, since .sarc-chapter-pair's grid only aligns each column's
+   own top edge (align-items:start), not the card inside it. */
+.sarc-chapter__desc{
+  font-size:var(--text-base); line-height:1.5; color:var(--ink-soft);
+  margin-bottom:var(--space-5); max-width:520px; min-height:3em;
+}
 
 /* Chapters 01/02 side by side — both are the same short 3-column shape,
    so a visitor reads them as two examples of one pattern rather than

@@ -292,7 +292,12 @@
 .sarc-chapter__icon--amber{ background:var(--amber-bg); color:var(--amber-dark); }
 
 .sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; }
-.sarc-chapter__desc{ font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); margin:0; }
+/* min-height reserves 2 lines regardless of how long the sentence actually
+   is — chapter 01's description wraps to 2 lines, chapter 02's is short
+   enough to fit 1. Without this, chapter 02's whole .sarc-chapter__head
+   (and therefore its card below) sat higher than chapter 01's, since the
+   grid only aligns each column's own top edge, not the card inside it. */
+.sarc-chapter__desc{ font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); margin:0; min-height:3em; }
 
 /* Same card language as .pillar elsewhere on the site (--radius, a soft
    resting shadow) rather than .compare-table-wrap's heavier treatment. */

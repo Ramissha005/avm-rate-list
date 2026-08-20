@@ -660,7 +660,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    blue/gold. Warm gradient (not flat amber) so it still has some depth
    next to the flat-blue Franchise card; h3 keeps the base .cta-band's
    white, p gets a warm cream instead of the base's cool light-blue tint. */
-.cta-band--gold{ background:linear-gradient(135deg, var(--amber), #C1531E); }
+.cta-band--gold{ background:linear-gradient(135deg, #C1531E, var(--amber)); }
 .cta-band--gold p{ color:#FBE3C4; }
 
 /* The franchise band now lives inside the hero itself, sitting below the

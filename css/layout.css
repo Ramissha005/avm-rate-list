@@ -214,6 +214,13 @@ button{ font-family:inherit; cursor:pointer; }
 .hero__sub{
   font-size:var(--text-md); color:#C4D2DC; max-width:46ch; margin-bottom:var(--space-4);
 }
+/* SARC hero's paragraph specifically — the 46ch cap above is what every
+   other hero's .hero__sub wants (short paragraph, narrower column), but
+   this page's hero has no second column competing for width, so the
+   same cap left this one sentence wrapping across 4 short lines instead
+   of 2 wide ones. Scoped to this modifier so it doesn't touch .hero__sub
+   anywhere else. */
+.hero__sub--wide{ max-width:90ch; }
 
 .hero__sub--lead{
   margin-top:var(--space-3);

@@ -271,25 +271,41 @@
   .compare-table td.is-no::before{ color:#C0392B; }
 }
 
-/* ---------- SARC page reference tables — plain numeric data (cost per
-   volume tiers), not a yes/no comparison like .compare-table. Same card
-   language as .pillar elsewhere on the site (--radius, a soft resting
-   shadow) rather than .compare-table-wrap's heavier treatment (amber
-   bar, --radius-lg, --shadow-lg) — enough lift to read as a designed
-   card, still restrained/technical rather than promotional. A tinted
-   header band (not a full navy fill) and a faint row tint (not a bold
-   zebra stripe) carry that same "present but quiet" balance through
-   the table itself.
-   Chapters 01/02's cards are capped and left-aligned (flush with their
+/* ---------- SARC page reference tables — each chapter themed with its
+   own accent colour (blue for quality control, emerald for reagent
+   purchasing, amber for the SARC margin table): an icon badge next to
+   the heading, a coloured gradient header row, and numbered circle
+   badges down the first column. Chapter 03's first column (HPD) is
+   real data, not a row index like chapters 01/02's S.No, so it's the
+   only one that skips the circle-badge treatment. */
+.sarc-chapter__head{
+  display:flex; align-items:flex-start; gap:var(--space-4); margin-bottom:var(--space-5);
+}
+.sarc-chapter__icon{
+  flex:none; width:56px; height:56px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid currentColor;
+}
+.sarc-chapter__icon svg{ width:28px; height:28px; display:block; }
+.sarc-chapter__icon--blue{ background:var(--teal-bg); color:var(--teal); }
+.sarc-chapter__icon--emerald{ background:var(--emerald-bg); color:var(--emerald); }
+.sarc-chapter__icon--amber{ background:var(--amber-bg); color:var(--amber-dark); }
+
+.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; }
+.sarc-chapter__desc{ font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); margin:0; }
+
+/* Same card language as .pillar elsewhere on the site (--radius, a soft
+   resting shadow) rather than .compare-table-wrap's heavier treatment. */
+.data-table-card{
+  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+  box-shadow:var(--shadow-sm); overflow:hidden; max-width:780px;
+}
+/* Chapters 01/02's cards are capped and left-aligned (flush with their
    own column's heading) — they already fill their half of the
    .sarc-chapter-pair grid, so there's no leftover width to center within.
    Chapter 03's wide card sits alone in the section instead, so its extra
    room (920px inside a ~1140px section) is centered rather than left as
    one lopsided gap on the right. */
-.data-table-card{
-  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-  box-shadow:var(--shadow-xs); overflow:hidden; max-width:780px;
-}
 .data-table-card--wide{ max-width:920px; margin:0 auto; }
 .data-table-wrap{ overflow-x:auto; padding:0 var(--space-4); }
 /* Chapter 02 has no .data-table__note under its table, so without this
@@ -298,50 +314,54 @@
 .data-table-card > .data-table-wrap:last-child{ padding-bottom:var(--space-4); }
 .data-table{ width:100%; max-width:600px; margin:0 auto; border-collapse:collapse; min-width:280px; }
 .data-table--wide{ max-width:800px; }
-/* Centered (not right-aligned), plain uppercase text headings — no icons,
-   kept deliberately minimal/technical for a B2B lab-services page rather
-   than reading as promotional. */
 .data-table thead th{
-  text-align:center; color:var(--navy); background:var(--paper); border-bottom:2px solid var(--navy);
+  text-align:center; color:#fff; background:var(--navy); border-bottom:none;
   font-family:var(--font-mono); font-size:var(--text-xs); font-weight:700; letter-spacing:.06em; text-transform:uppercase;
   padding:var(--space-4) var(--space-5); white-space:nowrap;
 }
+/* Gradient header per theme — overrides the plain navy fallback above. */
+.data-table-card--blue thead th{ background:linear-gradient(90deg, var(--navy-2), var(--teal)); }
+.data-table-card--emerald thead th{ background:linear-gradient(90deg, var(--emerald-dark), var(--emerald)); }
+.data-table-card--amber thead th{ background:linear-gradient(90deg, var(--amber-dark), var(--amber)); }
 .data-table tbody td{
   text-align:center; padding:var(--space-3) var(--space-5); border-bottom:1px solid var(--line);
   font-family:var(--font-mono); font-size:var(--text-base); font-weight:600; font-variant-numeric:tabular-nums; color:var(--ink);
 }
 .data-table tbody td:first-child{ color:var(--navy); font-weight:700; }
-/* Faint alternating tint (the same --paper used for the header band, not
-   a separate colour) so the eye can track one row across several columns
-   — subtle enough to stay behind the numbers, not compete with them. */
+/* Faint alternating tint, coloured per theme so it still reads as part
+   of the same accent rather than a generic grey zebra stripe. */
 .data-table tbody tr:nth-child(even) td{ background:var(--paper); }
-.data-table tbody tr:hover td{ background:var(--profit-bg); }
+.data-table-card--blue tbody tr:nth-child(even) td{ background:var(--teal-bg); }
+.data-table-card--emerald tbody tr:nth-child(even) td{ background:var(--emerald-bg); }
+.data-table-card--amber tbody tr:nth-child(even) td{ background:var(--amber-bg); }
+.data-table tbody tr:hover td{ background:var(--paper-2); }
+/* Numbered circle badge for chapters 01/02's S.No column (see the
+   comment at the top of this section for why chapter 03 doesn't get
+   one). Sits inside the first td, replacing the plain digit. */
+.sarc-num{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:26px; height:26px; border-radius:50%; background:var(--navy);
+  color:#fff; font-family:var(--font-mono); font-size:var(--text-xs); font-weight:700;
+}
+.data-table-card--blue .sarc-num{ background:var(--teal); }
+.data-table-card--emerald .sarc-num{ background:var(--emerald); }
 .data-table__note{
+  display:flex; align-items:center; justify-content:center; gap:6px;
   padding:var(--space-3) var(--space-5) var(--space-4); font-size:var(--text-xs); font-style:italic; color:var(--ink-faint);
   text-align:center;
+}
+.data-table__note-icon{
+  flex:none; display:inline-flex; align-items:center; justify-content:center;
+  width:15px; height:15px; border-radius:50%; border:1px solid var(--ink-faint);
+  font-size:10px; font-style:normal; font-family:var(--font-mono); line-height:1;
 }
 .data-table td.is-negative{ color:#C0392B; font-weight:700; }
 .data-table td.is-positive{ color:#1E8449; font-weight:700; }
 .data-table td.is-neutral{ color:var(--ink); font-weight:700; }
 
-/* Each table's "chapter": a heading + one-line description above its
-   table card, with real vertical space between chapters. Centered to
-   match the table card below (both the paired 01/02 cards and chapter
-   03's centered wide card), not left-flush against a centered card. */
+/* Each table's "chapter": icon + heading + one-line description above
+   its table card, with real vertical space between chapters. */
 .sarc-chapter{ margin-bottom:var(--space-10); }
-.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; text-align:center; }
-/* min-height reserves 2 lines regardless of how long the sentence actually
-   is — chapter 01's description wraps to 2 lines, chapter 02's is short
-   enough to fit 1. Without this, chapter 02's card started higher than
-   chapter 01's, since .sarc-chapter-pair's grid only aligns each column's
-   own top edge (align-items:start), not the card inside it.
-   margin:auto (not just text-align) centers the 520px-capped box itself —
-   matters on chapter 03, where that cap is narrower than the section, so
-   centered text in a left-flush box would still look off-center overall. */
-.sarc-chapter__desc{
-  font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); text-align:center;
-  margin:0 auto var(--space-5); max-width:520px; min-height:3em;
-}
 
 /* Chapters 01/02 side by side — both are the same short 3-column shape,
    so a visitor reads them as two examples of one pattern rather than

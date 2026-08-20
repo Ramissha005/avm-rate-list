@@ -48,69 +48,94 @@
   </section>
 
   <!-- ================= COST TABLES ================= -->
-  <!-- Three chapters, each a heading + one-line description above a
-       full-width table card. Chapters 01/02 (same 3-column shape) sit
-       side by side; Chapter 03 (the 5-column synthesis) is full-width
-       on its own below. Each chapter is .reveal, so they fade/rise in
-       as you scroll (see reveal.js). -->
+  <!-- Three chapters, each an icon badge + heading + one-line description
+       above a themed table card (blue/emerald/amber — see .sarc-chapter__icon
+       and .data-table-card--blue/emerald/amber in components.css). Chapters
+       01/02 (same 3-column shape) sit side by side; Chapter 03 (the
+       5-column synthesis) is full-width on its own below. Each chapter is
+       .reveal, so they fade/rise in as you scroll (see reveal.js). -->
   <section class="ratelist" id="cost-tables">
     <div class="wrap">
       <div class="sarc-chapter-pair">
         <div class="sarc-chapter-pair__col reveal" id="chapter-01">
-          <h3 class="sarc-chapter__title">Cost of CBC with 3-Level Controls</h3>
-          <p class="sarc-chapter__desc">See how the cost of quality control decreases as daily testing volume increases.</p>
-          <div class="data-table-card">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__icon sarc-chapter__icon--blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="3" width="4" height="15" rx="2"/>
+                <rect x="14" y="6" width="4" height="12" rx="2"/>
+                <line x1="4.5" y1="3" x2="11.5" y2="3"/>
+                <line x1="12.5" y1="6" x2="19.5" y2="6"/>
+              </svg>
+            </span>
+            <div>
+              <h3 class="sarc-chapter__title">Cost of CBC with 3-Level Controls</h3>
+              <p class="sarc-chapter__desc">See how the cost of quality control decreases as daily testing volume increases.</p>
+            </div>
+          </div>
+          <div class="data-table-card data-table-card--blue">
             <div class="data-table-wrap">
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>S.No</th>
+                    <th>#</th>
                     <th>Test/Day</th>
                     <th>Cost of Quality</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>1</td><td>1</td><td>300.0</td></tr>
-                  <tr><td>2</td><td>2</td><td>150.0</td></tr>
-                  <tr><td>3</td><td>4</td><td>75.0</td></tr>
-                  <tr><td>4</td><td>8</td><td>37.5</td></tr>
-                  <tr><td>5</td><td>16</td><td>18.8</td></tr>
-                  <tr><td>6</td><td>32</td><td>9.4</td></tr>
-                  <tr><td>7</td><td>64</td><td>4.7</td></tr>
-                  <tr><td>8</td><td>128</td><td>2.3</td></tr>
-                  <tr><td>9</td><td>256</td><td>1.2</td></tr>
-                  <tr><td>10</td><td>512</td><td>0.6</td></tr>
+                  <tr><td><span class="sarc-num">1</span></td><td>1</td><td>300.0</td></tr>
+                  <tr><td><span class="sarc-num">2</span></td><td>2</td><td>150.0</td></tr>
+                  <tr><td><span class="sarc-num">3</span></td><td>4</td><td>75.0</td></tr>
+                  <tr><td><span class="sarc-num">4</span></td><td>8</td><td>37.5</td></tr>
+                  <tr><td><span class="sarc-num">5</span></td><td>16</td><td>18.8</td></tr>
+                  <tr><td><span class="sarc-num">6</span></td><td>32</td><td>9.4</td></tr>
+                  <tr><td><span class="sarc-num">7</span></td><td>64</td><td>4.7</td></tr>
+                  <tr><td><span class="sarc-num">8</span></td><td>128</td><td>2.3</td></tr>
+                  <tr><td><span class="sarc-num">9</span></td><td>256</td><td>1.2</td></tr>
+                  <tr><td><span class="sarc-num">10</span></td><td>512</td><td>0.6</td></tr>
                 </tbody>
               </table>
             </div>
-            <p class="data-table__note">Cost of reagent not included.</p>
+            <p class="data-table__note"><span class="data-table__note-icon">i</span>Cost of reagent not included.</p>
           </div>
         </div>
 
         <div class="sarc-chapter-pair__col reveal" id="chapter-02">
-          <h3 class="sarc-chapter__title">Purchase Cost of Vitamin D</h3>
-          <p class="sarc-chapter__desc">Higher purchase volumes reduce the reagent cost per test.</p>
-          <div class="data-table-card">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__icon sarc-chapter__icon--emerald" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="9" width="10" height="11" rx="2.5"/>
+                <rect x="9.5" y="5" width="5" height="4" rx="1"/>
+                <line x1="8.5" y1="3.5" x2="15.5" y2="3.5"/>
+                <line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/>
+              </svg>
+            </span>
+            <div>
+              <h3 class="sarc-chapter__title">Purchase Cost of Vitamin D</h3>
+              <p class="sarc-chapter__desc">Higher purchase volumes reduce the reagent cost per test.</p>
+            </div>
+          </div>
+          <div class="data-table-card data-table-card--emerald">
             <div class="data-table-wrap">
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>S.No</th>
+                    <th>#</th>
                     <th>Tests/Month</th>
                     <th>Cost of Reagents</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>1</td><td>100</td><td>100</td></tr>
-                  <tr><td>2</td><td>200</td><td>90</td></tr>
-                  <tr><td>3</td><td>400</td><td>81</td></tr>
-                  <tr><td>4</td><td>800</td><td>73</td></tr>
-                  <tr><td>5</td><td>1,600</td><td>66</td></tr>
-                  <tr><td>6</td><td>3,200</td><td>59</td></tr>
-                  <tr><td>7</td><td>6,400</td><td>53</td></tr>
-                  <tr><td>8</td><td>12,800</td><td>48</td></tr>
-                  <tr><td>9</td><td>25,600</td><td>43</td></tr>
-                  <tr><td>10</td><td>51,200</td><td>39</td></tr>
+                  <tr><td><span class="sarc-num">1</span></td><td>100</td><td>100</td></tr>
+                  <tr><td><span class="sarc-num">2</span></td><td>200</td><td>90</td></tr>
+                  <tr><td><span class="sarc-num">3</span></td><td>400</td><td>81</td></tr>
+                  <tr><td><span class="sarc-num">4</span></td><td>800</td><td>73</td></tr>
+                  <tr><td><span class="sarc-num">5</span></td><td>1,600</td><td>66</td></tr>
+                  <tr><td><span class="sarc-num">6</span></td><td>3,200</td><td>59</td></tr>
+                  <tr><td><span class="sarc-num">7</span></td><td>6,400</td><td>53</td></tr>
+                  <tr><td><span class="sarc-num">8</span></td><td>12,800</td><td>48</td></tr>
+                  <tr><td><span class="sarc-num">9</span></td><td>25,600</td><td>43</td></tr>
+                  <tr><td><span class="sarc-num">10</span></td><td>51,200</td><td>39</td></tr>
                 </tbody>
               </table>
             </div>
@@ -119,9 +144,21 @@
       </div>
 
       <div class="sarc-chapter reveal" id="chapter-03">
-        <h3 class="sarc-chapter__title">Services At Reagent Cost (SARC) – Simplified</h3>
-        <p class="sarc-chapter__desc">See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
-        <div class="data-table-card data-table-card--wide">
+        <div class="sarc-chapter__head">
+          <span class="sarc-chapter__icon sarc-chapter__icon--amber" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="20" x2="20" y2="20"/>
+              <rect x="6" y="14" width="3" height="6" rx="1" fill="currentColor" stroke="none"/>
+              <rect x="11" y="10" width="3" height="10" rx="1" fill="currentColor" stroke="none"/>
+              <rect x="16" y="5" width="3" height="15" rx="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <div>
+            <h3 class="sarc-chapter__title">Services At Reagent Cost (SARC) – Simplified</h3>
+            <p class="sarc-chapter__desc">See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
+          </div>
+        </div>
+        <div class="data-table-card data-table-card--wide data-table-card--amber">
           <div class="data-table-wrap">
             <table class="data-table data-table--wide">
               <thead>
@@ -146,7 +183,7 @@
               </tbody>
             </table>
           </div>
-          <p class="data-table__note">HPD – Hours per the Analyzer running.</p>
+          <p class="data-table__note"><span class="data-table__note-icon">i</span>HPD – Hours per the Analyzer running.</p>
         </div>
       </div>
     </div>

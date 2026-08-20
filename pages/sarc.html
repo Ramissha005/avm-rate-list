@@ -38,7 +38,7 @@
        Works" section into one line, and the scroll cue hands off into
        the chapters below. -->
   <section class="hero">
-    <div class="wrap">
+    <div class="wrap hero__grid">
       <div class="hero__content reveal">
         <div class="hero__brand-wrap">
           <span class="hero__brand">SARC</span>
@@ -60,6 +60,29 @@
           <span>See the numbers behind it</span>
           <span class="hero__scroll-cue__arrow" aria-hidden="true">↓</span>
         </a>
+      </div>
+      <!-- Mini "cost falls as volume rises" chart — real figures from
+           Chapter 01's table, bar height sqrt-scaled purely for legible
+           proportions (each bar is still labeled with its real, exact
+           number; the full precise table is one scroll away). Same
+           "light card floating on the dark hero" treatment as the
+           homepage's specimen slip, so the hero has a right-hand visual
+           instead of empty navy space, and previews the page's core
+           point before you've scrolled at all. -->
+      <div class="hero__visual-wrap">
+        <div class="sarc-chart reveal">
+          <div class="sarc-chart__head"><span>Cost of Quality (₹)</span><span>vs. Tests/Day</span></div>
+          <div class="sarc-chart__bars">
+            <div class="sarc-chart__bar" style="--h:100%"><span class="sarc-chart__val">300</span></div>
+            <div class="sarc-chart__bar" style="--h:70%"><span class="sarc-chart__val">150</span></div>
+            <div class="sarc-chart__bar" style="--h:50%"><span class="sarc-chart__val">75</span></div>
+            <div class="sarc-chart__bar" style="--h:35%"><span class="sarc-chart__val">37.5</span></div>
+            <div class="sarc-chart__bar" style="--h:25%"><span class="sarc-chart__val">18.8</span></div>
+            <div class="sarc-chart__bar" style="--h:18%"><span class="sarc-chart__val">9.4</span></div>
+          </div>
+          <div class="sarc-chart__foot"><span>1</span><span>2</span><span>4</span><span>8</span><span>16</span><span>32</span></div>
+          <p class="sarc-chart__caption">From the CBC quality-control table below — see Chapter 01</p>
+        </div>
       </div>
     </div>
   </section>
@@ -161,7 +184,7 @@
             <p>See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
           </div>
         </div>
-        <div class="data-table-card">
+        <div class="data-table-card data-table-card--wide">
           <div class="data-table-wrap">
             <table class="data-table data-table--wide">
               <thead>

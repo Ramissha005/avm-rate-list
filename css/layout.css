@@ -82,12 +82,12 @@ button{ font-family:inherit; cursor:pointer; }
 .hero{
   background:linear-gradient(180deg, #0E2238, #173A5A);
   color:#EFF3F6;
-  /* Was space-24/space-20 (96px/80px) — the hero plus its folded-in
-     franchise band ran taller than a typical desktop viewport before a
-     visitor scrolled at all. Tightened so the whole hero (headline through
-     the franchise CTA) has a realistic shot at fitting above the fold on
-     common laptop heights (~900px), not just ultra-tall monitors. */
-  padding:var(--space-16) 0 var(--space-12);
+  /* Was space-24/space-20 (96px/80px), then space-16/space-12. Tightened
+     again now that the franchise band grew into a two-card CTA row (see
+     .cta-grid) — the whole hero (headline through the CTA cards) still
+     needs a realistic shot at fitting above the fold on common laptop
+     heights (~900px), not just ultra-tall monitors. */
+  padding:var(--space-12) 0 var(--space-8);
   position:relative; overflow:hidden;
 }
 

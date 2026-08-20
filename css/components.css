@@ -552,14 +552,16 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cta-band{
   position:relative; overflow:hidden;
   background:var(--teal);
-  color:#fff; border-radius:var(--radius-lg); padding:var(--space-7);
-  display:flex; align-items:center; justify-content:space-between; gap:var(--space-6); flex-wrap:wrap;
+  color:#fff; border-radius:var(--radius-lg); padding:var(--space-5);
+  display:flex; align-items:center; justify-content:space-between; gap:var(--space-4); flex-wrap:wrap;
   box-shadow:var(--shadow-lg);
 }
 
-.cta-band h3{ font-size:var(--text-2xl); margin-bottom:var(--space-2); }
+.cta-band h3{ font-size:var(--text-lg); margin-bottom:4px; }
 
-.cta-band p{ color:#D6E4F2; font-size:var(--text-base); }
+.cta-band p{ color:#D6E4F2; font-size:var(--text-sm); }
+
+.cta-band .btn{ padding:var(--space-3) var(--space-5); font-size:var(--text-sm); flex:none; }
 
 /* Two .cta-band cards side by side (Franchise + SARC) — same background,
    same button style, on purpose: the point is that the second card reads
@@ -567,13 +569,13 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    on next to it. Grid's default align-items:stretch already equalizes
    their height without extra rules. Collapses to one column at the same
    960px breakpoint the rest of the site's 2-up sections use. */
-.cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-5); }
+.cta-grid{ display:grid; grid-template-columns:1fr 1fr; gap:var(--space-4); }
 
 /* The franchise band now lives inside the hero itself, sitting below the
    two-column grid — it shares the hero's dark backdrop rather than
    getting its own section, so it just needs top spacing to separate it
    from the grid above (the hero's own bottom padding closes it out). */
-.hero__franchise{ position:relative; z-index:1; margin-top:var(--space-7); }
+.hero__franchise{ position:relative; z-index:1; margin-top:var(--space-5); }
 
 /* ---------- WhatsApp CTA button — brand green, recognizable at a glance,
    tapping anywhere on the button opens a WhatsApp chat directly. ---------- */

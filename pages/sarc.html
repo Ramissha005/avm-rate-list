@@ -30,45 +30,19 @@
 <main>
 
   <!-- ================= HERO ================= -->
-  <!-- Same SARC brand mark / headline / tagline as the homepage hero. The
-       three stat callouts are real, computed figures — one per chapter
-       below (500x from Ch.01, 61% from Ch.02, +37% from Ch.03) — so the
-       hero carries actual substance instead of an empty right side, a
-       decorative chart, or filler chips. -->
+  <!-- What used to sit as a separate section-head right above the tables
+       — now the hero itself, so the page opens straight on the one
+       claim it's actually there to prove, instead of a SARC-brand intro
+       followed by a second "here's what these tables show" intro. -->
   <section class="hero">
     <div class="wrap">
       <div class="hero__content hero__content--wide reveal">
-        <div class="hero__brand-wrap">
-          <span class="hero__brand">SARC</span>
-        </div>
-        <h1 class="hero__headline">Services At Reagent Cost</h1>
-        <p class="hero__sub hero__sub--lead">Truth. Trust. Transparency.</p>
+        <p class="eyebrow on-dark">THE NUMBERS BEHIND SARC</p>
+        <h1 class="hero__headline">Cost per test falls as volume rises</h1>
         <p class="hero__sub">
-          SARC is how AVMLabs prices testing at, or near, the cost of the reagent itself — not a discount, a
-          different cost structure. Higher volume and better utilization push the effective cost per test down
-          far enough that reagent cost becomes the number that matters, while the business stays sustainable on
-          overheads and scale rather than on markup.
+          The same pattern shows up whether the cost driver is quality control, reagent purchasing, or the full
+          services-cost breakdown — more volume through the same fixed base, lower cost per test.
         </p>
-
-        <div class="hero-stats">
-          <div class="hero-stat">
-            <span class="hero-stat__num">500×</span>
-            <span class="hero-stat__label">Lower cost of quality control at full daily volume</span>
-          </div>
-          <div class="hero-stat">
-            <span class="hero-stat__num">61%</span>
-            <span class="hero-stat__label">Lower reagent purchase cost at scale</span>
-          </div>
-          <div class="hero-stat">
-            <span class="hero-stat__num">+37%</span>
-            <span class="hero-stat__label">Best-case SARC margin — up from −50% at low utilization</span>
-          </div>
-        </div>
-
-        <a href="#cost-tables" class="hero__scroll-cue">
-          <span>See the full cost tables</span>
-          <span class="hero__scroll-cue__arrow" aria-hidden="true">↓</span>
-        </a>
       </div>
     </div>
   </section>
@@ -83,12 +57,6 @@
        scroll (see reveal.js). -->
   <section class="ratelist" id="cost-tables">
     <div class="wrap">
-      <div class="section-head section-head--roomy reveal">
-        <p class="eyebrow">THE NUMBERS BEHIND SARC</p>
-        <h2>Cost per test falls as volume rises</h2>
-        <p>The same pattern shows up whether the cost driver is quality control, reagent purchasing, or the full services-cost breakdown — more volume through the same fixed base, lower cost per test.</p>
-      </div>
-
       <div class="sarc-chapter-pair">
         <div class="sarc-chapter-pair__col reveal" id="chapter-01">
           <p class="eyebrow">CHAPTER 01 · QUALITY CONTROL</p>

@@ -320,11 +320,6 @@
    only new thing is the tint, not another accent hue. */
 .data-table--highlight-last tbody td:last-child{ background:var(--profit-bg); color:var(--navy); font-weight:700; }
 
-/* More breathing room before the first table than a typical section-head
-   gets — this one is introducing three chapters below it, not a grid of
-   cards immediately underneath. */
-.section-head--roomy{ margin-bottom:var(--space-14); }
-
 /* Each table's "chapter": reuses the site's own .eyebrow component for the
    "CHAPTER 01 · ..." label (same small-dash-plus-uppercase-mono treatment
    as every other section eyebrow on the site) rather than a bespoke

@@ -320,14 +320,10 @@
    only new thing is the tint, not another accent hue. */
 .data-table--highlight-last tbody td:last-child{ background:var(--profit-bg); color:var(--navy); font-weight:700; }
 
-/* Each table's "chapter": reuses the site's own .eyebrow component for the
-   "CHAPTER 01 · ..." label (same small-dash-plus-uppercase-mono treatment
-   as every other section eyebrow on the site) rather than a bespoke
-   numbered-circle badge — the numbering still gives the visual hierarchy/
-   progression cue, just through a component that already belongs to this
-   design system instead of a one-off invention. */
+/* Each table's "chapter": a heading + one-line description above its
+   table card, with real vertical space between chapters. */
 .sarc-chapter{ margin-bottom:var(--space-10); }
-.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:var(--space-2) 0 4px; }
+.sarc-chapter__title{ font-size:var(--text-xl); color:var(--navy); margin:0 0 4px; }
 .sarc-chapter__desc{ font-size:var(--text-base); color:var(--ink-soft); margin-bottom:var(--space-5); max-width:520px; }
 
 /* Chapters 01/02 side by side — both are the same short 3-column shape,

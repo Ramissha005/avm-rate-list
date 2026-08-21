@@ -8,11 +8,26 @@ AVM.modules = AVM.modules || {};
   // but the scroll position itself doesn't move — if you'd scrolled down to
   // the bottom of a long page to hit "Next", you land on a new page's rows
   // still scrolled to the bottom, with the new page's own start scrolled
-  // out of view above. Scrolling the controls bar back into view puts the
-  // new page's first row right underneath it, same as a fresh page load.
+  // out of view above.
+  //
+  // scrollIntoView() on .rl-controls itself doesn't fix this: it's
+  // position:sticky, so once you've scrolled past it it's already sitting
+  // pinned near the top of the viewport — the browser sees it as "already
+  // in view" and barely scrolls at all, leaving you looking at whatever
+  // landed under the sticky bar on the new (often shorter) page, which
+  // reads as scrolling further down instead of back up. Scrolling to
+  // .rl-toolbar (the "Showing X-Y of Z" line right above the rows, not
+  // itself sticky) with an explicit offset for the two stacked sticky bars
+  // — the site nav and .rl-controls — actually moves the page.
   function scrollToListTop() {
+    const anchor = document.querySelector(".rl-toolbar");
     const controls = document.querySelector(".rl-controls");
-    if (controls) controls.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (!anchor) return;
+    const stickyHeight = controls
+      ? controls.getBoundingClientRect().height + (parseFloat(getComputedStyle(controls).top) || 0)
+      : 0;
+    const target = anchor.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 12;
+    window.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
   }
 
   function getPageWindow(current, total, size) {

@@ -10,7 +10,7 @@ AVM.modules = AVM.modules || {};
     }
 
     const { money, escapeHtml: esc } = AVM.utils.formatters;
-    const { margin, multiplier } = AVM.modules.calculations;
+    const { margin, marginPercentage } = AVM.modules.calculations;
     const { byCode } = AVM.data.getCatalog();
     const params = AVM.data.getParametersForTest(test.code);
     // A single param with id:null is just the fallback echo of the test's
@@ -55,7 +55,7 @@ AVM.modules = AVM.modules || {};
       <div class="td-pricing">
         <div><span>B2B Cost</span><b>${money(test.b2b)}</b></div>
         <div><span>B2C Value</span><b>${money(test.b2c)}</b></div>
-        <div class="is-profit"><span>Margin</span><b>+${money(margin(test))} <small>(${multiplier(test)}×)</small></b></div>
+        <div class="is-profit"><span>Margin</span><b>+${money(margin(test))} <small>(${test.b2b ? `+${Math.round(marginPercentage(test.b2b, test.b2c))}%` : "—"})</small></b></div>
       </div>
       ${hasParamBreakdown ? `
       <div class="td-params">

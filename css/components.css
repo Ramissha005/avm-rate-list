@@ -1058,10 +1058,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .td-pricing > div{ display:flex; justify-content:space-between; align-items:baseline; font-size:var(--text-base); color:var(--ink-soft); }
 .td-pricing b{ font-family:var(--font-display); font-size:var(--text-md); color:var(--navy); }
 .td-pricing .is-profit b{ color:var(--profit); }
-.td-params h3{ font-size:var(--text-sm); color:var(--navy); margin-bottom:var(--space-2); text-transform:uppercase; letter-spacing:.04em; font-family:var(--font-mono); font-weight:600; }
-.td-params ul{ display:flex; flex-direction:column; gap:var(--space-2); margin-bottom:var(--space-5); }
-.td-params li{ font-size:var(--text-base); color:var(--ink); padding:var(--space-2) var(--space-3); background:var(--paper); border-radius:var(--radius-xs); }
-.td-params li small{ color:var(--ink-faint); margin-left:4px; }
 .td-add-btn{ width:100%; justify-content:center; }
 .td-empty{ padding:var(--space-10) var(--space-5); text-align:center; color:var(--ink-faint); }
 .cell-name--clickable{ cursor:pointer; }

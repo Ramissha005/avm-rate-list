@@ -13,12 +13,14 @@ AVM.modules = AVM.modules || {};
   // scrollIntoView() on .rl-controls itself doesn't fix this: it's
   // position:sticky, so once you've scrolled past it it's already sitting
   // pinned near the top of the viewport — the browser sees it as "already
-  // in view" and barely scrolls at all, leaving you looking at whatever
-  // landed under the sticky bar on the new (often shorter) page, which
-  // reads as scrolling further down instead of back up. Scrolling to
-  // .rl-toolbar (the "Showing X-Y of Z" line right above the rows, not
-  // itself sticky) with an explicit offset for the two stacked sticky bars
-  // — the site nav and .rl-controls — actually moves the page.
+  // in view" and barely scrolls at all. Targeting .rl-toolbar (the
+  // "Showing X-Y of Z" line right above the rows, not itself sticky) with
+  // scroll-margin-top set to the two stacked sticky bars' combined height
+  // (site nav + .rl-controls) lets the browser's own scrollIntoView
+  // algorithm do the positioning — more robust than computing an absolute
+  // window.scrollTo() target by hand, which can fight the browser's own
+  // scroll-anchoring (CSS overflow-anchor) mid-animation and land somewhere
+  // other than intended, including all the way up at the top of the page.
   function scrollToListTop() {
     const anchor = document.querySelector(".rl-toolbar");
     const controls = document.querySelector(".rl-controls");
@@ -26,8 +28,8 @@ AVM.modules = AVM.modules || {};
     const stickyHeight = controls
       ? controls.getBoundingClientRect().height + (parseFloat(getComputedStyle(controls).top) || 0)
       : 0;
-    const target = anchor.getBoundingClientRect().top + window.pageYOffset - stickyHeight - 12;
-    window.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+    anchor.style.scrollMarginTop = (stickyHeight + 12) + "px";
+    anchor.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function getPageWindow(current, total, size) {

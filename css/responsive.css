@@ -165,6 +165,14 @@
      so franchise.html/sarc.html's own closing .cta-band keeps its text. */
   .cta-grid .cta-band p{ display:none; }
   .cta-band .btn{ width:100%; justify-content:center; padding:var(--space-3) var(--space-5); font-size:var(--text-sm); }
+  /* With the description gone, the homepage pair goes back to one row —
+     heading left, button right, same shape as desktop — instead of the
+     stacked/full-width layout above (still right for franchise.html/
+     sarc.html's own .cta-band, which keeps its longer description text
+     and genuinely needs the extra vertical room). */
+  .cta-grid .cta-band{ flex-direction:row; align-items:center; }
+  .cta-grid .cta-band h3{ font-size:var(--text-md); margin-bottom:0; }
+  .cta-grid .cta-band .btn{ width:auto; flex:none; padding:var(--space-2) var(--space-4); font-size:var(--text-xs); }
   blockquote.pull p{ font-size:var(--text-lg); }
   .cart-drawer{ width:100vw; }
 

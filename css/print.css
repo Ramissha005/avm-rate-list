@@ -90,6 +90,7 @@ tbody tr{ break-inside:avoid; }
 .num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .profit{ color:var(--profit); font-weight:600; }
 
+tfoot tr{ break-inside:avoid; }
 tfoot td{
   padding:12px 8px 4px; font-size:12.5px; font-weight:700; color:var(--navy);
   border-top:2px solid var(--navy); border-bottom:none;
@@ -101,9 +102,15 @@ tfoot .profit{ color:var(--profit); }
 /* ================= SUMMARY STRIP ================= */
 .summary{
   display:flex; gap:12px; margin-top:18px;
+  /* Without this, a page break can land mid-strip and slice straight
+     through a card (half the amber/blue box and its ₹ figure on one
+     page, the rest on the next) — the whole strip now moves to the next
+     page together instead of splitting. */
+  break-inside:avoid;
 }
 .summary__card{
   flex:1; background:var(--paper); border-radius:6px; padding:10px 14px;
+  break-inside:avoid;
 }
 .summary__card span{ display:block; font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-bottom:3px; }
 .summary__card b{ font-size:15px; color:var(--navy); font-variant-numeric:tabular-nums; }

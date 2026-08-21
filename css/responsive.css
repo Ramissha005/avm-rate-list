@@ -120,6 +120,11 @@
 
   .rl-controls{ padding:var(--space-4); }
 
+  /* Row wrapper stacks back to a column here — the side-by-side flex
+     ratio in components.css is a desktop-only layout. The gap replaces
+     the margin-bottom the row wrapper zeroes out on its children, so it
+     matches what .stat-cards/.charge-cards used to carry themselves. */
+  .stat-charge-row{ flex-direction:column; gap:var(--space-8); }
   .stat-cards{ grid-template-columns:repeat(3,1fr); gap:var(--space-2); }
   .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
   .stat-card__num{ font-size:var(--text-xl); }
@@ -187,11 +192,11 @@
   .rl-controls{ top:60px; }
 
   .section-head{ margin-bottom:var(--space-6); }
-  .stat-cards{ margin-bottom:var(--space-5); }
+  .stat-charge-row{ gap:var(--space-5); }
   /* Two columns still fits the short stat cards above, but a whole
      sentence squeezed into half a phone width wraps too tightly — one
      column here instead. */
-  .charge-cards{ grid-template-columns:1fr; margin-bottom:var(--space-5); }
+  .charge-cards{ grid-template-columns:1fr; }
   .bundles{ margin-bottom:var(--space-6); }
   /* Same reasoning as .hero__specialties above — a 2-column grid instead of
      one full-width panel chip per row. */

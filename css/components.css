@@ -956,10 +956,20 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 }
 
 /* ---------- Stat cards ---------- */
+/* Wraps .stat-cards + .charge-cards so all 5 cards share one row on
+   desktop — each inner grid keeps its own column count (3 and 2), the
+   flex ratio below just gives the 2 charge cards a bit more width than
+   the 3 plain count cards. Stacks back to column (original behaviour)
+   under the existing 960px breakpoint in responsive.css. */
+.stat-charge-row{ display:flex; gap:var(--space-3); align-items:stretch; margin-bottom:var(--space-8); }
+.stat-charge-row .stat-cards,
+.stat-charge-row .charge-cards{ margin-bottom:0; }
+.stat-charge-row .stat-cards{ flex:3 1 0; }
+.stat-charge-row .charge-cards{ flex:2.4 1 0; }
 .stat-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:var(--space-3); margin-bottom:var(--space-8); }
 .stat-card{
   position:relative; overflow:hidden;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-4);
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-3);
   transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .stat-card::before{
@@ -967,7 +977,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   background:linear-gradient(90deg, var(--teal), var(--teal-dark));
 }
 .stat-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-.stat-card__num{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
+.stat-card__num{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
 .stat-card__label{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-top:4px; }
 /* Optional third line — only the two pickup/consignment charge cards use
    this, so a plain stat card (just num + label) doesn't grow to make room

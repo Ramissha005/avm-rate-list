@@ -158,6 +158,12 @@
   .cta-band{ padding:var(--space-5); flex-direction:column; align-items:flex-start; }
   .cta-band h3{ font-size:var(--text-lg); margin-bottom:var(--space-1); }
   .cta-band p{ font-size:var(--text-sm); }
+  /* The homepage's Franchise + SARC pair (.cta-grid) is the tallest thing
+     on a phone screen — dropping their description line (heading + button
+     alone are still a complete, self-explanatory CTA) is what actually
+     gets the page closer to fitting a single screen. Scoped to .cta-grid
+     so franchise.html/sarc.html's own closing .cta-band keeps its text. */
+  .cta-grid .cta-band p{ display:none; }
   .cta-band .btn{ width:100%; justify-content:center; padding:var(--space-3) var(--space-5); font-size:var(--text-sm); }
   blockquote.pull p{ font-size:var(--text-lg); }
   .cart-drawer{ width:100vw; }

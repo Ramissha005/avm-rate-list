@@ -776,7 +776,7 @@ AVM.state = {
     {
       "sr": 32,
       "code": "VB12",
-      "name": "VitaminB12",
+      "name": "Vitamin B12",
       "aliases": ["Cobalamin","Vitamin B12"],
       "techId": "eclia",
       "sampleId": "serum",
@@ -1516,7 +1516,7 @@ AVM.state = {
     {
       "sr": 69,
       "code": "FOLI",
-      "name": "Folic Acid.",
+      "name": "Folic Acid",
       "aliases": ["Vitamin B9","Folate"],
       "techId": "eclia",
       "sampleId": "serum",

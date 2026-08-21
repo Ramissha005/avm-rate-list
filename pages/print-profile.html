@@ -78,6 +78,7 @@
     Customer copy — hide B2B cost &amp; margin
   </label>
   <button type="button" id="btnBranding">🏷 Branding</button>
+  <button type="button" id="btnShare">📤 Share</button>
   <button type="button" id="btnClose">Close</button>
   <button type="button" id="btnPrint" class="primary">🖨 Print</button>
 </div>
@@ -122,6 +123,9 @@
   </div>
 </div>
 
+<!-- Only pulled in for the Share button below (PDF-from-HTML rendering) —
+     everything else on this page works with no external dependency. -->
+<script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.2/dist/html2pdf.bundle.min.js"></script>
 <script src="../js/config.js"></script>
 <script src="../js/utils/formatters.js"></script>
 <script src="../js/utils/storage.js"></script>
@@ -169,6 +173,61 @@
 
   document.getElementById("btnPrint").addEventListener("click", () => window.print());
   document.getElementById("btnClose").addEventListener("click", () => window.close());
+
+  // -------- share as PDF (WhatsApp, or whatever else the share sheet offers) --------
+  // wa.me links can only pre-fill text, never attach a file — the only way
+  // to actually hand a PDF to WhatsApp from a web page is the native share
+  // sheet (navigator.share with a file), which is what lets someone pick a
+  // contact and send it exactly like sharing a photo. That's supported on
+  // mobile Chrome/Safari but not every desktop browser, so there's a
+  // fallback below for when it (or file sharing specifically) isn't there.
+  const btnShare = document.getElementById("btnShare");
+  btnShare.addEventListener("click", async () => {
+    const originalLabel = btnShare.textContent;
+    btnShare.disabled = true;
+    btnShare.textContent = "Preparing PDF…";
+    try {
+      const pdfBlob = await html2pdf()
+        .set({
+          margin: 8,
+          filename: "AVM-Health-Profile.pdf",
+          image: { type: "jpeg", quality: 0.95 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        })
+        .from(document.getElementById("sheet"))
+        .outputPdf("blob");
+      const file = new File([pdfBlob], "AVM-Health-Profile.pdf", { type: "application/pdf" });
+
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: printElements.titleEl.textContent || "Health Profile",
+          text: "AVMLabs health profile — see the attached PDF.",
+        });
+      } else {
+        // Can't attach a file through a wa.me link, so download the PDF
+        // (the user attaches it from their Downloads once inside the chat)
+        // and open WhatsApp with a text-only message as a starting point.
+        const dlLink = document.createElement("a");
+        dlLink.href = URL.createObjectURL(pdfBlob);
+        dlLink.download = "AVM-Health-Profile.pdf";
+        dlLink.click();
+        URL.revokeObjectURL(dlLink.href);
+        window.open("https://wa.me/?text=" + encodeURIComponent("AVMLabs health profile — attaching the PDF I just downloaded."), "_blank");
+        alert("This browser can't attach files straight to WhatsApp, so the PDF was downloaded instead — attach it manually from the chat's 📎 once WhatsApp opens.");
+      }
+    } catch (err) {
+      // AbortError just means the user closed the native share sheet without
+      // picking anything — not a real failure, nothing to tell them.
+      if (err && err.name !== "AbortError") {
+        alert("Couldn't prepare the PDF for sharing. Please try the Print button instead.");
+      }
+    } finally {
+      btnShare.disabled = false;
+      btnShare.textContent = originalLabel;
+    }
+  });
 
   // -------- letterhead branding --------
   const brandBlock = document.getElementById("brandBlock");

@@ -148,6 +148,7 @@ tfoot .profit{ color:var(--profit); }
 }
 .toolbar button.primary{ background:var(--navy); border-color:var(--navy); color:#fff; }
 .toolbar button:hover{ opacity:.9; }
+.toolbar button:disabled{ opacity:.55; cursor:wait; }
 
 /* ================= BRANDING EDITOR (screen-only) ================= */
 .branding-overlay{

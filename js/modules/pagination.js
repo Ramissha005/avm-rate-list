@@ -4,6 +4,17 @@ AVM.modules = AVM.modules || {};
 (function () {
   const state = AVM.state;
 
+  // Changing page swaps every row below the sticky search/filter/sort bar,
+  // but the scroll position itself doesn't move — if you'd scrolled down to
+  // the bottom of a long page to hit "Next", you land on a new page's rows
+  // still scrolled to the bottom, with the new page's own start scrolled
+  // out of view above. Scrolling the controls bar back into view puts the
+  // new page's first row right underneath it, same as a fresh page load.
+  function scrollToListTop() {
+    const controls = document.querySelector(".rl-controls");
+    if (controls) controls.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   function getPageWindow(current, total, size) {
     if (total <= size + 2) return Array.from({ length: total }, (_, i) => i + 1);
     const pages = [1];
@@ -30,7 +41,7 @@ AVM.modules = AVM.modules || {};
     prevBtn.className = "page-btn page-btn--nav";
     prevBtn.textContent = "Previous";
     prevBtn.disabled = state.currentPage === 1;
-    prevBtn.onclick = () => { state.currentPage -= 1; onChange(); };
+    prevBtn.onclick = () => { state.currentPage -= 1; onChange(); scrollToListTop(); };
     container.appendChild(prevBtn);
 
     getPageWindow(state.currentPage, totalPages, 5).forEach(p => {
@@ -45,7 +56,7 @@ AVM.modules = AVM.modules || {};
       btn.type = "button";
       btn.className = "page-btn" + (p === state.currentPage ? " active" : "");
       btn.textContent = p;
-      btn.onclick = () => { state.currentPage = p; onChange(); };
+      btn.onclick = () => { state.currentPage = p; onChange(); scrollToListTop(); };
       container.appendChild(btn);
     });
 
@@ -54,7 +65,7 @@ AVM.modules = AVM.modules || {};
     nextBtn.className = "page-btn page-btn--nav";
     nextBtn.textContent = "Next";
     nextBtn.disabled = state.currentPage === totalPages;
-    nextBtn.onclick = () => { state.currentPage += 1; onChange(); };
+    nextBtn.onclick = () => { state.currentPage += 1; onChange(); scrollToListTop(); };
     container.appendChild(nextBtn);
   }
 
@@ -71,6 +82,7 @@ AVM.modules = AVM.modules || {};
       state.pageSize = Number.isFinite(parsed) && parsed > 0 ? parsed : AVM.CONFIG.DEFAULT_PAGE_SIZE;
       state.currentPage = 1;
       onChange();
+      scrollToListTop();
     });
   }
 

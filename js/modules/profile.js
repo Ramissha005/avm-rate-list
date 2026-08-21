@@ -36,9 +36,14 @@ AVM.modules = AVM.modules || {};
     state.cart = new Set(codes);
     const packageOf = (saved && !Array.isArray(saved) && saved.packageOf) || {};
     state.cartPackageOf = new Map(Object.entries(packageOf));
-    const discountedPrice = saved && !Array.isArray(saved) && typeof saved.discountedPrice === "number"
-      ? saved.discountedPrice : null;
-    state.discountedPrice = discountedPrice;
+    // Deliberately NOT restored from storage, even though persistCart() still
+    // writes it — a discount typed for one client shouldn't silently reapply
+    // to whatever's in the cart the next time this device opens My Profile
+    // (a different client, a rebuilt profile, days later). Every fresh
+    // session starts at the plain B2C price (see updateDiscountEditor's
+    // fallback below); staff types a lower number only when *this* client
+    // actually needs one.
+    state.discountedPrice = null;
   }
 
   // `value` comes straight from the discount input's raw string on every
@@ -254,10 +259,17 @@ AVM.modules = AVM.modules || {};
     // The input always echoes the raw stored value (valid or not) so
     // there's something to see and correct; validity only gates the
     // read-only displays below.
+    //
+    // No discount typed yet -> default the field to the plain B2C total
+    // rather than leaving it blank. Staff edits it *down* from there for a
+    // client who actually needs a lower price; state.discountedPrice stays
+    // null (no discount actually applied) until they do — this is just what
+    // the field starts showing, not a discount someone has to explicitly
+    // clear before it "goes back" to B2C.
     if (elements.discountInput) {
       elements.discountInput.max = original > 0 ? original : "";
       if (document.activeElement !== elements.discountInput) {
-        elements.discountInput.value = discounted != null ? discounted : "";
+        elements.discountInput.value = discounted != null ? discounted : (original > 0 ? original : "");
       }
     }
     if (elements.discountClear) elements.discountClear.hidden = discounted == null;

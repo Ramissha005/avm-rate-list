@@ -959,7 +959,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .stat-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:var(--space-3); margin-bottom:var(--space-8); }
 .stat-card{
   position:relative; overflow:hidden;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-5);
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-4);
   transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
 .stat-card::before{
@@ -967,8 +967,19 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   background:linear-gradient(90deg, var(--teal), var(--teal-dark));
 }
 .stat-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-.stat-card__num{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
+.stat-card__num{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
 .stat-card__label{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-top:4px; }
+/* Optional third line — only the two pickup/consignment charge cards use
+   this, so a plain stat card (just num + label) doesn't grow to make room
+   for a paragraph it doesn't have. */
+.stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
+/* Own row/grid rather than folding into .stat-cards above — these two
+   carry a description line the plain count cards don't, so mixing them
+   into one auto-fit grid would either stretch the short cards to match
+   the tall ones (wasted empty space) or, once .stat-cards' 3 count-cards
+   already fill a row on their own, leave these 2 fighting for a spot in
+   that same row depending on viewport width. Two clean columns instead. */
+.charge-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-3); margin-bottom:var(--space-8); }
 
 /* ---------- Quick actions ---------- */
 .quick-actions{ display:flex; flex-wrap:wrap; gap:var(--space-3); }

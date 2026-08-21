@@ -124,6 +124,11 @@
   .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
+  .charge-cards{ gap:var(--space-2); }
+  /* The centered text-align above reads fine for a short num+label, but
+     a whole sentence centered across several lines is harder to read —
+     left-align just the description. */
+  .stat-card__desc{ text-align:left; }
 }
 @media (max-width:600px){
   .wrap{ padding:0 var(--space-4); }
@@ -183,6 +188,10 @@
 
   .section-head{ margin-bottom:var(--space-6); }
   .stat-cards{ margin-bottom:var(--space-5); }
+  /* Two columns still fits the short stat cards above, but a whole
+     sentence squeezed into half a phone width wraps too tightly — one
+     column here instead. */
+  .charge-cards{ grid-template-columns:1fr; margin-bottom:var(--space-5); }
   .bundles{ margin-bottom:var(--space-6); }
   /* Same reasoning as .hero__specialties above — a 2-column grid instead of
      one full-width panel chip per row. */

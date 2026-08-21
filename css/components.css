@@ -977,7 +977,13 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   background:linear-gradient(90deg, var(--teal), var(--teal-dark));
 }
 .stat-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-.stat-card__num{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
+/* The 3 plain count cards are short on content next to the 2 charge
+   cards' extra description line, so align-items:stretch above leaves
+   them stretched tall with a dead gap under the label. Centering their
+   icon+number+label as a group spreads that leftover space evenly
+   above and below instead of dumping it all at the bottom. */
+.stat-charge-row .stat-cards .stat-card{ display:flex; flex-direction:column; justify-content:center; }
+.stat-card__num{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
 .stat-card__label{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-top:4px; }
 /* Optional third line — only the two pickup/consignment charge cards use
    this, so a plain stat card (just num + label) doesn't grow to make room

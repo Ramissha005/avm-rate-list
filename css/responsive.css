@@ -120,7 +120,7 @@
 
   .rl-controls{ padding:var(--space-4); }
 
-  /* LPL/CPL stack instead of sitting side by side at this width. */
+  /* LPL/CRL stack instead of sitting side by side at this width. */
   .lab-stats{ flex-direction:column; gap:var(--space-6); }
   .stat-cards{ gap:var(--space-2); }
   .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
@@ -130,16 +130,11 @@
   .stat-card__icon{ margin-left:auto; margin-right:auto; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
-  /* CPL's heading (code + name + "Coming Soon" pill) is the one row
+  /* CRL's heading (code + name + "Coming Soon" pill) is the one row
      here with 3 pieces fighting for space — let it wrap rather than
      force the pill onto a phone-width line with the rest. */
   .lab-stats__head{ flex-wrap:wrap; row-gap:var(--space-1); }
   .lab-stats__soon{ margin-left:0; }
-  .charge-cards{ gap:var(--space-2); }
-  /* The centered text-align above reads fine for a short num+label, but
-     a whole sentence centered across several lines is harder to read —
-     left-align just the description. */
-  .stat-card__desc{ text-align:left; }
 }
 @media (max-width:600px){
   .wrap{ padding:0 var(--space-4); }
@@ -199,10 +194,6 @@
 
   .section-head{ margin-bottom:var(--space-6); }
   .lab-stats{ gap:var(--space-5); }
-  /* Two columns still fits the short stat cards above, but a whole
-     sentence squeezed into half a phone width wraps too tightly — one
-     column here instead. */
-  .charge-cards{ grid-template-columns:1fr; }
   .bundles{ margin-bottom:var(--space-6); }
   /* Same reasoning as .hero__specialties above — a 2-column grid instead of
      one full-width panel chip per row. */

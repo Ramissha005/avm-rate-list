@@ -130,9 +130,11 @@
   .stat-card__icon{ margin-left:auto; margin-right:auto; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
-  /* Matches the icon's centering above — align-self isn't affected by
-     text-align:center, so the "Coming Soon" pill needs its own nudge. */
-  .stat-card__soon{ align-self:center; }
+  /* CPL's heading (code + name + "Coming Soon" pill) is the one row
+     here with 3 pieces fighting for space — let it wrap rather than
+     force the pill onto a phone-width line with the rest. */
+  .lab-stats__head{ flex-wrap:wrap; row-gap:var(--space-1); }
+  .lab-stats__soon{ margin-left:0; }
   .charge-cards{ gap:var(--space-2); }
   /* The centered text-align above reads fine for a short num+label, but
      a whole sentence centered across several lines is harder to read —

@@ -965,6 +965,13 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .lab-stats__code{ font-family:var(--font-display); font-weight:800; font-size:var(--text-lg); color:var(--teal); }
 .lab-stats__name{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
 .lab-stats__col--cpl .lab-stats__code{ color:var(--violet); }
+/* CPL as a whole isn't live yet, so the "Coming Soon" tag sits on its
+   section heading rather than on one individual card. */
+.lab-stats__soon{
+  margin-left:auto; align-self:center;
+  font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--violet-dark); background:var(--violet-bg); border-radius:var(--radius-full); padding:3px 9px;
+}
 
 .stat-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-3); }
 .stat-card{
@@ -989,12 +996,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   background:var(--teal-bg); color:var(--teal); margin-bottom:var(--space-3);
 }
 .stat-card__icon svg{ width:20px; height:20px; }
-/* CPL's "Ready-Made Profiles" is the one number here that isn't live yet. */
-.stat-card__soon{
-  align-self:flex-start; margin-top:var(--space-2);
-  font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
-  color:var(--violet-dark); background:var(--violet-bg); border-radius:var(--radius-full); padding:3px 9px;
-}
 
 /* CPL's cards pick up violet instead of LPL's teal, so the two columns
    read as distinct at a glance. */

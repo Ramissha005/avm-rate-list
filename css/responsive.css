@@ -128,6 +128,9 @@
      (which only centers inline text) leaves it stuck on the left —
      center it explicitly to match. */
   .stat-card__icon{ margin-left:auto; margin-right:auto; }
+  /* ...except in the charge cards' row layout, where the icon sits
+     inline at the start of the row rather than stacked above the text. */
+  .stat-card--plain .stat-card__icon{ margin-left:0; margin-right:0; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
   /* CRL's heading (code + name + "Coming Soon" pill) is the one row

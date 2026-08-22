@@ -1012,9 +1012,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .stat-card--plain:hover{ transform:none; box-shadow:none; }
 .stat-card--plain .stat-card__icon{ background:var(--accent-bg); color:var(--accent); }
 .stat-card--plain .stat-card__num{ color:var(--accent); }
-.stat-card--plain .stat-card__label{ color:var(--accent); font-weight:700; margin-top:0; }
-/* Label sits to the left of the price instead of stacked above/below it. */
-.stat-card__row{ display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:var(--space-1) var(--space-4); }
+.stat-card--plain .stat-card__label{ color:var(--accent); font-weight:700; }
 .stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
 .charge-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-6); margin-bottom:var(--space-8); }
 

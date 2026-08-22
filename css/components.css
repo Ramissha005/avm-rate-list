@@ -998,6 +998,24 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .stat-cards--crl .stat-card__icon{ background:var(--violet-bg); color:var(--violet); }
 .stat-cards--crl .stat-card__num{ color:var(--violet-dark); }
 
+/* Minimum Consignment Value / Pickup Request Charge sit below LPL/CRL
+   as plain content — no card frame (background, border, shadow, top
+   accent bar) — just an icon, number, label and description, coloured
+   per-card (--accent) so the two stay visually distinct from each other. */
+.stat-card--teal{ --accent:var(--teal); --accent-bg:var(--teal-bg); }
+.stat-card--emerald{ --accent:var(--emerald); --accent-bg:var(--emerald-bg); }
+.stat-card--plain{
+  background:none; border:none; border-radius:0; padding:0; box-shadow:none;
+  justify-content:flex-start;
+}
+.stat-card--plain::before{ display:none; }
+.stat-card--plain:hover{ transform:none; box-shadow:none; }
+.stat-card--plain .stat-card__icon{ background:var(--accent-bg); color:var(--accent); }
+.stat-card--plain .stat-card__num{ color:var(--accent); }
+.stat-card--plain .stat-card__label{ color:var(--accent); font-weight:700; }
+.stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
+.charge-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-6); margin-bottom:var(--space-8); }
+
 /* ---------- Quick actions ---------- */
 .quick-actions{ display:flex; flex-wrap:wrap; gap:var(--space-3); }
 

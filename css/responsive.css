@@ -120,12 +120,9 @@
 
   .rl-controls{ padding:var(--space-4); }
 
-  /* Row wrapper stacks back to a column here — the side-by-side flex
-     ratio in components.css is a desktop-only layout. The gap replaces
-     the margin-bottom the row wrapper zeroes out on its children, so it
-     matches what .stat-cards/.charge-cards used to carry themselves. */
-  .stat-charge-row{ flex-direction:column; gap:var(--space-8); }
-  .stat-cards{ grid-template-columns:repeat(3,1fr); gap:var(--space-2); }
+  /* LPL/CPL stack instead of sitting side by side at this width. */
+  .lab-stats{ flex-direction:column; gap:var(--space-6); }
+  .stat-cards{ gap:var(--space-2); }
   .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
   /* The icon badge is a block element, so the text-align:center above
      (which only centers inline text) leaves it stuck on the left —
@@ -133,6 +130,9 @@
   .stat-card__icon{ margin-left:auto; margin-right:auto; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
+  /* Matches the icon's centering above — align-self isn't affected by
+     text-align:center, so the "Coming Soon" pill needs its own nudge. */
+  .stat-card__soon{ align-self:center; }
   .charge-cards{ gap:var(--space-2); }
   /* The centered text-align above reads fine for a short num+label, but
      a whole sentence centered across several lines is harder to read —
@@ -196,7 +196,7 @@
   .rl-controls{ top:60px; }
 
   .section-head{ margin-bottom:var(--space-6); }
-  .stat-charge-row{ gap:var(--space-5); }
+  .lab-stats{ gap:var(--space-5); }
   /* Two columns still fits the short stat cards above, but a whole
      sentence squeezed into half a phone width wraps too tightly — one
      column here instead. */

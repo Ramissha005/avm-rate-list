@@ -956,19 +956,19 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 }
 
 /* ---------- Stat cards ---------- */
-/* Wraps .stat-cards + .charge-cards so all 5 cards share one row on
-   desktop — each inner grid keeps its own column count (3 and 2), the
-   flex ratio below just gives the 2 charge cards a bit more width than
-   the 3 plain count cards. Stacks back to column (original behaviour)
-   under the existing 960px breakpoint in responsive.css. */
-.stat-charge-row{ display:flex; gap:var(--space-3); align-items:stretch; margin-bottom:var(--space-8); }
-.stat-charge-row .stat-cards,
-.stat-charge-row .charge-cards{ margin-bottom:0; }
-.stat-charge-row .stat-cards{ flex:3 1 0; }
-.stat-charge-row .charge-cards{ flex:2.4 1 0; }
-.stat-cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:var(--space-3); margin-bottom:var(--space-8); }
+/* LPL (today's live counts) and CPL (the upcoming central lab) sit side
+   by side, each under its own heading; the 2 charge cards (MCB/PUC)
+   form their own full-width row underneath. */
+.lab-stats{ display:flex; gap:var(--space-6); margin-bottom:var(--space-6); }
+.lab-stats__col{ flex:1 1 0; min-width:0; }
+.lab-stats__head{ display:flex; align-items:baseline; gap:var(--space-2); margin-bottom:var(--space-3); }
+.lab-stats__code{ font-family:var(--font-display); font-weight:800; font-size:var(--text-lg); color:var(--teal); }
+.lab-stats__name{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
+.lab-stats__col--cpl .lab-stats__code{ color:var(--violet); }
+
+.stat-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-3); }
 .stat-card{
-  position:relative; overflow:hidden;
+  position:relative; overflow:hidden; display:flex; flex-direction:column; justify-content:center;
   background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-3);
   transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
 }
@@ -977,30 +977,36 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   background:linear-gradient(90deg, var(--teal), var(--teal-dark));
 }
 .stat-card:hover{ transform:translateY(-3px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-/* The 3 plain count cards are short on content next to the 2 charge
-   cards' extra description line, so align-items:stretch above leaves
-   them stretched tall with a dead gap under the label. Centering their
-   icon+number+label as a group spreads that leftover space evenly
-   above and below instead of dumping it all at the bottom. */
-.stat-charge-row .stat-cards .stat-card{ display:flex; flex-direction:column; justify-content:center; }
 .stat-card__num{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
 .stat-card__label{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-top:4px; }
-/* Optional third line — only the two pickup/consignment charge cards use
-   this, so a plain stat card (just num + label) doesn't grow to make room
-   for a paragraph it doesn't have. */
+/* Optional third line — only the two charge cards (MCB/PUC) use this,
+   so a plain stat card (icon + number + label) doesn't grow to make
+   room for a paragraph it doesn't have. */
 .stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
-/* Rounded-square icon badge above each card's number. Plain count cards
-   all share one neutral teal accent (they're peers); the 2 charge cards
-   below pick up their own accent colour instead, via --accent/--accent-bg. */
 .stat-card__icon{
   width:38px; height:38px; border-radius:var(--radius-sm);
   display:flex; align-items:center; justify-content:center;
   background:var(--teal-bg); color:var(--teal); margin-bottom:var(--space-3);
 }
 .stat-card__icon svg{ width:20px; height:20px; }
-/* Charge cards get their own accent colour so they read as visually
-   distinct from the plain count cards and from each other — a tinted
-   card face, matching border/icon, and the number + label recoloured. */
+/* CPL's "Ready-Made Profiles" is the one number here that isn't live yet. */
+.stat-card__soon{
+  align-self:flex-start; margin-top:var(--space-2);
+  font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--violet-dark); background:var(--violet-bg); border-radius:var(--radius-full); padding:3px 9px;
+}
+
+/* CPL's cards pick up violet instead of LPL's teal, so the two columns
+   read as distinct at a glance. */
+.stat-cards--cpl .stat-card::before{ background:linear-gradient(90deg, var(--violet), var(--violet-dark)); }
+.stat-cards--cpl .stat-card__icon{ background:var(--violet-bg); color:var(--violet); }
+.stat-cards--cpl .stat-card__num{ color:var(--violet-dark); }
+
+/* Charge cards (MCB/PUC) get their own accent colour so they read as
+   visually distinct from the plain count cards and from each other — a
+   tinted card face, matching border/icon, and the number + label
+   recoloured. Each variant just points --accent/--accent-bg at one
+   colour pair. */
 .stat-card--teal{ --accent:var(--teal); --accent-bg:var(--teal-bg); }
 .stat-card--emerald{ --accent:var(--emerald); --accent-bg:var(--emerald-bg); }
 .stat-card--accent{
@@ -1012,12 +1018,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .stat-card--accent .stat-card__icon{ background:var(--accent); color:#fff; }
 .stat-card--accent .stat-card__num{ color:var(--accent); }
 .stat-card--accent .stat-card__label{ color:var(--accent); font-weight:700; }
-/* Own row/grid rather than folding into .stat-cards above — these two
-   carry a description line the plain count cards don't, so mixing them
-   into one auto-fit grid would either stretch the short cards to match
-   the tall ones (wasted empty space) or, once .stat-cards' 3 count-cards
-   already fill a row on their own, leave these 2 fighting for a spot in
-   that same row depending on viewport width. Two clean columns instead. */
 .charge-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-3); margin-bottom:var(--space-8); }
 
 /* ---------- Quick actions ---------- */

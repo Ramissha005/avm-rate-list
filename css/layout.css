@@ -281,9 +281,10 @@ button{ font-family:inherit; cursor:pointer; }
    as the homepage's franchise CTA band (--teal), not amber, so it matches
    rather than introducing a clashing accent color. Compact (small
    padding/type) so it doesn't stretch the hero taller than the original
-   single-CTA version. No prices shown — the discount is expressed as a
-   percentage only, so .offer-banner__price just needs to be the biggest,
-   boldest thing in the block. */
+   single-CTA version. The discount is the one figure that has to read
+   first, so .offer-banner__price (just "50% OFF", no rupee amount) is
+   the biggest, boldest thing in the block — the ₹5 Lakh base fee it's
+   off of sits smaller in the detail column beside it. */
 .offer-banner{
   position:relative; overflow:hidden; cursor:pointer;
   display:flex; align-items:center; gap:var(--space-5);

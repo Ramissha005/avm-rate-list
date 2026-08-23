@@ -46,7 +46,7 @@ AVM.modules = AVM.modules || {};
       <dl class="td-facts">
         <div><dt>Sample</dt><dd>${esc(test.sample)}</dd></div>
         <div><dt>Fasting required</dt><dd>${fastingLabel}</dd></div>
-        <div><dt>Processed At</dt><dd>LPL for all test and profiles</dd></div>
+        <div><dt>Processed At</dt><dd>LPL</dd></div>
       </dl>
       <div class="td-pricing">
         <div><span>B2B Cost</span><b>${money(test.b2b)}</b></div>

@@ -288,13 +288,21 @@ button{ font-family:inherit; cursor:pointer; }
 .offer-banner:focus-visible{ transform:translateY(-2px); box-shadow:var(--shadow-lg); }
 .offer-banner__main{ display:flex; flex-direction:column; }
 .offer-banner__tag{
-  display:block; font-family:var(--font-mono); font-size:var(--text-xs); font-weight:800;
+  display:flex; align-items:center; gap:4px;
+  font-family:var(--font-mono); font-size:var(--text-xs); font-weight:800;
   text-transform:uppercase; letter-spacing:.08em;
 }
+.offer-banner__rocket{ font-size:1.6em; line-height:1; }
 /* The discount itself is the one figure that has to grab the eye first —
-   amber against the banner's teal reads as a highlight/badge instead of
-   just more white text like the tag and detail lines around it. */
-.offer-banner__price{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:800; line-height:1; margin-top:2px; color:var(--amber); }
+   a warm gold gradient fill (not flat amber) plus a soft glow reads as a
+   lit-up highlight/badge instead of just more white text like the tag
+   and detail lines around it. */
+.offer-banner__price{
+  font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1; margin-top:2px;
+  background:linear-gradient(180deg, #FFE9A8 0%, #FFC94D 40%, #E8A317 75%, #C9820A 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 10px rgba(255,201,77,.55));
+}
 /* "Franchisee Fee" / "For First 100" stacked as their own two-line column
    beside the tag+price column, rather than run into one wrapped sentence —
    reads as a clean two-column badge instead of a paragraph. */

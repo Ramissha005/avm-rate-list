@@ -294,14 +294,14 @@ button{ font-family:inherit; cursor:pointer; }
 }
 .offer-banner__rocket{ font-size:1.6em; line-height:1; }
 /* The discount itself is the one figure that has to grab the eye first —
-   a warm gold gradient fill (not flat amber) plus a soft glow reads as a
-   lit-up highlight/badge instead of just more white text like the tag
-   and detail lines around it. */
+   a warm gold gradient fill reads as a lit-up highlight/badge instead of
+   just more white text like the tag and detail lines around it. No
+   drop-shadow glow and no near-white gradient stop — that combination
+   read as a washed-out white halo rather than a warm gold. */
 .offer-banner__price{
   font-family:var(--font-display); font-size:44px; font-weight:800; line-height:1; margin-top:2px;
-  background:linear-gradient(180deg, #FFE9A8 0%, #FFC94D 40%, #E8A317 75%, #C9820A 100%);
+  background:linear-gradient(180deg, #FFD35C 0%, #F5A623 55%, #C9820A 100%);
   -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent;
-  filter:drop-shadow(0 0 10px rgba(255,201,77,.55));
 }
 /* "Franchisee Fee" / "For First 100" stacked as their own two-line column
    beside the tag+price column, rather than run into one wrapped sentence —

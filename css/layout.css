@@ -211,6 +211,15 @@ button{ font-family:inherit; cursor:pointer; }
   background:linear-gradient(90deg, rgba(255,180,71,0.95), rgba(255,180,71,0.25));
 }
 
+/* .hero__headline is used on 3 pages' actual <h1> (sarc/crl/index), which
+   means it collides with the generic ".hero h1" fallback above — that
+   selector's extra element (.hero h1) out-specifies the single-class
+   .hero__headline, so its font-size/margin would otherwise win and add
+   unwanted space above/below the gradient headline. Re-asserting them
+   here at a higher specificity than both keeps .hero__headline's own
+   values in charge whenever the two combine on the same element. */
+.hero h1.hero__headline{ margin:0; font-size:clamp(2.1rem, 3vw, 3.5rem); }
+
 .hero__sub{
   font-size:var(--text-md); color:#C4D2DC; max-width:46ch; margin-bottom:var(--space-4);
 }

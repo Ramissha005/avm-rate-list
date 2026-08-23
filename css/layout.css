@@ -272,9 +272,9 @@ button{ font-family:inherit; cursor:pointer; }
    as the homepage's franchise CTA band (--teal), not amber, so it matches
    rather than introducing a clashing accent color. Compact (small
    padding/type) so it doesn't stretch the hero taller than the original
-   single-CTA version. The struck-through regular fee does the "was/now"
-   contrast work; the offer price itself just needs to be the biggest
-   number in the block. */
+   single-CTA version. No prices shown — the discount is expressed as a
+   percentage only, so .offer-banner__price just needs to be the biggest,
+   boldest thing in the block. */
 .offer-banner{
   position:relative; overflow:hidden; cursor:pointer;
   display:inline-block; min-width:360px; max-width:520px; text-decoration:none;
@@ -294,9 +294,6 @@ button{ font-family:inherit; cursor:pointer; }
 .offer-banner__headline{ display:flex; align-items:baseline; flex-wrap:wrap; gap:8px; margin:2px 0 0; }
 .offer-banner__price{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:800; line-height:1; }
 .offer-banner__sub{ font-size:var(--text-base); font-weight:700; }
-.offer-banner__regular{ font-size:var(--text-base); font-weight:600; margin:2px 0 0; color:#D6E4F2; }
-.offer-banner__regular-price{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:800; }
-.offer-banner__regular-price s{ text-decoration-thickness:2px; }
 
 /* Hover: a gold panel wipes in from the left to cover most (not all — 95%
    reads as "nearly full" without needing the very last sliver) of the

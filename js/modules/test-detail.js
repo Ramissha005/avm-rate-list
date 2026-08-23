@@ -30,10 +30,6 @@ AVM.modules = AVM.modules || {};
       btnNote = `<p class="td-note">Already covered by ${esc(conflictTest.name)} in your profile. Remove it first to add this instead.</p>`;
     }
 
-    const fastingLabel = test.fastingRequired === true ? "Yes"
-      : test.fastingRequired === false ? "No"
-      : "Not specified";
-
     container.innerHTML = `
       <div class="td-head">
         <span class="cell-code">${esc(test.code)}</span>
@@ -45,7 +41,6 @@ AVM.modules = AVM.modules || {};
       </div>
       <dl class="td-facts">
         <div><dt>Sample</dt><dd>${esc(test.sample)}</dd></div>
-        <div><dt>Fasting required</dt><dd>${fastingLabel}</dd></div>
         <div><dt>Processed At</dt><dd>LPL</dd></div>
       </dl>
       <div class="td-pricing">

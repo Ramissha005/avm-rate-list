@@ -365,6 +365,14 @@ section{ padding:var(--space-20) 0; }
 .section-head__cta span{ display:inline-block; transition:transform var(--transition-fast); }
 .section-head__cta:hover span{ transform:translateX(3px); }
 
+/* CRL "About" body copy (pages/crl.html) — sits below a .section-head
+   heading but isn't capped to its 640px reading width. This is longer,
+   denser body text meant to use the section's full measure rather than
+   read as a short intro blurb, so it gets its own wider, larger-type
+   treatment instead of inheriting .section-head p. */
+.crl-about{ display:flex; flex-direction:column; gap:var(--space-4); max-width:1100px; }
+.crl-about p{ font-size:var(--text-md); line-height:1.7; color:var(--ink-soft); margin:0; }
+
 .about{ background:var(--paper); }
 
 .about__lede{ font-size:var(--text-lg); color:var(--ink); max-width:70ch; margin-bottom:var(--space-8); }

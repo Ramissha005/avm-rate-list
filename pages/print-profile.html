@@ -23,7 +23,7 @@
     </div>
     <div class="letterhead__doc">
       <p class="letterhead__title" id="printTitle">Health Profile</p>
-      <p class="letterhead__meta">Ref <b id="printRef"></b> · Generated <b id="printDate"></b></p>
+      <p class="letterhead__meta">Generated <b id="printDate"></b></p>
     </div>
   </header>
 
@@ -138,7 +138,6 @@
   const printElements = {
     tbody: document.getElementById("printBody"),
     dateEl: document.getElementById("printDate"),
-    refEl: document.getElementById("printRef"),
     countEl: document.getElementById("printCount"),
     totalB2BEl: document.getElementById("printTotalB2B"),
     totalB2CEl: document.getElementById("printTotalB2C"),
@@ -163,7 +162,7 @@
 
   AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: true }).then(() => {
     // Reflect whatever view (internal/customer) actually got rendered —
-    // carried over from the cart's own toggle when Print Profile was clicked.
+    // carried over from the cart's own toggle when Print/Share was clicked.
     customerViewToggle.checked = printElements.sheetEl.classList.contains("customer-view");
   });
 

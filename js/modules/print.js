@@ -29,12 +29,6 @@ AVM.modules = AVM.modules || {};
     if (!win) AVM.utils.helpers.showToast("Pop-up blocked — allow pop-ups to open the print view");
   }
 
-  // Short human-friendly reference for the printed sheet — not a persisted ID,
-  // just something to write on a physical requisition slip.
-  function makeRef() {
-    return "AVM-" + Date.now().toString(36).toUpperCase();
-  }
-
   // window.print() renders whatever is on screen *right now* — if the Poppins
   // web font hasn't finished swapping in yet, Chrome prints the fallback font
   // instead. document.fonts.ready resolves once webfonts are actually usable;
@@ -51,7 +45,7 @@ AVM.modules = AVM.modules || {};
 
   async function renderPrintPage({
     tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
-    refEl, countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
+    countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
     sumDiscountCardEl, sumDiscountLabelEl, sumDiscountEl,
     sumB2CLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
     contentEl, emptyEl, sheetEl, titleEl, autoPrint,
@@ -82,7 +76,6 @@ AVM.modules = AVM.modules || {};
     if (titleEl) titleEl.textContent = customerView ? "Custom Health Profile — Customer Copy" : "Custom Health Profile";
 
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
-    if (refEl) refEl.textContent = makeRef();
 
     if (items.length === 0) {
       if (contentEl) contentEl.hidden = true;

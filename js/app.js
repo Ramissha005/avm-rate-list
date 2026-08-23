@@ -138,6 +138,15 @@ window.AVM = window.AVM || {};
         if (applied != null && Number(e.target.value) > applied) e.target.value = applied;
         refreshAll();
       };
+      // The field defaults to showing the plain B2C total (see
+      // updateDiscountEditor) rather than starting blank — without this,
+      // clicking in and typing a new number *inserts* digits into that
+      // pre-filled value instead of replacing it (e.g. "800" + typing "5"
+      // -> "8005"), which gets clamped to exactly the B2C total and trips
+      // the "should be lower" warning on what looked like a normal edit.
+      // Selecting the existing text on focus makes a plain click-and-type
+      // overwrite it, the way a pre-filled field is expected to behave.
+      $("discountedPriceInput").onfocus = (e) => e.target.select();
     }
     if ($("clearDiscountedPrice")) {
       $("clearDiscountedPrice").onclick = () => {

@@ -58,14 +58,17 @@ AVM.modules = AVM.modules || {};
     const start = (state.currentPage - 1) * state.pageSize;
     const shown = list.slice(start, start + state.pageSize);
 
-    const rangeText = shown.length ? `${start + 1}–${start + shown.length}` : "0";
-    elements.count.textContent = `Showing ${rangeText} of ${totalItems} matching tests${hasActiveFilters() ? "" : ` (${tests.length} total)`} · B2B cost, B2C price & your margin`;
-
-    if (list.length === 0) {
+    if (totalItems === 0) {
+      // "Showing 0 of 0 matching tests" is redundant right above the empty
+      // message below explaining the same thing — hide the counter instead.
+      elements.count.textContent = "";
       elements.body.innerHTML = `<div class="rl-empty">No tests match that search. Try a different name, code, or filter.</div>`;
       if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
       return;
     }
+
+    const rangeText = `${start + 1}–${start + shown.length}`;
+    elements.count.textContent = `Showing ${rangeText} of ${totalItems} matching tests${hasActiveFilters() ? "" : ` (${tests.length} total)`} · B2B cost, B2C price & your margin`;
 
     const { byCode } = AVM.data.getCatalog();
 

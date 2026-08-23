@@ -394,11 +394,16 @@
 
 /* ---------- Scroll reveal (progressive enhancement) ----------
    Only takes effect once js/modules/reveal.js adds .reveal-ready to
-   <body> — without it, .reveal content is never given the opacity:0
-   starting state in the first place, so a page where the script fails
-   to load just shows everything normally instead of stuck invisible. */
+   <body> — without it, .reveal content is never given the starting
+   state in the first place, so a page where the script fails to load
+   just shows everything normally instead of stuck invisible.
+   Starting opacity is .4, not 0 — a full fade-from-nothing left text
+   essentially unreadable for a chunk of the .7s transition; partially
+   visible throughout still reads as "rising into place" without ever
+   going illegible. (prefers-reduced-motion is handled globally in
+   responsive.css, collapsing this transition to near-instant.) */
 body.reveal-ready .reveal{
-  opacity:0; transform:translateY(28px);
+  opacity:.4; transform:translateY(28px);
   transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
 }
 body.reveal-ready .reveal.is-visible{ opacity:1; transform:translateY(0); }

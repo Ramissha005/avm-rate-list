@@ -964,15 +964,14 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .lab-stats__code{ font-family:var(--font-display); font-weight:800; font-size:var(--text-lg); color:var(--teal); }
 .lab-stats__name{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
 .lab-stats__col--crl .lab-stats__code{ color:var(--violet); }
-/* CRL as a whole isn't live yet, flagged above its heading; the
-   heading itself carries an "Explore" link out to a dedicated page. */
+/* CRL as a whole isn't live yet — "Coming Soon" and the "Explore" link
+   sit together at the end of the heading row, tag first then button. */
+.lab-stats__cta{ margin-left:auto; align-self:center; display:flex; align-items:center; gap:var(--space-2); }
 .lab-stats__soon{
-  display:inline-block; margin-bottom:var(--space-2);
   font-family:var(--font-mono); font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
   color:var(--violet-dark); background:var(--violet-bg); border-radius:var(--radius-full); padding:3px 9px;
 }
 .lab-stats__explore{
-  margin-left:auto; align-self:center;
   font-family:var(--font-mono); font-size:var(--text-xs); font-weight:700; text-transform:uppercase; letter-spacing:.04em;
   color:#fff; background:var(--violet); border-radius:var(--radius-full); padding:7px 16px;
   text-decoration:none; transition:background var(--transition-fast);

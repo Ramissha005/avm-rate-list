@@ -133,11 +133,11 @@
   .stat-card--plain .stat-card__icon{ margin-left:0; margin-right:0; }
   .stat-card__num{ font-size:var(--text-xl); }
   .stat-card__label{ font-size:9px; margin-top:2px; }
-  /* CRL's heading (code + name + Explore link) is the one row here
-     with 3 pieces fighting for space — let it wrap rather than force
-     the link onto a phone-width line with the rest. */
+  /* CRL's heading (code + name + Coming Soon/Explore) is the one row
+     here with pieces fighting for space — let it wrap rather than force
+     the tag/button onto a phone-width line with the rest. */
   .lab-stats__head{ flex-wrap:wrap; row-gap:var(--space-1); }
-  .lab-stats__explore{ margin-left:0; }
+  .lab-stats__cta{ margin-left:0; }
   .charge-cards{ gap:var(--space-4); }
   /* The centered text-align above reads fine for a short num+label, but
      a whole sentence centered across several lines is harder to read —

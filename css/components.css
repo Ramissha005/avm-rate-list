@@ -791,27 +791,11 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-row--msb span:first-child{ color:var(--violet-dark); font-weight:600; }
 .ct-row--msb span:last-child{ color:var(--violet-dark); }
 
-/* Franchise upsell — what this profile would cost at the Franchise rate,
-   shown between the MSB row and B2C Value only when there's a genuine
-   saving to point at. Styled as a small standalone ad rather than another
-   boxed ledger line: plain background, big bold label + price (with the
-   %-saved tucked in small and light right after the price), and a plain
-   marketing line underneath — no accent bar, no tint. */
-.ct-row--franchise{ align-items:baseline; padding:var(--space-2) var(--space-2) 0; margin:var(--space-2) 0 0; }
-.ct-row--franchise span:first-child{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:800; color:var(--ink); }
-.ct-row--franchise span:last-child{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:800; color:var(--ink); }
-.ct-row--franchise__pct{ font-family:var(--font-display); font-size:var(--text-sm); font-weight:600; color:var(--ink-soft); margin-left:4px; }
-
 /* Shared "add ₹X more to unlock…" nudge line. Bare .ct-hint sets the
    typography only — each caller picks a color/tint variant so it reads as
    belonging to the row it's explaining rather than a generic gray note. */
 .ct-hint{ font-size:var(--text-xs); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
 .ct-hint--msb{ color:var(--violet-dark); }
-
-/* Marketing line under .ct-row--franchise — plain caption text (matches
-   the reference layout: no boxed background, unlike every other .ct-hint
-   variant above), just enough size/weight to read as a subtitle. */
-.ct-hint--franchise{ color:var(--ink-soft); font-size:var(--text-sm); margin-top:2px; opacity:1; }
 
 /* ---------- Discount editor + Margin box — side by side, not stacked, so
    together they cost one compact row instead of two full-width blocks.
@@ -908,6 +892,33 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .margin-box__amount{
   font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--profit);
+  line-height:1.1; font-variant-numeric:tabular-nums;
+}
+
+/* ---------- Franchise box — same callout treatment as .margin-box above
+   (colored panel, left accent bar, label + live pill, big bold amount),
+   in the amber family instead of profit-blue so it reads as its own kind
+   of callout rather than a second margin box. Shown between the MSB row
+   and B2C Value only when there's a genuine saving to point at — no
+   supporting copy underneath, the box speaks for itself. ---------- */
+.franchise-box{
+  position:relative; overflow:hidden;
+  background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
+  margin:var(--space-2) 0 var(--space-3);
+}
+.franchise-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
+.franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); margin-bottom:2px; flex-wrap:wrap; }
+.franchise-box__label{
+  display:flex; align-items:center; gap:6px; font-size:var(--text-2xs); font-weight:700; color:var(--amber-dark);
+  text-transform:uppercase; letter-spacing:.05em;
+}
+.franchise-box__dot{ width:6px; height:6px; border-radius:50%; background:var(--amber-dark); flex:none; }
+.franchise-box__pct{
+  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:#fff; background:var(--amber-dark);
+  padding:2px 8px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
+}
+.franchise-box__amount{
+  font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--amber-dark);
   line-height:1.1; font-variant-numeric:tabular-nums;
 }
 

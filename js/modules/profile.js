@@ -317,7 +317,6 @@ AVM.modules = AVM.modules || {};
     if (elements.msbRow) elements.msbRow.style.display = "none";
     if (elements.msbHint) elements.msbHint.style.display = "none";
     if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
-    if (elements.franchiseHint) elements.franchiseHint.style.display = "none";
 
     elements.badge.textContent = items.length;
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
@@ -445,19 +444,16 @@ AVM.modules = AVM.modules || {};
 
     // Franchise upsell: what this exact profile would cost at the Franchise
     // rate vs. what's actually being paid today (Net B2B Payable) — see
-    // calculations.js totals() for the math. Only shown once there's a
-    // genuine saving to point at (a stray rounding-equal profile shows
-    // nothing rather than a "save 0%" row). Internal view only — this is a
-    // partner-facing upsell nudge, not something to hand a customer. The
-    // hint below is static marketing copy (see markup) — the actual
-    // numbers live in the row itself (price + save %), not in the hint.
-    if (!customerView && sum.franchiseSavings > 0) {
-      if (elements.franchiseRow) {
-        elements.franchiseRow.style.display = "";
-        if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
-        if (elements.franchisePct) elements.franchisePct.textContent = ` (save ${Math.round(sum.franchiseSavingsPercentage)}%)`;
-      }
-      if (elements.franchiseHint) elements.franchiseHint.style.display = "";
+    // calculations.js totals() for the math. Same callout treatment as the
+    // margin box (colored panel, left accent bar, label + live pill, big
+    // bold amount) — see .franchise-box. Only shown once there's a genuine
+    // saving to point at (a stray rounding-equal profile shows nothing
+    // rather than a "Save 0%" box). Internal view only — this is a
+    // partner-facing upsell nudge, not something to hand a customer.
+    if (!customerView && sum.franchiseSavings > 0 && elements.franchiseRow) {
+      elements.franchiseRow.style.display = "";
+      if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
+      if (elements.franchisePct) elements.franchisePct.textContent = `Save ${Math.round(sum.franchiseSavingsPercentage)}%`;
     }
   }
 

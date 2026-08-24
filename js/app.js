@@ -35,7 +35,7 @@ window.AVM = window.AVM || {};
       marginLabel: $("cartMarginLabel"),
       cartActions: $("cartActions"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
-      franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"), franchiseHint: $("cartFranchiseHint"),
+      franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"),
       onChange: refreshAll,
     } : null;
 

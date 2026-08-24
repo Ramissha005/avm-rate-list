@@ -46,7 +46,6 @@ AVM.modules = AVM.modules || {};
   async function renderPrintPage({
     tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
     countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
-    sumDiscountCardEl, sumDiscountLabelEl, sumDiscountEl,
     sumB2CLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
     contentEl, emptyEl, sheetEl, titleEl, autoPrint,
   }, customerViewOverride) {
@@ -100,9 +99,6 @@ AVM.modules = AVM.modules || {};
 
     // The table's own rows list each test's raw B2B/margin, so its footer
     // total stays raw too (it's a plain sum of what's printed above it).
-    // The bulk discount is a whole-profile figure, not a per-test one — it
-    // surfaces in the summary cards below instead, alongside the partner's
-    // real (post-discount) margin.
     if (totalB2BEl) totalB2BEl.textContent = money(sum.b2b);
     if (totalB2CEl) totalB2CEl.textContent = money(sum.b2c);
     if (totalMarginEl) totalMarginEl.textContent = "+" + money(sum.margin);
@@ -110,25 +106,16 @@ AVM.modules = AVM.modules || {};
 
     // Unlike the table footer above (raw, row-matching), this summary card
     // is the actual billable B2B cost: MSB-adjusted, floored at ₹25 per
-    // sample type — the discount card below subtracts from this figure.
+    // sample type.
     if (sumB2BEl) sumB2BEl.textContent = money(sum.msbB2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);
     if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
-    if (sumDiscountCardEl) {
-      const applies = !customerView && sum.discountRate > 0;
-      sumDiscountCardEl.hidden = !applies;
-      if (applies) {
-        if (sumDiscountLabelEl) sumDiscountLabelEl.textContent = `Bulk Discount (${Math.round(sum.discountRate * 100)}%)`;
-        if (sumDiscountEl) sumDiscountEl.textContent = "−" + money(sum.discountAmount);
-      }
-    }
 
-    // The manually-entered customer-copy discount (see profile.js) — B2C
-    // never gets the B2B bulk discount above, so this is the only discount
-    // a customer copy ever shows. Only takes effect when it's actually
-    // lower than the B2C total; otherwise this prints exactly like before
-    // (plain "B2C Value" card, no strike-through).
+    // The manually-entered customer-copy discount (see profile.js) — the
+    // only discount a customer copy ever shows. Only takes effect when
+    // it's actually lower than the B2C total; otherwise this prints
+    // exactly like before (plain "B2C Value" card, no strike-through).
     const discountedPrice = cachedItems.discountedPrice;
     const hasCustomerDiscount = customerView && typeof discountedPrice === "number"
       && discountedPrice > 0 && discountedPrice < sum.b2c;

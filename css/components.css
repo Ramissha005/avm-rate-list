@@ -781,16 +781,9 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .ct-row span:last-child{ font-family:var(--font-mono); font-weight:600; color:var(--navy); font-variant-numeric:tabular-nums; }
 
-/* Bulk B2B discount — a subtotal/discount/net bridge between the raw B2B
-   Cost row and the B2C Value row, shown only once a profile's combined B2B
-   cost clears a discount tier. */
-.ct-row--discount span:last-child{ color:var(--amber-dark); }
-.ct-row--net span:last-child{ color:var(--navy); font-weight:700; }
-
 /* Minimum Sample Billing uplift — shown between the raw B2B Cost row and
-   the discount/net rows only when one or more sample-type groups fall
-   short of the ₹25 floor. Given its own violet accent + tinted background
-   (distinct from the amber discount row and navy/blue totals) so the
+   the B2C Value row only when one or more sample-type groups fall short of
+   the ₹25 floor. Given its own violet accent + tinted background so the
    uplift reads as its own line item rather than blending into B2B Cost.
    The hint line right below tells the partner exactly how much more of
    that same sample type would clear it. */
@@ -799,11 +792,10 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-row--msb span:last-child{ color:var(--violet-dark); }
 
 /* Franchise upsell — what this profile would cost at the Franchise rate,
-   shown between the Bulk Discount/Net B2B rows and B2C Value only when
-   there's a genuine saving to point at. Given the same --profit (blue)
-   accent as the margin box below, since it's the same idea ("money that
-   stays with the partner") rather than the amber discount or violet MSB
-   nudges above it. */
+   shown between the MSB row and B2C Value only when there's a genuine
+   saving to point at. Given the same --profit (blue) accent as the margin
+   box below, since it's the same idea ("money that stays with the
+   partner") rather than the violet MSB nudge above it. */
 .ct-row--franchise{ background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin:var(--space-1) 0; }
 .ct-row--franchise span:first-child{ color:var(--profit); font-weight:600; }
 .ct-row--franchise span:last-child{ color:var(--profit); }
@@ -814,14 +806,8 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-hint{ font-size:var(--text-xs); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
 .ct-hint--msb{ color:var(--violet-dark); }
 
-/* "Add ₹X more to unlock a bulk discount" nudge — same amber family as the
-   discount row it leads into, shown whenever a higher tier is still within
-   reach (even at ₹0 discount today), so the incentive to add one more test
-   is visible before the discount itself ever kicks in. */
-.ct-hint--discount{ color:var(--amber-dark); background:var(--amber-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; }
-
 /* Franchise savings callout under .ct-row--franchise — same treatment as
-   .ct-hint--discount, in the --profit family to match the row above it. */
+   .ct-hint--msb above, in the --profit family to match the row above it. */
 .ct-hint--franchise{ color:var(--profit); background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; font-weight:600; }
 
 /* ---------- Discount editor + Margin box — side by side, not stacked, so

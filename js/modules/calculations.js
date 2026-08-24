@@ -11,34 +11,6 @@ AVM.modules = AVM.modules || {};
     return ((b2c - b2b) / b2b) * 100;
   }
 
-  // Volume discount on a profile's *combined* B2B cost. No single test's B2B
-  // rate comes anywhere near these thresholds (the priciest test is under
-  // ₹500), so this only ever triggers once several tests are bundled into
-  // one profile/cart. It's a whole-total tier, not a bracketed/marginal one:
-  // cross ₹2000 and the *entire* total gets 15% off, not just the slice past
-  // ₹2000. Ordered highest-first so the first tier the total clears wins.
-  const B2B_DISCOUNT_TIERS = [
-    { over: 4000, rate: 0.20 },
-    { over: 2000, rate: 0.15 },
-    { over: 1000, rate: 0.10 },
-  ];
-
-  function b2bDiscountRate(b2bTotal) {
-    const tier = B2B_DISCOUNT_TIERS.find(t => b2bTotal > t.over);
-    return tier ? tier.rate : 0;
-  }
-
-  // The next bulk-discount tier above the current B2B total, and how much
-  // more B2B value would unlock it — the data behind an "add ₹640 more to
-  // unlock a 10% Bulk Discount" nudge. Returns null once the top tier (20%)
-  // is already in effect, since there's nothing higher left to work toward.
-  function nextDiscountTier(b2bTotal) {
-    const ascending = [...B2B_DISCOUNT_TIERS].sort((a, b) => a.over - b.over);
-    const next = ascending.find(t => b2bTotal <= t.over);
-    if (!next) return null;
-    return { over: next.over, rate: next.rate, remaining: next.over - b2bTotal + 1 };
-  }
-
   // Minimum Sample Billing: the lab draws/processes one sample per sample
   // type regardless of how many tests ride on it, so the ₹25 floor applies
   // once per sample type — never per test. Tests are grouped by sampleId,
@@ -120,38 +92,33 @@ AVM.modules = AVM.modules || {};
     return shortfalls;
   }
 
-  // `margin`/`marginPercentage`/`b2b` stay raw (pre-MSB, pre-discount) so
-  // they still match a straight sum of each item's own numbers — callers
-  // that render per-line-item figures alongside a total (Excel columns
-  // summed by an actual SUM() formula, the print table's footer row) stay
-  // internally consistent with what's printed above them.
+  // `margin`/`marginPercentage`/`b2b` stay raw (pre-MSB) so they still
+  // match a straight sum of each item's own numbers — callers that render
+  // per-line-item figures alongside a total (Excel columns summed by an
+  // actual SUM() formula, the print table's footer row) stay internally
+  // consistent with what's printed above them.
   //
   // `msbB2b` is the actual billable B2B base: tests grouped by sample type,
   // each group floored at ₹25 (see `sampleTypeBilling`) — MSB applies once
-  // per sample type, never per test. The volume discount tiers then apply
-  // to *that* MSB-adjusted total, since that's the partner's real combined
-  // cost. `netB2b`/`netMargin`/`netMarginPercentage` are the final
-  // post-MSB, post-discount figures for callers that want the partner's
-  // actual bottom line (cart drawer headline, print summary cards,
-  // clipboard copy). Recompute by calling `totals` again after any
-  // add/remove — nothing here is cached, so it always reflects the current
-  // item list.
+  // per sample type, never per test. `netB2b`/`netMargin`/
+  // `netMarginPercentage` are that same post-MSB figure for callers that
+  // want the partner's actual bottom line (cart drawer headline, print
+  // summary cards, clipboard copy) — there's no further bulk-volume
+  // discount layered on top of it. Recompute by calling `totals` again
+  // after any add/remove — nothing here is cached, so it always reflects
+  // the current item list.
   function totals(items) {
     const b2b = items.reduce((sum, t) => sum + t.b2b, 0);
     const b2c = items.reduce((sum, t) => sum + t.b2c, 0);
     const msbB2b = msbAdjustedB2b(items);
-    const discountRate = b2bDiscountRate(msbB2b);
-    const discountAmount = msbB2b * discountRate;
-    const netB2b = msbB2b - discountAmount;
+    const netB2b = msbB2b;
 
-    // What this same profile costs at the Franchise rate (same MSB floor,
-    // no B2B bulk-discount tiers — those are a B2B volume incentive, not a
-    // franchise one) vs. `netB2b` above, which is what a B2B partner
-    // actually pays today, bulk discount included. The difference is the
-    // real, apples-to-apples "you'd save this much as a franchise" figure
-    // for the profile currently in the cart. Floored at 0 so a data gap
-    // (a test priced the same or cheaper at B2B than franchise) can never
-    // show a negative/nonsense saving.
+    // What this same profile costs at the Franchise rate (same MSB floor)
+    // vs. `netB2b` above, which is what a B2B partner actually pays today.
+    // The difference is the real, apples-to-apples "you'd save this much
+    // as a franchise" figure for the profile currently in the cart.
+    // Floored at 0 so a data gap (a test priced the same or cheaper at B2B
+    // than franchise) can never show a negative/nonsense saving.
     const msbFranchise = msbAdjustedFranchise(items);
     const franchiseSavings = Math.max(0, netB2b - msbFranchise);
     const franchiseSavingsPercentage = netB2b > 0 ? (franchiseSavings / netB2b) * 100 : 0;
@@ -160,7 +127,7 @@ AVM.modules = AVM.modules || {};
       b2b, b2c, msbB2b,
       margin: b2c - b2b,
       marginPercentage: marginPercentage(b2b, b2c),
-      discountRate, discountAmount, netB2b,
+      netB2b,
       netMargin: b2c - netB2b,
       netMarginPercentage: marginPercentage(netB2b, b2c),
       msbFranchise, franchiseSavings, franchiseSavingsPercentage,
@@ -176,7 +143,7 @@ AVM.modules = AVM.modules || {};
   }
 
   AVM.modules.calculations = {
-    margin, marginPercentage, totals, packageTestCount, b2bDiscountRate, nextDiscountTier,
+    margin, marginPercentage, totals, packageTestCount,
     sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
     sampleTypeBillingFranchise, msbAdjustedFranchise,
   };

@@ -312,11 +312,8 @@ AVM.modules = AVM.modules || {};
     // Copy List / Export Excel / Print Profile are customer-handoff
     // actions — only relevant once there's a customer copy to hand off.
     if (elements.cartActions) elements.cartActions.style.display = customerView ? "" : "none";
-    // Reset every render — shown again below only when a bulk discount is
-    // actually in effect (and never in customer view, alongside B2B/margin).
-    if (elements.discountRow) elements.discountRow.style.display = "none";
-    if (elements.netB2bRow) elements.netB2bRow.style.display = "none";
-    if (elements.discountHint) elements.discountHint.style.display = "none";
+    // Reset every render — shown again below only when actually in effect
+    // (and never in customer view, alongside B2B/margin).
     if (elements.msbRow) elements.msbRow.style.display = "none";
     if (elements.msbHint) elements.msbHint.style.display = "none";
     if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
@@ -407,12 +404,11 @@ AVM.modules = AVM.modules || {};
     // each test's own raw price.
     elements.b2b.textContent = money(sum.msbB2b);
     elements.b2c.textContent = money(sum.b2c);
-    // The headline margin is the partner's real bottom line — after the
-    // bulk B2B discount, and (if set) after a staff-entered customer
-    // discount too: what the customer actually pays, minus the partner's
-    // own (already bulk-discounted) B2B cost. The discount only takes
-    // effect once it's genuinely lower than the B2C total it would
-    // otherwise be based on.
+    // The headline margin is the partner's real bottom line — after MSB,
+    // and (if set) after a staff-entered customer discount too: what the
+    // customer actually pays, minus the partner's own (MSB-adjusted) B2B
+    // cost. The discount only takes effect once it's genuinely lower than
+    // the B2C total it would otherwise be based on.
     const discountedPrice = state.discountedPrice;
     const hasCustomerDiscount = discountedPrice != null && discountedPrice > 0 && discountedPrice < sum.b2c;
     const marginBase = hasCustomerDiscount ? discountedPrice : sum.b2c;
@@ -447,38 +443,12 @@ AVM.modules = AVM.modules || {};
       }
     }
 
-    if (!customerView && sum.discountRate > 0) {
-      if (elements.discountRow) {
-        elements.discountRow.style.display = "";
-        if (elements.discountLabel) elements.discountLabel.textContent = `Bulk Discount (${Math.round(sum.discountRate * 100)}%)`;
-        if (elements.discountAmt) elements.discountAmt.textContent = "−" + money(sum.discountAmount);
-      }
-      if (elements.netB2bRow) {
-        elements.netB2bRow.style.display = "";
-        if (elements.netB2b) elements.netB2b.textContent = money(sum.netB2b);
-      }
-    }
-
-    // "Add ₹X more to unlock a bigger Bulk Discount" — points at the next
-    // tier above the current MSB-adjusted B2B total (the same base the
-    // discount itself is computed on), whether or not a discount already
-    // applies today. Nothing shown once the top tier (20%) is reached.
-    if (!customerView && elements.discountHint) {
-      const next = AVM.modules.calculations.nextDiscountTier(sum.msbB2b);
-      if (next) {
-        elements.discountHint.style.display = "";
-        elements.discountHint.textContent =
-          `Add ${money(next.remaining)} more to unlock a ${Math.round(next.rate * 100)}% Bulk Discount (over ${money(next.over)})`;
-      }
-    }
-
     // Franchise upsell: what this exact profile would cost at the Franchise
-    // rate vs. what's actually being paid today (Net B2B Payable, bulk
-    // discount already included) — see calculations.js totals() for the
-    // math. Only shown once there's a genuine saving to point at (a stray
-    // rounding-equal profile shows nothing rather than a "save ₹0" row).
-    // Internal view only — this is a partner-facing upsell nudge, not
-    // something to hand a customer.
+    // rate vs. what's actually being paid today (Net B2B Payable) — see
+    // calculations.js totals() for the math. Only shown once there's a
+    // genuine saving to point at (a stray rounding-equal profile shows
+    // nothing rather than a "save ₹0" row). Internal view only — this is a
+    // partner-facing upsell nudge, not something to hand a customer.
     if (!customerView && sum.franchiseSavings > 0) {
       if (elements.franchiseRow) {
         elements.franchiseRow.style.display = "";

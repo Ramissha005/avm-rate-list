@@ -34,8 +34,6 @@ window.AVM = window.AVM || {};
       discountedRow: $("cartDiscountedRow"), discountedAmt: $("cartDiscountedAmt"),
       marginLabel: $("cartMarginLabel"),
       cartActions: $("cartActions"),
-      discountRow: $("cartDiscountRow"), discountLabel: $("cartDiscountLabel"), discountAmt: $("cartDiscountAmt"),
-      netB2bRow: $("cartNetB2BRow"), netB2b: $("cartNetB2B"), discountHint: $("cartDiscountHint"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
       franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchiseHint: $("cartFranchiseHint"),
       onChange: refreshAll,

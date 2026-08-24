@@ -22,9 +22,6 @@ AVM.modules = AVM.modules || {};
       ? `${t.name} (${t.code}) — B2C ${money(t.b2c)}`
       : `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
     const sum = AVM.modules.calculations.totals(items);
-    const discountLines = sum.discountRate > 0
-      ? `\nBulk Discount (${Math.round(sum.discountRate * 100)}%): −${money(sum.discountAmount)}\nNet B2B Payable: ${money(sum.netB2b)}`
-      : "";
     // The manually-entered customer-copy discount (see profile.js) — only
     // surfaces here in customer view, and only when it's actually lower
     // than the B2C total.
@@ -35,10 +32,9 @@ AVM.modules = AVM.modules || {};
       ? `Original Price: ${money(sum.b2c)}\nDiscounted Price: ${money(discountedPrice)}`
       : `B2C Value: ${money(sum.b2c)}`;
     // B2B Cost is the MSB-adjusted figure (grouped by sample type, floored
-    // at ₹25/sample type) — the actual billable amount before any bulk
-    // discount, not a raw per-test sum.
+    // at ₹25/sample type), not a raw per-test sum.
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
-      (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.msbB2b)}${discountLines}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
+      (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.msbB2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 
     navigator.clipboard?.writeText(text)
       .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
@@ -62,16 +58,12 @@ AVM.modules = AVM.modules || {};
           { header: "Margin", key: "margin", type: "margin", width: 12 },
         ];
     // The B2B/Margin columns below stay raw (each row summed by an actual
-    // Excel formula), so a discounted or MSB-adjusted total can't be dropped
-    // into those footer cells without them disagreeing with their own SUM()
-    // once Excel recalculates. The MSB adjustment, bulk discount, and net
-    // payable figure go in the subtitle instead, as plain notes alongside
-    // the raw column totals.
+    // Excel formula), so an MSB-adjusted total can't be dropped into those
+    // footer cells without them disagreeing with their own SUM() once Excel
+    // recalculates. The MSB adjustment goes in the subtitle instead, as a
+    // plain note alongside the raw column totals.
     const msbNote = !customerView && sum.msbB2b !== sum.b2b
       ? ` · Min. Sample Billing → B2B ${AVM.utils.formatters.money(sum.msbB2b)}`
-      : "";
-    const discountNote = !customerView && sum.discountRate > 0
-      ? ` · Bulk Discount ${Math.round(sum.discountRate * 100)}% (−${AVM.utils.formatters.money(sum.discountAmount)}) → Net B2B ${AVM.utils.formatters.money(sum.netB2b)}`
       : "";
     // The manually-entered customer-copy discount (see profile.js) — only
     // in customer view, and only when it's actually lower than the B2C
@@ -88,7 +80,7 @@ AVM.modules = AVM.modules || {};
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${discountNote}${customerDiscountNote}`,
+      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${customerDiscountNote}`,
       columns: [
         { header: "Code", key: "code", type: "text", width: 12 },
         { header: "Test", key: "name", type: "text", width: 36 },

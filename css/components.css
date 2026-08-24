@@ -41,6 +41,24 @@
   background:var(--amber); color:#231400; font-family:var(--font-mono); font-weight:600;
   font-size:var(--text-xs); min-width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   padding:0 2px;
+  transition:transform var(--transition-fast);
+}
+
+/* "Make My Profile" pop — a quick overshoot bounce on the whole button
+   (see profile.js renderCart, popAnimate) every time a test is actually
+   added to the cart, so the badge count updating isn't the only feedback.
+   Class is added/removed by JS per add, not a permanent hover-style rule. */
+@keyframes cartBtnPop{
+  0%{ transform:scale(1); }
+  40%{ transform:scale(1.14); }
+  65%{ transform:scale(.95); }
+  100%{ transform:scale(1); }
+}
+.cart-btn--pop{ animation:cartBtnPop .45s cubic-bezier(.34,1.56,.64,1); }
+.cart-btn--pop .cart-btn__badge{ transform:scale(1.2); }
+@media (prefers-reduced-motion: reduce){
+  .cart-btn--pop{ animation:none; }
+  .cart-btn--pop .cart-btn__badge{ transform:none; }
 }
 
 /* ---------- Buttons ---------- */

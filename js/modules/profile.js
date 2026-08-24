@@ -20,6 +20,25 @@ AVM.modules = AVM.modules || {};
   // session.
   state.expandedGroups = state.expandedGroups || new Set();
 
+  // Tracks the cart size across renders purely to detect "a test was just
+  // added" (see renderCart's popAnimate call below) — not persisted, and
+  // deliberately module-local rather than on `state` since nothing else
+  // needs it. Starts null so the very first render (page load, restoring
+  // a saved cart) never triggers a pop for tests that were already there.
+  let lastCartCount = null;
+
+  // Restarts a CSS animation reliably even if it's already mid-play from a
+  // previous add (e.g. two tests added in quick succession) — remove the
+  // class, force a reflow, then re-add it. Cleans itself up once the
+  // animation finishes so the class doesn't linger on the element.
+  function popAnimate(el, className) {
+    if (!el) return;
+    el.classList.remove(className);
+    void el.offsetWidth; // force reflow — restarts the animation on re-add
+    el.classList.add(className);
+    el.addEventListener("animationend", () => el.classList.remove(className), { once: true });
+  }
+
   function persistCart() {
     AVM.utils.storage.writeJSON(CONFIG.STORAGE_KEYS.PROFILE, {
       codes: [...state.cart],
@@ -296,6 +315,14 @@ AVM.modules = AVM.modules || {};
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
     const customerView = state.customerView;
+
+    // A test was just added (not removed, not the first render) — pop the
+    // "Make My Profile" button so the count updating isn't the only sign
+    // something landed in the profile. Compared *before* lastCartCount is
+    // updated below, so this only ever fires on a genuine increase.
+    const justAdded = lastCartCount !== null && items.length > lastCartCount;
+    lastCartCount = items.length;
+    if (justAdded && elements.cartBtn) popAnimate(elements.cartBtn, "cart-btn--pop");
 
     // Set inline `style.display` rather than the `hidden` attribute — `.ct-row`
     // and other component rules declare their own `display`, which (being an

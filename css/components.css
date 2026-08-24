@@ -919,8 +919,8 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .franchise-box__dot{ width:6px; height:6px; border-radius:50%; background:var(--amber-dark); flex:none; }
 .franchise-box__pct{
   flex:none; display:flex; align-items:center; justify-content:center; text-align:center;
-  font-family:var(--font-mono); font-size:var(--text-lg); font-weight:800; color:#fff; background:var(--amber-dark);
-  padding:10px 18px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
+  font-family:var(--font-mono); font-size:var(--text-sm); font-weight:800; color:#fff; background:var(--amber-dark);
+  padding:6px 14px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
 }
 .franchise-box__amount{
   font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--amber-dark);

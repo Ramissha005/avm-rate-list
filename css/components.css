@@ -793,12 +793,14 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 /* Franchise upsell — what this profile would cost at the Franchise rate,
    shown between the MSB row and B2C Value only when there's a genuine
-   saving to point at. Given the same --profit (blue) accent as the margin
-   box below, since it's the same idea ("money that stays with the
-   partner") rather than the violet MSB nudge above it. */
-.ct-row--franchise{ background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin:var(--space-1) 0; }
-.ct-row--franchise span:first-child{ color:var(--profit); font-weight:600; }
-.ct-row--franchise span:last-child{ color:var(--profit); }
+   saving to point at. Styled as a small standalone ad rather than another
+   boxed ledger line: plain background, big bold label + price (with the
+   %-saved tucked in small and light right after the price), and a plain
+   marketing line underneath — no accent bar, no tint. */
+.ct-row--franchise{ align-items:baseline; padding:var(--space-2) var(--space-2) 0; margin:var(--space-2) 0 0; }
+.ct-row--franchise span:first-child{ font-family:var(--font-display); font-size:var(--text-xl); font-weight:800; color:var(--ink); }
+.ct-row--franchise span:last-child{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:800; color:var(--ink); }
+.ct-row--franchise__pct{ font-family:var(--font-display); font-size:var(--text-sm); font-weight:600; color:var(--ink-soft); margin-left:4px; }
 
 /* Shared "add ₹X more to unlock…" nudge line. Bare .ct-hint sets the
    typography only — each caller picks a color/tint variant so it reads as
@@ -806,9 +808,10 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-hint{ font-size:var(--text-xs); opacity:0.85; margin:0 0 var(--space-2); padding:0 var(--space-2); line-height:1.4; }
 .ct-hint--msb{ color:var(--violet-dark); }
 
-/* Franchise savings callout under .ct-row--franchise — same treatment as
-   .ct-hint--msb above, in the --profit family to match the row above it. */
-.ct-hint--franchise{ color:var(--profit); background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; font-weight:600; }
+/* Marketing line under .ct-row--franchise — plain caption text (matches
+   the reference layout: no boxed background, unlike every other .ct-hint
+   variant above), just enough size/weight to read as a subtitle. */
+.ct-hint--franchise{ color:var(--ink-soft); font-size:var(--text-sm); margin-top:2px; opacity:1; }
 
 /* ---------- Discount editor + Margin box — side by side, not stacked, so
    together they cost one compact row instead of two full-width blocks.

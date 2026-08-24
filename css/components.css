@@ -896,26 +896,31 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 }
 
 /* ---------- Franchise box — same callout treatment as .margin-box above
-   (colored panel, left accent bar, label + live pill, big bold amount),
-   in the amber family instead of profit-blue so it reads as its own kind
-   of callout rather than a second margin box. Shown between the MSB row
-   and B2C Value only when there's a genuine saving to point at — no
-   supporting copy underneath, the box speaks for itself. ---------- */
+   (colored panel, left accent bar, big bold amount), in the amber family
+   instead of profit-blue so it reads as its own kind of callout rather
+   than a second margin box. Shown between the MSB row and B2C Value only
+   when there's a genuine saving to point at — no supporting copy
+   underneath, the box speaks for itself.
+   Laid out as one row — label+amount stacked on the left, the "Save X%"
+   pill sized up and vertically centered on the right (not pinned to the
+   label line) so it reads as a real badge, not a small corner tag. */
 .franchise-box{
   position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:space-between; gap:var(--space-3);
   background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
   margin:var(--space-2) 0 var(--space-3);
 }
 .franchise-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
-.franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); margin-bottom:2px; flex-wrap:wrap; }
+.franchise-box__info{ min-width:0; }
 .franchise-box__label{
   display:flex; align-items:center; gap:6px; font-size:var(--text-2xs); font-weight:700; color:var(--amber-dark);
-  text-transform:uppercase; letter-spacing:.05em;
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
 }
 .franchise-box__dot{ width:6px; height:6px; border-radius:50%; background:var(--amber-dark); flex:none; }
 .franchise-box__pct{
-  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:#fff; background:var(--amber-dark);
-  padding:2px 8px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
+  flex:none; display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family:var(--font-mono); font-size:var(--text-lg); font-weight:800; color:#fff; background:var(--amber-dark);
+  padding:10px 18px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
 }
 .franchise-box__amount{
   font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--amber-dark);

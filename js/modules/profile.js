@@ -319,6 +319,8 @@ AVM.modules = AVM.modules || {};
     if (elements.discountHint) elements.discountHint.style.display = "none";
     if (elements.msbRow) elements.msbRow.style.display = "none";
     if (elements.msbHint) elements.msbHint.style.display = "none";
+    if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
+    if (elements.franchiseHint) elements.franchiseHint.style.display = "none";
 
     elements.badge.textContent = items.length;
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
@@ -467,6 +469,25 @@ AVM.modules = AVM.modules || {};
         elements.discountHint.style.display = "";
         elements.discountHint.textContent =
           `Add ${money(next.remaining)} more to unlock a ${Math.round(next.rate * 100)}% Bulk Discount (over ${money(next.over)})`;
+      }
+    }
+
+    // Franchise upsell: what this exact profile would cost at the Franchise
+    // rate vs. what's actually being paid today (Net B2B Payable, bulk
+    // discount already included) — see calculations.js totals() for the
+    // math. Only shown once there's a genuine saving to point at (a stray
+    // rounding-equal profile shows nothing rather than a "save ₹0" row).
+    // Internal view only — this is a partner-facing upsell nudge, not
+    // something to hand a customer.
+    if (!customerView && sum.franchiseSavings > 0) {
+      if (elements.franchiseRow) {
+        elements.franchiseRow.style.display = "";
+        if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
+      }
+      if (elements.franchiseHint) {
+        elements.franchiseHint.style.display = "";
+        elements.franchiseHint.textContent =
+          `Become an AVMLabs Franchisee and pay this instead of ${money(sum.netB2b)} — save ${money(sum.franchiseSavings)} (${Math.round(sum.franchiseSavingsPercentage)}%) on this profile.`;
       }
     }
   }

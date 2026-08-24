@@ -71,6 +71,35 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
+  // Same ₹25-per-sample-type minimum billing floor as sampleTypeBilling
+  // above, but priced at the Franchise rate instead of B2B — this is what
+  // this exact profile would cost billed as a franchisee rather than a
+  // regular B2B partner. Falls back to a test's own B2B price when it has
+  // no `franchise` rate on file yet, so a not-yet-priced test never
+  // invents a saving that isn't backed by real franchise data.
+  function sampleTypeBillingFranchise(items) {
+    const groups = new Map();
+    items.forEach(t => {
+      const sampleId = t.sampleId || "unknown";
+      if (!groups.has(sampleId)) {
+        groups.set(sampleId, { sampleId, tests: [], rawFranchise: 0, billedFranchise: 0 });
+      }
+      const group = groups.get(sampleId);
+      group.tests.push(t);
+      group.rawFranchise += (t.franchise != null ? t.franchise : t.b2b);
+    });
+    groups.forEach(group => {
+      group.billedFranchise = group.rawFranchise < MSB_FLOOR ? MSB_FLOOR : group.rawFranchise;
+    });
+    return groups;
+  }
+
+  function msbAdjustedFranchise(items) {
+    let total = 0;
+    sampleTypeBillingFranchise(items).forEach(group => { total += group.billedFranchise; });
+    return total;
+  }
+
   // Which sample-type groups are currently under the ₹25 floor, and how
   // much more B2B value in that same sample type would clear it — the data
   // behind a "add ₹5 more Serum tests to clear the ₹25 minimum" nudge.
@@ -114,6 +143,19 @@ AVM.modules = AVM.modules || {};
     const discountRate = b2bDiscountRate(msbB2b);
     const discountAmount = msbB2b * discountRate;
     const netB2b = msbB2b - discountAmount;
+
+    // What this same profile costs at the Franchise rate (same MSB floor,
+    // no B2B bulk-discount tiers — those are a B2B volume incentive, not a
+    // franchise one) vs. `netB2b` above, which is what a B2B partner
+    // actually pays today, bulk discount included. The difference is the
+    // real, apples-to-apples "you'd save this much as a franchise" figure
+    // for the profile currently in the cart. Floored at 0 so a data gap
+    // (a test priced the same or cheaper at B2B than franchise) can never
+    // show a negative/nonsense saving.
+    const msbFranchise = msbAdjustedFranchise(items);
+    const franchiseSavings = Math.max(0, netB2b - msbFranchise);
+    const franchiseSavingsPercentage = netB2b > 0 ? (franchiseSavings / netB2b) * 100 : 0;
+
     return {
       b2b, b2c, msbB2b,
       margin: b2c - b2b,
@@ -121,6 +163,7 @@ AVM.modules = AVM.modules || {};
       discountRate, discountAmount, netB2b,
       netMargin: b2c - netB2b,
       netMarginPercentage: marginPercentage(netB2b, b2c),
+      msbFranchise, franchiseSavings, franchiseSavingsPercentage,
     };
   }
 
@@ -135,5 +178,6 @@ AVM.modules = AVM.modules || {};
   AVM.modules.calculations = {
     margin, marginPercentage, totals, packageTestCount, b2bDiscountRate, nextDiscountTier,
     sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
+    sampleTypeBillingFranchise, msbAdjustedFranchise,
   };
 })();

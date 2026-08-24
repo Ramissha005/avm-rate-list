@@ -798,6 +798,16 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-row--msb span:first-child{ color:var(--violet-dark); font-weight:600; }
 .ct-row--msb span:last-child{ color:var(--violet-dark); }
 
+/* Franchise upsell — what this profile would cost at the Franchise rate,
+   shown between the Bulk Discount/Net B2B rows and B2C Value only when
+   there's a genuine saving to point at. Given the same --profit (blue)
+   accent as the margin box below, since it's the same idea ("money that
+   stays with the partner") rather than the amber discount or violet MSB
+   nudges above it. */
+.ct-row--franchise{ background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin:var(--space-1) 0; }
+.ct-row--franchise span:first-child{ color:var(--profit); font-weight:600; }
+.ct-row--franchise span:last-child{ color:var(--profit); }
+
 /* Shared "add ₹X more to unlock…" nudge line. Bare .ct-hint sets the
    typography only — each caller picks a color/tint variant so it reads as
    belonging to the row it's explaining rather than a generic gray note. */
@@ -809,6 +819,10 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    reach (even at ₹0 discount today), so the incentive to add one more test
    is visible before the discount itself ever kicks in. */
 .ct-hint--discount{ color:var(--amber-dark); background:var(--amber-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; }
+
+/* Franchise savings callout under .ct-row--franchise — same treatment as
+   .ct-hint--discount, in the --profit family to match the row above it. */
+.ct-hint--franchise{ color:var(--profit); background:var(--profit-bg); border-radius:var(--radius-xs); padding:var(--space-1) var(--space-2); margin-top:var(--space-1); opacity:1; font-weight:600; }
 
 /* ---------- Discount editor + Margin box — side by side, not stacked, so
    together they cost one compact row instead of two full-width blocks.

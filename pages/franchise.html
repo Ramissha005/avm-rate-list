@@ -309,9 +309,12 @@
   <div class="cart-foot">
     <div class="cart-foot__summary" id="cartFootSummary">
       <div class="cart-totals">
-        <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
-        <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>
-        <p class="ct-hint ct-hint--msb" id="cartMsbHint" style="display:none"></p>
+        <!-- Franchise page: lead with the Franchise Rate box (and what it
+             saves) before B2B Cost — this page's whole pitch is "become a
+             franchisee", so the savings number should be the first thing
+             a partner sees here, not buried after B2B. Every other page
+             with a cart drawer keeps B2B Cost first (see index.html/crl.
+             html/sarc.html) — this reordering is franchise.html-only. -->
         <div class="franchise-box" id="cartFranchiseRow" style="display:none">
           <div class="franchise-box__info">
             <span class="franchise-box__label"><span class="franchise-box__dot" aria-hidden="true"></span>Franchise Rate</span>
@@ -319,6 +322,9 @@
           </div>
           <span class="franchise-box__pct" id="cartFranchisePct">Save 0%</span>
         </div>
+        <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
+        <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>
+        <p class="ct-hint ct-hint--msb" id="cartMsbHint" style="display:none"></p>
         <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
         <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
       </div>

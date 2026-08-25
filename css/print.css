@@ -135,7 +135,7 @@ tbody tr{ break-inside:avoid; }
 .group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
 .group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }
 .group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
-.group-head__dot{ font-weight:700; color:var(--profit); margin:0 3px; }
+.group-head__dot{ font-weight:700; color:var(--profit); margin:0 4px; font-size:17px; vertical-align:middle; line-height:0; display:inline-block; }
 
 /* ================= SUMMARY STRIP ================= */
 .summary{

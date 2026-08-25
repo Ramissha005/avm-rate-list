@@ -54,7 +54,7 @@ window.AVM = window.AVM || {};
         AVM.modules.profile.renderCart(cartElements);
       }
       if (hasFranchiseRates) {
-        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, elements: franchiseRatesElements });
+        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, elements: franchiseRatesElements, onChange: refreshAll });
       }
       // Bundle chips flip to their "✓ in profile" state once fully added, so
       // they need to re-render on every cart change, not just once at init.

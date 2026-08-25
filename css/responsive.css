@@ -116,7 +116,9 @@
 
   /* Franchise page "your savings" table — same idea as .rl-row's mobile
      card above, just fewer fields: code+name stacked full-width, then
-     B2B/Franchise as a matching pair, then the Save badge on its own row. */
+     B2B/Franchise as a matching pair, then the Save badge and finally the
+     full-width Add to Profile button (its text label shows at this width,
+     same as .add-btn__label above). */
   .fr-head{ display:none; }
   .fr-row{
     display:grid; grid-template-columns:1fr 1fr;
@@ -128,6 +130,7 @@
   .fr-row > *:nth-child(3){ grid-column:1; grid-row:3; }                     /* B2B */
   .fr-row > *:nth-child(4){ grid-column:2; grid-row:3; }                     /* Franchise */
   .fr-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; text-align:center; } /* Save */
+  .fr-row > *:nth-child(6){ grid-column:1 / -1; grid-row:5; }                /* Add to Profile */
   .fr-row .cell-price{
     font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
     padding:var(--space-1) 6px; line-height:1.2;

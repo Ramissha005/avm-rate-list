@@ -541,11 +541,12 @@ section{ padding:var(--space-20) 0; }
 /* ---------- Franchise page "your savings" table (see js/modules/
    franchise-rates.js) — the wrapper reuses .rl-table itself (see
    franchise.html) rather than a duplicate box style; own grid here since
-   it's 5 columns (Code, Test, B2B, Franchise, Save) not .rl-row's 8, and
-   read-only: no Add to Profile action column. ---------- */
+   it's 6 columns (Code, Test, B2B, Franchise, Save, Action) not
+   .rl-row's 8. The Action column reuses .add-btn/.cell-action/
+   .add-btn__label as-is, same 54px width as the main rate list's. */
 .fr-head, .fr-row{
   display:grid;
-  grid-template-columns:70px minmax(0,1.8fr) 110px 130px 110px;
+  grid-template-columns:70px minmax(0,1.8fr) 110px 130px 110px 54px;
   gap:var(--space-3); align-items:center; padding:var(--space-3) var(--space-4);
 }
 

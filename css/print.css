@@ -90,6 +90,25 @@ tbody tr{ break-inside:avoid; }
 .num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .profit{ color:var(--profit); font-weight:600; }
 
+/* Common-panel heading row — one per group from groupCartItems (see
+   print.js), sitting above that panel's own tests. break-after:avoid is a
+   best-effort nudge to keep it from landing alone at the bottom of a
+   printed page, split from the rows it's introducing. */
+.row-group-head{ break-inside:avoid; break-after:avoid; }
+.group-head{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  background:var(--profit-bg); padding:7px 8px; border-bottom:1px solid var(--line);
+}
+.group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
+.group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }
+
+/* A panel's calculated extra (eGFR, VLDL, …) — no code, no separate price
+   of its own, so it reads as "comes bundled in" rather than another
+   billable line. */
+.row-calc .name em{ font-style:italic; font-weight:500; color:var(--ink); }
+.row-calc .tech{ font-style:italic; color:var(--ink-faint); font-size:11px; }
+.row-calc .num{ color:var(--ink-faint); font-style:italic; }
+
 tfoot tr{ break-inside:avoid; }
 tfoot td{
   padding:12px 8px 4px; font-size:12.5px; font-weight:700; color:var(--navy);

@@ -502,6 +502,6 @@ AVM.modules = AVM.modules || {};
   AVM.modules.profile = {
     persistCart, restoreCart, toggleTest, addPackage, removePackage, isPackageActive,
     removeFromProfile, clearProfile, renderCart, conflictingCodeFor,
-    setDiscountedPrice, clearDiscountedPrice,
+    setDiscountedPrice, clearDiscountedPrice, groupCartItems,
   };
 })();

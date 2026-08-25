@@ -134,6 +134,10 @@
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
 <script src="../js/modules/branding.js"></script>
+<!-- Only groupCartItems is used here (to render tests grouped by common
+     panel, same as the cart drawer) — profile.js's cart-mutation functions
+     (toggleTest, addPackage, ...) are simply unused on this read-only page. -->
+<script src="../js/modules/profile.js"></script>
 <script src="../js/modules/print.js"></script>
 <script>
   const printElements = {

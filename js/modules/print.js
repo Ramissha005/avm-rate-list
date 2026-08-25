@@ -17,6 +17,10 @@ AVM.modules = AVM.modules || {};
       codes: [...state.cart],
       customerView: state.customerView,
       discountedPrice: state.discountedPrice,
+      // Which common-panel each code was added as part of — carried over so
+      // the print table can group them under a panel heading the same way
+      // the cart drawer does (see renderPrintPage below).
+      packageOf: Object.fromEntries(state.cartPackageOf),
     });
     // index.html sits at the project root; every page/* file sits one level down —
     // this project has no build step to resolve paths, so branch on where we are.
@@ -58,6 +62,13 @@ AVM.modules = AVM.modules || {};
       const codes = Array.isArray(saved) ? saved : (saved.codes || []);
       await AVM.data.loadCatalog();
       const { byCode } = AVM.data.getCatalog();
+      // This page never adds/removes tests, but groupCartItems (see below)
+      // reads AVM.state.cartPackageOf to know which panel each code came
+      // from — seed it from the print payload so grouping works here the
+      // same as it does in the cart drawer that sent us here.
+      state.cartPackageOf = new Map(Object.entries(
+        (!Array.isArray(saved) && saved.packageOf) || {}
+      ));
       cachedItems = {
         items: codes.map(c => byCode[c]).filter(Boolean),
         customerView: Array.isArray(saved) ? false : !!saved.customerView,
@@ -83,18 +94,60 @@ AVM.modules = AVM.modules || {};
     }
 
     if (tbody) {
-      tbody.innerHTML = items.map((t, i) => `
-        <tr>
-          <td class="sr">${i + 1}</td>
-          <td class="c-code"><span class="code">${esc(t.code)}</span></td>
-          <td class="name">${esc(t.name)}</td>
-          <td class="tech">${esc(t.tech)}</td>
-          <td class="sample">${esc(t.sample)}</td>
-          <td class="num c-b2b">${money(t.b2b)}</td>
-          <td class="num">${money(t.b2c)}</td>
-          <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
-        </tr>
-      `).join("");
+      // Grouped the same way the cart drawer groups its own list (see
+      // profile.js groupCartItems) — tests added as part of a common panel
+      // print under a "Panel Name · Price" heading row, tests added one at
+      // a time print as plain rows with no heading. Row numbering (#) stays
+      // continuous across the whole table; heading and calculated-param
+      // rows get no number.
+      const groups = AVM.modules.profile.groupCartItems(items);
+      let rowNum = 0;
+      tbody.innerHTML = groups.map(group => {
+        const rows = group.items.map(t => {
+          rowNum++;
+          return `
+          <tr>
+            <td class="sr">${rowNum}</td>
+            <td class="c-code"><span class="code">${esc(t.code)}</span></td>
+            <td class="name">${esc(t.name)}</td>
+            <td class="tech">${esc(t.tech)}</td>
+            <td class="sample">${esc(t.sample)}</td>
+            <td class="num c-b2b">${money(t.b2b)}</td>
+            <td class="num">${money(t.b2c)}</td>
+            <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
+          </tr>
+        `;
+        }).join("");
+
+        // Individually added tests (no package tag) print as plain rows,
+        // no heading — same as the cart drawer.
+        if (!group.pkg) return rows;
+
+        // The panel's own B2C total, same figure the cart drawer shows in
+        // its group header.
+        const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
+        const calcRows = (group.pkg.calculatedParams || []).map(name => `
+          <tr class="row-calc">
+            <td class="sr"></td>
+            <td class="c-code"></td>
+            <td class="name"><em>${esc(name)}</em></td>
+            <td class="tech" colspan="2">Calculated from the tests above</td>
+            <td class="num c-b2b"></td>
+            <td class="num">Included</td>
+            <td class="num c-margin"></td>
+          </tr>
+        `).join("");
+
+        return `
+          <tr class="row-group-head">
+            <td colspan="8" class="group-head">
+              <span class="group-head__name">${esc(group.pkg.name)}</span>
+              <span class="group-head__price">${money(groupB2C)}</span>
+            </td>
+          </tr>
+          ${rows}${calcRows}
+        `;
+      }).join("");
     }
 
     // The table's own rows list each test's raw B2B/margin, so its footer

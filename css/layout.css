@@ -619,26 +619,16 @@ section{ padding:var(--space-20) 0; }
    line of every test. Each block gets a small colored rail so a
    several-line panel like Liver Profile still reads as one unit at a
    glance, rather than leaning on bold text alone to separate it from
-   the block above and below. */
+   the block above and below. Standalone tests split out of what used
+   to be one "Additional Tests" bucket (Calcium, CRP, TSH, ...) get this
+   exact same block treatment (see panels-table.js) — just without a
+   body line, since a one-item line would only repeat the heading. */
 .fr-panel-details__group{
   margin-top:var(--space-4); padding-left:var(--space-3); border-left:2px solid var(--teal-bg);
 }
 .fr-panel-details__group:first-child{ margin-top:0; }
 .fr-panel-details__group-label{
   display:block; font-size:var(--text-xs); font-weight:700; color:var(--navy); margin-bottom:3px;
-}
-
-/* Standalone tests that aren't part of any named panel (Calcium, CRP,
-   TSH, ...) — each still gets its own heading (see panels-table.js),
-   but as a compact pill in one wrapped row instead of a full-width
-   block, so five one-word add-ons don't read as five empty-looking
-   sections stacked with the same weight as Kidney Profile or Liver
-   Profile above them. */
-.fr-panel-details__chips{ display:flex; flex-wrap:wrap; gap:var(--space-2); margin-top:var(--space-4); }
-.fr-panel-details__chip{
-  font-size:var(--text-xs); font-weight:600; color:var(--navy);
-  background:var(--paper-2); border:1px solid var(--line); border-radius:var(--radius-full);
-  padding:5px 12px;
 }
 
 footer{ background:var(--navy); color:#B9C7D1; padding:var(--space-14) 0 var(--space-7); }

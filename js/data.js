@@ -2396,6 +2396,29 @@ AVM.state = {
   // the panel's total "test" count (per the source rate card) but never
   // toward B2B/B2C/margin.
   const PACKAGES = [
+  // AVM's own curated multi-panel checkups (as opposed to the single
+  // system panels below) — each one's codes are the flattened, deduped
+  // union of its listed components (a package's codes are always a flat
+  // test-code list, no nested package-of-packages support), so e.g. AVM
+  // Profile B repeats every code AVM Profile A has plus its own two.
+  // Placed first so they sort to the top of the Profiles view in its
+  // default (no sort picked) order, same as every other package here —
+  // no separate "pinned" mechanism, just array order.
+  { "id": "avm-profile-a", "name": "AVM Profile A", "categoryId": "general-biochemistry",
+    "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH"],
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
+  { "id": "avm-profile-b", "name": "AVM Profile B", "categoryId": "general-biochemistry",
+    "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"],
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
+  { "id": "avm-profile-c", "name": "AVM Profile C", "categoryId": "general-biochemistry",
+    "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC", "VB12", "VITDT", "FOLI"],
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
+  { "id": "avm-infertility-a", "name": "AVM Infertility A", "categoryId": "reproductive-hormones",
+    "codes": ["UTSH", "AMH", "FSH", "LH", "PRL", "CBC", "A1c"],
+    "calculatedParams": [], "active": true },
+  { "id": "avm-anemia-a", "name": "AVM Anemia A", "categoryId": "iron-studies",
+    "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "BUN", "UREA", "SCRE", "URIC", "IRON", "TIBC", "FERR", "FOLI", "VB12", "CBC", "A1c"],
+    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)"], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"], "active": true },
   { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],

@@ -80,23 +80,35 @@ AVM.modules = AVM.modules || {};
       // separate "Calculated Parameters" section, so e.g. eGFR reads
       // under Kidney Profile the same way it does on the Kidney Profile
       // package itself.
-      return pkg.groups.map(g => {
+      //
+      // A group that's just one standalone test and nothing else (the
+      // Calcium/CRP/TSH-style entries split out of what used to be one
+      // "Additional Tests" bucket) reads as a compact pill in one
+      // wrapped row instead of its own full-width block — otherwise
+      // five one-word add-ons stack with the same visual weight as
+      // Kidney Profile or Liver Profile above them, all empty-looking
+      // headings and no content of their own. Groups with more than one
+      // line's worth of content (a named panel, or a singleton that
+      // also carries a calculated ratio) still get their own block.
+      const blocks = [];
+      const chips = [];
+      pkg.groups.forEach(g => {
         const names = [...g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
-        // A group that's just one standalone test and nothing else (the
-        // Calcium/CRP/TSH-style entries split out of what used to be one
-        // "Additional Tests" bucket) would otherwise repeat its own name
-        // twice — once as the heading, once as a one-item body line
-        // saying the exact same thing. Heading-only for those; groups
-        // with more than one line's worth of content (a named panel, or
-        // a singleton that also carries a calculated ratio) still get
-        // their body line.
-        const body = names.length === 1 ? "" : `<p>${dotJoin(names, esc)}</p>`;
-        return `
+        if (names.length === 1) {
+          chips.push(names[0]);
+          return;
+        }
+        blocks.push(`
           <div class="fr-panel-details__group">
             <span class="fr-panel-details__group-label">${esc(g.label)}</span>
-            ${body}
-          </div>`;
-      }).join("");
+            <p>${dotJoin(names, esc)}</p>
+          </div>`);
+      });
+      const chipRow = chips.length ? `
+        <div class="fr-panel-details__chips">
+          ${chips.map(name => `<span class="fr-panel-details__chip">${esc(name)}</span>`).join("")}
+        </div>` : "";
+      return blocks.join("") + chipRow;
     }
     const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
     return `<p>${dotJoin(names, esc)}</p>`;

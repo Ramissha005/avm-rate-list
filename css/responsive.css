@@ -141,7 +141,7 @@
   /* Desktop's .fr-panel-details lines its text up under the Panel column
      (82px in from the 70px code column + gap) — no such column on this
      stacked card layout, so it just gets the card's own padding back. */
-  .fr-panel-details{ padding:0 var(--space-4) var(--space-4); }
+  .fr-panel-details{ padding:var(--space-4); }
 
   /* Sort and page-size drop out of the mobile controls bar entirely —
      leaves .rl-right empty, so the frozen bar is just the search input. */

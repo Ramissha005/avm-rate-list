@@ -447,14 +447,21 @@ AVM.modules = AVM.modules || {};
     elements.b2c.textContent = money(sum.b2c);
     // The headline margin is the partner's real bottom line — after MSB,
     // and (if set) after a staff-entered customer discount too: what the
-    // customer actually pays, minus the partner's own (MSB-adjusted) B2B
-    // cost. The discount only takes effect once it's genuinely lower than
-    // the B2C total it would otherwise be based on.
+    // customer actually pays, minus the partner's own (MSB-adjusted) cost.
+    // The discount only takes effect once it's genuinely lower than the
+    // B2C total it would otherwise be based on.
+    //
+    // On the Franchise page (elements.useFranchiseMargin — see app.js,
+    // true only when the page's own #cartFranchiseHint exists), that cost
+    // is the Franchise rate instead of B2B: a visitor there is weighing
+    // life as a franchisee, so their margin should read against what
+    // they'd actually pay as one, not the regular B2B rate.
     const discountedPrice = state.discountedPrice;
     const hasCustomerDiscount = discountedPrice != null && discountedPrice > 0 && discountedPrice < sum.b2c;
     const marginBase = hasCustomerDiscount ? discountedPrice : sum.b2c;
-    const finalMargin = marginBase - sum.netB2b;
-    const finalMarginPct = AVM.modules.calculations.marginPercentage(sum.netB2b, marginBase);
+    const costBase = elements.useFranchiseMargin ? sum.msbFranchise : sum.netB2b;
+    const finalMargin = marginBase - costBase;
+    const finalMarginPct = AVM.modules.calculations.marginPercentage(costBase, marginBase);
     elements.margin.textContent = money(finalMargin);
     if (elements.marginPct) elements.marginPct.textContent = (finalMargin >= 0 ? "+" : "") + Math.round(finalMarginPct) + "%";
     if (elements.marginLabel) elements.marginLabel.textContent = hasCustomerDiscount ? "Your Margin (after discount)" : "Your Margin";

@@ -46,6 +46,10 @@ window.AVM = window.AVM || {};
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
       franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"),
       franchiseHint: $("cartFranchiseHint"),
+      // True only on the Franchise page (the one page with a
+      // #cartFranchiseHint) — see profile.js's renderCart for what this
+      // changes Your Margin's cost basis to.
+      useFranchiseMargin: !!$("cartFranchiseHint"),
       onChange: refreshAll,
     } : null;
 

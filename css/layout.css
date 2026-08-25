@@ -447,8 +447,16 @@ section{ padding:var(--space-20) 0; }
    .fr-view-toggle and .rl-controls sit inside this wrapper) — sticky
    lives on the wrapper itself rather than on each piece separately with
    two hand-tuned top offsets that would drift apart if either one's own
-   height ever changed. */
-.fr-sticky-controls{ position:sticky; top:64px; z-index:40; }
+   height ever changed.
+   Needs its own opaque background: .fr-view-toggle is an inline-flex
+   pill that's only as wide as its own two buttons, and it also has a
+   margin-bottom gap before .rl-controls — without a background here,
+   both that empty space beside the toggle and the gap below it are
+   transparent, so rows scrolled underneath show through the pinned bar
+   instead of being covered by it. Matches .ratelist's own background so
+   the pinned bar blends into the section instead of reading as a
+   separate strip. */
+.fr-sticky-controls{ position:sticky; top:64px; z-index:40; background:var(--paper-2); padding:var(--space-3) 0; }
 
 .rl-controls{
   display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center; justify-content:space-between;

@@ -59,13 +59,36 @@ body{
 .letterhead__meta b{ color:var(--ink-soft); font-weight:600; }
 
 /* ================= TABLE ================= */
-table{ width:100%; border-collapse:collapse; }
+/* table-layout:fixed makes column widths purely a function of the
+   <colgroup> below (or the customer-view override further down) — never
+   of cell content. That's what customer view relies on: with 'auto'
+   layout, a column whose cells are all display:none can still get width
+   reserved for it by the browser (especially once any colspan cell is in
+   the mix — see .row-group-head), leaving a blank gap on the right
+   instead of letting the visible columns fill the table. Fixed layout
+   has no such ambiguity: a column not given any width here simply has
+   none. */
+table{ width:100%; border-collapse:collapse; table-layout:fixed; }
 colgroup .c-sr{ width:4%; }
 colgroup .c-code{ width:11%; }
 colgroup .c-name{ width:29%; }
 colgroup .c-tech{ width:16%; }
 colgroup .c-sample{ width:12%; }
 colgroup .c-b2b, colgroup .c-b2c, colgroup .c-margin{ width:9.33%; }
+
+/* Customer view hides Code/B2B/Margin entirely (see the rule further
+   below) — their <col> widths are zeroed here too so the 5 remaining
+   columns' widths (redistributed to still sum to 100%) are what the
+   table actually renders, rather than leaving ~30% of the table blank
+   where those hidden columns used to be. */
+.sheet.customer-view colgroup .c-sr{ width:5%; }
+.sheet.customer-view colgroup .c-name{ width:40%; }
+.sheet.customer-view colgroup .c-tech{ width:22%; }
+.sheet.customer-view colgroup .c-sample{ width:18%; }
+.sheet.customer-view colgroup .c-b2c{ width:15%; }
+.sheet.customer-view colgroup .c-code,
+.sheet.customer-view colgroup .c-b2b,
+.sheet.customer-view colgroup .c-margin{ width:0; }
 
 thead th{
   text-align:left; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;

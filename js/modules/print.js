@@ -140,9 +140,11 @@ AVM.modules = AVM.modules || {};
 
         return `
           <tr class="row-group-head">
-            <td colspan="8" class="group-head">
-              <span class="group-head__name">${esc(group.pkg.name)}</span>
-              <span class="group-head__price">${money(groupB2C)}</span>
+            <td colspan="8">
+              <div class="group-head">
+                <span class="group-head__name">${esc(group.pkg.name)}</span>
+                <span class="group-head__price">${money(groupB2C)}</span>
+              </div>
             </td>
           </tr>
           ${rows}${calcRows}

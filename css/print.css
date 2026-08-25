@@ -91,13 +91,16 @@ tbody tr{ break-inside:avoid; }
 .profit{ color:var(--profit); font-weight:600; }
 
 /* Common-panel heading row — one per group from groupCartItems (see
-   print.js), sitting above that panel's own tests. break-after:avoid is a
-   best-effort nudge to keep it from landing alone at the bottom of a
-   printed page, split from the rows it's introducing. */
+   print.js), sitting above that panel's own tests. The flex layout lives
+   on the inner div, not the <td> itself — a <td> with display:flex doesn't
+   reliably fill its column span. break-after:avoid is a best-effort nudge
+   to keep it from landing alone at the bottom of a printed page, split
+   from the rows it's introducing. */
 .row-group-head{ break-inside:avoid; break-after:avoid; }
+.row-group-head td{ padding:0; border-bottom:none; }
 .group-head{
   display:flex; align-items:center; justify-content:space-between; gap:8px;
-  background:var(--profit-bg); padding:7px 8px; border-bottom:1px solid var(--line);
+  background:var(--profit-bg); padding:8px;
 }
 .group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
 .group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }

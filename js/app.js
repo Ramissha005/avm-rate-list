@@ -42,7 +42,6 @@ window.AVM = window.AVM || {};
       sortSelect: $("franchiseRatesSort"),
       paginationWrap: $("franchiseRatesPagination"),
       viewToggle: $("franchiseViewToggle"),
-      filtersToggleBtn: $("filtersToggleBtn"),
       sortWrap: $("franchiseRatesSortWrap"),
     } : null;
 
@@ -71,15 +70,17 @@ window.AVM = window.AVM || {};
     function refreshAll() {
       if (hasRateList) {
         const view = rateListView();
-        // Filters/Sort/page size and the Code/Technology/Sample columns
-        // are Tests-only — hidden rather than left inert while Panels is
-        // active, and the two header rows swap so a panel's "Panel" +
+        // Sort/page size and the Code/Technology/Sample columns are
+        // Tests-only — hidden while Panels is active (no equivalent sort
+        // options for panels, and the panel list is short enough to show
+        // in full), and the two header rows swap so a panel's "Panel" +
         // test-count columns show instead of a test's Code/Technology/
         // Sample ones (see index.html — rate-list.js never touches the
         // head itself, unlike franchise-rates.js's single dynamic one).
+        // Filters stays available in both views — Technology filtering
+        // applies to panels too (see panels-table.js).
         if ($("rlHeadTests")) $("rlHeadTests").style.display = view === "profiles" ? "none" : "";
         if ($("rlHeadPanels")) $("rlHeadPanels").style.display = view === "profiles" ? "" : "none";
-        if ($("filtersToggleBtn")) $("filtersToggleBtn").style.display = view === "profiles" ? "none" : "";
         if ($("rateListSortWrap")) $("rateListSortWrap").style.display = view === "profiles" ? "none" : "";
         if (view === "profiles") {
           AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll, priceMode: "margin" });

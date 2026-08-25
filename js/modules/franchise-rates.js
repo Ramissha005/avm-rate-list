@@ -155,9 +155,12 @@ AVM.modules = AVM.modules || {};
     if (!elements || !elements.body) return;
     const view = currentView(elements);
 
-    // Filters/Sort/page size are Tests-only controls — hidden rather than
-    // just inert while Panels is active, so it's clear they don't apply.
-    if (elements.filtersToggleBtn) elements.filtersToggleBtn.style.display = view === "profiles" ? "none" : "";
+    // Sort/page size are Tests-only (no equivalent sort options for
+    // panels, and the panel list is short enough to show in full) —
+    // hidden while Panels is active. Filters stays available in both
+    // views: Technology filtering applies to panels too (see
+    // panels-table.js — a panel matches if any of its tests use a
+    // selected technology).
     if (elements.sortWrap) elements.sortWrap.style.display = view === "profiles" ? "none" : "";
 
     if (view === "profiles") {

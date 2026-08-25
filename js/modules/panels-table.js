@@ -11,6 +11,13 @@ AVM.modules = AVM.modules || {};
   // default so a page with several panels doesn't turn into one long list
   // of test names.
   //
+  // The Technology filter (state.activeFilters.technology, same chips as
+  // the Tests view) applies here too — a panel matches if *any* of its
+  // tests use one of the selected technologies, not only if every test
+  // does, so picking a technology never hides a panel that's genuinely
+  // relevant to it just because one other test inside happens to use a
+  // different one.
+  //
   // priceMode picks which two rate columns sit next to the third
   // (badge) column:
   //   'margin'    -> B2B / B2C / Margin (the site's normal pricing —
@@ -40,13 +47,18 @@ AVM.modules = AVM.modules || {};
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
+    const activeTech = AVM.state.activeFilters.technology;
     const rows = (packages || [])
       .filter(pkg => pkg.active !== false)
       .map(pkg => {
         const items = pkg.codes.map(c => byCode[c]).filter(Boolean);
         return { pkg, items, sum: AVM.modules.calculations.totals(items) };
       })
-      .filter(({ pkg }) => !term || pkg.name.toLowerCase().includes(term));
+      .filter(({ pkg, items }) => {
+        if (activeTech.size && !items.some(t => activeTech.has(t.tech))) return false;
+        if (term && !pkg.name.toLowerCase().includes(term)) return false;
+        return true;
+      });
 
     // Biggest-saving-first for the franchise pitch; catalog order otherwise
     // (matches the order common panels appear everywhere else on the
@@ -58,12 +70,17 @@ AVM.modules = AVM.modules || {};
     if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
 
     if (rows.length === 0) {
-      elements.body.innerHTML = `<div class="fr-empty">No panels match that search.</div>`;
+      elements.body.innerHTML = `<div class="fr-empty">No panels match that search/filter.</div>`;
       if (elements.count) elements.count.textContent = "";
       return;
     }
 
-    if (elements.count) elements.count.textContent = `${rows.length} panel${rows.length !== 1 ? "s" : ""}`;
+    if (elements.count) {
+      const filtered = term || activeTech.size;
+      elements.count.textContent = filtered
+        ? `Showing ${rows.length} of ${packages.length} panels`
+        : `${rows.length} panel${rows.length !== 1 ? "s" : ""}`;
+    }
 
     elements.body.innerHTML = rows.map(({ pkg, items, sum }) => {
       const testCount = AVM.modules.calculations.packageTestCount(pkg);

@@ -940,25 +940,25 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    the box speak for itself like it does everywhere else. */
 .franchise-box{
   position:relative; overflow:hidden;
-  background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
+  background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-2) var(--space-3);
   margin:var(--space-2) 0 var(--space-3);
 }
 .franchise-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
-.franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); }
-.franchise-box__hint{ margin:8px 0 0; font-size:var(--text-sm); font-weight:600; color:var(--amber-dark); }
+.franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); }
+.franchise-box__hint{ margin:2px 0 0; font-size:var(--text-xs); font-weight:600; color:var(--amber-dark); line-height:1.35; }
 .franchise-box__info{ min-width:0; }
 .franchise-box__label{
   display:flex; align-items:center; gap:6px; font-size:var(--text-2xs); font-weight:700; color:var(--amber-dark);
-  text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:1px;
 }
 .franchise-box__dot{ width:6px; height:6px; border-radius:50%; background:var(--amber-dark); flex:none; }
 .franchise-box__pct{
   flex:none; display:flex; align-items:center; justify-content:center; text-align:center;
-  font-family:var(--font-mono); font-size:var(--text-sm); font-weight:800; color:#fff; background:var(--amber-dark);
-  padding:6px 14px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
+  font-family:var(--font-mono); font-size:var(--text-xs); font-weight:800; color:#fff; background:var(--amber-dark);
+  padding:4px 12px; border-radius:var(--radius-full); white-space:nowrap; font-variant-numeric:tabular-nums;
 }
 .franchise-box__amount{
-  font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--amber-dark);
+  font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--amber-dark);
   line-height:1.1; font-variant-numeric:tabular-nums;
 }
 

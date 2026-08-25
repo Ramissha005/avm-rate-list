@@ -551,6 +551,17 @@ section{ padding:var(--space-20) 0; }
 .fr-row:last-child{ border-bottom:none; }
 .fr-row:hover{ background:#F4F5F6; }
 
+/* Panels table (see js/modules/panels-table.js) — same shell, but 5
+   columns (Panel, first rate, second rate, badge, Action) instead of
+   the Tests view's 6: no per-test code, so no leading count column
+   either — a panel's test count now lives in its own "Show N tests
+   included" toggle instead (see .fr-panel-toggle). Needs both classes
+   combined for specificity over the plain .fr-head/.fr-row rule above. */
+.fr-head.fr-panels-head,
+.fr-row.fr-panels-row{
+  grid-template-columns:minmax(0,1.9fr) 110px 130px 110px 54px;
+}
+
 /* Individual Tests vs Common Panels switch above the savings table (see
    js/modules/franchise-rates.js) — a segmented control, not filter chips
    (.rl-filter), since it's picking the dataset itself rather than

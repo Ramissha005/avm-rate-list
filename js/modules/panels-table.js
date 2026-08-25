@@ -69,9 +69,10 @@ AVM.modules = AVM.modules || {};
     const { marginPercentage } = AVM.modules.calculations;
 
     if (elements.head) {
+      elements.head.className = "fr-head fr-panels-head";
       elements.head.innerHTML = priceMode === "franchise"
-        ? `<div>Tests</div><div>Panel</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-        : `<div>Tests</div><div>Panel</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+        ? `<div>Panel</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
+        : `<div>Panel</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
@@ -135,11 +136,10 @@ AVM.modules = AVM.modules || {};
           <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(sum.b2c - sum.msbB2b)}<small>+${Math.round(marginPercentage(sum.msbB2b, sum.b2c))}%</small></span></div>`;
 
       return `
-        <div class="fr-row">
-          <div><span class="cell-code">${testCount}</span></div>
+        <div class="fr-row fr-panels-row">
           <div class="cell-name">
             ${esc(pkg.name)}
-            <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴ Hide" : "▾ Show"} tests included</button>
+            <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴ Hide" : "▾ Show"} ${testCount} test${testCount !== 1 ? "s" : ""} included</button>
           </div>
           ${priceCells}
           <div class="cell-action">

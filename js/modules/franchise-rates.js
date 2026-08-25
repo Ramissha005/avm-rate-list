@@ -48,6 +48,11 @@ AVM.modules = AVM.modules || {};
 
   function renderTestsHead(elements) {
     if (!elements.head) return;
+    // Reset className too, not just innerHTML — a prior Panels-view
+    // render leaves .fr-panels-head attached (its 5-column grid, see
+    // panels-table.js), which would otherwise linger and misalign this
+    // 6-column Tests header.
+    elements.head.className = "fr-head";
     elements.head.innerHTML = `<div>Code</div><div>Test</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`;
   }
 

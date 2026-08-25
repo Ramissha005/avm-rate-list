@@ -105,22 +105,19 @@
   }
   .add-btn__label{ display:inline; }
 
-  /* .fr-row's mobile card — shared by the Franchise savings table (see
-     franchise-rates.js) and the homepage/Franchise Panels views (see
-     panels-table.js), same idea as .rl-row's mobile card above, just
-     fewer/purely-positional fields: code+name stacked full-width, then
-     the two rate cells (B2B/Franchise or B2B/B2C) as a matching pair,
-     then the badge cell (Save % or Margin) and finally the full-width
-     Add to Profile button (its text label shows at this width, same as
-     .add-btn__label above). */
+  /* .fr-row's mobile card — the Franchise savings table's Tests view (see
+     franchise-rates.js): code+name stacked full-width, then the two rate
+     cells (B2B/Franchise) as a matching pair, then the badge cell
+     (Save %) and finally the full-width Add to Profile button (its text
+     label shows at this width, same as .add-btn__label above). */
   .fr-head{ display:none; }
   .fr-row{
     display:grid; grid-template-columns:1fr 1fr;
     column-gap:var(--space-2); row-gap:var(--space-2);
     padding:var(--space-4); align-items:center;
   }
-  .fr-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* code/count */
-  .fr-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }                 /* name/panel */
+  .fr-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* code */
+  .fr-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }                 /* name */
   .fr-row > *:nth-child(3){ grid-column:1; grid-row:3; }                     /* first rate */
   .fr-row > *:nth-child(4){ grid-column:2; grid-row:3; }                     /* second rate */
   .fr-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; text-align:center; } /* badge */
@@ -129,6 +126,17 @@
     font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
     padding:var(--space-1) 6px; line-height:1.2;
   }
+
+  /* Panels view (see panels-table.js) — same card, one fewer field since
+     there's no code column: name (with its own "Show N tests included"
+     toggle) full-width, then the two rate cells, then the badge, then Add
+     to Profile. Needs .fr-panels-row (not just nth-child alone) to win
+     over the 6-field positions above at equal specificity. */
+  .fr-panels-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* name */
+  .fr-panels-row > *:nth-child(2){ grid-column:1; grid-row:2; }                     /* first rate */
+  .fr-panels-row > *:nth-child(3){ grid-column:2; grid-row:2; }                     /* second rate */
+  .fr-panels-row > *:nth-child(4){ grid-column:1 / -1; grid-row:3; text-align:center; } /* badge */
+  .fr-panels-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; }                /* Add to Profile */
 
   /* Desktop's .fr-panel-details lines its text up under the Panel column
      (82px in from the 70px code column + gap) — no such column on this

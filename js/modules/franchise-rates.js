@@ -2,30 +2,54 @@ window.AVM = window.AVM || {};
 AVM.modules = AVM.modules || {};
 
 (function () {
+  const state = AVM.state;
+
   // A lightweight, read-only "what you'd save" table for the Franchise
   // page — every test's B2B rate next to its Franchise rate and the %
   // that saves, so a prospective franchisee sees the pitch in real
-  // numbers instead of taking "better rates" on faith. Deliberately
-  // simple: a name/code search is the only control (no sort/filter/
-  // pagination), and there's no Add to Profile action — that's what the
-  // real rate list (rate-list.js) is for; this one just makes the case.
+  // numbers instead of taking "better rates" on faith. No Add to Profile
+  // action here — that's what the real rate list (rate-list.js) is for;
+  // this one just makes the case.
+  //
+  // Technology/Price filtering reuses the same state.activeFilters Sets
+  // (and the same #filterTech/#filterPrice chip UI) as the main rate
+  // list — this page never has that list on screen at the same time, so
+  // there's no risk of the two stepping on each other, and it means the
+  // Filters button just works here via app.js's existing generic wiring
+  // with no extra plumbing. Search is local to this table's own input,
+  // not the shared state.searchTerm the main list uses.
+  function inPriceBand(t, bandIds) {
+    return [...bandIds].some(bandId => {
+      const band = AVM.CONFIG.PRICE_BANDS.find(b => b.id === bandId);
+      if (!band) return false;
+      if (band.min != null && t.b2c < band.min) return false;
+      if (band.max != null && t.b2c > band.max) return false;
+      return true;
+    });
+  }
+
   function renderFranchiseRates({ tests, elements }) {
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
+    const { activeFilters } = state;
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
-    const list = term
-      ? tests.filter(t => `${t.name} ${t.code}`.toLowerCase().includes(term))
-      : tests;
+    const list = tests.filter(t => {
+      if (activeFilters.technology.size && !activeFilters.technology.has(t.tech)) return false;
+      if (activeFilters.priceBand.size && !inPriceBand(t, activeFilters.priceBand)) return false;
+      if (term && !`${t.name} ${t.code}`.toLowerCase().includes(term)) return false;
+      return true;
+    });
 
     if (list.length === 0) {
-      elements.body.innerHTML = `<div class="fr-empty">No tests match that search.</div>`;
+      elements.body.innerHTML = `<div class="fr-empty">No tests match that search/filter.</div>`;
       if (elements.count) elements.count.textContent = "";
       return;
     }
 
+    const filtered = term || activeFilters.technology.size || activeFilters.priceBand.size;
     if (elements.count) {
-      elements.count.textContent = term
+      elements.count.textContent = filtered
         ? `Showing ${list.length} of ${tests.length} tests`
         : `${tests.length} tests`;
     }
@@ -36,14 +60,21 @@ AVM.modules = AVM.modules || {};
       // figure for any future test priced before its franchise rate is
       // set.
       const hasSaving = t.franchise != null && t.b2b > t.franchise;
-      const pct = hasSaving ? Math.round(((t.b2b - t.franchise) / t.b2b) * 100) : 0;
+      const savingsAmt = hasSaving ? t.b2b - t.franchise : 0;
+      const pct = hasSaving ? Math.round((savingsAmt / t.b2b) * 100) : 0;
+      // Same two-line badge as the main rate list's Margin column
+      // (.cell-margin: amount on top, % below) — same design, just the
+      // amber "franchise" accent instead of the profit-blue "margin" one.
+      const saveBadge = hasSaving
+        ? `<span class="cell-margin is-franchise">${money(savingsAmt)}<small>${pct}%</small></span>`
+        : `<span class="fr-save--none">—</span>`;
       return `
         <div class="fr-row">
           <div><span class="cell-code">${esc(t.code)}</span></div>
           <div class="cell-name">${esc(t.name)}</div>
           <div class="cell-price"><span class="mobile-label">B2B Rate</span>${money(t.b2b)}</div>
           <div class="cell-price is-franchise"><span class="mobile-label">Franchise Rate</span>${t.franchise != null ? money(t.franchise) : "—"}</div>
-          <div><span class="mobile-label">You Save</span>${hasSaving ? `<span class="fr-save">Save ${pct}%</span>` : `<span class="fr-save fr-save--none">—</span>`}</div>
+          <div><span class="mobile-label">You Save</span>${saveBadge}</div>
         </div>`;
     }).join("");
   }

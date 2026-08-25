@@ -169,15 +169,37 @@
         <p>Every test on the rate list — B2B rate vs Franchise rate, side by side.</p>
       </div>
 
-      <div class="rl-toolbar">
+      <div class="rl-controls">
         <div class="rl-search">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
           <input type="text" id="franchiseRatesSearch" placeholder="Search by test name or code">
         </div>
-        <p class="rl-count" id="franchiseRatesCount"></p>
+        <button type="button" class="filters-toggle-btn" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Filters
+          <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
+        </button>
       </div>
 
-      <div class="fr-table">
+      <div class="filters-panel" id="filtersPanel" hidden>
+        <div class="filter-group">
+          <p class="filter-group__label">Technology</p>
+          <div class="rl-filters" id="filterTech"></div>
+        </div>
+        <div class="filter-group">
+          <p class="filter-group__label">Price</p>
+          <div class="rl-filters" id="filterPrice"></div>
+        </div>
+      </div>
+
+      <div class="rl-toolbar">
+        <p class="rl-count" id="franchiseRatesCount"></p>
+        <div class="rl-toolbar__actions">
+          <button type="button" class="view-more-btn" id="clearFilters">Clear filters</button>
+        </div>
+      </div>
+
+      <div class="rl-table fr-table">
         <div class="fr-head">
           <div>Code</div>
           <div>Test</div>

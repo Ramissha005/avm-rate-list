@@ -165,7 +165,7 @@ AVM.modules = AVM.modules || {};
               const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(esc).join(dot)}</p>`;
               return `
                 <div class="group-head__group">
-                  <span class="group-head__group-label">${esc(g.label)}</span>
+                  <span class="group-head__group-label">${esc(g.label)} (${names.length})</span>
                   ${body}
                 </div>`;
             }).join("")}</div>`

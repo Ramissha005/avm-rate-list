@@ -92,7 +92,7 @@ AVM.modules = AVM.modules || {};
         const body = names.length === 1 ? "" : `<p>${dotJoin(names, esc)}</p>`;
         return `
           <div class="fr-panel-details__group">
-            <span class="fr-panel-details__group-label">${esc(g.label)}</span>
+            <span class="fr-panel-details__group-label">${esc(g.label)} (${names.length})</span>
             ${body}
           </div>`;
       }).join("");

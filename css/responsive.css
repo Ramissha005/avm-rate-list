@@ -128,10 +128,10 @@
   }
 
   /* Panels view (see panels-table.js) — same card, one fewer field since
-     there's no code column: name (with its own "Show N tests included"
-     toggle) full-width, then the two rate cells, then the badge, then Add
-     to Profile. Needs .fr-panels-row (not just nth-child alone) to win
-     over the 6-field positions above at equal specificity. */
+     there's no code column: name (with its own "Tests included" toggle)
+     full-width, then the two rate cells, then the badge, then Add to
+     Profile. Needs .fr-panels-row (not just nth-child alone) to win over
+     the 6-field positions above at equal specificity. */
   .fr-panels-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* name */
   .fr-panels-row > *:nth-child(2){ grid-column:1; grid-row:2; }                     /* first rate */
   .fr-panels-row > *:nth-child(3){ grid-column:2; grid-row:2; }                     /* second rate */

@@ -24,7 +24,7 @@ window.AVM = window.AVM || {};
       sortSelect: $("sortSelect"),
     } : null;
 
-    // Individual Tests / Common Panels switch above the homepage rate
+    // Individual Tests / Profiles switch above the homepage rate
     // list — same "read which button carries .active" pattern the
     // Franchise page's own toggle uses (see franchise-rates.js).
     function rateListView() {
@@ -156,7 +156,7 @@ window.AVM = window.AVM || {};
     // Shared state.pageSize/currentPage, same as the main rate list — see
     // franchise-rates.js's header comment for why that's safe here.
     AVM.modules.pagination.wirePageSize($("franchiseRatesPageSize"), { onChange: refreshAll });
-    // Individual Tests / Common Panels switch — wired once here rather
+    // Individual Tests / Profiles switch — wired once here rather
     // than re-bound every render since the buttons themselves never
     // change, only which one carries .active (read straight back off the
     // DOM by whichever module owns that table's rendering — rate-list.js/

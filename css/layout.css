@@ -577,7 +577,7 @@ section{ padding:var(--space-20) 0; }
   grid-template-columns:minmax(0,1.9fr) 110px 130px 110px 54px;
 }
 
-/* Individual Tests vs Common Panels switch above the savings table (see
+/* Individual Tests vs Profiles switch above the savings table (see
    js/modules/franchise-rates.js) — a segmented control, not filter chips
    (.rl-filter), since it's picking the dataset itself rather than
    narrowing one. */

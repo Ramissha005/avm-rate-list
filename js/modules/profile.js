@@ -189,7 +189,7 @@ AVM.modules = AVM.modules || {};
       state.cartPackageOf.delete(code);
     });
     persistCart();
-    if (removed > 0) AVM.utils.helpers.showToast(`Removed ${pkg.name} panel from your profile`);
+    if (removed > 0) AVM.utils.helpers.showToast(`Removed ${pkg.name} from your profile`);
     return removed;
   }
 
@@ -349,7 +349,7 @@ AVM.modules = AVM.modules || {};
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
 
     if (items.length === 0) {
-      elements.body.innerHTML = `<p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a panel.</p>`;
+      elements.body.innerHTML = `<p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a profile.</p>`;
       elements.b2b.textContent = money(0);
       elements.b2c.textContent = money(0);
       elements.margin.textContent = money(0);
@@ -407,7 +407,7 @@ AVM.modules = AVM.modules || {};
               <span class="cart-group__title-text">${esc(group.pkg.name)}</span>
               <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""} · ${money(groupB2C)}</span>
             </button>
-            <button type="button" class="cart-group__remove" data-remove-pkg="${esc(group.pkg.id)}" aria-label="Remove ${esc(group.pkg.name)} panel">✕</button>
+            <button type="button" class="cart-group__remove" data-remove-pkg="${esc(group.pkg.id)}" aria-label="Remove ${esc(group.pkg.name)}">✕</button>
           </div>
           <div class="cart-group__items" ${collapsed ? "hidden" : ""}>${rows}${calcRows}</div>
         </div>`;

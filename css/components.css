@@ -608,14 +608,25 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   transition:background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
-.add-btn:hover{ background:var(--teal); color:#fff; transform:scale(1.06); }
+/* Hover only for a real pointer device (mouse/trackpad) — on a touch
+   screen, :hover activates on tap and then has nothing to clear it
+   (there's no mouse to leave), so it sticks until the next tap
+   elsewhere. Since this rule paints the exact same blue fill as
+   .add-btn.added below, an unguarded version made a just-removed
+   button (freshly re-rendered back to plain .add-btn, correctly not
+   "added") visually stay stuck blue on mobile — reading as if removing
+   never took effect, even though the underlying state was already
+   correct. */
+@media (hover: hover) and (pointer: fine) {
+  .add-btn:hover{ background:var(--teal); color:#fff; transform:scale(1.06); }
+  .add-btn.blocked:hover{ background:#fff; color:var(--ink-faint); transform:none; }
+}
 
 .add-btn.added{ background:var(--teal); color:#fff; }
 
 .add-btn.blocked{
   background:#fff; color:var(--ink-faint); border-color:var(--line); cursor:not-allowed; opacity:.65;
 }
-.add-btn.blocked:hover{ background:#fff; color:var(--ink-faint); transform:none; }
 
 .add-btn__label{ display:none; }
 

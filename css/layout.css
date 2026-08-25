@@ -51,6 +51,13 @@ button{ font-family:inherit; cursor:pointer; }
 
 .nav__links a:hover{ color:var(--navy); border-bottom-color:var(--amber); }
 
+/* The current page's own nav link — same amber underline hover already
+   gives any link, but permanent rather than needing the cursor sitting
+   on it, so there's always a "you are here" marker. Set per-page in
+   each page's own nav markup (aria-current="page", not just a class —
+   also tells assistive tech which link is the current one). */
+.nav__links a[aria-current="page"]{ color:var(--navy); border-bottom-color:var(--amber); }
+
 .nav__actions{ display:flex; align-items:center; gap:var(--space-2); flex:none; }
 
 /* ---------- Mobile nav toggle (hamburger) ----------

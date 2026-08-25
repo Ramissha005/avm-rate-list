@@ -504,7 +504,14 @@ AVM.modules = AVM.modules || {};
       elements.franchiseRow.style.display = "";
       if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
       const pct = Math.round(sum.franchiseSavingsPercentage);
-      if (elements.franchisePct) elements.franchisePct.textContent = `Save ${pct}%`;
+      // "Saving X%" on the Franchise page (elements.useFranchiseMargin)
+      // to match the hint sentence right below it ("You're saving X%
+      // as an AVMLabs Franchisee") — "Save X%" everywhere else, where
+      // it's a plain upsell nudge rather than something addressed at a
+      // visitor already weighing life as a franchisee.
+      if (elements.franchisePct) {
+        elements.franchisePct.textContent = elements.useFranchiseMargin ? `Saving ${pct}%` : `Save ${pct}%`;
+      }
       // Franchise page only (see franchise.html) — spells out the "you're
       // a franchisee" framing, since a visitor there is specifically
       // weighing that decision rather than just glancing at a nudge.

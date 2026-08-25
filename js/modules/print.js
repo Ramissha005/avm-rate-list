@@ -138,10 +138,14 @@ AVM.modules = AVM.modules || {};
         // its group header — the one price that covers every test (and
         // calculated extra) listed below it.
         const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
+        // Escaped per-name, then rejoined with a styled separator span —
+        // the dot needs its own markup (bold, blue) so it can't be part of
+        // a plain joined-and-escaped string.
+        const dot = `<span class="group-head__dot">·</span>`;
         const testNames = [
           ...group.items.map(t => cleanName(t.name)),
           ...(group.pkg.calculatedParams || []),
-        ].join(" · ");
+        ].map(esc).join(dot);
 
         return `
           <tr class="row-group-head">
@@ -150,7 +154,7 @@ AVM.modules = AVM.modules || {};
                 <span class="group-head__name">${esc(group.pkg.name)}</span>
                 <span class="group-head__price">${money(groupB2C)}</span>
               </div>
-              <p class="group-head__tests">${esc(testNames)}</p>
+              <p class="group-head__tests">${testNames}</p>
             </td>
           </tr>
         `;

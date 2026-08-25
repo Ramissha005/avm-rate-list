@@ -95,59 +95,66 @@ AVM.modules = AVM.modules || {};
 
     if (tbody) {
       // Grouped the same way the cart drawer groups its own list (see
-      // profile.js groupCartItems) — tests added as part of a common panel
-      // print under a "Panel Name · Price" heading row, tests added one at
-      // a time print as plain rows with no heading. Row numbering (#) stays
-      // continuous across the whole table; heading and calculated-param
-      // rows get no number.
+      // profile.js groupCartItems). A common panel prints as one compact
+      // block — heading + total price, then its tests as a plain "included"
+      // line — rather than a full priced row per test, since the panel
+      // price already covers all of them. Tests added one at a time (no
+      // package tag) still print as normal individually-priced rows, same
+      // as before. Row numbering (#) only counts those individual rows.
+      //
+      // The heading's colspan matches the number of columns actually
+      // visible (5 in customer view, 8 internally) rather than always 8 —
+      // a colspan cell that spans a *hidden* column can make the browser's
+      // table layout reserve width for that hidden column after all,
+      // stretching the row wider than the rest of the table.
+      const colCount = customerView ? 5 : 8;
+      // A test's own name often already ends in "(CODE)" (e.g. "Blood Urea
+      // Nitrogen (BUN)") — stripped here so the "tests included" line
+      // reads as plain names, same as the bundle-chip tooltip does.
+      const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+
       const groups = AVM.modules.profile.groupCartItems(items);
       let rowNum = 0;
       tbody.innerHTML = groups.map(group => {
-        const rows = group.items.map(t => {
-          rowNum++;
-          return `
-          <tr>
-            <td class="sr">${rowNum}</td>
-            <td class="c-code"><span class="code">${esc(t.code)}</span></td>
-            <td class="name">${esc(t.name)}</td>
-            <td class="tech">${esc(t.tech)}</td>
-            <td class="sample">${esc(t.sample)}</td>
-            <td class="num c-b2b">${money(t.b2b)}</td>
-            <td class="num">${money(t.b2c)}</td>
-            <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
-          </tr>
-        `;
-        }).join("");
-
-        // Individually added tests (no package tag) print as plain rows,
-        // no heading — same as the cart drawer.
-        if (!group.pkg) return rows;
+        // Individually added tests (no package tag) print as plain,
+        // individually-priced rows — no heading, no change from before.
+        if (!group.pkg) {
+          return group.items.map(t => {
+            rowNum++;
+            return `
+            <tr>
+              <td class="sr">${rowNum}</td>
+              <td class="c-code"><span class="code">${esc(t.code)}</span></td>
+              <td class="name">${esc(t.name)}</td>
+              <td class="tech">${esc(t.tech)}</td>
+              <td class="sample">${esc(t.sample)}</td>
+              <td class="num c-b2b">${money(t.b2b)}</td>
+              <td class="num">${money(t.b2c)}</td>
+              <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
+            </tr>
+          `;
+          }).join("");
+        }
 
         // The panel's own B2C total, same figure the cart drawer shows in
-        // its group header.
+        // its group header — the one price that covers every test (and
+        // calculated extra) listed below it.
         const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
-        const calcRows = (group.pkg.calculatedParams || []).map(name => `
-          <tr class="row-calc">
-            <td class="sr"></td>
-            <td class="c-code"></td>
-            <td class="name"><em>${esc(name)}</em></td>
-            <td class="tech" colspan="2">Calculated from the tests above</td>
-            <td class="num c-b2b"></td>
-            <td class="num">Included</td>
-            <td class="num c-margin"></td>
-          </tr>
-        `).join("");
+        const testNames = [
+          ...group.items.map(t => cleanName(t.name)),
+          ...(group.pkg.calculatedParams || []),
+        ].join(", ");
 
         return `
           <tr class="row-group-head">
-            <td colspan="8">
+            <td colspan="${colCount}">
               <div class="group-head">
                 <span class="group-head__name">${esc(group.pkg.name)}</span>
                 <span class="group-head__price">${money(groupB2C)}</span>
               </div>
+              <p class="group-head__tests">${esc(testNames)}</p>
             </td>
           </tr>
-          ${rows}${calcRows}
         `;
       }).join("");
     }

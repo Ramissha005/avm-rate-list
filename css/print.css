@@ -90,27 +90,26 @@ tbody tr{ break-inside:avoid; }
 .num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .profit{ color:var(--profit); font-weight:600; }
 
-/* Common-panel heading row — one per group from groupCartItems (see
-   print.js), sitting above that panel's own tests. The flex layout lives
-   on the inner div, not the <td> itself — a <td> with display:flex doesn't
-   reliably fill its column span. break-after:avoid is a best-effort nudge
-   to keep it from landing alone at the bottom of a printed page, split
-   from the rows it's introducing. */
+/* Common-panel block — one per group from groupCartItems (see print.js):
+   a "Panel Name · Price" heading bar over a single plain line listing
+   every test (and calculated extra) it includes, rather than a full
+   priced row per test — the panel price above already covers all of them.
+   The flex layout lives on the inner div, not the <td> itself — a <td>
+   with display:flex doesn't reliably fill its column span. The heading's
+   colspan is set in JS to match only the *visible* columns (see
+   print.js) — spanning a hidden column can make the browser's table
+   layout reserve width for it anyway, stretching the row wider than the
+   rest of the table. break-after:avoid is a best-effort nudge to keep the
+   block from splitting across a page break. */
 .row-group-head{ break-inside:avoid; break-after:avoid; }
-.row-group-head td{ padding:0; border-bottom:none; }
+.row-group-head td{ padding:0; border-bottom:1px solid var(--line); }
 .group-head{
   display:flex; align-items:center; justify-content:space-between; gap:8px;
   background:var(--profit-bg); padding:8px;
 }
 .group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
 .group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }
-
-/* A panel's calculated extra (eGFR, VLDL, …) — no code, no separate price
-   of its own, so it reads as "comes bundled in" rather than another
-   billable line. */
-.row-calc .name em{ font-style:italic; font-weight:500; color:var(--ink); }
-.row-calc .tech{ font-style:italic; color:var(--ink-faint); font-size:11px; }
-.row-calc .num{ color:var(--ink-faint); font-style:italic; }
+.group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
 
 tfoot tr{ break-inside:avoid; }
 tfoot td{

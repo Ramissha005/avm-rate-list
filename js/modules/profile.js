@@ -363,13 +363,24 @@ AVM.modules = AVM.modules || {};
     const groups = groupCartItems(items);
 
     elements.body.innerHTML = groups.map(group => {
-      const rows = group.items.map(t => `
+      const inGroup = !!group.pkg;
+      // Customer copy never shows the internal test code — a customer
+      // needs the test's name and what it costs, not "BUN". Once a test is
+      // part of a labeled panel, its price is shown once at the panel
+      // level instead (see cart-group__meta below), so grouped rows carry
+      // no per-item detail line at all in customer view.
+      const rows = group.items.map(t => {
+        const detail = customerView
+          ? (inGroup ? "" : `<small>${money(t.b2c)}</small>`)
+          : `<small>${esc(t.code)} · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}</small>`;
+        return `
         <div class="cart-item">
-          <div class="cart-item__name">${esc(t.name)}<small>${esc(t.code)}${customerView ? ` · Price ${money(t.b2c)}` : ` · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}`}</small></div>
+          <div class="cart-item__name">${esc(t.name)}${detail}</div>
           ${customerView ? "" : `<div class="cart-item__margin">+${money(t.b2c - t.b2b)}</div>`}
           <button type="button" class="cart-item__remove" data-code="${esc(t.code)}" aria-label="Remove ${esc(t.name)}">✕</button>
         </div>
-      `).join("");
+      `;
+      }).join("");
 
       // Individually added tests (no package tag) are never grouped under a
       // heading — they're just plain rows, added and removed one at a time.
@@ -378,6 +389,10 @@ AVM.modules = AVM.modules || {};
       const groupKey = group.pkg.id;
       const collapsed = !state.expandedGroups.has(groupKey);
       const testCount = AVM.modules.calculations.packageTestCount(group.pkg);
+      // The panel's own B2C total, shown once in the header — see rows
+      // above, which rely on this instead of repeating a price on every
+      // line inside the panel.
+      const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
       const calcRows = (group.pkg.calculatedParams || []).map(name => `
         <div class="cart-item cart-item--calc">
           <div class="cart-item__name">${esc(name)}<small>Calculated from the tests above</small></div>
@@ -390,7 +405,7 @@ AVM.modules = AVM.modules || {};
             <button type="button" class="cart-group__title" data-toggle-group="${esc(groupKey)}" aria-expanded="${!collapsed}">
               <span class="cart-group__chevron" aria-hidden="true">▾</span>
               <span class="cart-group__title-text">${esc(group.pkg.name)}</span>
-              <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""}</span>
+              <span class="cart-group__meta">${testCount} test${testCount !== 1 ? "s" : ""} · ${money(groupB2C)}</span>
             </button>
             <button type="button" class="cart-group__remove" data-remove-pkg="${esc(group.pkg.id)}" aria-label="Remove ${esc(group.pkg.name)} panel">✕</button>
           </div>

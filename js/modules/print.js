@@ -86,7 +86,7 @@ AVM.modules = AVM.modules || {};
       tbody.innerHTML = items.map((t, i) => `
         <tr>
           <td class="sr">${i + 1}</td>
-          <td><span class="code">${esc(t.code)}</span></td>
+          <td class="c-code"><span class="code">${esc(t.code)}</span></td>
           <td class="name">${esc(t.name)}</td>
           <td class="tech">${esc(t.tech)}</td>
           <td class="sample">${esc(t.sample)}</td>

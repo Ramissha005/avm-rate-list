@@ -131,9 +131,12 @@ tfoot .profit{ color:var(--profit); }
 .foot p + p{ margin-top:3px; }
 .foot__brand{ font-weight:600; color:var(--ink-soft) !important; }
 
-/* ================= CUSTOMER COPY (hide B2B cost & margin) ================= */
+/* ================= CUSTOMER COPY (hide B2B cost, margin & test codes) ================= */
+/* Test codes (BUN, SCRE, …) are internal shorthand — a customer copy just
+   needs the test's name, not its code. */
 .sheet.customer-view .c-b2b,
-.sheet.customer-view .c-margin{ display:none !important; }
+.sheet.customer-view .c-margin,
+.sheet.customer-view .c-code{ display:none !important; }
 
 /* ================= SCREEN-ONLY TOOLBAR ================= */
 .toolbar{

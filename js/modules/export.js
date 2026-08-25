@@ -18,8 +18,10 @@ AVM.modules = AVM.modules || {};
     }
     const customerView = state.customerView;
 
+    // Customer copy drops the internal test code (BUN, SCRE, …) — a
+    // customer needs the test's name and price, not its internal shorthand.
     const lines = items.map(t => customerView
-      ? `${t.name} (${t.code}) — B2C ${money(t.b2c)}`
+      ? `${t.name} — B2C ${money(t.b2c)}`
       : `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
     const sum = AVM.modules.calculations.totals(items);
     // The manually-entered customer-copy discount (see profile.js) — only
@@ -81,8 +83,10 @@ AVM.modules = AVM.modules || {};
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
       subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${customerDiscountNote}`,
+      // Code is internal shorthand (BUN, SCRE, …) — left out of the
+      // customer copy's columns entirely, same as Copy List and Print.
       columns: [
-        { header: "Code", key: "code", type: "text", width: 12 },
+        ...(customerView ? [] : [{ header: "Code", key: "code", type: "text", width: 12 }]),
         { header: "Test", key: "name", type: "text", width: 36 },
         { header: "Technology", key: "tech", type: "text", width: 20 },
         { header: "Sample", key: "sample", type: "text", width: 12 },

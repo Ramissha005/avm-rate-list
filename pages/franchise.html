@@ -316,11 +316,17 @@
              with a cart drawer keeps B2B Cost first (see index.html/crl.
              html/sarc.html) — this reordering is franchise.html-only. -->
         <div class="franchise-box" id="cartFranchiseRow" style="display:none">
-          <div class="franchise-box__info">
-            <span class="franchise-box__label"><span class="franchise-box__dot" aria-hidden="true"></span>Franchise Rate</span>
-            <div class="franchise-box__amount" id="cartFranchiseAmt">₹0</div>
+          <div class="franchise-box__top">
+            <div class="franchise-box__info">
+              <span class="franchise-box__label"><span class="franchise-box__dot" aria-hidden="true"></span>Franchise Rate</span>
+              <div class="franchise-box__amount" id="cartFranchiseAmt">₹0</div>
+            </div>
+            <span class="franchise-box__pct" id="cartFranchisePct">Save 0%</span>
           </div>
-          <span class="franchise-box__pct" id="cartFranchisePct">Save 0%</span>
+          <!-- Franchise-page-only: spell out the "you're a franchisee"
+               framing since a visitor here is specifically weighing that
+               decision — see profile.js for the text it's filled with. -->
+          <p class="franchise-box__hint" id="cartFranchiseHint"></p>
         </div>
         <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
         <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>

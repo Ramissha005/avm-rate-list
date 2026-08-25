@@ -495,7 +495,14 @@ AVM.modules = AVM.modules || {};
     if (!customerView && sum.franchiseSavings > 0 && elements.franchiseRow) {
       elements.franchiseRow.style.display = "";
       if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
-      if (elements.franchisePct) elements.franchisePct.textContent = `Save ${Math.round(sum.franchiseSavingsPercentage)}%`;
+      const pct = Math.round(sum.franchiseSavingsPercentage);
+      if (elements.franchisePct) elements.franchisePct.textContent = `Save ${pct}%`;
+      // Franchise page only (see franchise.html) — spells out the "you're
+      // a franchisee" framing, since a visitor there is specifically
+      // weighing that decision rather than just glancing at a nudge.
+      if (elements.franchiseHint) {
+        elements.franchiseHint.textContent = `You're saving ${pct}% as an AVMLabs Franchisee.`;
+      }
     }
   }
 

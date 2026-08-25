@@ -45,6 +45,7 @@ window.AVM = window.AVM || {};
       cartActions: $("cartActions"),
       msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
       franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"),
+      franchiseHint: $("cartFranchiseHint"),
       onChange: refreshAll,
     } : null;
 

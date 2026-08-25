@@ -929,18 +929,23 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    (colored panel, left accent bar, big bold amount), in the amber family
    instead of profit-blue so it reads as its own kind of callout rather
    than a second margin box. Shown between the MSB row and B2C Value only
-   when there's a genuine saving to point at — no supporting copy
-   underneath, the box speaks for itself.
-   Laid out as one row — label+amount stacked on the left, the "Save X%"
-   pill sized up and vertically centered on the right (not pinned to the
-   label line) so it reads as a real badge, not a small corner tag. */
+   when there's a genuine saving to point at.
+   .franchise-box__top holds the original single row — label+amount
+   stacked on the left, the "Save X%" pill sized up and vertically
+   centered on the right (not pinned to the label line) so it reads as a
+   real badge, not a small corner tag. The box itself is block-level (not
+   flex) so a .franchise-box__hint caption can sit below that row — used
+   only on the Franchise page (see franchise.html), where the pitch calls
+   for spelling out "you're saving X% as a Franchisee" rather than letting
+   the box speak for itself like it does everywhere else. */
 .franchise-box{
   position:relative; overflow:hidden;
-  display:flex; align-items:center; justify-content:space-between; gap:var(--space-3);
   background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
   margin:var(--space-2) 0 var(--space-3);
 }
 .franchise-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
+.franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-3); }
+.franchise-box__hint{ margin:8px 0 0; font-size:var(--text-sm); font-weight:600; color:var(--amber-dark); }
 .franchise-box__info{ min-width:0; }
 .franchise-box__label{
   display:flex; align-items:center; gap:6px; font-size:var(--text-2xs); font-weight:700; color:var(--amber-dark);

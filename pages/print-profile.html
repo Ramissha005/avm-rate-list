@@ -42,14 +42,6 @@
         </tr>
       </thead>
       <tbody id="printBody"></tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5" class="foot-label">Total — <b id="printCount">0 tests</b></td>
-          <td class="num c-b2b" id="printTotalB2B"></td>
-          <td class="num" id="printTotalB2C"></td>
-          <td class="num profit c-margin" id="printTotalMargin"></td>
-        </tr>
-      </tfoot>
     </table>
 
     <div class="summary">
@@ -143,10 +135,6 @@
   const printElements = {
     tbody: document.getElementById("printBody"),
     dateEl: document.getElementById("printDate"),
-    countEl: document.getElementById("printCount"),
-    totalB2BEl: document.getElementById("printTotalB2B"),
-    totalB2CEl: document.getElementById("printTotalB2C"),
-    totalMarginEl: document.getElementById("printTotalMargin"),
     sumB2BEl: document.getElementById("sumB2B"),
     sumB2CEl: document.getElementById("sumB2C"),
     sumMarginEl: document.getElementById("sumMargin"),

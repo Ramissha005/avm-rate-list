@@ -48,13 +48,11 @@ AVM.modules = AVM.modules || {};
   let cachedItems = null;
 
   async function renderPrintPage({
-    tbody, dateEl, totalB2BEl, totalB2CEl, totalMarginEl,
-    countEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
+    tbody, dateEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
     sumB2CLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
     contentEl, emptyEl, sheetEl, titleEl, autoPrint,
   }, customerViewOverride) {
     const money = AVM.utils.formatters.money;
-    const pluralize = AVM.utils.formatters.pluralize;
     const esc = AVM.utils.formatters.escapeHtml;
 
     if (!cachedItems) {
@@ -159,16 +157,8 @@ AVM.modules = AVM.modules || {};
       }).join("");
     }
 
-    // The table's own rows list each test's raw B2B/margin, so its footer
-    // total stays raw too (it's a plain sum of what's printed above it).
-    if (totalB2BEl) totalB2BEl.textContent = money(sum.b2b);
-    if (totalB2CEl) totalB2CEl.textContent = money(sum.b2c);
-    if (totalMarginEl) totalMarginEl.textContent = "+" + money(sum.margin);
-    if (countEl) countEl.textContent = pluralize(items.length, "test");
-
-    // Unlike the table footer above (raw, row-matching), this summary card
-    // is the actual billable B2B cost: MSB-adjusted, floored at ₹25 per
-    // sample type.
+    // The summary card below is the actual billable B2B cost: MSB-adjusted,
+    // floored at ₹25 per sample type.
     if (sumB2BEl) sumB2BEl.textContent = money(sum.msbB2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);

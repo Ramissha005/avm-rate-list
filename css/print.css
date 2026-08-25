@@ -68,7 +68,9 @@ body{
    instead of letting the visible columns fill the table. Fixed layout
    has no such ambiguity: a column not given any width here simply has
    none. */
-table{ width:100%; border-collapse:collapse; table-layout:fixed; }
+/* border-bottom closes the table off now that there's no tfoot totals row
+   (removed — the summary cards below are the one place totals show). */
+table{ width:100%; border-collapse:collapse; table-layout:fixed; border-bottom:2px solid var(--navy); }
 colgroup .c-sr{ width:4%; }
 colgroup .c-code{ width:11%; }
 colgroup .c-name{ width:29%; }
@@ -133,15 +135,6 @@ tbody tr{ break-inside:avoid; }
 .group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
 .group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }
 .group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
-
-tfoot tr{ break-inside:avoid; }
-tfoot td{
-  padding:12px 8px 4px; font-size:12.5px; font-weight:700; color:var(--navy);
-  border-top:2px solid var(--navy); border-bottom:none;
-}
-tfoot .foot-label{ font-weight:600; color:var(--ink-soft); text-transform:none; }
-tfoot .foot-label b{ color:var(--navy); }
-tfoot .profit{ color:var(--profit); }
 
 /* ================= SUMMARY STRIP ================= */
 .summary{
@@ -258,6 +251,5 @@ tfoot .profit{ color:var(--profit); }
   .sheet{ box-shadow:none; border-radius:0; padding:0; max-width:none; }
   .no-print{ display:none !important; }
   thead{ display:table-header-group; }
-  tfoot{ display:table-row-group; }
   tr{ break-inside:avoid; }
 }

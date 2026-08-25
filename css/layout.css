@@ -442,10 +442,17 @@ section{ padding:var(--space-20) 0; }
 
 .ratelist{ background:var(--paper-2); }
 
+/* Individual Tests/Panels toggle + the search/filter/sort bar stick
+   together as one unit while scrolling (see index.html/franchise.html —
+   .fr-view-toggle and .rl-controls sit inside this wrapper) — sticky
+   lives on the wrapper itself rather than on each piece separately with
+   two hand-tuned top offsets that would drift apart if either one's own
+   height ever changed. */
+.fr-sticky-controls{ position:sticky; top:64px; z-index:40; }
+
 .rl-controls{
   display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center; justify-content:space-between;
   background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-4); margin-bottom:var(--space-6);
-  position:sticky; top:64px; z-index:40;
   box-shadow:0 10px 24px -18px rgba(14,34,56,0.35);
 }
 

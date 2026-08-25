@@ -171,36 +171,41 @@
 
       <!-- Individual tests vs whole common panels — two different datasets
            (js/modules/franchise-rates.js), so Filters/Sort/page size only
-           make sense for Tests and are hidden in Panels view (see there). -->
-      <div class="fr-view-toggle" id="franchiseViewToggle">
-        <button type="button" class="fr-view-toggle__btn active" data-view="tests">Individual Tests</button>
-        <button type="button" class="fr-view-toggle__btn" data-view="profiles">Common Panels</button>
-      </div>
-
-      <div class="rl-controls">
-        <div class="rl-search">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input type="text" id="franchiseRatesSearch" placeholder="Search by test name or code">
+           make sense for Tests and are hidden in Panels view (see there).
+           Wrapped with .rl-controls in .fr-sticky-controls so the toggle
+           and the search/filter/sort bar stick together as one unit
+           while scrolling — see layout.css. -->
+      <div class="fr-sticky-controls">
+        <div class="fr-view-toggle" id="franchiseViewToggle">
+          <button type="button" class="fr-view-toggle__btn active" data-view="tests">Individual Tests</button>
+          <button type="button" class="fr-view-toggle__btn" data-view="profiles">Profiles</button>
         </div>
-        <button type="button" class="filters-toggle-btn" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          Filters
-          <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
-        </button>
-        <div class="rl-right">
-          <div class="rl-sort" id="franchiseSortWrap">
-            <select id="franchiseRatesSort">
-              <option value="savings-desc">Sort: Savings High to Low</option>
-              <option value="savings-asc">Savings: Low to High</option>
-              <option value="name">Name A–Z</option>
-              <option value="b2b-asc">B2B: Low to High</option>
-              <option value="b2b-desc">B2B: High to Low</option>
-              <option value="franchise-asc">Franchise: Low to High</option>
-              <option value="franchise-desc">Franchise: High to Low</option>
-            </select>
+
+        <div class="rl-controls">
+          <div class="rl-search">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="franchiseRatesSearch" placeholder="Search by test name or code">
           </div>
-          <div class="rl-sort" id="franchisePageSizeWrap">
-            <select id="franchiseRatesPageSize"></select>
+          <button type="button" class="filters-toggle-btn" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Filters
+            <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
+          </button>
+          <div class="rl-right">
+            <div class="rl-sort" id="franchiseSortWrap">
+              <select id="franchiseRatesSort">
+                <option value="savings-desc">Sort: Savings High to Low</option>
+                <option value="savings-asc">Savings: Low to High</option>
+                <option value="name">Name A–Z</option>
+                <option value="b2b-asc">B2B: Low to High</option>
+                <option value="b2b-desc">B2B: High to Low</option>
+                <option value="franchise-asc">Franchise: Low to High</option>
+                <option value="franchise-desc">Franchise: High to Low</option>
+              </select>
+            </div>
+            <div class="rl-sort" id="franchisePageSizeWrap">
+              <select id="franchiseRatesPageSize"></select>
+            </div>
           </div>
         </div>
       </div>

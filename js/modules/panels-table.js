@@ -71,8 +71,8 @@ AVM.modules = AVM.modules || {};
     if (elements.head) {
       elements.head.className = "fr-head fr-panels-head";
       elements.head.innerHTML = priceMode === "franchise"
-        ? `<div>Panel</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-        : `<div>Panel</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+        ? `<div>Profile</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
+        : `<div>Profile</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
@@ -102,7 +102,7 @@ AVM.modules = AVM.modules || {};
     if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
 
     if (rows.length === 0) {
-      elements.body.innerHTML = `<div class="fr-empty">No panels match that search/filter.</div>`;
+      elements.body.innerHTML = `<div class="fr-empty">No profiles match that search/filter.</div>`;
       if (elements.count) elements.count.textContent = "";
       return;
     }
@@ -110,8 +110,8 @@ AVM.modules = AVM.modules || {};
     if (elements.count) {
       const filtered = term || activeTech.size;
       elements.count.textContent = filtered
-        ? `Showing ${rows.length} of ${packages.length} panels`
-        : `${rows.length} panel${rows.length !== 1 ? "s" : ""}`;
+        ? `Showing ${rows.length} of ${packages.length} profiles`
+        : `${rows.length} profile${rows.length !== 1 ? "s" : ""}`;
     }
 
     elements.body.innerHTML = rows.map(({ pkg, items, sum }) => {
@@ -119,7 +119,7 @@ AVM.modules = AVM.modules || {};
       const btnClass = "add-btn" + (isAdded ? " added" : "");
       const btnLabel = isAdded ? "Added" : "Add to Profile";
       const btnIcon = isAdded ? "✓" : "+";
-      const btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="${isAdded ? "Remove" : "Add"} ${esc(pkg.name)} panel"`;
+      const btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="${isAdded ? "Remove" : "Add"} ${esc(pkg.name)}"`;
       const isOpen = expanded.has(pkg.id);
 
       const priceCells = priceMode === "franchise"

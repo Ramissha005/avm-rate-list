@@ -227,7 +227,7 @@
   /* The frozen search bar's top offset tracks the header's real height —
      it shrinks here as the logo drops to 36px and the hamburger button
      (38px) becomes the tallest element in the row. */
-  .rl-controls{ top:60px; }
+  .fr-sticky-controls{ top:60px; }
 
   .section-head{ margin-bottom:var(--space-6); }
   .lab-stats{ gap:var(--space-5); }

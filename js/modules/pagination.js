@@ -10,20 +10,22 @@ AVM.modules = AVM.modules || {};
   // still scrolled to the bottom, with the new page's own start scrolled
   // out of view above.
   //
-  // scrollIntoView() on .rl-controls itself doesn't fix this: it's
+  // scrollIntoView() on .fr-sticky-controls itself doesn't fix this: it's
   // position:sticky, so once you've scrolled past it it's already sitting
   // pinned near the top of the viewport — the browser sees it as "already
   // in view" and barely scrolls at all. Targeting .rl-toolbar (the
   // "Showing X-Y of Z" line right above the rows, not itself sticky) with
   // scroll-margin-top set to the two stacked sticky bars' combined height
-  // (site nav + .rl-controls) lets the browser's own scrollIntoView
-  // algorithm do the positioning — more robust than computing an absolute
+  // (site nav + .fr-sticky-controls, which itself now stacks the Tests/
+  // Panels toggle above the search/filter/sort bar as one sticky unit —
+  // see layout.css) lets the browser's own scrollIntoView algorithm do
+  // the positioning — more robust than computing an absolute
   // window.scrollTo() target by hand, which can fight the browser's own
   // scroll-anchoring (CSS overflow-anchor) mid-animation and land somewhere
   // other than intended, including all the way up at the top of the page.
   function scrollToListTop() {
     const anchor = document.querySelector(".rl-toolbar");
-    const controls = document.querySelector(".rl-controls");
+    const controls = document.querySelector(".fr-sticky-controls");
     if (!anchor) return;
     const stickyHeight = controls
       ? controls.getBoundingClientRect().height + (parseFloat(getComputedStyle(controls).top) || 0)

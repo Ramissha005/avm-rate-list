@@ -155,13 +155,15 @@ AVM.modules = AVM.modules || {};
     if (!elements || !elements.body) return;
     const view = currentView(elements);
 
-    // Sort/page size are Tests-only (no equivalent sort options for
-    // panels, and the panel list is short enough to show in full) —
-    // hidden while Panels is active. Filters stays available in both
-    // views: Technology filtering applies to panels too (see
-    // panels-table.js — a panel matches if any of its tests use a
-    // selected technology).
-    if (elements.sortWrap) elements.sortWrap.style.display = view === "profiles" ? "none" : "";
+    // Filters and page size are Tests-only — hidden while Panels is
+    // active (Technology filtering doesn't map cleanly to a panel that
+    // can span mixed technologies, and the panel list is short enough to
+    // show in full with no pagination). Sort stays available in both
+    // views — the same options (Savings/Name/B2B/Franchise) apply just
+    // as well to a panel's aggregate totals as to a single test's (see
+    // panels-table.js's own sorter map).
+    if (elements.filtersToggleBtn) elements.filtersToggleBtn.style.display = view === "profiles" ? "none" : "";
+    if (elements.pageSizeWrap) elements.pageSizeWrap.style.display = view === "profiles" ? "none" : "";
 
     if (view === "profiles") {
       // Shared with the homepage's own Panels view — see panels-table.js.

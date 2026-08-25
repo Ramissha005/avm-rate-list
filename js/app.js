@@ -21,6 +21,7 @@ window.AVM = window.AVM || {};
       count: $("rlCount"),
       paginationWrap: $("paginationWrap"),
       searchInput: $("searchInput"),
+      sortSelect: $("sortSelect"),
     } : null;
 
     // Individual Tests / Common Panels switch above the homepage rate
@@ -42,7 +43,8 @@ window.AVM = window.AVM || {};
       sortSelect: $("franchiseRatesSort"),
       paginationWrap: $("franchiseRatesPagination"),
       viewToggle: $("franchiseViewToggle"),
-      sortWrap: $("franchiseRatesSortWrap"),
+      filtersToggleBtn: $("filtersToggleBtn"),
+      pageSizeWrap: $("franchisePageSizeWrap"),
     } : null;
 
     const hasCart = !!$("cartBody");
@@ -70,18 +72,21 @@ window.AVM = window.AVM || {};
     function refreshAll() {
       if (hasRateList) {
         const view = rateListView();
-        // Sort/page size and the Code/Technology/Sample columns are
-        // Tests-only — hidden while Panels is active (no equivalent sort
-        // options for panels, and the panel list is short enough to show
-        // in full), and the two header rows swap so a panel's "Panel" +
-        // test-count columns show instead of a test's Code/Technology/
-        // Sample ones (see index.html — rate-list.js never touches the
-        // head itself, unlike franchise-rates.js's single dynamic one).
-        // Filters stays available in both views — Technology filtering
-        // applies to panels too (see panels-table.js).
+        // Filters and page size are Tests-only — hidden while Panels is
+        // active (Technology doesn't map cleanly to a panel that can span
+        // mixed technologies, and the panel list is short enough to show
+        // in full with no pagination), and the two header rows swap so a
+        // panel's "Panel" + test-count columns show instead of a test's
+        // Code/Technology/Sample ones (see index.html — rate-list.js
+        // never touches the head itself, unlike franchise-rates.js's
+        // single dynamic one). Sort stays available in both views — the
+        // same options (Default/Name/B2B/B2C/Margin) apply just as well
+        // to a panel's aggregate totals as to a single test's (see
+        // panels-table.js's own sorter map).
         if ($("rlHeadTests")) $("rlHeadTests").style.display = view === "profiles" ? "none" : "";
         if ($("rlHeadPanels")) $("rlHeadPanels").style.display = view === "profiles" ? "" : "none";
-        if ($("rateListSortWrap")) $("rateListSortWrap").style.display = view === "profiles" ? "none" : "";
+        if ($("filtersToggleBtn")) $("filtersToggleBtn").style.display = view === "profiles" ? "none" : "";
+        if ($("pageSizeWrap")) $("pageSizeWrap").style.display = view === "profiles" ? "none" : "";
         if (view === "profiles") {
           AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll, priceMode: "margin" });
         } else {

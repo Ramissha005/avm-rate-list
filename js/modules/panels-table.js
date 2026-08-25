@@ -26,7 +26,35 @@ AVM.modules = AVM.modules || {};
   // Both totals come from the same calculations.js totals() the cart
   // drawer's own Franchise box and Margin box are built on, so a panel's
   // numbers here match what it'd actually cost added to a profile.
+  //
+  // Sort reuses each page's existing Sort control (elements.sortSelect —
+  // #sortSelect on the homepage, #franchiseRatesSort on the Franchise
+  // page) rather than a separate dropdown just for panels: the same
+  // options (Default/Name/B2B/B2C/Margin, or Savings/Name/B2B/Franchise)
+  // read just as naturally against a panel's aggregate totals as they do
+  // against a single test's — see the two sorter maps below, keyed by the
+  // exact same option values each <select>'s markup already uses.
   const expanded = new Set();
+
+  const MARGIN_SORTERS = {
+    name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
+    "b2b-asc": (a, b) => a.sum.msbB2b - b.sum.msbB2b,
+    "b2b-desc": (a, b) => b.sum.msbB2b - a.sum.msbB2b,
+    "b2c-asc": (a, b) => a.sum.b2c - b.sum.b2c,
+    "b2c-desc": (a, b) => b.sum.b2c - a.sum.b2c,
+    "margin-desc": (a, b) => (b.sum.b2c - b.sum.msbB2b) - (a.sum.b2c - a.sum.msbB2b),
+    "margin-asc": (a, b) => (a.sum.b2c - a.sum.msbB2b) - (b.sum.b2c - b.sum.msbB2b),
+  };
+
+  const FRANCHISE_SORTERS = {
+    "savings-desc": (a, b) => b.sum.franchiseSavingsPercentage - a.sum.franchiseSavingsPercentage,
+    "savings-asc": (a, b) => a.sum.franchiseSavingsPercentage - b.sum.franchiseSavingsPercentage,
+    name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
+    "b2b-asc": (a, b) => a.sum.msbB2b - b.sum.msbB2b,
+    "b2b-desc": (a, b) => b.sum.msbB2b - a.sum.msbB2b,
+    "franchise-asc": (a, b) => a.sum.msbFranchise - b.sum.msbFranchise,
+    "franchise-desc": (a, b) => b.sum.msbFranchise - a.sum.msbFranchise,
+  };
 
   function testNamesLine(pkg, items, esc) {
     const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
@@ -60,12 +88,15 @@ AVM.modules = AVM.modules || {};
         return true;
       });
 
-    // Biggest-saving-first for the franchise pitch; catalog order otherwise
-    // (matches the order common panels appear everywhere else on the
-    // homepage, e.g. the old bundle-chip row).
-    if (priceMode === "franchise") {
-      rows.sort((a, b) => b.sum.franchiseSavingsPercentage - a.sum.franchiseSavingsPercentage);
-    }
+    // No sort selected (homepage's "Sort: Default", or no #sortSelect at
+    // all) leaves rows in catalog order — same as every other panel
+    // listing on the site (the old bundle-chip row included). The
+    // Franchise page's own default ("Savings: High to Low") comes from
+    // its <select>'s own default-selected option, same as any other
+    // choice there.
+    const sortMode = (elements.sortSelect && elements.sortSelect.value) || "";
+    const sorters = priceMode === "franchise" ? FRANCHISE_SORTERS : MARGIN_SORTERS;
+    if (sorters[sortMode]) rows.sort(sorters[sortMode]);
 
     if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
 

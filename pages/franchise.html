@@ -169,6 +169,14 @@
         <p>Every test on the rate list — B2B rate vs Franchise rate, side by side.</p>
       </div>
 
+      <!-- Individual tests vs whole common panels — two different datasets
+           (js/modules/franchise-rates.js), so Filters/Sort/page size only
+           make sense for Tests and are hidden in Panels view (see there). -->
+      <div class="fr-view-toggle" id="franchiseViewToggle">
+        <button type="button" class="fr-view-toggle__btn active" data-view="tests">Individual Tests</button>
+        <button type="button" class="fr-view-toggle__btn" data-view="profiles">Common Panels</button>
+      </div>
+
       <div class="rl-controls">
         <div class="rl-search">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
@@ -179,7 +187,7 @@
           Filters
           <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
         </button>
-        <div class="rl-right">
+        <div class="rl-right" id="franchiseRatesSortWrap">
           <div class="rl-sort">
             <select id="franchiseRatesSort">
               <option value="savings-desc">Sort: Savings High to Low</option>
@@ -212,14 +220,7 @@
       </div>
 
       <div class="rl-table fr-table">
-        <div class="fr-head">
-          <div>Code</div>
-          <div>Test</div>
-          <div>B2B Rate</div>
-          <div>Franchise Rate</div>
-          <div>You Save</div>
-          <div></div>
-        </div>
+        <div class="fr-head" id="franchiseRatesHead"></div>
         <div id="franchiseRatesBody"></div>
       </div>
 

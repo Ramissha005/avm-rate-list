@@ -559,6 +559,22 @@ section{ padding:var(--space-20) 0; }
 .fr-row:last-child{ border-bottom:none; }
 .fr-row:hover{ background:#F4F5F6; }
 
+/* Individual Tests vs Common Panels switch above the savings table (see
+   js/modules/franchise-rates.js) — a segmented control, not filter chips
+   (.rl-filter), since it's picking the dataset itself rather than
+   narrowing one. */
+.fr-view-toggle{
+  display:inline-flex; background:var(--paper-2); border-radius:var(--radius-full);
+  padding:4px; gap:4px; margin-bottom:var(--space-4);
+}
+.fr-view-toggle__btn{
+  font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; color:var(--ink-soft);
+  background:none; border:none; border-radius:var(--radius-full); padding:9px 20px; cursor:pointer;
+  transition:background var(--transition-fast), color var(--transition-fast);
+}
+.fr-view-toggle__btn:hover{ color:var(--ink); }
+.fr-view-toggle__btn.active{ background:var(--navy); color:#fff; }
+
 footer{ background:var(--navy); color:#B9C7D1; padding:var(--space-14) 0 var(--space-7); }
 .footer__top{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:var(--space-10); margin-bottom:var(--space-10); }
 .footer__brand p{ margin-top:var(--space-3); font-size:var(--text-sm); color:#93A6B4; max-width:34ch; }

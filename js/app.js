@@ -25,10 +25,14 @@ window.AVM = window.AVM || {};
     const hasFranchiseRates = !!$("franchiseRatesBody");
     const franchiseRatesElements = hasFranchiseRates ? {
       body: $("franchiseRatesBody"),
+      head: $("franchiseRatesHead"),
       count: $("franchiseRatesCount"),
       searchInput: $("franchiseRatesSearch"),
       sortSelect: $("franchiseRatesSort"),
       paginationWrap: $("franchiseRatesPagination"),
+      viewToggle: $("franchiseViewToggle"),
+      filtersToggleBtn: $("filtersToggleBtn"),
+      sortWrap: $("franchiseRatesSortWrap"),
     } : null;
 
     const hasCart = !!$("cartBody");
@@ -61,7 +65,7 @@ window.AVM = window.AVM || {};
         AVM.modules.profile.renderCart(cartElements);
       }
       if (hasFranchiseRates) {
-        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, elements: franchiseRatesElements, onChange: refreshAll });
+        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, packages: catalog.packages, elements: franchiseRatesElements, onChange: refreshAll });
       }
       // Bundle chips flip to their "✓ in profile" state once fully added, so
       // they need to re-render on every cart change, not just once at init.
@@ -125,6 +129,20 @@ window.AVM = window.AVM || {};
     // Shared state.pageSize/currentPage, same as the main rate list — see
     // franchise-rates.js's header comment for why that's safe here.
     AVM.modules.pagination.wirePageSize($("franchiseRatesPageSize"), { onChange: refreshAll });
+    // Individual Tests / Common Panels switch — wired once here rather
+    // than re-bound every render since the two buttons themselves never
+    // change, only which one carries .active (read straight back off the
+    // DOM by franchise-rates.js, see its currentView()).
+    if ($("franchiseViewToggle")) {
+      $("franchiseViewToggle").querySelectorAll(".fr-view-toggle__btn").forEach(btn => {
+        btn.onclick = () => {
+          $("franchiseViewToggle").querySelectorAll(".fr-view-toggle__btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          AVM.state.currentPage = 1;
+          refreshAll();
+        };
+      });
+    }
     AVM.modules.testDetail.wireTestDetailDrawer();
 
     if ($("clearFilters")) {

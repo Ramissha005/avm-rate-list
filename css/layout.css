@@ -567,16 +567,22 @@ section{ padding:var(--space-20) 0; }
 .fr-row:hover{ background:#F4F5F6; }
 
 /* Panels table (see js/modules/panels-table.js) — same shell, but 6
-   columns (Profile, Tests, first rate, second rate, badge, Action)
-   instead of the Tests view's: no per-test code column, but its own
-   Tests count instead (packageTestCount() — every priced code plus any
-   calculated/derived parameters, e.g. AVM Profile A shows 36 even
-   though it's 26 priced codes). Needs both classes combined for
-   specificity over the plain .fr-head/.fr-row rule above. */
+   columns (Profile, Tests included, first rate, second rate, badge,
+   Action) instead of the Tests view's: no per-test code column, but
+   its own Tests-included count instead (packageTestCount() — every
+   priced code plus any calculated/derived parameters, e.g. AVM
+   Profile A shows 36 even though it's 26 priced codes). Needs both
+   classes combined for specificity over the plain .fr-head/.fr-row
+   rule above. */
 .fr-head.fr-panels-head,
 .fr-row.fr-panels-row{
-  grid-template-columns:minmax(0,1.7fr) 64px 110px 130px 110px 54px;
+  grid-template-columns:minmax(0,1.6fr) 84px 110px 130px 110px 54px;
 }
+
+/* "Tests included" is short enough to need centering over its number
+   below (.cell-testcount is centered too) rather than reading like a
+   left-aligned label over a centered value. */
+.fr-head.fr-panels-head > *:nth-child(2){ text-align:center; }
 
 /* Individual Tests vs Profiles switch above the savings table (see
    js/modules/franchise-rates.js) — a segmented control, not filter chips

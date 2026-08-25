@@ -110,8 +110,8 @@ AVM.modules = AVM.modules || {};
     if (elements.head) {
       elements.head.className = "fr-head fr-panels-head";
       elements.head.innerHTML = priceMode === "franchise"
-        ? `<div>Profile</div><div>Tests</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-        : `<div>Profile</div><div>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+        ? `<div>Profile</div><div>Tests included</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
+        : `<div>Profile</div><div>Tests included</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();

@@ -11,23 +11,15 @@ AVM.modules = AVM.modules || {};
   // action here — that's what the real rate list (rate-list.js) is for;
   // this one just makes the case.
   //
-  // Technology/Price filtering reuses the same state.activeFilters Sets
-  // (and the same #filterTech/#filterPrice chip UI) as the main rate
-  // list — this page never has that list on screen at the same time, so
-  // there's no risk of the two stepping on each other, and it means the
-  // Filters button just works here via app.js's existing generic wiring
-  // with no extra plumbing. Search is local to this table's own input,
-  // not the shared state.searchTerm the main list uses.
-  function inPriceBand(t, bandIds) {
-    return [...bandIds].some(bandId => {
-      const band = AVM.CONFIG.PRICE_BANDS.find(b => b.id === bandId);
-      if (!band) return false;
-      if (band.min != null && t.b2c < band.min) return false;
-      if (band.max != null && t.b2c > band.max) return false;
-      return true;
-    });
-  }
-
+  // Technology filtering reuses the same state.activeFilters.technology
+  // Set (and the same #filterTech chip UI) as the main rate list — this
+  // page never has that list on screen at the same time, so there's no
+  // risk of the two stepping on each other, and it means the Filters
+  // button just works here via app.js's existing generic wiring with no
+  // extra plumbing. Search is local to this table's own input, not the
+  // shared state.searchTerm the main list uses. Price filtering isn't
+  // offered here — franchise savings track a test's own price either way,
+  // not a band a customer would shop by.
   function renderFranchiseRates({ tests, elements }) {
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
@@ -36,7 +28,6 @@ AVM.modules = AVM.modules || {};
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
     const list = tests.filter(t => {
       if (activeFilters.technology.size && !activeFilters.technology.has(t.tech)) return false;
-      if (activeFilters.priceBand.size && !inPriceBand(t, activeFilters.priceBand)) return false;
       if (term && !`${t.name} ${t.code}`.toLowerCase().includes(term)) return false;
       return true;
     });
@@ -47,7 +38,7 @@ AVM.modules = AVM.modules || {};
       return;
     }
 
-    const filtered = term || activeFilters.technology.size || activeFilters.priceBand.size;
+    const filtered = term || activeFilters.technology.size;
     if (elements.count) {
       elements.count.textContent = filtered
         ? `Showing ${list.length} of ${tests.length} tests`

@@ -73,6 +73,7 @@ AVM.modules = AVM.modules || {};
   // like Kidney Profile itself) fall back to the plain flat line they've
   // always used — grouping a panel that IS the group would be redundant.
   function renderTestDetails(pkg, items, byCode, esc) {
+    const { packageTestCount } = AVM.modules.calculations;
     if (pkg.groups && pkg.groups.length) {
       // Each group carries its own calculatedParams (the same ratios its
       // matching standalone panel already lists — see data.js), folded
@@ -88,11 +89,18 @@ AVM.modules = AVM.modules || {};
       // left rail — just without a body line, since a one-item line
       // would only repeat the heading's own name.
       return pkg.groups.map(g => {
-        const names = [...g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
+        const resolved = g.codes.map(c => byCode[c]).filter(Boolean);
+        const names = [...resolved.map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
+        // The count in the heading is the same weighted packageTestCount()
+        // math the profile's own Test Count uses (a code like CBC reports
+        // more than one result on its own — see data.js's paramCount) —
+        // not just how many lines are listed below, which for CBC would
+        // undercount it as 1 instead of the real 21.
+        const count = packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
         const body = names.length === 1 ? "" : `<p>${dotJoin(names, esc)}</p>`;
         return `
           <div class="fr-panel-details__group">
-            <span class="fr-panel-details__group-label">${esc(g.label)} (${names.length})</span>
+            <span class="fr-panel-details__group-label">${esc(g.label)} (${count})</span>
             ${body}
           </div>`;
       }).join("");

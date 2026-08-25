@@ -158,14 +158,20 @@ AVM.modules = AVM.modules || {};
         // keep the original flat line.
         const testsMarkup = group.pkg.groups && group.pkg.groups.length
           ? `<div class="group-head__groups">${group.pkg.groups.map(g => {
+              const resolved = g.codes.map(c => byCode[c]).filter(Boolean);
               const names = [
-                ...g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanName(t.name)),
+                ...resolved.map(t => cleanName(t.name)),
                 ...(g.calculatedParams || []),
               ];
+              // Same weighted packageTestCount() math the profile's own
+              // Test Count uses (see panels-table.js) — a code like CBC
+              // reports more than one result on its own, so the heading's
+              // count isn't just how many lines are listed below it.
+              const count = AVM.modules.calculations.packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
               const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(esc).join(dot)}</p>`;
               return `
                 <div class="group-head__group">
-                  <span class="group-head__group-label">${esc(g.label)} (${names.length})</span>
+                  <span class="group-head__group-label">${esc(g.label)} (${count})</span>
                   ${body}
                 </div>`;
             }).join("")}</div>`

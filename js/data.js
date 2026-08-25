@@ -2407,6 +2407,8 @@ AVM.state = {
   { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC"],
     "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
+    "calculatedParams": [], "active": true },
+  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "general-biochemistry", "codes": ["AMYL", "LASE"],
     "calculatedParams": [], "active": true }
 ];
 

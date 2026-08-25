@@ -177,10 +177,29 @@ AVM.modules = AVM.modules || {};
 
     elements.body.innerHTML = rows.map(({ pkg, items, sum }) => {
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
-      const btnClass = "add-btn" + (isAdded ? " added" : "");
-      const btnLabel = isAdded ? "Added" : "Add to Profile";
-      const btnIcon = isAdded ? "✓" : "+";
-      const btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="${isAdded ? "Remove" : "Add"} ${esc(pkg.name)}"`;
+      // Every one of this profile's tests can be "active" without this
+      // profile ever having been added itself — a bigger profile that
+      // includes it (e.g. AVM Profile A already covers Kidney Profile
+      // whole) tagged them all first. Same blocked/⊘ treatment as a
+      // conflicting individual test (see rate-list.js) rather than a
+      // misleading "✓ Added" that would look removable but actually do
+      // nothing when clicked.
+      const covering = isAdded ? AVM.modules.profile.coveringPackage(pkg) : null;
+      let btnClass = "add-btn";
+      let btnLabel = "Add to Profile";
+      let btnIcon = "+";
+      let btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="Add ${esc(pkg.name)}"`;
+      if (covering) {
+        btnClass += " blocked";
+        btnLabel = "Blocked";
+        btnIcon = "⊘";
+        btnAttrs = `data-pkg="${esc(pkg.id)}" data-conflict="1" aria-label="${esc(pkg.name)} is already covered by ${esc(covering.name)} in your profile" title="Already covered by ${esc(covering.name)} in your profile"`;
+      } else if (isAdded) {
+        btnClass += " added";
+        btnLabel = "Added";
+        btnIcon = "✓";
+        btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="Remove ${esc(pkg.name)}"`;
+      }
       const isOpen = expanded.has(pkg.id);
       // Same real test count the cart drawer's own "N tests" badge shows
       // once this profile is added (see calculations.js) — a code that

@@ -169,6 +169,26 @@ AVM.modules = AVM.modules || {};
     return pkg.codes.every(code => state.cart.has(code));
   }
 
+  // The bigger profile actually responsible for a fully-active package's
+  // tests, if there is one — e.g. Kidney Profile reads as "active" once
+  // AVM Profile A is added (it includes every one of Kidney Profile's own
+  // codes), but Kidney Profile itself was never added; every one of its
+  // codes is tagged to "avm-profile-a" instead (see addPackage). Same
+  // "pick one, don't double-count" idea as conflictingCodeFor below, one
+  // level up — a whole profile instead of a single test. Returns null for
+  // a package that's genuinely its own addition (codes tagged to itself,
+  // or untagged from being added test-by-test) or only partially/mixed-
+  // ly covered, where there's no one profile to point at.
+  function coveringPackage(pkg) {
+    if (!pkg.codes.length || !isPackageActive(pkg)) return null;
+    const taggedIds = new Set(pkg.codes.map(code => state.cartPackageOf.get(code)));
+    if (taggedIds.size !== 1) return null;
+    const soleId = [...taggedIds][0];
+    if (!soleId || soleId === pkg.id) return null;
+    const { packageById } = AVM.data.getCatalog();
+    return packageById[soleId] || null;
+  }
+
   // Removes every test in the package from the profile — the chip's
   // "already added" counterpart to addPackage(). Doesn't touch anything
   // that isn't part of this package.
@@ -189,7 +209,18 @@ AVM.modules = AVM.modules || {};
       state.cartPackageOf.delete(code);
     });
     persistCart();
-    if (removed > 0) AVM.utils.helpers.showToast(`Removed ${pkg.name} from your profile`);
+    if (removed > 0) {
+      AVM.utils.helpers.showToast(`Removed ${pkg.name} from your profile`);
+    } else if (isPackageActive(pkg)) {
+      // Nothing here was actually this package's own — every one of its
+      // tests belongs to a bigger profile already covering it (see
+      // coveringPackage) — so removing "it" would otherwise silently do
+      // nothing with no explanation. Point at what to remove instead.
+      const covering = coveringPackage(pkg);
+      AVM.utils.helpers.showToast(
+        covering ? `Already covered by ${covering.name} — remove that to free up ${pkg.name}` : `${pkg.name}'s tests are already in your profile`
+      );
+    }
     return removed;
   }
 
@@ -530,7 +561,7 @@ AVM.modules = AVM.modules || {};
 
   AVM.modules.profile = {
     persistCart, restoreCart, toggleTest, addPackage, removePackage, isPackageActive,
-    removeFromProfile, clearProfile, renderCart, conflictingCodeFor,
+    removeFromProfile, clearProfile, renderCart, conflictingCodeFor, coveringPackage,
     setDiscountedPrice, clearDiscountedPrice, groupCartItems,
   };
 })();

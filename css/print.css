@@ -78,18 +78,18 @@ colgroup .c-tech{ width:16%; }
 colgroup .c-sample{ width:12%; }
 colgroup .c-b2b, colgroup .c-b2c, colgroup .c-margin{ width:9.33%; }
 
-/* Customer view hides Code/B2B/Margin entirely (see the rule further
-   below) — their <col> widths are zeroed here too so the 5 remaining
-   columns' widths (redistributed to still sum to 100%) are what the
-   table actually renders, rather than leaving ~30% of the table blank
+/* Customer view hides Code/B2B/Margin/Technology entirely (see the rule
+   further below) — their <col> widths are zeroed here too so the 4
+   remaining columns' widths (redistributed to still sum to 100%) are
+   what the table actually renders, rather than leaving blank space
    where those hidden columns used to be. */
 .sheet.customer-view colgroup .c-sr{ width:5%; }
-.sheet.customer-view colgroup .c-name{ width:40%; }
-.sheet.customer-view colgroup .c-tech{ width:22%; }
-.sheet.customer-view colgroup .c-sample{ width:18%; }
-.sheet.customer-view colgroup .c-b2c{ width:15%; }
+.sheet.customer-view colgroup .c-name{ width:52%; }
+.sheet.customer-view colgroup .c-sample{ width:22%; }
+.sheet.customer-view colgroup .c-b2c{ width:21%; }
 .sheet.customer-view colgroup .c-code,
 .sheet.customer-view colgroup .c-b2b,
+.sheet.customer-view colgroup .c-tech,
 .sheet.customer-view colgroup .c-margin{ width:0; }
 
 thead th{
@@ -183,12 +183,16 @@ tbody tr{ break-inside:avoid; }
 .foot p + p{ margin-top:3px; }
 .foot__brand{ font-weight:600; color:var(--ink-soft) !important; }
 
-/* ================= CUSTOMER COPY (hide B2B cost, margin & test codes) ================= */
+/* ================= CUSTOMER COPY (hide B2B cost, margin, test codes & technology) ================= */
 /* Test codes (BUN, SCRE, …) are internal shorthand — a customer copy just
-   needs the test's name, not its code. */
+   needs the test's name, not its code. Technology (Photometry, E.C.L.I.A,
+   …) is the same kind of internal/lab detail a customer doesn't need to
+   see — Sample stays, since that's what actually matters to them
+   (what gets drawn, not which analyzer method processes it). */
 .sheet.customer-view .c-b2b,
 .sheet.customer-view .c-margin,
-.sheet.customer-view .c-code{ display:none !important; }
+.sheet.customer-view .c-code,
+.sheet.customer-view .c-tech{ display:none !important; }
 
 /* ================= SCREEN-ONLY TOOLBAR ================= */
 .toolbar{

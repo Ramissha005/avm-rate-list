@@ -131,7 +131,7 @@ AVM.modules = AVM.modules || {};
               <td class="sr">${rowNum}</td>
               <td class="c-code"><span class="code">${esc(t.code)}</span></td>
               <td class="name">${esc(t.name)}</td>
-              <td class="tech">${esc(t.tech)}</td>
+              <td class="tech c-tech">${esc(t.tech)}</td>
               <td class="sample">${esc(t.sample)}</td>
               <td class="num c-b2b">${money(t.b2b)}</td>
               <td class="num">${money(t.b2c)}</td>

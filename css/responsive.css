@@ -206,7 +206,7 @@
      sizing ran this CTA taller than the hero content above it on a phone
      screen. */
   .cta-band{ padding:var(--space-5); flex-direction:column; align-items:flex-start; }
-  .cta-band h3{ font-size:var(--text-lg); margin-bottom:var(--space-1); }
+  .cta-band__title{ font-size:var(--text-lg); margin-bottom:var(--space-1); }
   .cta-band p{ font-size:var(--text-sm); }
   /* The homepage's Franchise + SARC pair (.cta-grid) is the tallest thing
      on a phone screen — dropping their description line (heading + button
@@ -221,7 +221,7 @@
      sarc.html's own .cta-band, which keeps its longer description text
      and genuinely needs the extra vertical room). */
   .cta-grid .cta-band{ flex-direction:row; align-items:center; }
-  .cta-grid .cta-band h3{ font-size:var(--text-md); margin-bottom:0; }
+  .cta-grid .cta-band__title{ font-size:var(--text-md); margin-bottom:0; }
   .cta-grid .cta-band .btn{ width:auto; flex:none; padding:var(--space-2) var(--space-4); font-size:var(--text-xs); }
   blockquote.pull p{ font-size:var(--text-lg); }
   .cart-drawer{ width:100vw; }

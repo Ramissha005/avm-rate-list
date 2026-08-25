@@ -26,6 +26,7 @@ AVM.modules = AVM.modules || {};
     const allBtn = document.createElement("button");
     allBtn.type = "button";
     allBtn.className = "rl-filter" + (activeSet.size === 0 ? " active" : "");
+    allBtn.setAttribute("aria-pressed", String(activeSet.size === 0));
     allBtn.textContent = "All";
     allBtn.onclick = () => {
       activeSet.clear();
@@ -41,6 +42,7 @@ AVM.modules = AVM.modules || {};
       const b = document.createElement("button");
       b.type = "button";
       b.className = "rl-filter" + (activeSet.has(opt.id) ? " active" : "");
+      b.setAttribute("aria-pressed", String(activeSet.has(opt.id)));
       b.textContent = opt.label;
       b.onclick = () => {
         if (singleSelect) {

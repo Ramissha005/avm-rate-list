@@ -168,8 +168,12 @@ window.AVM = window.AVM || {};
       if (!toggle) return;
       toggle.querySelectorAll(".fr-view-toggle__btn").forEach(btn => {
         btn.onclick = () => {
-          toggle.querySelectorAll(".fr-view-toggle__btn").forEach(b => b.classList.remove("active"));
+          toggle.querySelectorAll(".fr-view-toggle__btn").forEach(b => {
+            b.classList.remove("active");
+            b.setAttribute("aria-pressed", "false");
+          });
           btn.classList.add("active");
+          btn.setAttribute("aria-pressed", "true");
           AVM.state.currentPage = 1;
           refreshAll();
         };

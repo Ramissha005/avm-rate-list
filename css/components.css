@@ -648,7 +648,11 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   box-shadow:var(--shadow-lg);
 }
 
-.cta-band h3{ font-size:var(--text-lg); margin-bottom:4px; }
+/* Class-based rather than a bare `h3` tag selector — the heading's tag
+   varies per page depending on where it actually sits in that page's
+   own document outline (some are h2, some h3), but should look
+   identical in this component either way. */
+.cta-band__title{ font-size:var(--text-lg); margin-bottom:4px; }
 
 .cta-band p{ color:#D6E4F2; font-size:var(--text-sm); line-height:1.4; }
 

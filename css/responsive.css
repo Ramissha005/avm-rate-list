@@ -127,16 +127,18 @@
     padding:var(--space-1) 6px; line-height:1.2;
   }
 
-  /* Panels view (see panels-table.js) — same card, one fewer field since
-     there's no code column: name (with its own "Tests included" toggle)
-     full-width, then the two rate cells, then the badge, then Add to
-     Profile. Needs .fr-panels-row (not just nth-child alone) to win over
-     the 6-field positions above at equal specificity. */
+  /* Panels view (see panels-table.js) — same card, no code column: name
+     (with its own "Tests included" toggle) full-width, then its own
+     Tests count on its own line, then the two rate cells, then the
+     badge, then Add to Profile. Needs .fr-panels-row (not just
+     nth-child alone) to win over the 6-field positions above at equal
+     specificity. */
   .fr-panels-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* name */
-  .fr-panels-row > *:nth-child(2){ grid-column:1; grid-row:2; }                     /* first rate */
-  .fr-panels-row > *:nth-child(3){ grid-column:2; grid-row:2; }                     /* second rate */
-  .fr-panels-row > *:nth-child(4){ grid-column:1 / -1; grid-row:3; text-align:center; } /* badge */
-  .fr-panels-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; }                /* Add to Profile */
+  .fr-panels-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; text-align:left; } /* tests */
+  .fr-panels-row > *:nth-child(3){ grid-column:1; grid-row:3; }                     /* first rate */
+  .fr-panels-row > *:nth-child(4){ grid-column:2; grid-row:3; }                     /* second rate */
+  .fr-panels-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; text-align:center; } /* badge */
+  .fr-panels-row > *:nth-child(6){ grid-column:1 / -1; grid-row:5; }                /* Add to Profile */
 
   /* Desktop's .fr-panel-details lines its text up under the Panel column
      (82px in from the 70px code column + gap) — no such column on this

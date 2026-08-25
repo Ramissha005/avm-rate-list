@@ -105,13 +105,13 @@ AVM.modules = AVM.modules || {};
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { byCode } = AVM.data.getCatalog();
-    const { marginPercentage } = AVM.modules.calculations;
+    const { marginPercentage, packageTestCount } = AVM.modules.calculations;
 
     if (elements.head) {
       elements.head.className = "fr-head fr-panels-head";
       elements.head.innerHTML = priceMode === "franchise"
-        ? `<div>Profile</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-        : `<div>Profile</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+        ? `<div>Profile</div><div>Tests</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
+        : `<div>Profile</div><div>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
@@ -160,6 +160,12 @@ AVM.modules = AVM.modules || {};
       const btnIcon = isAdded ? "✓" : "+";
       const btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="${isAdded ? "Remove" : "Add"} ${esc(pkg.name)}"`;
       const isOpen = expanded.has(pkg.id);
+      // Same real test count the cart drawer's own "N tests" badge shows
+      // once this profile is added (see calculations.js) — a code that
+      // itself reports more than one result (CBC's 21) and any
+      // calculated/derived parameters (eGFR, ABG, ...) both count here
+      // too, not just pkg.codes.length.
+      const testCount = packageTestCount(pkg, items);
 
       const priceCells = priceMode === "franchise"
         ? `
@@ -179,6 +185,7 @@ AVM.modules = AVM.modules || {};
             ${esc(pkg.name)}
             <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴" : "▾"} Tests included</button>
           </div>
+          <div class="cell-testcount"><span class="mobile-label">Tests</span>${testCount}</div>
           ${priceCells}
           <div class="cell-action">
             <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>

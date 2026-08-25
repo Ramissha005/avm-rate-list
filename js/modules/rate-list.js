@@ -113,7 +113,7 @@ AVM.modules = AVM.modules || {};
           <div class="cell-sample">${esc(t.sample)}</div>
           <div class="cell-price"><span class="mobile-label">B2B</span>${money(t.b2b)}</div>
           <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(t.b2c)}</div>
-          <div><span class="cell-margin">+${money(margin(t))}<small>${t.b2b ? `+${Math.round(marginPercentage(t.b2b, t.b2c))}%` : "—"}</small></span></div>
+          <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(margin(t))}<small>${t.b2b ? `+${Math.round(marginPercentage(t.b2b, t.b2c))}%` : "—"}</small></span></div>
           <div class="cell-action">
             <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>
           </div>

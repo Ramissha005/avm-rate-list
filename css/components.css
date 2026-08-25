@@ -805,7 +805,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
   padding:var(--space-3) var(--space-4); margin-bottom:var(--space-3);
 }
 
-.cart-totals{ margin-bottom:var(--space-3); }
+.cart-totals{ margin-bottom:var(--space-2); }
 
 .ct-row{ display:flex; justify-content:space-between; align-items:baseline; padding:var(--space-1) 0; font-size:var(--text-base); color:var(--ink-soft); }
 
@@ -832,7 +832,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    That row (plus the rest of the footer) is meant to stay a minority of
    the drawer's height, leaving most of it for the test list above (see
    .cart-body / .cart-foot in layout.css). ---------- */
-.discount-margin-row{ display:flex; align-items:stretch; gap:var(--space-3); margin-bottom:var(--space-3); }
+.discount-margin-row{ display:flex; align-items:stretch; gap:var(--space-2); margin-bottom:var(--space-2); }
 .discount-margin-row > .discount-editor,
 .discount-margin-row > .margin-box{ flex:1 1 0; min-width:0; margin-bottom:0; }
 
@@ -843,8 +843,8 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    a live margin-percentage pill for instant context. */
 .margin-box{
   position:relative; overflow:hidden;
-  background:var(--profit-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
-  margin-bottom:var(--space-4);
+  background:var(--profit-bg); border-radius:var(--radius-sm); padding:var(--space-2) var(--space-3);
+  margin-bottom:var(--space-2);
 }
 .margin-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--profit); }
 .margin-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); margin-bottom:2px; flex-wrap:wrap; }
@@ -862,15 +862,15 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    single headline number once B2B/margin are hidden. ---------- */
 .price-box{
   position:relative; overflow:hidden;
-  background:var(--profit-bg); border-radius:var(--radius-sm); padding:var(--space-4) var(--space-5);
-  margin-bottom:var(--space-4);
+  background:var(--profit-bg); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
+  margin-bottom:var(--space-2);
 }
 .price-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--navy); }
 .price-box__label{
   display:block; font-size:var(--text-xs); font-weight:700; color:var(--navy);
   text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
 }
-.price-box__amount{ font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--navy); }
+.price-box__amount{ font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--navy); }
 
 /* Original price, struck through, shown above the headline amount once a
    discounted price is entered below — the headline amount itself becomes
@@ -889,12 +889,12 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    to each other. Never shown in Customer copy — that view only shows the
    read-only Original/Discounted Price in the price box. ---------- */
 .discount-editor{
-  background:var(--paper-2); border-radius:var(--radius-sm); padding:var(--space-3) var(--space-4);
-  margin-bottom:var(--space-3); display:flex; flex-direction:column; justify-content:center;
+  background:var(--paper-2); border-radius:var(--radius-sm); padding:var(--space-2) var(--space-3);
+  margin-bottom:var(--space-2); display:flex; flex-direction:column; justify-content:center;
 }
 .discount-editor__label{
   display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-soft);
-  text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px;
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;
 }
 .discount-editor__row{ display:flex; align-items:center; gap:6px; }
 .discount-editor__currency{ font-weight:600; color:var(--ink-soft); }
@@ -921,7 +921,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .ct-amount--struck{ text-decoration:line-through; color:var(--ink-faint) !important; }
 
 .margin-box__amount{
-  font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--profit);
+  font-family:var(--font-display); font-size:var(--text-2xl); font-weight:700; color:var(--profit);
   line-height:1.1; font-variant-numeric:tabular-nums;
 }
 
@@ -941,7 +941,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .franchise-box{
   position:relative; overflow:hidden;
   background:var(--amber-bg); border-radius:var(--radius-sm); padding:var(--space-2) var(--space-3);
-  margin:var(--space-2) 0 var(--space-3);
+  margin:var(--space-1) 0 var(--space-2);
 }
 .franchise-box::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--amber); }
 .franchise-box__top{ display:flex; align-items:center; justify-content:space-between; gap:var(--space-2); }

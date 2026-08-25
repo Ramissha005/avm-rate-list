@@ -20,6 +20,15 @@ AVM.modules = AVM.modules || {};
   // shared state.searchTerm the main list uses. Price filtering isn't
   // offered here — franchise savings track a test's own price either way,
   // not a band a customer would shop by.
+  //
+  // Sorted biggest-savings-first (not the catalog's sr order) — the whole
+  // point of this table is the pitch, so the most persuasive rows lead;
+  // tests with no franchise discount sink to the bottom.
+  function savingsPercent(t) {
+    if (t.franchise == null || t.b2b <= t.franchise) return 0;
+    return ((t.b2b - t.franchise) / t.b2b) * 100;
+  }
+
   function renderFranchiseRates({ tests, elements, onChange }) {
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
@@ -27,11 +36,13 @@ AVM.modules = AVM.modules || {};
     const { byCode } = AVM.data.getCatalog();
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
-    const list = tests.filter(t => {
-      if (activeFilters.technology.size && !activeFilters.technology.has(t.tech)) return false;
-      if (term && !`${t.name} ${t.code}`.toLowerCase().includes(term)) return false;
-      return true;
-    });
+    const list = tests
+      .filter(t => {
+        if (activeFilters.technology.size && !activeFilters.technology.has(t.tech)) return false;
+        if (term && !`${t.name} ${t.code}`.toLowerCase().includes(term)) return false;
+        return true;
+      })
+      .sort((a, b) => savingsPercent(b) - savingsPercent(a));
 
     if (list.length === 0) {
       elements.body.innerHTML = `<div class="fr-empty">No tests match that search/filter.</div>`;

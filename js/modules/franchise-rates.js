@@ -78,11 +78,12 @@ AVM.modules = AVM.modules || {};
       const hasSaving = t.franchise != null && t.b2b > t.franchise;
       const savingsAmt = hasSaving ? t.b2b - t.franchise : 0;
       const pct = hasSaving ? Math.round((savingsAmt / t.b2b) * 100) : 0;
-      // Same two-line badge as the main rate list's Margin column
-      // (.cell-margin: amount on top, % below) — same design, just the
-      // amber "franchise" accent instead of the profit-blue "margin" one.
+      // Same two-line badge shape as the main rate list's Margin column
+      // (.cell-margin), but flipped: the % leads (big, bold) since that's
+      // the headline number for a savings pitch, with the ₹ amount below
+      // it in <small> instead of the other way around.
       const saveBadge = hasSaving
-        ? `<span class="cell-margin is-franchise">${money(savingsAmt)}<small>${pct}%</small></span>`
+        ? `<span class="cell-margin is-franchise">${pct}%<small>${money(savingsAmt)}</small></span>`
         : `<span class="fr-save--none">—</span>`;
 
       // Same Add to Profile button, same states, as rate-list.js.

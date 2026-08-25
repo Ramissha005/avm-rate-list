@@ -20,7 +20,18 @@ window.AVM = window.AVM || {};
       body: $("rlBody"),
       count: $("rlCount"),
       paginationWrap: $("paginationWrap"),
+      searchInput: $("searchInput"),
     } : null;
+
+    // Individual Tests / Common Panels switch above the homepage rate
+    // list — same "read which button carries .active" pattern the
+    // Franchise page's own toggle uses (see franchise-rates.js).
+    function rateListView() {
+      const toggle = $("rateListViewToggle");
+      if (!toggle) return "tests";
+      const active = toggle.querySelector(".fr-view-toggle__btn.active");
+      return (active && active.dataset.view) || "tests";
+    }
 
     const hasFranchiseRates = !!$("franchiseRatesBody");
     const franchiseRatesElements = hasFranchiseRates ? {
@@ -59,18 +70,28 @@ window.AVM = window.AVM || {};
 
     function refreshAll() {
       if (hasRateList) {
-        AVM.modules.rateList.renderTable({ tests: catalog.tests, techColors: catalog.techColors, elements: tableElements, onChange: refreshAll });
+        const view = rateListView();
+        // Filters/Sort/page size and the Code/Technology/Sample columns
+        // are Tests-only — hidden rather than left inert while Panels is
+        // active, and the two header rows swap so a panel's "Panel" +
+        // test-count columns show instead of a test's Code/Technology/
+        // Sample ones (see index.html — rate-list.js never touches the
+        // head itself, unlike franchise-rates.js's single dynamic one).
+        if ($("rlHeadTests")) $("rlHeadTests").style.display = view === "profiles" ? "none" : "";
+        if ($("rlHeadPanels")) $("rlHeadPanels").style.display = view === "profiles" ? "" : "none";
+        if ($("filtersToggleBtn")) $("filtersToggleBtn").style.display = view === "profiles" ? "none" : "";
+        if ($("rateListSortWrap")) $("rateListSortWrap").style.display = view === "profiles" ? "none" : "";
+        if (view === "profiles") {
+          AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll, priceMode: "margin" });
+        } else {
+          AVM.modules.rateList.renderTable({ tests: catalog.tests, techColors: catalog.techColors, elements: tableElements, onChange: refreshAll });
+        }
       }
       if (hasCart) {
         AVM.modules.profile.renderCart(cartElements);
       }
       if (hasFranchiseRates) {
         AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, packages: catalog.packages, elements: franchiseRatesElements, onChange: refreshAll });
-      }
-      // Bundle chips flip to their "✓ in profile" state once fully added, so
-      // they need to re-render on every cart change, not just once at init.
-      if ($("bundleRow")) {
-        AVM.modules.packages.renderPackages($("bundleRow"), catalog.packages, refreshAll);
       }
       updateFiltersBadge();
     }
@@ -130,19 +151,26 @@ window.AVM = window.AVM || {};
     // franchise-rates.js's header comment for why that's safe here.
     AVM.modules.pagination.wirePageSize($("franchiseRatesPageSize"), { onChange: refreshAll });
     // Individual Tests / Common Panels switch — wired once here rather
-    // than re-bound every render since the two buttons themselves never
+    // than re-bound every render since the buttons themselves never
     // change, only which one carries .active (read straight back off the
-    // DOM by franchise-rates.js, see its currentView()).
-    if ($("franchiseViewToggle")) {
-      $("franchiseViewToggle").querySelectorAll(".fr-view-toggle__btn").forEach(btn => {
+    // DOM by whichever module owns that table's rendering — rate-list.js/
+    // panels-table.js via rateListView() above, or franchise-rates.js via
+    // its own currentView()). Same wiring on both the homepage rate list
+    // and the Franchise savings table, just a different toggle id.
+    function wireViewToggle(id) {
+      const toggle = $(id);
+      if (!toggle) return;
+      toggle.querySelectorAll(".fr-view-toggle__btn").forEach(btn => {
         btn.onclick = () => {
-          $("franchiseViewToggle").querySelectorAll(".fr-view-toggle__btn").forEach(b => b.classList.remove("active"));
+          toggle.querySelectorAll(".fr-view-toggle__btn").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
           AVM.state.currentPage = 1;
           refreshAll();
         };
       });
     }
+    wireViewToggle("rateListViewToggle");
+    wireViewToggle("franchiseViewToggle");
     AVM.modules.testDetail.wireTestDetailDrawer();
 
     if ($("clearFilters")) {

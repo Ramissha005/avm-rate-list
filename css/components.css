@@ -470,65 +470,6 @@ blockquote.pull p{ font-family:var(--font-display); font-size:var(--text-xl); co
 
 blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--text-sm); color:#9FB4C4; font-style:normal; font-family:var(--font-mono); }
 
-.bundle-chip{
-  position:relative;
-  display:flex; align-items:center; gap:var(--space-2);
-  background:#fff; border:1.5px solid var(--line-dark); border-radius:var(--radius-full);
-  padding:var(--space-2) var(--space-2) var(--space-2) var(--space-4); font-size:var(--text-base); font-weight:500; color:var(--navy);
-  transition:background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition), border-color var(--transition-fast);
-}
-
-.bundle-chip:hover{ border-color:var(--teal); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
-
-.bundle-chip__name{ flex:1; min-width:0; }
-
-.bundle-chip .count{
-  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--teal-dark);
-  background:var(--profit-bg); border-radius:var(--radius-full); padding:2px 8px;
-}
-
-.bundle-chip .plus{
-  width:24px; height:24px; border-radius:50%; background:var(--teal); color:#fff;
-  display:flex; align-items:center; justify-content:center; font-size:var(--text-md); flex:none;
-}
-
-/* Once every test in the panel is in the profile, the chip flips to a
-   "remove the whole panel" affordance — filled instead of outlined, ✓
-   instead of +. */
-.bundle-chip--active{ background:var(--profit-bg); border-color:var(--teal); color:var(--teal-dark); }
-.bundle-chip--active .plus{ background:var(--teal-dark); }
-.bundle-chip--active .count{ background:#fff; }
-
-/* ---------- Bundle chip hover tooltip — the panel's full test breakdown ---------- */
-.bundle-tip{
-  /* Opens upward, not down — a downward popover here would drop straight
-     onto the sticky search bar/rate list right below the panel row. */
-  position:absolute; bottom:calc(100% + 8px); left:0; z-index:70; width:280px; max-width:80vw;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-lg);
-  padding:var(--space-3) var(--space-4); text-align:left;
-  opacity:0; visibility:hidden; transform:translateY(4px);
-  transition:opacity var(--transition-fast), transform var(--transition-fast), visibility var(--transition-fast);
-}
-.bundle-chip:hover .bundle-tip, .bundle-chip:focus-visible .bundle-tip{
-  opacity:1; visibility:visible; transform:translateY(0);
-}
-.bundle-tip__title{
-  display:block; font-family:var(--font-display); font-weight:700; font-size:var(--text-sm); color:var(--navy);
-  padding-bottom:var(--space-2); margin-bottom:var(--space-2); border-bottom:1px solid var(--line); white-space:normal;
-}
-.bundle-tip__total{ display:block; font-family:var(--font-mono); font-weight:600; font-size:var(--text-xs); color:var(--ink-soft); margin-top:2px; }
-.bundle-tip ul{ max-height:220px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; }
-.bundle-tip li{
-  display:flex; align-items:baseline; gap:6px; font-size:var(--text-sm); font-weight:400; color:var(--ink); white-space:normal;
-}
-.bundle-tip__code{
-  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700; color:var(--navy);
-  background:var(--mono-chip); border-radius:4px; padding:1px 5px; flex:none;
-}
-.bundle-tip__price{ margin-left:auto; font-family:var(--font-mono); font-size:var(--text-xs); color:var(--ink-soft); flex:none; }
-.bundle-tip li.bundle-tip__calc{ color:var(--ink-faint); }
-.bundle-tip li.bundle-tip__calc em{ font-style:italic; }
-
 .rl-search{ position:relative; flex:1; min-width:220px; }
 
 .rl-search input{

@@ -46,11 +46,9 @@ AVM.modules = AVM.modules || {};
     return (active && active.dataset.view) || "tests";
   }
 
-  function renderHead(elements, view) {
+  function renderTestsHead(elements) {
     if (!elements.head) return;
-    elements.head.innerHTML = view === "profiles"
-      ? `<div>Tests</div><div>Panel</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-      : `<div>Code</div><div>Test</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`;
+    elements.head.innerHTML = `<div>Code</div><div>Test</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`;
   }
 
   // Same two-line badge shape as the main rate list's Margin column
@@ -153,77 +151,9 @@ AVM.modules = AVM.modules || {};
     });
   }
 
-  function renderProfiles({ packages, elements, onChange }) {
-    const { money, escapeHtml: esc } = AVM.utils.formatters;
-    const { byCode } = AVM.data.getCatalog();
-    const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
-
-    // Each panel's B2B/Franchise totals reuse the exact same MSB-adjusted
-    // math the cart drawer's Franchise box is built on (calculations.js
-    // totals()) — same ₹25-per-sample-type floor, so a panel's numbers
-    // here match what it would actually cost if added to a profile.
-    const rows = (packages || [])
-      .filter(pkg => pkg.active !== false)
-      .map(pkg => {
-        const items = pkg.codes.map(c => byCode[c]).filter(Boolean);
-        return { pkg, sum: AVM.modules.calculations.totals(items) };
-      })
-      .filter(({ pkg }) => !term || pkg.name.toLowerCase().includes(term))
-      // Biggest saving first — no separate sort control for this view
-      // (see franchise.html, hidden while Panels is active); keep it to
-      // the one order that best fits the "your savings" pitch.
-      .sort((a, b) => b.sum.franchiseSavingsPercentage - a.sum.franchiseSavingsPercentage);
-
-    const totalItems = rows.length;
-
-    if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
-
-    if (totalItems === 0) {
-      elements.body.innerHTML = `<div class="fr-empty">No panels match that search.</div>`;
-      if (elements.count) elements.count.textContent = "";
-      return;
-    }
-
-    // Short, fixed list of common panels — no pagination needed.
-    if (elements.count) elements.count.textContent = `${totalItems} panel${totalItems !== 1 ? "s" : ""}`;
-
-    elements.body.innerHTML = rows.map(({ pkg, sum }) => {
-      const testCount = AVM.modules.calculations.packageTestCount(pkg);
-      const isAdded = AVM.modules.profile.isPackageActive(pkg);
-      const btnClass = "add-btn" + (isAdded ? " added" : "");
-      const btnLabel = isAdded ? "Added" : "Add to Profile";
-      const btnIcon = isAdded ? "✓" : "+";
-      const btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="${isAdded ? "Remove" : "Add"} ${esc(pkg.name)} panel"`;
-
-      return `
-        <div class="fr-row">
-          <div><span class="cell-code">${testCount}</span></div>
-          <div class="cell-name">${esc(pkg.name)}<small>${testCount} test${testCount !== 1 ? "s" : ""}</small></div>
-          <div class="cell-price"><span class="mobile-label">B2B Rate</span>${money(sum.msbB2b)}</div>
-          <div class="cell-price is-franchise"><span class="mobile-label">Franchise Rate</span>${money(sum.msbFranchise)}</div>
-          <div><span class="mobile-label">You Save</span>${saveBadge(sum.franchiseSavingsPercentage, sum.franchiseSavings, money)}</div>
-          <div class="cell-action">
-            <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>
-          </div>
-        </div>`;
-    }).join("");
-
-    elements.body.querySelectorAll(".add-btn").forEach(btn => {
-      btn.onclick = () => {
-        const { packageById } = AVM.data.getCatalog();
-        const pkg = packageById[btn.dataset.pkg];
-        if (!pkg) return;
-        if (AVM.modules.profile.isPackageActive(pkg)) AVM.modules.profile.removePackage(pkg);
-        else AVM.modules.profile.addPackage(pkg);
-        if (onChange) onChange();
-      };
-    });
-  }
-
   function renderFranchiseRates({ tests, packages, elements, onChange }) {
     if (!elements || !elements.body) return;
     const view = currentView(elements);
-    renderHead(elements, view);
 
     // Filters/Sort/page size are Tests-only controls — hidden rather than
     // just inert while Panels is active, so it's clear they don't apply.
@@ -231,8 +161,10 @@ AVM.modules = AVM.modules || {};
     if (elements.sortWrap) elements.sortWrap.style.display = view === "profiles" ? "none" : "";
 
     if (view === "profiles") {
-      renderProfiles({ packages, elements, onChange });
+      // Shared with the homepage's own Panels view — see panels-table.js.
+      AVM.modules.panelsTable.renderPanelsTable({ packages, elements, onChange, priceMode: "franchise" });
     } else {
+      renderTestsHead(elements);
       renderTests({ tests, elements, onChange });
     }
   }

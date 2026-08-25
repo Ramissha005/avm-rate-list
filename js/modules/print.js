@@ -108,7 +108,7 @@ AVM.modules = AVM.modules || {};
       const colCount = customerView ? 5 : 8;
       // A test's own name often already ends in "(CODE)" (e.g. "Blood Urea
       // Nitrogen (BUN)") — stripped here so the "tests included" line
-      // reads as plain names, same as the bundle-chip tooltip does.
+      // reads as plain names, same as panels-table.js's own version does.
       const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
 
       const groups = AVM.modules.profile.groupCartItems(items);

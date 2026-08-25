@@ -57,7 +57,7 @@
         <p class="hero__sub hero__sub--lead">Truth. Trust. Transparency</p>
         <div class="hero__ctas">
           <a href="#ratelist" class="btn btn--amber btn--sm">Browse the Rate List</a>
-          <a href="#ratelist-bundles" class="btn btn--ghost-dark btn--sm">Make My Profile</a>
+          <a href="#ratelist" class="btn btn--ghost-dark btn--sm">Make My Profile</a>
         </div>
         <h3 class="hero__focus-title">We focus &amp; specialize in</h3>
         <div class="stat-strip hero__specialties">
@@ -198,10 +198,16 @@
         </div>
       </div>
 
-      <div class="bundles" id="ratelist-bundles">
-        <h3>Start from a common panel</h3>
-        <p class="hint">One click adds the whole panel to your profile — remove anything you don't need afterwards.</p>
-        <div class="bundle-row" id="bundleRow"></div>
+      <!-- Individual tests vs whole common panels — two different
+           datasets (js/modules/rate-list.js vs panels-table.js), so
+           Filters/Sort/page size only make sense for Tests and are
+           hidden in Panels view (see app.js). Replaces the old "Start
+           from a common panel" bundle-chip row — same idea (one click
+           adds a whole panel), now with the panel's own B2B/B2C/Margin
+           laid out the same way individual tests are below. -->
+      <div class="fr-view-toggle" id="rateListViewToggle">
+        <button type="button" class="fr-view-toggle__btn active" data-view="tests">Individual Tests</button>
+        <button type="button" class="fr-view-toggle__btn" data-view="profiles">Common Panels</button>
       </div>
 
       <div class="rl-controls">
@@ -214,7 +220,7 @@
           Filters
           <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
         </button>
-        <div class="rl-right">
+        <div class="rl-right" id="rateListSortWrap">
           <div class="rl-sort" id="sortWrap">
             <select id="sortSelect">
               <option value="sr">Sort: Default</option>
@@ -253,8 +259,11 @@
       </div>
 
       <div class="rl-table">
-        <div class="rl-head">
+        <div class="rl-head" id="rlHeadTests">
           <span>Code</span><span>Test</span><span>Technology</span><span>Sample</span><span>B2B</span><span>B2C</span><span>Margin</span><span></span>
+        </div>
+        <div class="fr-head" id="rlHeadPanels" style="display:none">
+          <div>Tests</div><div>Panel</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>
         </div>
         <div id="rlBody"></div>
       </div>
@@ -278,7 +287,7 @@
         <h4>Site</h4>
         <ul>
           <li><a href="#ratelist">Rate List</a></li>
-          <li><a href="#ratelist-bundles">Make My Profile</a></li>
+          <li><a href="#ratelist">Make My Profile</a></li>
           <li><a href="pages/franchise.html">AVMLabs Franchisee</a></li>
           <li><a href="pages/sarc.html">SARC Explained</a></li>
           <li><a href="pages/crl.html">CRL</a></li>
@@ -416,9 +425,9 @@
 <script src="js/modules/search.js"></script>
 <script src="js/modules/sorting.js"></script>
 <script src="js/modules/filters.js"></script>
-<script src="js/modules/packages.js"></script>
 <script src="js/modules/export.js"></script>
 <script src="js/modules/print.js"></script>
+<script src="js/modules/panels-table.js"></script>
 <script src="js/app.js"></script>
 
 </body>

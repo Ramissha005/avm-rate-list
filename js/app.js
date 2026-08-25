@@ -22,6 +22,13 @@ window.AVM = window.AVM || {};
       paginationWrap: $("paginationWrap"),
     } : null;
 
+    const hasFranchiseRates = !!$("franchiseRatesBody");
+    const franchiseRatesElements = hasFranchiseRates ? {
+      body: $("franchiseRatesBody"),
+      count: $("franchiseRatesCount"),
+      searchInput: $("franchiseRatesSearch"),
+    } : null;
+
     const hasCart = !!$("cartBody");
     const cartElements = hasCart ? {
       body: $("cartBody"), badge: $("cartBadge"), sub: $("cartSub"), cartBtn: $("openCart"),
@@ -45,6 +52,9 @@ window.AVM = window.AVM || {};
       }
       if (hasCart) {
         AVM.modules.profile.renderCart(cartElements);
+      }
+      if (hasFranchiseRates) {
+        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, elements: franchiseRatesElements });
       }
       // Bundle chips flip to their "✓ in profile" state once fully added, so
       // they need to re-render on every cart change, not just once at init.
@@ -85,6 +95,14 @@ window.AVM = window.AVM || {};
     renderFilterGroups();
 
     AVM.modules.search.wireSearch($("searchInput"), { onChange: refreshAll });
+    // Its own independent search, not the shared rate-list state.searchTerm
+    // above — this table lives on a page that doesn't have the main rate
+    // list at all, and reads its own input value straight off the element
+    // (see franchise-rates.js) rather than through app-wide state.
+    if ($("franchiseRatesSearch")) {
+      $("franchiseRatesSearch").addEventListener("input",
+        AVM.utils.helpers.debounce(refreshAll, 200));
+    }
     AVM.modules.sorting.wireSort($("sortSelect"), { onChange: refreshAll });
     AVM.modules.pagination.wirePageSize($("pageSizeSelect"), { onChange: refreshAll });
     AVM.modules.testDetail.wireTestDetailDrawer();

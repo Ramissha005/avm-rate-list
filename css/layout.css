@@ -538,6 +538,27 @@ section{ padding:var(--space-20) 0; }
 
 .rl-disclaimer{ margin-top:var(--space-4); font-size:var(--text-sm); color:var(--ink-faint); }
 
+/* ---------- Franchise page "your savings" table (see js/modules/
+   franchise-rates.js) — same table shell as .rl-table/.rl-head/.rl-row,
+   own grid since it's 5 columns (Code, Test, B2B, Franchise, Save) not 8,
+   and read-only: no Add to Profile action column. ---------- */
+.fr-table{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+
+.fr-head, .fr-row{
+  display:grid;
+  grid-template-columns:70px minmax(0,1.8fr) 110px 130px 110px;
+  gap:var(--space-3); align-items:center; padding:var(--space-3) var(--space-4);
+}
+
+.fr-head{
+  font-family:var(--font-body); font-size:var(--text-xs); font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--ink-faint); border-bottom:1px solid var(--line); background:var(--paper-2);
+}
+
+.fr-row{ border-bottom:1px solid var(--line); transition:background var(--transition-fast); }
+.fr-row:last-child{ border-bottom:none; }
+.fr-row:hover{ background:#F4F5F6; }
+
 footer{ background:var(--navy); color:#B9C7D1; padding:var(--space-14) 0 var(--space-7); }
 .footer__top{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:var(--space-10); margin-bottom:var(--space-10); }
 .footer__brand p{ margin-top:var(--space-3); font-size:var(--text-sm); color:#93A6B4; max-width:34ch; }

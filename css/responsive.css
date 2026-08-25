@@ -114,6 +114,25 @@
   }
   .add-btn__label{ display:inline; }
 
+  /* Franchise page "your savings" table — same idea as .rl-row's mobile
+     card above, just fewer fields: code+name stacked full-width, then
+     B2B/Franchise as a matching pair, then the Save badge on its own row. */
+  .fr-head{ display:none; }
+  .fr-row{
+    display:grid; grid-template-columns:1fr 1fr;
+    column-gap:var(--space-2); row-gap:var(--space-2);
+    padding:var(--space-4); align-items:center;
+  }
+  .fr-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* code */
+  .fr-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }                 /* name */
+  .fr-row > *:nth-child(3){ grid-column:1; grid-row:3; }                     /* B2B */
+  .fr-row > *:nth-child(4){ grid-column:2; grid-row:3; }                     /* Franchise */
+  .fr-row > *:nth-child(5){ grid-column:1 / -1; grid-row:4; text-align:center; } /* Save */
+  .fr-row .cell-price{
+    font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
+    padding:var(--space-1) 6px; line-height:1.2;
+  }
+
   /* Sort and page-size drop out of the mobile controls bar entirely —
      leaves .rl-right empty, so the frozen bar is just the search input. */
   .rl-right{ display:none; }

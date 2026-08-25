@@ -775,6 +775,17 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 
 .ct-row span:last-child{ font-family:var(--font-mono); font-weight:600; color:var(--navy); font-variant-numeric:tabular-nums; }
 
+/* Franchise page only (see profile.js's elements.useFranchiseMargin) —
+   struck through once the Franchise Rate box above it is showing, so
+   B2B Cost visually reads as the "before" price next to Franchise
+   Rate's "after" — the same crossed-out-original-price pattern a
+   markdown uses, instead of two independent numbers a visitor has to
+   compare themselves. Specificity matches .ct-row span:last-child
+   above (same 0,2,1 weight) so this actually overrides its navy/bold
+   styling instead of losing to it while only the plain class's own
+   line-through silently applied. */
+.ct-row span.ct-amount--struck{ text-decoration:line-through; color:var(--ink-faint); font-weight:500; }
+
 /* Minimum Sample Billing uplift — shown between the raw B2B Cost row and
    the B2C Value row only when one or more sample-type groups fall short of
    the ₹25 floor. Given its own violet accent + tinted background so the

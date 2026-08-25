@@ -344,6 +344,7 @@ AVM.modules = AVM.modules || {};
     if (elements.msbRow) elements.msbRow.style.display = "none";
     if (elements.msbHint) elements.msbHint.style.display = "none";
     if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
+    if (elements.b2b) elements.b2b.classList.remove("ct-amount--struck");
 
     elements.badge.textContent = items.length;
     elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
@@ -509,6 +510,13 @@ AVM.modules = AVM.modules || {};
       // weighing that decision rather than just glancing at a nudge.
       if (elements.franchiseHint) {
         elements.franchiseHint.textContent = `You're saving ${pct}% as an AVMLabs Franchisee.`;
+      }
+      // Franchise page only (elements.useFranchiseMargin) — strikes
+      // through B2B Cost so it reads as the "before" price the
+      // Franchise Rate box above it replaces, not a second, unrelated
+      // figure a visitor has to compare on their own.
+      if (elements.useFranchiseMargin && elements.b2b) {
+        elements.b2b.classList.add("ct-amount--struck");
       }
     }
   }

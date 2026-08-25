@@ -2412,7 +2412,11 @@ AVM.state = {
       { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
       { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
       { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH"], "calculatedParams": [] }
+      { "label": "Calcium", "codes": ["CALC"], "calculatedParams": [] },
+      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-profile-b", "name": "AVM Profile B", "categoryId": "general-biochemistry",
@@ -2423,7 +2427,13 @@ AVM.state = {
       { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
       { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
       { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"], "calculatedParams": [] }
+      { "label": "Calcium", "codes": ["CALC"], "calculatedParams": [] },
+      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] },
+      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-profile-c", "name": "AVM Profile C", "categoryId": "general-biochemistry",
@@ -2435,7 +2445,13 @@ AVM.state = {
       { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
       { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VB12", "VITDT", "FOLI"], "calculatedParams": [] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"], "calculatedParams": [] }
+      { "label": "Calcium", "codes": ["CALC"], "calculatedParams": [] },
+      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] },
+      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-infertility-a", "name": "AVM Infertility A", "categoryId": "reproductive-hormones",
@@ -2447,7 +2463,10 @@ AVM.state = {
       { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
       { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"] },
       { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Additional Tests", "codes": ["FOLI", "VB12", "CBC", "A1c"], "calculatedParams": [] }
+      { "label": "Folic Acid", "codes": ["FOLI"], "calculatedParams": [] },
+      { "label": "Vitamin B12", "codes": ["VB12"], "calculatedParams": [] },
+      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] }
     ],
     "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)"], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],

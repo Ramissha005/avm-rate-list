@@ -13,6 +13,12 @@ AVM.modules = AVM.modules || {};
     const { margin, marginPercentage } = AVM.modules.calculations;
     const { byCode } = AVM.data.getCatalog();
     const isAdded = AVM.state.cart.has(test.code);
+    // Part of a profile already in the cart (e.g. via AVM Profile A) —
+    // same blocked treatment as a conflicting test rather than a
+    // "✓ Added to Profile" that would look freely removable here but
+    // actually just quietly pull it out of that profile (see
+    // profile.js's packageOwning/toggleTest).
+    const owner = isAdded ? AVM.modules.profile.packageOwning(test.code) : null;
     const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(test.code) : null;
     const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
@@ -20,7 +26,12 @@ AVM.modules = AVM.modules || {};
     let btnLabel = "+ Add to Profile";
     let btnDisabled = "";
     let btnNote = "";
-    if (isAdded) {
+    if (owner) {
+      btnClass = "btn--outline";
+      btnLabel = "Blocked — already in " + esc(owner.name);
+      btnDisabled = "disabled";
+      btnNote = `<p class="td-note">Already included in ${esc(owner.name)}. Remove it from there to change it.</p>`;
+    } else if (isAdded) {
       btnClass = "btn--outline";
       btnLabel = "✓ Added to Profile";
     } else if (conflictTest) {
@@ -53,7 +64,7 @@ AVM.modules = AVM.modules || {};
     `;
 
     container.querySelector("#tdAddBtn").onclick = () => {
-      if (conflictTest) return;
+      if (conflictTest || owner) return;
       AVM.modules.profile.toggleTest(test.code);
       if (onChange) onChange();
       renderTestDetail(container, AVM.data.getTestByCode(test.code), onChange);

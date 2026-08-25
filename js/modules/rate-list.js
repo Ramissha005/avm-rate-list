@@ -75,6 +75,12 @@ AVM.modules = AVM.modules || {};
     elements.body.innerHTML = shown.map(t => {
       const col = techColors[t.tech] || { fg: "#101C27", bd: "#D2D5D9", bg: "#EFF0F2" };
       const isAdded = state.cart.has(t.code);
+      // Part of a profile already in the cart (e.g. Alkaline Phosphatase
+      // via AVM Profile A) — same blocked/⊘ treatment as a conflicting
+      // test rather than a "✓ Added" that looks freely removable here
+      // but would actually just be quietly pulled out of that profile
+      // (see profile.js's toggleTest).
+      const owner = isAdded ? AVM.modules.profile.packageOwning(t.code) : null;
       const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
       const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
@@ -82,7 +88,12 @@ AVM.modules = AVM.modules || {};
       let btnLabel = "Add to Profile";
       let btnIcon = "+";
       let btnAttrs = `data-code="${esc(t.code)}" aria-label="Add ${esc(t.name)}"`;
-      if (isAdded) {
+      if (owner) {
+        btnClass += " blocked";
+        btnLabel = "Blocked";
+        btnIcon = "⊘";
+        btnAttrs = `data-code="${esc(t.code)}" data-conflict="1" aria-label="${esc(t.name)} is already included in ${esc(owner.name)}" title="Already included in ${esc(owner.name)} — remove it from there to change it"`;
+      } else if (isAdded) {
         btnClass += " added";
         btnLabel = "Added";
         btnIcon = "✓";

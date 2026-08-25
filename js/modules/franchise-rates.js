@@ -110,8 +110,11 @@ AVM.modules = AVM.modules || {};
       const savingsAmt = hasSaving ? t.b2b - t.franchise : 0;
       const pct = hasSaving ? (savingsAmt / t.b2b) * 100 : 0;
 
-      // Same Add to Profile button, same states, as rate-list.js.
+      // Same Add to Profile button, same states, as rate-list.js —
+      // including the "already part of a profile in your cart" blocked
+      // state (see profile.js's packageOwning/toggleTest).
       const isAdded = state.cart.has(t.code);
+      const owner = isAdded ? AVM.modules.profile.packageOwning(t.code) : null;
       const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
       const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
@@ -119,7 +122,12 @@ AVM.modules = AVM.modules || {};
       let btnLabel = "Add to Profile";
       let btnIcon = "+";
       let btnAttrs = `data-code="${esc(t.code)}" aria-label="Add ${esc(t.name)}"`;
-      if (isAdded) {
+      if (owner) {
+        btnClass += " blocked";
+        btnLabel = "Blocked";
+        btnIcon = "⊘";
+        btnAttrs = `data-code="${esc(t.code)}" data-conflict="1" aria-label="${esc(t.name)} is already included in ${esc(owner.name)}" title="Already included in ${esc(owner.name)} — remove it from there to change it"`;
+      } else if (isAdded) {
         btnClass += " added";
         btnLabel = "Added";
         btnIcon = "✓";

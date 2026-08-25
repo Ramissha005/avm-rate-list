@@ -106,12 +106,35 @@ AVM.modules = AVM.modules || {};
     return group.codes.find(c => c !== code && state.cart.has(c)) || null;
   }
 
+  // The profile a test currently in the cart is tagged to, if any — a
+  // test added on its own (never part of a package) or removed and
+  // re-added individually reads null here even if it happens to share a
+  // code with some package's own list; only actually tagged (see
+  // addPackage) counts.
+  function packageOwning(code) {
+    const taggedTo = state.cartPackageOf.get(code);
+    if (!taggedTo) return null;
+    const { packageById } = AVM.data.getCatalog();
+    return packageById[taggedTo] || null;
+  }
+
   function toggleTest(code) {
     const { byCode } = AVM.data.getCatalog();
     const test = byCode[code];
     if (!test) return;
 
     if (state.cart.has(code)) {
+      // Part of a profile already in the cart (e.g. Alkaline Phosphatase
+      // via AVM Profile A) — the Tests table's own Add/Remove toggle
+      // isn't the place to pick it apart test-by-test (that's what
+      // removing individual lines from the profile's own group in the
+      // cart drawer is for); same "point at what actually owns it"
+      // toast as a conflicting test, one level up.
+      const owner = packageOwning(code);
+      if (owner) {
+        AVM.utils.helpers.showToast(`${test.name} is already included in ${owner.name} — remove it from there to change it`);
+        return;
+      }
       state.cart.delete(code);
       state.cartPackageOf.delete(code);
       AVM.utils.helpers.showToast(`Removed ${test.name} from your profile`);
@@ -561,7 +584,7 @@ AVM.modules = AVM.modules || {};
 
   AVM.modules.profile = {
     persistCart, restoreCart, toggleTest, addPackage, removePackage, isPackageActive,
-    removeFromProfile, clearProfile, renderCart, conflictingCodeFor, coveringPackage,
+    removeFromProfile, clearProfile, renderCart, conflictingCodeFor, coveringPackage, packageOwning,
     setDiscountedPrice, clearDiscountedPrice, groupCartItems,
   };
 })();

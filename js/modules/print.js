@@ -141,7 +141,7 @@ AVM.modules = AVM.modules || {};
         const testNames = [
           ...group.items.map(t => cleanName(t.name)),
           ...(group.pkg.calculatedParams || []),
-        ].join(", ");
+        ].join(" · ");
 
         return `
           <tr class="row-group-head">

@@ -56,10 +56,41 @@ AVM.modules = AVM.modules || {};
     "franchise-desc": (a, b) => b.sum.msbFranchise - a.sum.msbFranchise,
   };
 
-  function testNamesLine(pkg, items, esc) {
-    const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
-    const names = [...items.map(t => cleanName(t.name)), ...(pkg.calculatedParams || [])];
+  function cleanTestName(name) {
+    return name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+  }
+
+  function dotJoin(names, esc) {
     return names.map(esc).join(`<span class="fr-panel-details__dot">•</span>`);
+  }
+
+  // Packages built from several named panels + a few extra tests (e.g. AVM
+  // Profile A = Kidney + Lipid + Liver + Iron + Pancreatic Profile plus
+  // Calcium/CRP/FBS/Phosphorous/TSH — see data.js) carry their own
+  // `groups` breakdown so the expanded "Tests included" list reads as
+  // "Kidney Profile: ..." / "Iron Profile: ..." instead of one long
+  // flattened line. Packages without `groups` (the single system panels
+  // like Kidney Profile itself) fall back to the plain flat line they've
+  // always used — grouping a panel that IS the group would be redundant.
+  function renderTestDetails(pkg, items, byCode, esc) {
+    if (pkg.groups && pkg.groups.length) {
+      const groupBlocks = pkg.groups.map(g => {
+        const names = g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanTestName(t.name));
+        return `
+          <div class="fr-panel-details__group">
+            <span class="fr-panel-details__group-label">${esc(g.label)}</span>
+            <p>${dotJoin(names, esc)}</p>
+          </div>`;
+      }).join("");
+      const calcBlock = (pkg.calculatedParams || []).length ? `
+          <div class="fr-panel-details__group">
+            <span class="fr-panel-details__group-label">Calculated Parameters</span>
+            <p>${dotJoin(pkg.calculatedParams, esc)}</p>
+          </div>` : "";
+      return groupBlocks + calcBlock;
+    }
+    const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
+    return `<p>${dotJoin(names, esc)}</p>`;
   }
 
   function renderPanelsTable({ packages, elements, onChange, priceMode }) {
@@ -148,7 +179,7 @@ AVM.modules = AVM.modules || {};
         ${isOpen ? `
         <div class="fr-panel-details">
           <span class="fr-panel-details__label">Tests included</span>
-          <p>${testNamesLine(pkg, items, esc)}</p>
+          ${renderTestDetails(pkg, items, byCode, esc)}
         </div>` : ""}`;
     }).join("");
 

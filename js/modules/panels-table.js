@@ -115,7 +115,6 @@ AVM.modules = AVM.modules || {};
     }
 
     elements.body.innerHTML = rows.map(({ pkg, items, sum }) => {
-      const testCount = AVM.modules.calculations.packageTestCount(pkg);
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
       const btnClass = "add-btn" + (isAdded ? " added" : "");
       const btnLabel = isAdded ? "Added" : "Add to Profile";
@@ -139,7 +138,7 @@ AVM.modules = AVM.modules || {};
         <div class="fr-row fr-panels-row">
           <div class="cell-name">
             ${esc(pkg.name)}
-            <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴ Hide" : "▾ Show"} ${testCount} test${testCount !== 1 ? "s" : ""} included</button>
+            <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴" : "▾"} Tests included</button>
           </div>
           ${priceCells}
           <div class="cell-action">

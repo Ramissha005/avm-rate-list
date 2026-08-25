@@ -27,6 +27,8 @@ window.AVM = window.AVM || {};
       body: $("franchiseRatesBody"),
       count: $("franchiseRatesCount"),
       searchInput: $("franchiseRatesSearch"),
+      sortSelect: $("franchiseRatesSort"),
+      paginationWrap: $("franchiseRatesPagination"),
     } : null;
 
     const hasCart = !!$("cartBody");
@@ -103,8 +105,21 @@ window.AVM = window.AVM || {};
       $("franchiseRatesSearch").addEventListener("input",
         AVM.utils.helpers.debounce(refreshAll, 200));
     }
+    // Same "reads its own value, not shared app state" reasoning as the
+    // search box above — this table's Sort options (Savings/Franchise
+    // rate) don't exist in rate-list.js's SORTERS, so it isn't wired
+    // through AVM.modules.sorting.wireSort/state.sortMode either.
+    if ($("franchiseRatesSort")) {
+      $("franchiseRatesSort").addEventListener("change", () => {
+        AVM.state.currentPage = 1;
+        refreshAll();
+      });
+    }
     AVM.modules.sorting.wireSort($("sortSelect"), { onChange: refreshAll });
     AVM.modules.pagination.wirePageSize($("pageSizeSelect"), { onChange: refreshAll });
+    // Shared state.pageSize/currentPage, same as the main rate list — see
+    // franchise-rates.js's header comment for why that's safe here.
+    AVM.modules.pagination.wirePageSize($("franchiseRatesPageSize"), { onChange: refreshAll });
     AVM.modules.testDetail.wireTestDetailDrawer();
 
     if ($("clearFilters")) {

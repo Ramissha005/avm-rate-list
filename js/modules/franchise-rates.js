@@ -7,27 +7,32 @@ AVM.modules = AVM.modules || {};
   // A "what you'd save" table for the Franchise page — every test's B2B
   // rate next to its Franchise rate and the % that saves, so a
   // prospective franchisee sees the pitch in real numbers instead of
-  // taking "better rates" on faith. Includes the same Add to Profile
-  // button as the main rate list (rate-list.js) — a visitor can start
-  // building a profile straight from this table, not just look at it.
-  //
-  // Technology filtering reuses the same state.activeFilters.technology
-  // Set (and the same #filterTech chip UI) as the main rate list — this
-  // page never has that list on screen at the same time, so there's no
-  // risk of the two stepping on each other, and it means the Filters
-  // button just works here via app.js's existing generic wiring with no
-  // extra plumbing. Search is local to this table's own input, not the
-  // shared state.searchTerm the main list uses. Price filtering isn't
-  // offered here — franchise savings track a test's own price either way,
-  // not a band a customer would shop by.
-  //
-  // Sorted biggest-savings-first (not the catalog's sr order) — the whole
-  // point of this table is the pitch, so the most persuasive rows lead;
-  // tests with no franchise discount sink to the bottom.
+  // taking "better rates" on faith. Same toolbar shape as the main rate
+  // list (search, Filters, Sort, page size) — see franchise.html — but
+  // its own Sort options (Savings/Name/B2B/Franchise rather than
+  // rate-list.js's B2B/B2C/Margin, since B2C and Margin aren't columns
+  // here) read straight off #franchiseRatesSort rather than going through
+  // the shared state.sortMode + SORTERS rate-list.js owns. Page size and
+  // current page *do* reuse the shared state.pageSize/currentPage (via
+  // AVM.modules.pagination) and Technology filtering reuses
+  // state.activeFilters.technology — safe since this page never has the
+  // main rate list on screen at the same time. Includes the same Add to
+  // Profile button as the main list too — a visitor can start building a
+  // profile straight from this table, not just look at it.
   function savingsPercent(t) {
     if (t.franchise == null || t.b2b <= t.franchise) return 0;
     return ((t.b2b - t.franchise) / t.b2b) * 100;
   }
+
+  const SORTERS = {
+    "savings-desc": (a, b) => savingsPercent(b) - savingsPercent(a),
+    "savings-asc": (a, b) => savingsPercent(a) - savingsPercent(b),
+    name: (a, b) => a.name.localeCompare(b.name),
+    "b2b-asc": (a, b) => a.b2b - b.b2b,
+    "b2b-desc": (a, b) => b.b2b - a.b2b,
+    "franchise-asc": (a, b) => (a.franchise ?? a.b2b) - (b.franchise ?? b.b2b),
+    "franchise-desc": (a, b) => (b.franchise ?? b.b2b) - (a.franchise ?? a.b2b),
+  };
 
   function renderFranchiseRates({ tests, elements, onChange }) {
     if (!elements || !elements.body) return;
@@ -36,25 +41,33 @@ AVM.modules = AVM.modules || {};
     const { byCode } = AVM.data.getCatalog();
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
-    const list = tests
+    const sortMode = (elements.sortSelect && elements.sortSelect.value) || "savings-desc";
+    const filteredList = tests
       .filter(t => {
         if (activeFilters.technology.size && !activeFilters.technology.has(t.tech)) return false;
         if (term && !`${t.name} ${t.code}`.toLowerCase().includes(term)) return false;
         return true;
       })
-      .sort((a, b) => savingsPercent(b) - savingsPercent(a));
+      .sort(SORTERS[sortMode] || SORTERS["savings-desc"]);
 
-    if (list.length === 0) {
+    const totalItems = filteredList.length;
+
+    if (totalItems === 0) {
       elements.body.innerHTML = `<div class="fr-empty">No tests match that search/filter.</div>`;
       if (elements.count) elements.count.textContent = "";
+      if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
       return;
     }
 
+    // Paged the same way the main rate list is — state.currentPage/
+    // pageSize are shared globals, safe here for the reason above.
+    const start = (state.currentPage - 1) * state.pageSize;
+    const list = filteredList.slice(start, start + state.pageSize);
     const filtered = term || activeFilters.technology.size;
+
     if (elements.count) {
-      elements.count.textContent = filtered
-        ? `Showing ${list.length} of ${tests.length} tests`
-        : `${tests.length} tests`;
+      const rangeText = `${start + 1}–${start + list.length}`;
+      elements.count.textContent = `Showing ${rangeText} of ${totalItems} tests${filtered ? "" : ` (${tests.length} total)`}`;
     }
 
     elements.body.innerHTML = list.map(t => {
@@ -105,6 +118,10 @@ AVM.modules = AVM.modules || {};
           </div>
         </div>`;
     }).join("");
+
+    if (elements.paginationWrap) {
+      AVM.modules.pagination.renderPagination({ container: elements.paginationWrap, totalItems, onChange });
+    }
 
     elements.body.querySelectorAll(".add-btn").forEach(btn => {
       btn.onclick = () => {

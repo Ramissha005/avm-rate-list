@@ -179,6 +179,22 @@
           Filters
           <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
         </button>
+        <div class="rl-right">
+          <div class="rl-sort">
+            <select id="franchiseRatesSort">
+              <option value="savings-desc">Sort: Savings High to Low</option>
+              <option value="savings-asc">Savings: Low to High</option>
+              <option value="name">Name A–Z</option>
+              <option value="b2b-asc">B2B: Low to High</option>
+              <option value="b2b-desc">B2B: High to Low</option>
+              <option value="franchise-asc">Franchise: Low to High</option>
+              <option value="franchise-desc">Franchise: High to Low</option>
+            </select>
+          </div>
+          <div class="rl-sort">
+            <select id="franchiseRatesPageSize"></select>
+          </div>
+        </div>
       </div>
 
       <div class="filters-panel" id="filtersPanel" hidden>
@@ -206,6 +222,8 @@
         </div>
         <div id="franchiseRatesBody"></div>
       </div>
+
+      <div id="franchiseRatesPagination" class="pagination"></div>
     </div>
   </section>
 

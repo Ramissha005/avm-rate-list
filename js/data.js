@@ -2407,35 +2407,35 @@ AVM.state = {
   { "id": "avm-profile-a", "name": "AVM Profile A", "categoryId": "general-biochemistry",
     "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH"],
     "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"] },
-      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH"] }
+      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
+      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
+      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-profile-b", "name": "AVM Profile B", "categoryId": "general-biochemistry",
     "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"],
     "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"] },
-      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"] }
+      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
+      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
+      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-profile-c", "name": "AVM Profile C", "categoryId": "general-biochemistry",
     "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC", "VB12", "VITDT", "FOLI"],
     "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"] },
-      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"] },
-      { "label": "Vitamin Profile", "codes": ["VB12", "VITDT", "FOLI"] },
-      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"] }
+      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
+      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
+      { "label": "Vitamin Profile", "codes": ["VB12", "VITDT", "FOLI"], "calculatedParams": [] },
+      { "label": "Additional Tests", "codes": ["CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"], "calculatedParams": [] }
     ],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
   { "id": "avm-infertility-a", "name": "AVM Infertility A", "categoryId": "reproductive-hormones",
@@ -2444,10 +2444,10 @@ AVM.state = {
   { "id": "avm-anemia-a", "name": "AVM Anemia A", "categoryId": "iron-studies",
     "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "BUN", "UREA", "SCRE", "URIC", "IRON", "TIBC", "FERR", "FOLI", "VB12", "CBC", "A1c"],
     "groups": [
-      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"] },
-      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"] },
-      { "label": "Additional Tests", "codes": ["FOLI", "VB12", "CBC", "A1c"] }
+      { "label": "Liver Profile", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"], "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"] },
+      { "label": "Kidney Profile", "codes": ["BUN", "UREA", "SCRE", "URIC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Additional Tests", "codes": ["FOLI", "VB12", "CBC", "A1c"], "calculatedParams": [] }
     ],
     "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)"], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],

@@ -74,20 +74,20 @@ AVM.modules = AVM.modules || {};
   // always used — grouping a panel that IS the group would be redundant.
   function renderTestDetails(pkg, items, byCode, esc) {
     if (pkg.groups && pkg.groups.length) {
-      const groupBlocks = pkg.groups.map(g => {
-        const names = g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanTestName(t.name));
+      // Each group carries its own calculatedParams (the same ratios its
+      // matching standalone panel already lists — see data.js), folded
+      // onto that group's own line rather than pulled out into a
+      // separate "Calculated Parameters" section, so e.g. eGFR reads
+      // under Kidney Profile the same way it does on the Kidney Profile
+      // package itself.
+      return pkg.groups.map(g => {
+        const names = [...g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
         return `
           <div class="fr-panel-details__group">
             <span class="fr-panel-details__group-label">${esc(g.label)}</span>
             <p>${dotJoin(names, esc)}</p>
           </div>`;
       }).join("");
-      const calcBlock = (pkg.calculatedParams || []).length ? `
-          <div class="fr-panel-details__group">
-            <span class="fr-panel-details__group-label">Calculated Parameters</span>
-            <p>${dotJoin(pkg.calculatedParams, esc)}</p>
-          </div>` : "";
-      return groupBlocks + calcBlock;
     }
     const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
     return `<p>${dotJoin(names, esc)}</p>`;

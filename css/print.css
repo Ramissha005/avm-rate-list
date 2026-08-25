@@ -137,6 +137,20 @@ tbody tr{ break-inside:avoid; }
 .group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
 .group-head__dot{ font-weight:700; color:var(--profit); margin:0 4px; font-size:17px; vertical-align:middle; line-height:0; display:inline-block; }
 
+/* AVM Profile A/B/C and AVM Anemia A (see data.js's per-package `groups`)
+   break the flat .group-head__tests line above into one sub-block per
+   named panel they're built from — same breakdown the site's own
+   Profiles view shows (panels-table.js), so the printed/customer copy
+   matches what the person building the profile already saw on screen.
+   The outer wrapper carries the same 7px/8px inset .group-head__tests
+   has on its own above; the nested copy of that class drops its own
+   padding since the wrapper already provides it. */
+.group-head__groups{ padding:7px 8px 3px; }
+.group-head__group{ margin-top:6px; padding-left:8px; border-left:2px solid var(--line); }
+.group-head__group:first-child{ margin-top:0; }
+.group-head__group-label{ display:block; font-weight:700; font-size:11px; color:var(--navy); margin-bottom:1px; }
+.group-head__group .group-head__tests{ padding:0; margin-top:1px; }
+
 /* ================= SUMMARY STRIP ================= */
 .summary{
   display:flex; gap:12px; margin-top:18px;

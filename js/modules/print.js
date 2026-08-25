@@ -110,6 +110,13 @@ AVM.modules = AVM.modules || {};
       // Nitrogen (BUN)") — stripped here so the "tests included" line
       // reads as plain names, same as panels-table.js's own version does.
       const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      // AVM Profile A/B/C and AVM Anemia A's `groups` (see below) list
+      // codes, not resolved test objects — this page's own `byCode` was
+      // scoped to the cache-population block above and out of reach down
+      // here, so it's fetched again (loadCatalog() already resolved by
+      // the time we get this far, so this is just a cheap lookup, not a
+      // re-fetch).
+      const { byCode } = AVM.data.getCatalog();
 
       const groups = AVM.modules.profile.groupCartItems(items);
       let rowNum = 0;
@@ -142,10 +149,30 @@ AVM.modules = AVM.modules || {};
         // the dot needs its own markup (bold, blue) so it can't be part of
         // a plain joined-and-escaped string.
         const dot = `<span class="group-head__dot">·</span>`;
-        const testNames = [
-          ...group.items.map(t => cleanName(t.name)),
-          ...(group.pkg.calculatedParams || []),
-        ].map(esc).join(dot);
+        // AVM Profile A/B/C and AVM Anemia A are built from several named
+        // panels + a few standalone tests (see data.js's per-package
+        // `groups`) — break their "included" line into one labeled
+        // sub-block per panel, same as the site's own Profiles view
+        // (panels-table.js), instead of one long flattened line of every
+        // test. Packages without `groups` (the single system panels)
+        // keep the original flat line.
+        const testsMarkup = group.pkg.groups && group.pkg.groups.length
+          ? `<div class="group-head__groups">${group.pkg.groups.map(g => {
+              const names = [
+                ...g.codes.map(c => byCode[c]).filter(Boolean).map(t => cleanName(t.name)),
+                ...(g.calculatedParams || []),
+              ];
+              const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(esc).join(dot)}</p>`;
+              return `
+                <div class="group-head__group">
+                  <span class="group-head__group-label">${esc(g.label)}</span>
+                  ${body}
+                </div>`;
+            }).join("")}</div>`
+          : `<p class="group-head__tests">${[
+              ...group.items.map(t => cleanName(t.name)),
+              ...(group.pkg.calculatedParams || []),
+            ].map(esc).join(dot)}</p>`;
 
         return `
           <tr class="row-group-head">
@@ -154,7 +181,7 @@ AVM.modules = AVM.modules || {};
                 <span class="group-head__name">${esc(group.pkg.name)}</span>
                 <span class="group-head__price">${money(groupB2C)}</span>
               </div>
-              <p class="group-head__tests">${testNames}</p>
+              ${testsMarkup}
             </td>
           </tr>
         `;

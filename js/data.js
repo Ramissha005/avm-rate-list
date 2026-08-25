@@ -2404,7 +2404,7 @@ AVM.state = {
     "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"], "active": true },
   { "id": "thyro-5", "name": "Thyro 5", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"],
     "calculatedParams": [], "active": true },
-  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC"],
+  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"],
     "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
     "calculatedParams": [], "active": true },

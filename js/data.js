@@ -2477,20 +2477,20 @@ AVM.state = {
       { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] }
     ],
     "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
+  { "id": "thyro-5", "name": "Thyro 5", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"],
+    "calculatedParams": [], "active": true },
+  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
+    "calculatedParams": [], "active": true },
+  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"],
+    "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
+  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "general-biochemistry", "codes": ["AMYL", "LASE"],
+    "calculatedParams": [], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"], "active": true },
   { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
     "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"], "active": true },
   { "id": "liver-profile", "name": "Liver Profile", "categoryId": "liver-function", "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT"],
-    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"], "active": true },
-  { "id": "thyro-5", "name": "Thyro 5", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"],
-    "calculatedParams": [], "active": true },
-  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"],
-    "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
-  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
-    "calculatedParams": [], "active": true },
-  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "general-biochemistry", "codes": ["AMYL", "LASE"],
-    "calculatedParams": [], "active": true }
+    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio"], "active": true }
 ];
 
   const PARAMETERS_WRAPPED = {

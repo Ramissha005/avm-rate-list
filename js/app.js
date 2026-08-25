@@ -146,7 +146,13 @@ window.AVM = window.AVM || {};
     // rate) don't exist in rate-list.js's SORTERS, so it isn't wired
     // through AVM.modules.sorting.wireSort/state.sortMode either.
     if ($("franchiseRatesSort")) {
-      $("franchiseRatesSort").addEventListener("change", () => {
+      $("franchiseRatesSort").addEventListener("change", (e) => {
+        // Marks that this dropdown's value is now a genuine, deliberate
+        // choice rather than just whatever its first <option> happens to
+        // be — see panels-table.js's own use of this flag, which the
+        // Profiles view needs to tell "nobody's touched Sort yet" apart
+        // from "the visitor picked Savings High to Low again".
+        e.target.dataset.userSet = "1";
         AVM.state.currentPage = 1;
         refreshAll();
       });

@@ -138,11 +138,25 @@ AVM.modules = AVM.modules || {};
 
     // No sort selected (homepage's "Sort: Default", or no #sortSelect at
     // all) leaves rows in catalog order — same as every other panel
-    // listing on the site (the old bundle-chip row included). The
-    // Franchise page's own default ("Savings: High to Low") comes from
-    // its <select>'s own default-selected option, same as any other
-    // choice there.
-    const sortMode = (elements.sortSelect && elements.sortSelect.value) || "";
+    // listing on the site (the old bundle-chip row included), so AVM
+    // Profile A/B/C/Infertility A/Anemia A show first here exactly like
+    // they do on the homepage's own Profiles view.
+    //
+    // The Franchise page's Individual Tests view defaults to "Savings:
+    // High to Low" (its <select>'s first <option>, and a deliberate
+    // earlier choice for that view specifically) — but that same
+    // <select> is shared with this Profiles view too, so left alone its
+    // untouched default would silently re-sort Profiles by savings as
+    // well, before the visitor ever picked anything, and scramble AVM
+    // Profile A out of first place. dataset.userSet (set once the
+    // dropdown actually fires a change event — see app.js) tells "still
+    // the pristine default" apart from "the visitor genuinely chose
+    // Savings High to Low again" — only the latter should sort Profiles
+    // by it.
+    const sortTouched = !elements.sortSelect || elements.sortSelect.dataset.userSet === "1";
+    const sortMode = priceMode === "franchise" && !sortTouched
+      ? ""
+      : (elements.sortSelect && elements.sortSelect.value) || "";
     const sorters = priceMode === "franchise" ? FRANCHISE_SORTERS : MARGIN_SORTERS;
     if (sorters[sortMode]) rows.sort(sorters[sortMode]);
 

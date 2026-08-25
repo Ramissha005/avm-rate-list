@@ -149,6 +149,15 @@ AVM.modules = AVM.modules || {};
         // the dot needs its own markup (bold, blue) so it can't be part of
         // a plain joined-and-escaped string.
         const dot = `<span class="group-head__dot">·</span>`;
+        // Distinct sample types this profile actually needs, not each
+        // test's own sample type repeated once per test — if ten of
+        // AVM Profile A's tests all draw from Serum, the partner
+        // collecting it needs to know "Serum" once, not "Serum" ten
+        // times over in a wall of test names.
+        const samples = [...new Set(group.items.map(t => t.sample).filter(Boolean))];
+        const samplesLine = samples.length
+          ? `<p class="group-head__samples"><span class="group-head__samples-label">Sample</span>${samples.map(esc).join(dot)}</p>`
+          : "";
         // AVM Profile A/B/C and AVM Anemia A are built from several named
         // panels + a few standalone tests (see data.js's per-package
         // `groups`) — break their "included" line into one labeled
@@ -187,6 +196,7 @@ AVM.modules = AVM.modules || {};
                 <span class="group-head__name">${esc(group.pkg.name)}</span>
                 <span class="group-head__price">${money(groupB2C)}</span>
               </div>
+              ${samplesLine}
               ${testsMarkup}
             </td>
           </tr>

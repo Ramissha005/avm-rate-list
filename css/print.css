@@ -137,6 +137,17 @@ tbody tr{ break-inside:avoid; }
 .group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
 .group-head__dot{ font-weight:700; color:var(--profit); margin:0 4px; font-size:17px; vertical-align:middle; line-height:0; display:inline-block; }
 
+/* Distinct sample types the whole profile needs (Serum, EDTA, ...) — see
+   print.js — deduplicated across every test in it rather than repeating
+   the same one once per test, so a ten-test profile that's all Serum
+   says "Serum" once, not ten times. Sits right under the name/price
+   row, above the test breakdown, since "what do I need to collect" is
+   the more immediately useful fact. */
+.group-head__samples{ margin:0; padding:7px 8px 0; font-size:11.5px; color:var(--ink-soft); }
+.group-head__samples-label{
+  font-weight:700; font-size:9.5px; color:var(--navy); text-transform:uppercase; letter-spacing:.04em; margin-right:6px;
+}
+
 /* AVM Profile A/B/C and AVM Anemia A (see data.js's per-package `groups`)
    break the flat .group-head__tests line above into one sub-block per
    named panel they're built from — same breakdown the site's own

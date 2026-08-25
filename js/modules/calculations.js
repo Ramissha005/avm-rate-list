@@ -137,9 +137,16 @@ AVM.modules = AVM.modules || {};
   // A profile's real test count per the source rate card — its priced codes
   // plus whatever calculated/derived parameters ride along with them for
   // free (e.g. Kidney Profile is 4 priced codes + eGFR + BUN/Creatinine
-  // Ratio = 6 "tests", even though only 4 are separately billed).
-  function packageTestCount(pkg) {
-    return pkg.codes.length + (pkg.calculatedParams ? pkg.calculatedParams.length : 0);
+  // Ratio = 6 "tests", even though only 4 are separately billed). A single
+  // priced code can itself report more than one result (CBC's one
+  // "Hemogram - 6 Part (Diff)" line is 21 reportable parameters) — see
+  // each test's own paramCount in data.js; tests without one count as 1.
+  // Needs the resolved test objects (not just pkg.codes) to read that
+  // field, so the caller passes the same `items` it already resolved for
+  // totals().
+  function packageTestCount(pkg, items) {
+    const codeCount = items.reduce((n, t) => n + (t.paramCount || 1), 0);
+    return codeCount + (pkg.calculatedParams ? pkg.calculatedParams.length : 0);
   }
 
   AVM.modules.calculations = {

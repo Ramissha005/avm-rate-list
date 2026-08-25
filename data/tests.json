@@ -2225,7 +2225,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "paramCount": 21
     }
   ]
 }

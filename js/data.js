@@ -2358,6 +2358,13 @@ AVM.state = {
       "tat": null,
       "active": true
     },
+    // paramCount: one billed code can itself report more than one result
+    // on the actual lab report — CBC's single "Hemogram - 6 Part (Diff)"
+    // line is 21 reportable parameters (WBC/RBC/Hb/Hct/indices/platelets/
+    // 6-part differential), not 1. Used by packageTestCount() below to
+    // total a profile's real test count without listing all 21 by name
+    // anywhere in the UI (see calculations.js). Every other test omits
+    // this field and defaults to 1.
     {
       "sr": 106,
       "code": "CBC",
@@ -2377,7 +2384,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "paramCount": 21
     }
   ]
 };
@@ -2432,10 +2440,10 @@ AVM.state = {
       { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
     ],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
   { "id": "avm-profile-c", "name": "AVM Profile C", "categoryId": "general-biochemistry",
     "codes": ["BUN", "UREA", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC", "VB12", "VITDT", "FOLI"],
     "groups": [
@@ -2450,13 +2458,13 @@ AVM.state = {
       { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
     ],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)"], "active": true },
+    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Globulin", "A:G Ratio", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
   { "id": "avm-infertility-a", "name": "AVM Infertility A", "categoryId": "reproductive-hormones",
     "codes": ["UTSH", "AMH", "FSH", "LH", "PRL", "CBC", "A1c"],
-    "calculatedParams": [], "active": true },
+    "calculatedParams": ["ABG (Average Blood Glucose)"], "active": true },
   { "id": "avm-anemia-a", "name": "AVM Anemia A", "categoryId": "iron-studies",
     "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "BUN", "UREA", "SCRE", "URIC", "IRON", "TIBC", "FERR", "FOLI", "VB12", "CBC", "A1c"],
     "groups": [
@@ -2466,9 +2474,9 @@ AVM.state = {
       { "label": "Folic Acid", "codes": ["FOLI"], "calculatedParams": [] },
       { "label": "Vitamin B12", "codes": ["VB12"], "calculatedParams": [] },
       { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": [] }
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] }
     ],
-    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)"], "active": true },
+    "calculatedParams": ["Bilirubin - Indirect", "Globulin", "A:G Ratio", "BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"], "active": true },
   { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],

@@ -388,7 +388,7 @@ AVM.modules = AVM.modules || {};
 
       const groupKey = group.pkg.id;
       const collapsed = !state.expandedGroups.has(groupKey);
-      const testCount = AVM.modules.calculations.packageTestCount(group.pkg);
+      const testCount = AVM.modules.calculations.packageTestCount(group.pkg, group.items);
       // The panel's own B2C total, shown once in the header — see rows
       // above, which rely on this instead of repeating a price on every
       // line inside the panel.

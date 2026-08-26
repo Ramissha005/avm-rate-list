@@ -2583,7 +2583,7 @@ AVM.state = {
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
       { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] }
     ],
@@ -2628,7 +2628,7 @@ AVM.state = {
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
       { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },

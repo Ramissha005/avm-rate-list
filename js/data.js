@@ -2510,7 +2510,7 @@ AVM.state = {
     "calculatedParams": [], "active": true },
   { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"],
     "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
-  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "general-biochemistry", "codes": ["AMYL", "LASE"],
+  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "pancreatic-function", "codes": ["AMYL", "LASE"],
     "calculatedParams": [], "active": true },
   { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "SCRE", "URIC", "CALC"],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"], "active": true },

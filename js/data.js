@@ -2271,7 +2271,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "paramCount": 22
     },
     {
       "sr": 102,
@@ -2359,11 +2360,13 @@ AVM.state = {
     },
     // paramCount: one billed code can itself report more than one result
     // on the actual lab report — CBC's single "Hemogram - 6 Part (Diff)"
-    // line is 21 reportable parameters (WBC/RBC/Hb/Hct/indices/platelets/
-    // 6-part differential), not 1. Used by packageTestCount() below to
-    // total a profile's real test count without listing all 21 by name
-    // anywhere in the UI (see calculations.js). Every other test omits
-    // this field and defaults to 1.
+    // line is 28 reportable parameters (WBC/RBC/Hb/Hct/indices/platelets/
+    // 6-part differential/etc.), not 1 (Complete Urine Analysis above is
+    // the other one, at 22 — see its own entry). Used by
+    // packageTestCount() below to total a profile's real test count
+    // without listing all of them by name anywhere in the UI (see
+    // calculations.js). Every other test omits this field and defaults
+    // to 1.
     {
       "sr": 106,
       "code": "CBC",
@@ -2384,7 +2387,7 @@ AVM.state = {
       "sampleVolume": null,
       "tat": null,
       "active": true,
-      "paramCount": 21
+      "paramCount": 28
     }
   ]
 };

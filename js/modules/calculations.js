@@ -139,8 +139,9 @@ AVM.modules = AVM.modules || {};
   // free (e.g. Kidney Profile is 4 priced codes + eGFR + BUN/Creatinine
   // Ratio = 6 "tests", even though only 4 are separately billed). A single
   // priced code can itself report more than one result (CBC's one
-  // "Hemogram - 6 Part (Diff)" line is 21 reportable parameters) — see
-  // each test's own paramCount in data.js; tests without one count as 1.
+  // "Hemogram - 6 Part (Diff)" line is 28 reportable parameters, CUA's
+  // "Complete Urine Analysis" is 22) — see each test's own paramCount
+  // in data.js; tests without one count as 1.
   // Needs the resolved test objects (not just pkg.codes) to read that
   // field, so the caller passes the same `items` it already resolved for
   // totals().

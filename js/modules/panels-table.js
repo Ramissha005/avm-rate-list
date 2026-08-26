@@ -204,7 +204,7 @@ AVM.modules = AVM.modules || {};
       const isOpen = expanded.has(pkg.id);
       // Same real test count the cart drawer's own "N tests" badge shows
       // once this profile is added (see calculations.js) — a code that
-      // itself reports more than one result (CBC's 21) and any
+      // itself reports more than one result (CBC's 28, CUA's 22) and any
       // calculated/derived parameters (eGFR, ABG, ...) both count here
       // too, not just pkg.codes.length.
       const testCount = packageTestCount(pkg, items);

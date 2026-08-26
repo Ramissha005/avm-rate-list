@@ -12,6 +12,10 @@
     "label": "Kidney Function"
   },
   {
+    "id": "pancreatic-function",
+    "label": "Pancreatic Function"
+  },
+  {
     "id": "lipid-profile",
     "label": "Lipid Profile"
   },

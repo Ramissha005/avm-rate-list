@@ -61,6 +61,10 @@ AVM.state = {
     "label": "Kidney Function"
   },
   {
+    "id": "pancreatic-function",
+    "label": "Pancreatic Function"
+  },
+  {
     "id": "lipid-profile",
     "label": "Lipid Profile"
   },
@@ -645,7 +649,7 @@ AVM.state = {
       "franchise": 35,
       "b2b": 45,
       "b2c": 200,
-      "categoryId": "general-biochemistry",
+      "categoryId": "pancreatic-function",
       "departmentId": "biochemistry",
       "displayOrder": 24,
       "fastingRequired": null,
@@ -792,7 +796,7 @@ AVM.state = {
       "franchise": 65,
       "b2b": 75,
       "b2c": 300,
-      "categoryId": "general-biochemistry",
+      "categoryId": "pancreatic-function",
       "departmentId": "immunoassay",
       "displayOrder": 31,
       "fastingRequired": null,

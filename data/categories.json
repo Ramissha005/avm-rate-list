@@ -16,6 +16,10 @@
     "label": "Pancreatic Function"
   },
   {
+    "id": "metabolic-disorder",
+    "label": "Metabolic Disorder"
+  },
+  {
     "id": "lipid-profile",
     "label": "Lipid Profile"
   },

@@ -65,6 +65,10 @@ AVM.state = {
     "label": "Pancreatic Function"
   },
   {
+    "id": "metabolic-disorder",
+    "label": "Metabolic Disorder"
+  },
+  {
     "id": "lipid-profile",
     "label": "Lipid Profile"
   },
@@ -418,7 +422,7 @@ AVM.state = {
       "franchise": 30,
       "b2b": 40,
       "b2c": 200,
-      "categoryId": "general-biochemistry",
+      "categoryId": "metabolic-disorder",
       "departmentId": "biochemistry",
       "displayOrder": 13,
       "fastingRequired": null,

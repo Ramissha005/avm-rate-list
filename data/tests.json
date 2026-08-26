@@ -263,7 +263,7 @@
       "franchise": 30,
       "b2b": 40,
       "b2c": 200,
-      "categoryId": "general-biochemistry",
+      "categoryId": "metabolic-disorder",
       "departmentId": "biochemistry",
       "displayOrder": 13,
       "fastingRequired": null,

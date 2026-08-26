@@ -150,8 +150,61 @@ AVM.modules = AVM.modules || {};
     return codeCount + (pkg.calculatedParams ? pkg.calculatedParams.length : 0);
   }
 
+  // A profile's own flat price (see each package's `pricing` in data.js) —
+  // NOT assembled from its member tests' own B2B/B2C prices the way every
+  // profile used to be priced. No MSB floor either: that's a per-sample-
+  // type billing rule for individually-priced tests, and doesn't apply to
+  // a bundle that's already one flat number.
+  function packagePricing(pkg) {
+    const p = pkg.pricing || { b2b: 0, franchise: 0, b2c: 0 };
+    const franchiseSavings = Math.max(0, p.b2b - p.franchise);
+    return {
+      b2b: p.b2b, franchise: p.franchise, b2c: p.b2c,
+      margin: p.b2c - p.b2b,
+      marginPercentage: marginPercentage(p.b2b, p.b2c),
+      franchiseSavings,
+      franchiseSavingsPercentage: p.b2b > 0 ? (franchiseSavings / p.b2b) * 100 : 0,
+    };
+  }
+
+  // The cart's real combined total: individually-added tests (summed and
+  // MSB-floored exactly like totals() above) PLUS every fixed-price
+  // profile currently in the cart, added as its own flat number — a
+  // profile bundle isn't subject to MSB (it's already one line, not
+  // assembled from per-sample-type groups) and never double-counts with
+  // `individualItems`, since a profile's own tests are never added there
+  // in the first place (see profile.js's addPackage). Returns the exact
+  // same shape totals() does so every caller downstream (cart drawer,
+  // print page, margin/franchise boxes) works unchanged either way.
+  function cartTotals(individualItems, bundlePkgs) {
+    const base = totals(individualItems);
+    let bundleB2b = 0, bundleB2c = 0, bundleFranchise = 0;
+    (bundlePkgs || []).forEach(pkg => {
+      const p = pkg.pricing || { b2b: 0, franchise: 0, b2c: 0 };
+      bundleB2b += p.b2b;
+      bundleB2c += p.b2c;
+      bundleFranchise += (p.franchise != null ? p.franchise : p.b2b);
+    });
+    const b2b = base.b2b + bundleB2b;
+    const b2c = base.b2c + bundleB2c;
+    const msbB2b = base.msbB2b + bundleB2b;
+    const netB2b = msbB2b;
+    const msbFranchise = base.msbFranchise + bundleFranchise;
+    const franchiseSavings = Math.max(0, netB2b - msbFranchise);
+    return {
+      b2b, b2c, msbB2b,
+      margin: b2c - b2b,
+      marginPercentage: marginPercentage(b2b, b2c),
+      netB2b,
+      netMargin: b2c - netB2b,
+      netMarginPercentage: marginPercentage(netB2b, b2c),
+      msbFranchise, franchiseSavings,
+      franchiseSavingsPercentage: netB2b > 0 ? (franchiseSavings / netB2b) * 100 : 0,
+    };
+  }
+
   AVM.modules.calculations = {
-    margin, marginPercentage, totals, packageTestCount,
+    margin, marginPercentage, totals, packageTestCount, packagePricing, cartTotals,
     sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
     sampleTypeBillingFranchise, msbAdjustedFranchise,
   };

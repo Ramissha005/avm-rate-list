@@ -23,37 +23,38 @@ AVM.modules = AVM.modules || {};
   //   'margin'    -> B2B / B2C / Margin (the site's normal pricing —
   //                  homepage)
   //   'franchise' -> B2B / Franchise Rate / Save % (Franchise page)
-  // Both totals come from the same calculations.js totals() the cart
-  // drawer's own Franchise box and Margin box are built on, so a panel's
-  // numbers here match what it'd actually cost added to a profile.
+  // Both come from each profile's own flat, hand-set price (see data.js
+  // `pricing` and calculations.js packagePricing()) — NOT summed from its
+  // listed tests' own B2B/B2C prices the way every profile used to be
+  // priced.
   //
   // Sort reuses each page's existing Sort control (elements.sortSelect —
   // #sortSelect on the homepage, #franchiseRatesSort on the Franchise
   // page) rather than a separate dropdown just for panels: the same
   // options (Default/Name/B2B/B2C/Margin, or Savings/Name/B2B/Franchise)
-  // read just as naturally against a panel's aggregate totals as they do
-  // against a single test's — see the two sorter maps below, keyed by the
-  // exact same option values each <select>'s markup already uses.
+  // read just as naturally against a panel's own price as they do against
+  // a single test's — see the two sorter maps below, keyed by the exact
+  // same option values each <select>'s markup already uses.
   const expanded = new Set();
 
   const MARGIN_SORTERS = {
     name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
-    "b2b-asc": (a, b) => a.sum.msbB2b - b.sum.msbB2b,
-    "b2b-desc": (a, b) => b.sum.msbB2b - a.sum.msbB2b,
-    "b2c-asc": (a, b) => a.sum.b2c - b.sum.b2c,
-    "b2c-desc": (a, b) => b.sum.b2c - a.sum.b2c,
-    "margin-desc": (a, b) => (b.sum.b2c - b.sum.msbB2b) - (a.sum.b2c - a.sum.msbB2b),
-    "margin-asc": (a, b) => (a.sum.b2c - a.sum.msbB2b) - (b.sum.b2c - b.sum.msbB2b),
+    "b2b-asc": (a, b) => a.pricing.b2b - b.pricing.b2b,
+    "b2b-desc": (a, b) => b.pricing.b2b - a.pricing.b2b,
+    "b2c-asc": (a, b) => a.pricing.b2c - b.pricing.b2c,
+    "b2c-desc": (a, b) => b.pricing.b2c - a.pricing.b2c,
+    "margin-desc": (a, b) => b.pricing.margin - a.pricing.margin,
+    "margin-asc": (a, b) => a.pricing.margin - b.pricing.margin,
   };
 
   const FRANCHISE_SORTERS = {
-    "savings-desc": (a, b) => b.sum.franchiseSavingsPercentage - a.sum.franchiseSavingsPercentage,
-    "savings-asc": (a, b) => a.sum.franchiseSavingsPercentage - b.sum.franchiseSavingsPercentage,
+    "savings-desc": (a, b) => b.pricing.franchiseSavingsPercentage - a.pricing.franchiseSavingsPercentage,
+    "savings-asc": (a, b) => a.pricing.franchiseSavingsPercentage - b.pricing.franchiseSavingsPercentage,
     name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
-    "b2b-asc": (a, b) => a.sum.msbB2b - b.sum.msbB2b,
-    "b2b-desc": (a, b) => b.sum.msbB2b - a.sum.msbB2b,
-    "franchise-asc": (a, b) => a.sum.msbFranchise - b.sum.msbFranchise,
-    "franchise-desc": (a, b) => b.sum.msbFranchise - a.sum.msbFranchise,
+    "b2b-asc": (a, b) => a.pricing.b2b - b.pricing.b2b,
+    "b2b-desc": (a, b) => b.pricing.b2b - a.pricing.b2b,
+    "franchise-asc": (a, b) => a.pricing.franchise - b.pricing.franchise,
+    "franchise-desc": (a, b) => b.pricing.franchise - a.pricing.franchise,
   };
 
   function cleanTestName(name) {
@@ -65,14 +66,14 @@ AVM.modules = AVM.modules || {};
     return names.map(n => highlightAsterisk(esc(n))).join(`<span class="fr-panel-details__dot">•</span>`);
   }
 
-  // Packages built from several named panels + a few extra tests (e.g. AVM
-  // Profile A = Kidney + Lipid + Liver + Iron + Pancreatic Profile plus
-  // Calcium/CRP/FBS/Phosphorous/TSH — see data.js) carry their own
-  // `groups` breakdown so the expanded "Tests included" list reads as
-  // "Kidney Profile: ..." / "Iron Profile: ..." instead of one long
-  // flattened line. Packages without `groups` (the single system panels
-  // like Kidney Profile itself) fall back to the plain flat line they've
-  // always used — grouping a panel that IS the group would be redundant.
+  // A profile built from several named sub-panels + a few extra tests can
+  // carry its own `groups` breakdown (see data.js) so the expanded "Tests
+  // included" list reads as "Kidney Profile: ..." / "Iron Profile: ..."
+  // instead of one long flattened line. No current profile uses this (the
+  // fixed-price model rebuild started from just one — see PACKAGES in
+  // data.js) but the rendering support stays here for when a bigger,
+  // multi-panel profile gets added back. Packages without `groups` fall
+  // back to the plain flat line instead.
   function renderTestDetails(pkg, items, byCode, esc) {
     const { packageTestCount } = AVM.modules.calculations;
     if (pkg.groups && pkg.groups.length) {
@@ -114,7 +115,7 @@ AVM.modules = AVM.modules || {};
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { byCode } = AVM.data.getCatalog();
-    const { marginPercentage, packageTestCount } = AVM.modules.calculations;
+    const { packageTestCount } = AVM.modules.calculations;
 
     if (elements.head) {
       elements.head.className = "fr-head fr-panels-head";
@@ -129,7 +130,7 @@ AVM.modules = AVM.modules || {};
       .filter(pkg => pkg.active !== false)
       .map(pkg => {
         const items = pkg.codes.map(c => byCode[c]).filter(Boolean);
-        return { pkg, items, sum: AVM.modules.calculations.totals(items) };
+        return { pkg, items, pricing: AVM.modules.calculations.packagePricing(pkg) };
       })
       .filter(({ pkg, items }) => {
         if (activeTech.size && !items.some(t => activeTech.has(t.tech))) return false;
@@ -176,7 +177,7 @@ AVM.modules = AVM.modules || {};
         : `${rows.length} profile${rows.length !== 1 ? "s" : ""}`;
     }
 
-    elements.body.innerHTML = rows.map(({ pkg, items, sum }) => {
+    elements.body.innerHTML = rows.map(({ pkg, items, pricing }) => {
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
       // Every one of this profile's tests can be "active" without this
       // profile ever having been added itself — a bigger profile that
@@ -211,15 +212,15 @@ AVM.modules = AVM.modules || {};
 
       const priceCells = priceMode === "franchise"
         ? `
-          <div class="cell-price"><span class="mobile-label">B2B Rate</span>${money(sum.msbB2b)}</div>
-          <div class="cell-price is-franchise"><span class="mobile-label">Franchise Rate</span>${money(sum.msbFranchise)}</div>
-          <div><span class="mobile-label">You Save</span>${sum.franchiseSavingsPercentage > 0
-            ? `<span class="cell-margin is-franchise">${Math.round(sum.franchiseSavingsPercentage)}%<small>${money(sum.franchiseSavings)}</small></span>`
+          <div class="cell-price"><span class="mobile-label">B2B Rate</span>${money(pricing.b2b)}</div>
+          <div class="cell-price is-franchise"><span class="mobile-label">Franchise Rate</span>${money(pricing.franchise)}</div>
+          <div><span class="mobile-label">You Save</span>${pricing.franchiseSavingsPercentage > 0
+            ? `<span class="cell-margin is-franchise">${Math.round(pricing.franchiseSavingsPercentage)}%<small>${money(pricing.franchiseSavings)}</small></span>`
             : `<span class="fr-save--none">—</span>`}</div>`
         : `
-          <div class="cell-price"><span class="mobile-label">B2B</span>${money(sum.msbB2b)}</div>
-          <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(sum.b2c)}</div>
-          <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(sum.b2c - sum.msbB2b)}<small>+${Math.round(marginPercentage(sum.msbB2b, sum.b2c))}%</small></span></div>`;
+          <div class="cell-price"><span class="mobile-label">B2B</span>${money(pricing.b2b)}</div>
+          <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(pricing.b2c)}</div>
+          <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(pricing.margin)}<small>+${Math.round(pricing.marginPercentage)}%</small></span></div>`;
 
       return `
         <div class="fr-row fr-panels-row">

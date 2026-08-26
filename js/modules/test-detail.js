@@ -12,14 +12,14 @@ AVM.modules = AVM.modules || {};
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { margin, marginPercentage } = AVM.modules.calculations;
     const { byCode } = AVM.data.getCatalog();
-    const isAdded = AVM.state.cart.has(test.code);
-    // Part of a profile already in the cart (e.g. via AVM Profile A) —
-    // same blocked treatment as a conflicting test rather than a
-    // "✓ Added to Profile" that would look freely removable here but
-    // actually just quietly pull it out of that profile (see
+    // Part of a fixed-price profile bundle already in the cart (e.g. via
+    // Vitamin Profile) — same blocked treatment as a conflicting test
+    // rather than a "✓ Added to Profile" that would look freely removable
+    // here but actually just quietly pull it out of that profile (see
     // profile.js's packageOwning/toggleTest).
-    const owner = isAdded ? AVM.modules.profile.packageOwning(test.code) : null;
-    const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(test.code) : null;
+    const owner = AVM.modules.profile.packageOwning(test.code);
+    const isAdded = !owner && AVM.state.cart.has(test.code);
+    const conflictCode = !isAdded && !owner ? AVM.modules.profile.conflictingCodeFor(test.code) : null;
     const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
     let btnClass = "btn--teal";

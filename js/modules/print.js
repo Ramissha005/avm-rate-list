@@ -6,7 +6,7 @@ AVM.modules = AVM.modules || {};
   const CONFIG = AVM.CONFIG;
 
   function openPrintProfile() {
-    if (state.cart.size === 0) {
+    if (state.cart.size === 0 && state.cartPackages.size === 0) {
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
@@ -17,10 +17,11 @@ AVM.modules = AVM.modules || {};
       codes: [...state.cart],
       customerView: state.customerView,
       discountedPrice: state.discountedPrice,
-      // Which common-panel each code was added as part of — carried over so
-      // the print table can group them under a panel heading the same way
-      // the cart drawer does (see renderPrintPage below).
-      packageOf: Object.fromEntries(state.cartPackageOf),
+      // Fixed-price profile bundles in the cart — carried over so the
+      // print table can group their tests under a profile heading with
+      // its own flat price, the same way the cart drawer does (see
+      // renderPrintPage below and profile.js's groupCartItems).
+      packages: [...state.cartPackages],
     });
     // index.html sits at the project root; every page/* file sits one level down —
     // this project has no build step to resolve paths, so branch on where we are.
@@ -58,15 +59,15 @@ AVM.modules = AVM.modules || {};
     if (!cachedItems) {
       const saved = AVM.utils.storage.readSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, []);
       const codes = Array.isArray(saved) ? saved : (saved.codes || []);
+      const pkgIds = Array.isArray(saved) ? [] : (saved.packages || []);
       await AVM.data.loadCatalog();
-      const { byCode } = AVM.data.getCatalog();
+      const { byCode, packageById } = AVM.data.getCatalog();
       // This page never adds/removes tests, but groupCartItems (see below)
-      // reads AVM.state.cartPackageOf to know which panel each code came
-      // from — seed it from the print payload so grouping works here the
-      // same as it does in the cart drawer that sent us here.
-      state.cartPackageOf = new Map(Object.entries(
-        (!Array.isArray(saved) && saved.packageOf) || {}
-      ));
+      // reads AVM.state.cartPackages to know which fixed-price profile
+      // bundles are in the profile — seed it from the print payload so
+      // grouping works here the same as it does in the cart drawer that
+      // sent us here.
+      state.cartPackages = new Set(pkgIds.filter(id => packageById[id]));
       cachedItems = {
         items: codes.map(c => byCode[c]).filter(Boolean),
         customerView: Array.isArray(saved) ? false : !!saved.customerView,
@@ -78,14 +79,16 @@ AVM.modules = AVM.modules || {};
     }
     const items = cachedItems.items;
     const customerView = customerViewOverride != null ? customerViewOverride : cachedItems.customerView;
-    const sum = AVM.modules.calculations.totals(items);
+    const { packageById } = AVM.data.getCatalog();
+    const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
+    const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
 
     if (sheetEl) sheetEl.classList.toggle("customer-view", customerView);
     if (titleEl) titleEl.textContent = customerView ? "Custom Health Profile — Customer Copy" : "Custom Health Profile";
 
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
-    if (items.length === 0) {
+    if (items.length === 0 && bundlePkgs.length === 0) {
       if (contentEl) contentEl.hidden = true;
       if (emptyEl) emptyEl.hidden = false;
       return;
@@ -111,7 +114,7 @@ AVM.modules = AVM.modules || {};
       // reads as plain names, same as panels-table.js's own version does.
       const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
       const { highlightAsterisk } = AVM.utils.formatters;
-      // AVM Profile A/B/C and AVM Anemia A's `groups` (see below) list
+      // A profile's own `groups` (see below), when it has one, lists
       // codes, not resolved test objects — this page's own `byCode` was
       // scoped to the cache-population block above and out of reach down
       // here, so it's fetched again (loadCatalog() already resolved by
@@ -142,21 +145,21 @@ AVM.modules = AVM.modules || {};
           }).join("");
         }
 
-        // The panel's own B2C total, same figure the cart drawer shows in
-        // its group header — the one price that covers every test (and
-        // calculated extra) listed below it.
-        const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
+        // The profile's own flat price, same figure the cart drawer shows
+        // in its group header — not summed from group.items, since a
+        // profile's price is its own fixed number now (see data.js
+        // `pricing`), never assembled from what it lists.
+        const groupB2C = group.pkg.pricing.b2c;
         // Escaped per-name, then rejoined with a styled separator span —
         // the dot needs its own markup (bold, blue) so it can't be part of
         // a plain joined-and-escaped string.
         const dot = `<span class="group-head__dot">·</span>`;
-        // AVM Profile A/B/C and AVM Anemia A are built from several named
-        // panels + a few standalone tests (see data.js's per-package
-        // `groups`) — break their "included" line into one labeled
-        // sub-block per panel, same as the site's own Profiles view
-        // (panels-table.js), instead of one long flattened line of every
-        // test. Packages without `groups` (the single system panels)
-        // keep the original flat line.
+        // A profile built from several named sub-panels + a few standalone
+        // tests can carry its own per-package `groups` (see data.js) —
+        // break its "included" line into one labeled sub-block per panel,
+        // same as the site's own Profiles view (panels-table.js), instead
+        // of one long flattened line of every test. No current profile
+        // uses this; packages without `groups` keep the plain flat line.
         const testsMarkup = group.pkg.groups && group.pkg.groups.length
           ? `<div class="group-head__groups">${group.pkg.groups.map(g => {
               const resolved = g.codes.map(c => byCode[c]).filter(Boolean);

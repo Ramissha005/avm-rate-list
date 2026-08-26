@@ -111,11 +111,11 @@ AVM.modules = AVM.modules || {};
       const pct = hasSaving ? (savingsAmt / t.b2b) * 100 : 0;
 
       // Same Add to Profile button, same states, as rate-list.js —
-      // including the "already part of a profile in your cart" blocked
-      // state (see profile.js's packageOwning/toggleTest).
-      const isAdded = state.cart.has(t.code);
-      const owner = isAdded ? AVM.modules.profile.packageOwning(t.code) : null;
-      const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
+      // including the "already part of a profile bundle in your cart"
+      // blocked state (see profile.js's packageOwning/toggleTest).
+      const owner = AVM.modules.profile.packageOwning(t.code);
+      const isAdded = !owner && state.cart.has(t.code);
+      const conflictCode = !isAdded && !owner ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
       const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
       let btnClass = "add-btn";

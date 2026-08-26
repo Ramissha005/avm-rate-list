@@ -5,12 +5,10 @@ AVM.modules = AVM.modules || {};
   const state = AVM.state;
   const CONFIG = AVM.CONFIG;
 
-  // Maps a test code -> the package id it was added as part of, purely so
-  // the cart can group "Kidney Profile" together under its own heading.
-  // This is NOT a lock — every test stays freely removable one at a time
-  // regardless of how it got into the profile; removing it just clears the
-  // tag along with it.
-  state.cartPackageOf = state.cartPackageOf || new Map();
+  // Fixed-price profile bundles (e.g. Vitamin Profile) currently in the
+  // cart — see state.cartPackages in data.js. Guard here too in case
+  // profile.js ever loads before data.js sets the initial state shape.
+  state.cartPackages = state.cartPackages || new Set();
 
   // Which cart groups (by package id, or "individual" for the untitled
   // group) have been expanded past just their heading — every group starts
@@ -42,7 +40,7 @@ AVM.modules = AVM.modules || {};
   function persistCart() {
     AVM.utils.storage.writeJSON(CONFIG.STORAGE_KEYS.PROFILE, {
       codes: [...state.cart],
-      packageOf: Object.fromEntries(state.cartPackageOf),
+      packages: [...state.cartPackages],
       discountedPrice: state.discountedPrice,
     });
   }
@@ -53,8 +51,14 @@ AVM.modules = AVM.modules || {};
     // (plain array of codes, or { codes, locks }) — take just the codes.
     const codes = Array.isArray(saved) ? saved : (saved && saved.codes) || [];
     state.cart = new Set(codes);
-    const packageOf = (saved && !Array.isArray(saved) && saved.packageOf) || {};
-    state.cartPackageOf = new Map(Object.entries(packageOf));
+    // Older saved carts (from before profiles switched to fixed pricing)
+    // have no `packages` field at all — that's fine, it just restores as
+    // an empty bundle set; whatever codes that old cart added via a
+    // package come back as plain individually-priced tests instead, which
+    // is the correct graceful fallback since most of those old packages
+    // no longer exist.
+    const pkgIds = (saved && !Array.isArray(saved) && saved.packages) || [];
+    state.cartPackages = new Set(pkgIds);
     // Deliberately NOT restored from storage, even though persistCart() still
     // writes it — a discount typed for one client shouldn't silently reapply
     // to whatever's in the cart the next time this device opens My Profile
@@ -83,9 +87,10 @@ AVM.modules = AVM.modules || {};
     }
     const num = Number(trimmed);
     if (!Number.isFinite(num) || num < 0) return state.discountedPrice;
-    const { byCode } = AVM.data.getCatalog();
+    const { byCode, packageById } = AVM.data.getCatalog();
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
-    const original = AVM.modules.calculations.totals(items).b2c;
+    const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
+    const original = AVM.modules.calculations.cartTotals(items, bundlePkgs).b2c;
     state.discountedPrice = original > 0 ? Math.min(num, original) : num;
     persistCart();
     return state.discountedPrice;
@@ -106,16 +111,19 @@ AVM.modules = AVM.modules || {};
     return group.codes.find(c => c !== code && state.cart.has(c)) || null;
   }
 
-  // The profile a test currently in the cart is tagged to, if any — a
-  // test added on its own (never part of a package) or removed and
-  // re-added individually reads null here even if it happens to share a
-  // code with some package's own list; only actually tagged (see
-  // addPackage) counts.
+  // The fixed-price profile bundle a test is covered by, if any active
+  // bundle in the cart includes this code — its price already lives
+  // entirely inside that bundle's own flat number (see data.js `pricing`),
+  // so the test can't also be added/removed as a separately-priced line
+  // while that bundle is active. Independent of state.cart — a bundle's
+  // own tests are never added there (see addPackage below).
   function packageOwning(code) {
-    const taggedTo = state.cartPackageOf.get(code);
-    if (!taggedTo) return null;
     const { packageById } = AVM.data.getCatalog();
-    return packageById[taggedTo] || null;
+    for (const pkgId of state.cartPackages) {
+      const pkg = packageById[pkgId];
+      if (pkg && pkg.codes.includes(code)) return pkg;
+    }
+    return null;
   }
 
   function toggleTest(code) {
@@ -123,20 +131,17 @@ AVM.modules = AVM.modules || {};
     const test = byCode[code];
     if (!test) return;
 
+    // Covered by a fixed-price profile bundle already in the cart — its
+    // price is already inside that bundle's own flat number, so it can't
+    // also be added/removed here as its own line (see packageOwning).
+    const owner = packageOwning(code);
+    if (owner) {
+      AVM.utils.helpers.showToast(`${test.name} is already included in ${owner.name} — remove that profile to change it`);
+      return;
+    }
+
     if (state.cart.has(code)) {
-      // Part of a profile already in the cart (e.g. Alkaline Phosphatase
-      // via AVM Profile A) — the Tests table's own Add/Remove toggle
-      // isn't the place to pick it apart test-by-test (that's what
-      // removing individual lines from the profile's own group in the
-      // cart drawer is for); same "point at what actually owns it"
-      // toast as a conflicting test, one level up.
-      const owner = packageOwning(code);
-      if (owner) {
-        AVM.utils.helpers.showToast(`${test.name} is already included in ${owner.name} — remove it from there to change it`);
-        return;
-      }
       state.cart.delete(code);
-      state.cartPackageOf.delete(code);
       AVM.utils.helpers.showToast(`Removed ${test.name} from your profile`);
     } else {
       const conflictCode = conflictingCodeFor(code);
@@ -151,135 +156,92 @@ AVM.modules = AVM.modules || {};
     persistCart();
   }
 
-  // Adds every test in the package that isn't already in the profile, and
-  // tags all of them (new or already-present) as belonging to this package
-  // so the cart can group them under one heading. Codes that would conflict
-  // with something already selected are skipped rather than blocking the
-  // rest of the panel. Every test stays freely removable afterwards.
+  // Adds a fixed-price profile bundle to the cart as one atomic unit — its
+  // price is its own flat number (see data.js `pricing`), not the sum of
+  // its member tests, so unlike the old package model those tests are
+  // never added to state.cart individually; only the package id itself
+  // goes into state.cartPackages. Blocked if any of the bundle's own tests
+  // are already sitting in the cart as separately-added individual tests
+  // — allowing both would bill the same test twice (once at its own price,
+  // once inside the bundle).
   function addPackage(pkg) {
-    const { byCode } = AVM.data.getCatalog();
-    let added = 0;
-    let skipped = 0;
-    pkg.codes.forEach(code => {
-      if (!byCode[code]) return;
-      if (!state.cart.has(code)) {
-        if (conflictingCodeFor(code)) { skipped++; return; }
-        state.cart.add(code);
-        added++;
-      }
-      state.cartPackageOf.set(code, pkg.id);
-    });
-    persistCart();
-    if (added > 0) {
-      AVM.utils.helpers.showToast(
-        `Added ${pkg.name} (${added} test${added > 1 ? "s" : ""}) to your profile` +
-        (skipped > 0 ? ` — ${skipped} skipped due to a conflicting test already selected` : "")
-      );
-    } else if (skipped > 0) {
-      AVM.utils.helpers.showToast(`${pkg.name} tests conflict with what's already in your profile`);
-    } else {
+    if (state.cartPackages.has(pkg.id)) {
       AVM.utils.helpers.showToast(`${pkg.name} is already in your profile`);
+      return 0;
     }
-    return added;
-  }
-
-  // True once every test in the package is present in the profile — used
-  // only to flip the bundle chip to its "✓ remove panel" state. This is a
-  // pure display check, not a lock: it's still true (and the chip still
-  // offers to remove the whole panel) even if some of those tests got there
-  // one at a time rather than through this package.
-  function isPackageActive(pkg) {
-    return pkg.codes.every(code => state.cart.has(code));
-  }
-
-  // The bigger profile actually responsible for a fully-active package's
-  // tests, if there is one — e.g. Kidney Profile reads as "active" once
-  // AVM Profile A is added (it includes every one of Kidney Profile's own
-  // codes), but Kidney Profile itself was never added; every one of its
-  // codes is tagged to "avm-profile-a" instead (see addPackage). Same
-  // "pick one, don't double-count" idea as conflictingCodeFor below, one
-  // level up — a whole profile instead of a single test. Returns null for
-  // a package that's genuinely its own addition (codes tagged to itself,
-  // or untagged from being added test-by-test) or only partially/mixed-
-  // ly covered, where there's no one profile to point at.
-  function coveringPackage(pkg) {
-    if (!pkg.codes.length || !isPackageActive(pkg)) return null;
-    const taggedIds = new Set(pkg.codes.map(code => state.cartPackageOf.get(code)));
-    if (taggedIds.size !== 1) return null;
-    const soleId = [...taggedIds][0];
-    if (!soleId || soleId === pkg.id) return null;
-    const { packageById } = AVM.data.getCatalog();
-    return packageById[soleId] || null;
-  }
-
-  // Removes every test in the package from the profile — the chip's
-  // "already added" counterpart to addPackage(). Doesn't touch anything
-  // that isn't part of this package.
-  function removePackage(pkg) {
-    let removed = 0;
-    pkg.codes.forEach(code => {
-      // A code shared by two overlapping packages (e.g. UTSH in both Total
-      // Thyroid and Free Thyroid) gets re-tagged to whichever was added
-      // most recently (see addPackage) — so it's currently displayed under
-      // *that* package's group, not this one. If it's now tagged to a
-      // different package, leave it alone; removing this panel shouldn't
-      // silently pull a test out from under a different, still-active
-      // group. Untagged codes (added individually) and codes still tagged
-      // to this package are removed as normal.
-      const taggedTo = state.cartPackageOf.get(code);
-      if (taggedTo && taggedTo !== pkg.id) return;
-      if (state.cart.delete(code)) removed++;
-      state.cartPackageOf.delete(code);
-    });
+    const { byCode } = AVM.data.getCatalog();
+    const alreadyIndividual = pkg.codes.filter(code => state.cart.has(code));
+    if (alreadyIndividual.length) {
+      const names = alreadyIndividual.map(c => (byCode[c] && byCode[c].name) || c).join(", ");
+      AVM.utils.helpers.showToast(`Remove ${names} from your profile individually first to add ${pkg.name}`);
+      return 0;
+    }
+    state.cartPackages.add(pkg.id);
     persistCart();
-    if (removed > 0) {
-      AVM.utils.helpers.showToast(`Removed ${pkg.name} from your profile`);
-    } else if (isPackageActive(pkg)) {
-      // Nothing here was actually this package's own — every one of its
-      // tests belongs to a bigger profile already covering it (see
-      // coveringPackage) — so removing "it" would otherwise silently do
-      // nothing with no explanation. Point at what to remove instead.
-      const covering = coveringPackage(pkg);
-      AVM.utils.helpers.showToast(
-        covering ? `Already covered by ${covering.name} — remove that to free up ${pkg.name}` : `${pkg.name}'s tests are already in your profile`
-      );
+    AVM.utils.helpers.showToast(`Added ${pkg.name} to your profile`);
+    return 1;
+  }
+
+  // True once this profile bundle is in the cart — used to flip its
+  // "✓ Added" state on the Profiles table and the cart-drawer group.
+  function isPackageActive(pkg) {
+    return state.cartPackages.has(pkg.id);
+  }
+
+  // Kept for API compatibility with panels-table.js's blocked/⊘ check —
+  // under the fixed-price model every profile is its own independent,
+  // atomically-added bundle (see addPackage), so one profile can no
+  // longer be silently "covered by" a bigger one the way AVM Profile A
+  // used to fully absorb Kidney Profile. Always null for now.
+  function coveringPackage(pkg) {
+    return null;
+  }
+
+  // Removes a fixed-price profile bundle from the cart as one atomic unit
+  // — the chip's "already added" counterpart to addPackage(). Doesn't
+  // touch any individually-added tests, even ones that share a code with
+  // this bundle (there shouldn't be any while the bundle is active — see
+  // addPackage's own-test guard).
+  function removePackage(pkg) {
+    if (!state.cartPackages.has(pkg.id)) {
+      AVM.utils.helpers.showToast(`${pkg.name} isn't in your profile`);
+      return 0;
     }
-    return removed;
+    state.cartPackages.delete(pkg.id);
+    persistCart();
+    AVM.utils.helpers.showToast(`Removed ${pkg.name} from your profile`);
+    return 1;
   }
 
   function removeFromProfile(code) {
     state.cart.delete(code);
-    state.cartPackageOf.delete(code);
     persistCart();
   }
 
   function clearProfile() {
     state.cart.clear();
-    state.cartPackageOf.clear();
+    state.cartPackages.clear();
     state.discountedPrice = null;
     persistCart();
     AVM.utils.helpers.showToast("Profile cleared");
   }
 
-  // Groups the profile's items by the package they were added from — each
-  // group becomes its own "<Profile Name>" section in the cart; anything
-  // added one at a time (no package tag) falls into a final untitled group.
+  // Every section the cart drawer / print page render, in a stable order:
+  // one section per fixed-price profile bundle currently in the cart
+  // (each with its own flat price, not the sum of its listed tests — see
+  // data.js `pricing`), then a final untitled section for whatever was
+  // added one test at a time. `items` is the individually-added list
+  // (state.cart resolved) — a bundle's own tests are never mixed into it
+  // (see addPackage), so the two sources never overlap.
   function groupCartItems(items) {
-    const { packageById } = AVM.data.getCatalog();
+    const { packageById, byCode } = AVM.data.getCatalog();
     const groups = [];
-    const groupByPkgId = {};
-    const individual = [];
-    items.forEach(t => {
-      const pkgId = state.cartPackageOf.get(t.code);
-      const pkg = pkgId ? packageById[pkgId] : null;
-      if (!pkg) { individual.push(t); return; }
-      if (!groupByPkgId[pkg.id]) {
-        groupByPkgId[pkg.id] = { pkg, items: [] };
-        groups.push(groupByPkgId[pkg.id]);
-      }
-      groupByPkgId[pkg.id].items.push(t);
+    [...state.cartPackages].forEach(pkgId => {
+      const pkg = packageById[pkgId];
+      if (!pkg) return;
+      groups.push({ pkg, items: pkg.codes.map(c => byCode[c]).filter(Boolean) });
     });
-    if (individual.length) groups.push({ pkg: null, items: individual });
+    if (items.length) groups.push({ pkg: null, items });
     return groups;
   }
 
@@ -365,17 +327,26 @@ AVM.modules = AVM.modules || {};
   }
 
   function renderCart(elements) {
-    const { byCode } = AVM.data.getCatalog();
+    const { byCode, packageById } = AVM.data.getCatalog();
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
+    const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
     const customerView = state.customerView;
 
-    // A test was just added (not removed, not the first render) — pop the
-    // "Make My Profile" button so the count updating isn't the only sign
-    // something landed in the profile. Compared *before* lastCartCount is
-    // updated below, so this only ever fires on a genuine increase.
-    const justAdded = lastCartCount !== null && items.length > lastCartCount;
-    lastCartCount = items.length;
+    // Individually-added tests plus every fixed-price bundle's own test
+    // count (raw code count, not the weighted packageTestCount() figure —
+    // same "how many things are in here" meaning the badge always showed
+    // before bundles existed) — what the header badge and "N tests
+    // selected" line below actually count.
+    const totalCount = items.length + bundlePkgs.reduce((n, pkg) => n + pkg.codes.length, 0);
+
+    // A test (or a whole bundle) was just added (not removed, not the
+    // first render) — pop the "Make My Profile" button so the count
+    // updating isn't the only sign something landed in the profile.
+    // Compared *before* lastCartCount is updated below, so this only ever
+    // fires on a genuine increase.
+    const justAdded = lastCartCount !== null && totalCount > lastCartCount;
+    lastCartCount = totalCount;
     if (justAdded && elements.cartBtn) popAnimate(elements.cartBtn, "cart-btn--pop");
 
     // Set inline `style.display` rather than the `hidden` attribute — `.ct-row`
@@ -400,10 +371,10 @@ AVM.modules = AVM.modules || {};
     if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
     if (elements.b2b) elements.b2b.classList.remove("ct-amount--struck");
 
-    elements.badge.textContent = items.length;
-    elements.sub.textContent = `${items.length} test${items.length !== 1 ? "s" : ""} selected`;
+    elements.badge.textContent = totalCount;
+    elements.sub.textContent = `${totalCount} test${totalCount !== 1 ? "s" : ""} selected`;
 
-    if (items.length === 0) {
+    if (totalCount === 0) {
       elements.body.innerHTML = `<p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a profile.</p>`;
       elements.b2b.textContent = money(0);
       elements.b2c.textContent = money(0);
@@ -419,14 +390,25 @@ AVM.modules = AVM.modules || {};
 
     elements.body.innerHTML = groups.map(group => {
       const inGroup = !!group.pkg;
+      // A fixed-price profile bundle is billed as one flat number (see
+      // data.js `pricing`), not assembled from what's inside it, so a
+      // member test here carries no price/margin of its own and can't be
+      // removed on its own — only the whole bundle can, via the group's
+      // own ✕ (see cart-group__remove below). Same informational,
+      // non-priced treatment calculatedParams rows already use.
+      //
       // Customer copy never shows the internal test code — a customer
-      // needs the test's name and what it costs, not "BUN". Once a test is
-      // part of a labeled panel, its price is shown once at the panel
-      // level instead (see cart-group__meta below), so grouped rows carry
-      // no per-item detail line at all in customer view.
+      // needs the test's name and what it costs, not "BUN".
       const rows = group.items.map(t => {
+        if (inGroup) {
+          return `
+          <div class="cart-item cart-item--calc">
+            <div class="cart-item__name">${esc(t.name)}<small>Included in the profile price</small></div>
+          </div>
+        `;
+        }
         const detail = customerView
-          ? (inGroup ? "" : `<small>${money(t.b2c)}</small>`)
+          ? `<small>${money(t.b2c)}</small>`
           : `<small>${esc(t.code)} · B2B ${money(t.b2b)} · B2C ${money(t.b2c)}</small>`;
         return `
         <div class="cart-item">
@@ -444,10 +426,12 @@ AVM.modules = AVM.modules || {};
       const groupKey = group.pkg.id;
       const collapsed = !state.expandedGroups.has(groupKey);
       const testCount = AVM.modules.calculations.packageTestCount(group.pkg, group.items);
-      // The panel's own B2C total, shown once in the header — see rows
-      // above, which rely on this instead of repeating a price on every
-      // line inside the panel.
-      const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
+      // The bundle's own flat price, shown once in the header — see rows
+      // above, which rely on this instead of a price on every line inside
+      // the bundle. Not summed from group.items — a profile's price is
+      // its own fixed number now (see data.js `pricing`), never assembled
+      // from what it lists.
+      const groupB2C = group.pkg.pricing.b2c;
       const calcRows = (group.pkg.calculatedParams || []).map(name => `
         <div class="cart-item cart-item--calc">
           <div class="cart-item__name">${AVM.utils.formatters.highlightAsterisk(esc(name))}<small>Calculated from the tests above</small></div>
@@ -493,7 +477,9 @@ AVM.modules = AVM.modules || {};
       };
     });
 
-    const sum = AVM.modules.calculations.totals(items);
+    // Individually-added tests (MSB-adjusted, as before) plus every fixed-
+    // price bundle's own flat number — see calculations.js cartTotals().
+    const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
     // The headline B2B figure is the MSB-adjusted cost (grouped by sample
     // type, floored at ₹25/sample type), not a raw per-test sum — that's
     // what the partner is actually billed. Per-item rows below still show

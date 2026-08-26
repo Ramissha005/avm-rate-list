@@ -5,6 +5,13 @@ AVM.state = {
   sortMode: "sr",
   activeFilters: { technology: new Set(), category: new Set(), sample: new Set(), priceBand: new Set() },
   cart: new Set(),
+  // Fixed-price profile bundles (e.g. Vitamin Profile) currently in the
+  // cart — a Set of package ids, tracked separately from `cart` above.
+  // A profile's price is now its own flat B2B/Franchise/B2C figure (see
+  // each package's `pricing` in PACKAGES below), not assembled from its
+  // member tests' own prices, so its tests are never added to `cart`
+  // itself — see profile.js's addPackage/removePackage.
+  cartPackages: new Set(),
   // "Customer copy" mode: hides B2B cost and margin everywhere a profile is
   // shown or shared (cart drawer, Copy List, Export Excel, Print) so a B2B
   // partner can hand this straight to their own customer without exposing
@@ -2421,11 +2428,16 @@ AVM.state = {
 };
   const TESTS = TESTS_WRAPPED.tests;
 
-  // Common profiles — sourced verbatim from AVMLabs' "Common Profiles" rate
-  // card (profile name + test codes). Prices are never stored here: each
-  // profile's cost is just the sum of its member tests' own B2B/B2C prices,
-  // computed on the fly (see calculations.js totals()) so it always tracks
-  // the rate list instead of drifting out of sync with a hardcoded number.
+  // Profiles — as of the pricing-model switchover below, a profile's price
+  // is its OWN flat, hand-set figure (see `pricing`), never derived by
+  // summing its member tests' individual B2B/B2C prices the way every
+  // profile used to work. `codes` still lists what the profile physically
+  // covers (for the "Tests included" breakdown and Test Count column —
+  // see calculations.js packageTestCount()), but adding a profile to a
+  // cart no longer adds those codes as separately-priced line items — see
+  // profile.js's addPackage/removePackage and calculations.js
+  // packagePricing()/cartTotals(). Every profile here MUST carry a
+  // `pricing: { b2b, franchise, b2c }` block.
   //
   // calculatedParams: report line items the panel also produces that are
   // NOT separately-priced tests of their own — they're derived/calculated
@@ -2433,91 +2445,14 @@ AVM.state = {
   // Triglycerides) and come bundled in at no extra cost. They count toward
   // the panel's total "test" count (per the source rate card) but never
   // toward B2B/B2C/margin.
+  //
+  // Only one profile exists for now (Vitamin Profile) while the rest of
+  // the old sum-of-tests catalog is rebuilt under this new fixed-price
+  // model — more will be added back here, each with its own `pricing`.
   const PACKAGES = [
-  // AVM's own curated multi-panel checkups (as opposed to the single
-  // system panels below) — each one's codes are the flattened, deduped
-  // union of its listed components (a package's codes are always a flat
-  // test-code list, no nested package-of-packages support), so e.g. AVM
-  // Profile B repeats every code AVM Profile A has plus its own two.
-  // Placed first so they sort to the top of the Profiles view in its
-  // default (no sort picked) order, same as every other package here —
-  // no separate "pinned" mechanism, just array order.
-  { "id": "avm-profile-a", "name": "AVM Profile A", "categoryId": "general-biochemistry",
-    "codes": ["BUN", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH"],
-    "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "SCRE", "URIC", "CALC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
-      { "label": "Liver Profile", "codes": ["BILT", "BILD", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
-      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] }
-    ],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio", "Transferrin Saturation (%)"], "active": true },
-  { "id": "avm-profile-b", "name": "AVM Profile B", "categoryId": "general-biochemistry",
-    "codes": ["BUN", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC"],
-    "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "SCRE", "URIC", "CALC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
-      { "label": "Liver Profile", "codes": ["BILT", "BILD", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
-      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
-    ],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
-  { "id": "avm-profile-c", "name": "AVM Profile C", "categoryId": "general-biochemistry",
-    "codes": ["BUN", "SCRE", "URIC", "CHOL", "TRIG", "HCHO", "LDL", "ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "IRON", "TIBC", "FERR", "AMYL", "LASE", "CALC", "CRP", "FBS", "PHOS", "UTSH", "A1c", "CBC", "VB12", "VITDT", "FOLI"],
-    "groups": [
-      { "label": "Kidney Profile", "codes": ["BUN", "SCRE", "URIC", "CALC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"] },
-      { "label": "Liver Profile", "codes": ["BILT", "BILD", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Pancreatic Profile", "codes": ["AMYL", "LASE"], "calculatedParams": [] },
-      { "label": "Vitamin Profile", "codes": ["VB12", "VITDT", "FOLI"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein", "codes": ["CRP"], "calculatedParams": [] },
-      { "label": "Fasting Blood Sugar", "codes": ["FBS"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Thyroid-Stimulating Hormone.", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] }
-    ],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)", "VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio", "Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
-  { "id": "avm-infertility-a", "name": "AVM Infertility A", "categoryId": "reproductive-hormones",
-    "codes": ["UTSH", "AMH", "FSH", "LH", "PRL", "CBC", "A1c"],
-    "calculatedParams": ["ABG (Average Blood Glucose)"], "active": true },
-  { "id": "avm-anemia-a", "name": "AVM Anemia A", "categoryId": "iron-studies",
-    "codes": ["ALKP", "BILD", "BILT", "PROT", "SALB", "SGOT", "SGPT", "GGT", "BUN", "SCRE", "URIC", "CALC", "IRON", "TIBC", "FERR", "FOLI", "VB12", "CBC", "A1c"],
-    "groups": [
-      { "label": "Liver Profile", "codes": ["BILT", "BILD", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio"] },
-      { "label": "Kidney Profile", "codes": ["BUN", "SCRE", "URIC", "CALC"], "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Folic Acid", "codes": ["FOLI"], "calculatedParams": [] },
-      { "label": "Vitamin B12", "codes": ["VB12"], "calculatedParams": [] },
-      { "label": "Hemogram - 6 Part", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] }
-    ],
-    "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio", "BUN / Serum Creatinine Ratio", "eGFR (For Adults*)", "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"], "active": true },
-  { "id": "thyro-5", "name": "Thyro 5", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"],
-    "calculatedParams": [], "active": true },
-  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VB12", "VITDT", "FOLI"],
-    "calculatedParams": [], "active": true },
-  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"],
-    "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
-  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "pancreatic-function", "codes": ["AMYL", "LASE"],
-    "calculatedParams": [], "active": true },
-  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "SCRE", "URIC", "CALC"],
-    "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (For Adults*)"], "active": true },
-  { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
-    "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"], "active": true },
-  { "id": "liver-profile", "name": "Liver Profile", "categoryId": "liver-function", "codes": ["BILT", "BILD", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"],
-    "calculatedParams": ["Bilirubin - Indirect", "Serum Globulin", "Serum Alb/Globulin Ratio"], "active": true }
+  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
+    "calculatedParams": [], "active": true,
+    "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } }
 ];
 
   const PARAMETERS_WRAPPED = {

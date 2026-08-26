@@ -74,14 +74,16 @@ AVM.modules = AVM.modules || {};
 
     elements.body.innerHTML = shown.map(t => {
       const col = techColors[t.tech] || { fg: "#101C27", bd: "#D2D5D9", bg: "#EFF0F2" };
-      const isAdded = state.cart.has(t.code);
-      // Part of a profile already in the cart (e.g. Alkaline Phosphatase
-      // via AVM Profile A) — same blocked/⊘ treatment as a conflicting
-      // test rather than a "✓ Added" that looks freely removable here
-      // but would actually just be quietly pulled out of that profile
-      // (see profile.js's toggleTest).
-      const owner = isAdded ? AVM.modules.profile.packageOwning(t.code) : null;
-      const conflictCode = !isAdded ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
+      // Part of a fixed-price profile bundle already in the cart (e.g.
+      // Vitamin D via Vitamin Profile) — checked first, independent of
+      // state.cart (a bundle's own tests are never added there — see
+      // profile.js's addPackage); same blocked/⊘ treatment as a
+      // conflicting test rather than a "✓ Added" that looks freely
+      // removable here but would actually just be quietly pulled out of
+      // that profile (see profile.js's toggleTest).
+      const owner = AVM.modules.profile.packageOwning(t.code);
+      const isAdded = !owner && state.cart.has(t.code);
+      const conflictCode = !isAdded && !owner ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
       const conflictTest = conflictCode ? byCode[conflictCode] : null;
 
       let btnClass = "add-btn";

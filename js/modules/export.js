@@ -9,10 +9,11 @@ AVM.modules = AVM.modules || {};
   }
 
   function copyProfileToClipboard() {
-    const { byCode } = AVM.data.getCatalog();
+    const { byCode, packageById } = AVM.data.getCatalog();
     const { money } = AVM.utils.formatters;
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
-    if (items.length === 0) {
+    const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
+    if (items.length === 0 && bundlePkgs.length === 0) {
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
@@ -20,10 +21,20 @@ AVM.modules = AVM.modules || {};
 
     // Customer copy drops the internal test code (BUN, SCRE, …) — a
     // customer needs the test's name and price, not its internal shorthand.
-    const lines = items.map(t => customerView
+    // A fixed-price profile bundle is billed as one flat number (see
+    // data.js `pricing`), not per test — one line for the whole profile,
+    // naming what it includes, rather than a priced line per test inside.
+    const bundleLines = bundlePkgs.map(pkg => {
+      const names = pkg.codes.map(c => (byCode[c] && byCode[c].name) || c).join(", ");
+      return customerView
+        ? `${pkg.name} (${names}) — B2C ${money(pkg.pricing.b2c)}`
+        : `${pkg.name} (${names}) — B2B ${money(pkg.pricing.b2b)} · B2C ${money(pkg.pricing.b2c)} · Margin +${money(pkg.pricing.b2c - pkg.pricing.b2b)}`;
+    });
+    const individualLines = items.map(t => customerView
       ? `${t.name} — B2C ${money(t.b2c)}`
       : `${t.name} (${t.code}) — B2B ${money(t.b2b)} · B2C ${money(t.b2c)} · Margin +${money(t.b2c - t.b2b)}`);
-    const sum = AVM.modules.calculations.totals(items);
+    const lines = [...bundleLines, ...individualLines];
+    const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
     // The manually-entered customer-copy discount (see profile.js) — only
     // surfaces here in customer view, and only when it's actually lower
     // than the B2C total.
@@ -44,14 +55,16 @@ AVM.modules = AVM.modules || {};
   }
 
   function exportProfileCSV() {
-    const { byCode } = AVM.data.getCatalog();
+    const { byCode, packageById } = AVM.data.getCatalog();
     const items = [...state.cart].map(c => byCode[c]).filter(Boolean);
-    if (items.length === 0) {
+    const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
+    if (items.length === 0 && bundlePkgs.length === 0) {
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
     const customerView = state.customerView;
-    const sum = AVM.modules.calculations.totals(items);
+    const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
+    const totalCount = items.length + bundlePkgs.reduce((n, pkg) => n + pkg.codes.length, 0);
     const pricingColumns = customerView
       ? [{ header: "B2C", key: "b2c", type: "currency", width: 12 }]
       : [
@@ -82,7 +95,7 @@ AVM.modules = AVM.modules || {};
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${items.length} test${items.length === 1 ? "" : "s"}${msbNote}${customerDiscountNote}`,
+      subtitle: `Generated ${today()} · ${totalCount} test${totalCount === 1 ? "" : "s"}${msbNote}${customerDiscountNote}`,
       // Code is internal shorthand (BUN, SCRE, …) — left out of the
       // customer copy's columns entirely, same as Copy List and Print.
       columns: [
@@ -92,7 +105,18 @@ AVM.modules = AVM.modules || {};
         { header: "Sample", key: "sample", type: "text", width: 12 },
         ...pricingColumns,
       ],
-      rows: items.map(t => ({ code: t.code, name: t.name, tech: t.tech, sample: t.sample, b2b: t.b2b, b2c: t.b2c, margin: t.b2c - t.b2b })),
+      // A fixed-price profile bundle is billed as one flat number (see
+      // data.js `pricing`), not per test — one row for the whole profile
+      // (naming what it includes in the Test column), not a priced row
+      // per test inside it. Listed before the individually-added tests,
+      // same order the cart drawer's own groups render in.
+      rows: [
+        ...bundlePkgs.map(pkg => ({
+          code: "", name: `${pkg.name} (${pkg.codes.map(c => (byCode[c] && byCode[c].name) || c).join(", ")})`,
+          tech: "", sample: "", b2b: pkg.pricing.b2b, b2c: pkg.pricing.b2c, margin: pkg.pricing.b2c - pkg.pricing.b2b,
+        })),
+        ...items.map(t => ({ code: t.code, name: t.name, tech: t.tech, sample: t.sample, b2b: t.b2b, b2c: t.b2c, margin: t.b2c - t.b2b })),
+      ],
       totals: customerView ? { b2c: sum.b2c } : { b2b: sum.b2b, b2c: sum.b2c, margin: sum.margin },
     });
     AVM.utils.helpers.showToast(customerView ? "Customer copy exported to Excel" : "Profile exported to Excel");

@@ -2479,13 +2479,16 @@ AVM.state = {
   // every other profile here — not the sum of what it lists.
   { "id": "avm-profile-1", "name": "AVM Profile 1", "categoryId": "general-biochemistry",
     "codes": [
+      "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC",
-      "UTSH", "MAGN", "PHOS"
+      "IRON", "TIBC"
     ],
     "groups": [
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
         "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
@@ -2498,10 +2501,7 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] }
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] }
     ],
     "calculatedParams": [
       "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",

@@ -2,6 +2,14 @@ window.AVM = window.AVM || {};
 AVM.modules = AVM.modules || {};
 
 (function () {
+  // Which tests' parameter breakdowns (see below) are expanded — starts
+  // collapsed (heading + count only) so a test with a long panel like
+  // CBC's 28 reportable results doesn't turn the drawer into one long
+  // scroll by default; click to drop down and see them all. Keyed by
+  // test code, mirrors panels-table.js's own `expanded` Set for "Tests
+  // included" — not persisted, resets each session.
+  const expandedParams = new Set();
+
   function renderTestDetail(container, test, onChange) {
     if (!container) return;
     if (!test) {
@@ -41,6 +49,25 @@ AVM.modules = AVM.modules || {};
       btnNote = `<p class="td-note">Already covered by ${esc(conflictTest.name)} in your profile. Remove it first to add this instead.</p>`;
     }
 
+    // A test that's itself a bundled multi-analyte panel (e.g. CBC's 28
+    // reportable results — see js/data.js's PARAMETERS/TEST_PARAMETERS)
+    // carries a real named breakdown here; a single-analyte test falls
+    // back to one implicit parameter (its own name, id: null — see
+    // getParametersForTest), which isn't worth showing as its own section.
+    const params = AVM.data.getParametersForTest(test.code);
+    const hasBreakdown = params.length > 1 || (params[0] && params[0].id);
+    const paramsOpen = expandedParams.has(test.code);
+    const paramsSection = hasBreakdown ? `
+      <div class="td-params">
+        <button type="button" class="td-params__toggle" id="tdParamsToggle" aria-expanded="${paramsOpen}">
+          ${paramsOpen ? "▴" : "▾"} ${params.length} parameter${params.length !== 1 ? "s" : ""} reported
+        </button>
+        ${paramsOpen ? `
+        <ul class="td-params__list">
+          ${params.map(p => `<li>${esc(p.name)}${p.unit ? `<span class="td-params__unit">${esc(p.unit)}</span>` : ""}</li>`).join("")}
+        </ul>` : ""}
+      </div>` : "";
+
     container.innerHTML = `
       <div class="td-head">
         <span class="cell-code">${esc(test.code)}</span>
@@ -59,9 +86,19 @@ AVM.modules = AVM.modules || {};
         <div><span>B2C Value</span><b>${money(test.b2c)}</b></div>
         <div class="is-profit"><span>Margin</span><b>+${money(margin(test))} <small>(${test.b2b ? `+${Math.round(marginPercentage(test.b2b, test.b2c))}%` : "—"})</small></b></div>
       </div>
+      ${paramsSection}
       ${btnNote}
       <button type="button" class="btn ${btnClass} td-add-btn" id="tdAddBtn" ${btnDisabled}>${btnLabel}</button>
     `;
+
+    const paramsToggle = container.querySelector("#tdParamsToggle");
+    if (paramsToggle) {
+      paramsToggle.onclick = () => {
+        if (expandedParams.has(test.code)) expandedParams.delete(test.code);
+        else expandedParams.add(test.code);
+        renderTestDetail(container, test, onChange);
+      };
+    }
 
     container.querySelector("#tdAddBtn").onclick = () => {
       if (conflictTest || owner) return;

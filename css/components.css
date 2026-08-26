@@ -1158,6 +1158,24 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .td-pricing .is-profit b{ color:var(--profit); }
 .td-add-btn{ width:100%; justify-content:center; }
 .td-empty{ padding:var(--space-10) var(--space-5); text-align:center; color:var(--ink-faint); }
+
+/* Test detail drawer's "N parameters reported" breakdown (see
+   js/modules/test-detail.js) — only shown for a test that's itself a
+   bundled multi-analyte panel (currently just CBC, see js/data.js's
+   PARAMETERS/TEST_PARAMETERS). Same collapsed-by-default toggle pattern
+   as the Profiles table's own "Tests included" (.fr-panel-toggle), just
+   under this drawer's own .td- naming since it isn't part of that grid. */
+.td-params{ margin-bottom:var(--space-5); }
+.td-params__toggle{
+  display:block; background:none; border:none; padding:0; cursor:pointer;
+  font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; color:var(--teal);
+}
+.td-params__toggle:hover{ text-decoration:underline; }
+.td-params__list{
+  margin:var(--space-3) 0 0; padding-left:1.2em; list-style:disc;
+  font-size:var(--text-sm); color:var(--ink-soft); line-height:1.8;
+}
+.td-params__unit{ color:var(--ink-faint); font-size:var(--text-xs); margin-left:6px; }
 .cell-name--clickable{ cursor:pointer; }
 .cell-name--clickable:hover{ text-decoration:underline; text-decoration-color:var(--line-dark); }
 

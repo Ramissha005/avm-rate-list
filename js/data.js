@@ -2646,6 +2646,58 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 1100, "franchise": 900, "b2c": 3000 } },
+  // Everything AVM Profile 3 has, plus a new Cardiac Profile group (Apo A1,
+  // Apo B, Lipoprotein (a), High-Sensitivity CRP + Apo B / Apo A1 Ratio
+  // calculated). C-Reactive Protein (CRP) stays its own separate group,
+  // same as in AVM Profile 3 — the user asked only for the Apo/Lp(a)/
+  // HS-CRP cluster to be grouped under Cardiac Profile, not CRP itself.
+  { "id": "avm-profile-4", "name": "AVM Profile 4", "categoryId": "general-biochemistry",
+    "codes": [
+      "UTSH", "MAGN", "PHOS",
+      "CHOL", "TRIG", "HCHO", "LDL",
+      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
+      "URIC", "SCRE", "CALC", "UREA", "BUN",
+      "IRON", "TIBC", "FERR",
+      "A1c", "CBC", "LASE", "AMYL",
+      "VITDT", "VB12", "ZINC", "COPP", "CRP",
+      "APOA", "APOB", "LPA", "HSCPRP"
+    ],
+    "groups": [
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
+        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+        "Non-HDL Cholesterol", "VLDL Cholesterol"
+      ] },
+      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
+        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+      ] },
+      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
+        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+      ] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
+      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
+      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
+    ],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol",
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
+      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
+    ], "active": true,
+    "pricing": { "b2b": 1300, "franchise": 1100, "b2c": 3600 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },

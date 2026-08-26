@@ -2483,19 +2483,34 @@ AVM.state = {
     { "id": "PAR_URIC", "name": "Uric Acid", "unit": "mg/dL" },
     { "id": "PAR_BUN_CRE_RATIO", "name": "BUN / Creatinine Ratio (calculated)", "unit": "ratio" },
 
-    { "id": "PAR_WBC", "name": "Total WBC Count", "unit": "/cumm" },
-    { "id": "PAR_RBC", "name": "Total RBC Count", "unit": "mill/cumm" },
     { "id": "PAR_HB", "name": "Hemoglobin", "unit": "g/dL" },
-    { "id": "PAR_HCT", "name": "Hematocrit (PCV)", "unit": "%" },
-    { "id": "PAR_MCV", "name": "MCV", "unit": "fL" },
-    { "id": "PAR_MCH", "name": "MCH", "unit": "pg" },
-    { "id": "PAR_MCHC", "name": "MCHC", "unit": "g/dL" },
-    { "id": "PAR_PLT", "name": "Platelet Count", "unit": "/cumm" },
+    { "id": "PAR_RBC", "name": "Red Blood Cell Count", "unit": "mill/cumm" },
+    { "id": "PAR_HCT", "name": "Hematocrit", "unit": "%" },
+    { "id": "PAR_MCV", "name": "Mean Corpuscular Volume", "unit": "fL" },
+    { "id": "PAR_MCH", "name": "Mean Corpuscular Hemoglobin", "unit": "pg" },
+    { "id": "PAR_MCHC", "name": "Mean Corpuscular Hemoglobin Concentration", "unit": "g/dL" },
+    { "id": "PAR_RDW_SD", "name": "Red Cell Distribution Width – Standard Deviation", "unit": "fL" },
+    { "id": "PAR_RDW_CV", "name": "Red Cell Distribution Width – Coefficient of Variation", "unit": "%" },
+    { "id": "PAR_WBC", "name": "White Blood Cell Count", "unit": "/cumm" },
     { "id": "PAR_NEUT", "name": "Neutrophils", "unit": "%" },
     { "id": "PAR_LYMPH", "name": "Lymphocytes", "unit": "%" },
     { "id": "PAR_MONO", "name": "Monocytes", "unit": "%" },
     { "id": "PAR_EOS", "name": "Eosinophils", "unit": "%" },
-    { "id": "PAR_BASO", "name": "Basophils", "unit": "%" }
+    { "id": "PAR_BASO", "name": "Basophils", "unit": "%" },
+    { "id": "PAR_IG", "name": "Immature Granulocytes", "unit": "%" },
+    { "id": "PAR_NRBC", "name": "Nucleated Red blood cells percentage", "unit": "%" },
+    { "id": "PAR_NEUT_ABS", "name": "Neutrophils – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_LYMPH_ABS", "name": "Lymphocytes – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_MONO_ABS", "name": "Monocytes – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_EOS_ABS", "name": "Eosinophils – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_BASO_ABS", "name": "Basophils – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_IG_ABS", "name": "Immature Granulocytes – Absolute Count", "unit": "/cumm" },
+    { "id": "PAR_NRBC_ABS", "name": "Nucleated Red blood cells percentage - Absolute count", "unit": "/cumm" },
+    { "id": "PAR_PLT", "name": "Platelet Count", "unit": "/cumm" },
+    { "id": "PAR_MPV", "name": "Mean Platelet Volume", "unit": "fL" },
+    { "id": "PAR_PDW", "name": "Platelet Distribution Width", "unit": "fL" },
+    { "id": "PAR_PLCR", "name": "Platelet Large Cell Ratio", "unit": "%" },
+    { "id": "PAR_PCT", "name": "Plateletcrit", "unit": "%" }
   ]
 };
   const PARAMETERS = PARAMETERS_WRAPPED.parameters;
@@ -2504,8 +2519,11 @@ AVM.state = {
   "_note": "Maps a test code to its parameter breakdown. In this catalog, CBC is the only test that is itself a bundled multi-analyte panel (all other panels — Lipid, Liver, Kidney — are already broken into separate individual line items in tests.json, which is why packages.json groups them instead). Everything else resolves to a single implicit parameter (its own name) in js/modules/test-detail.js.",
   "testParameters": {
     "CBC": [
-      "PAR_HB", "PAR_RBC", "PAR_WBC", "PAR_HCT", "PAR_MCV", "PAR_MCH", "PAR_MCHC",
-      "PAR_PLT", "PAR_NEUT", "PAR_LYMPH", "PAR_MONO", "PAR_EOS", "PAR_BASO"
+      "PAR_HB", "PAR_RBC", "PAR_HCT", "PAR_MCV", "PAR_MCH", "PAR_MCHC",
+      "PAR_RDW_SD", "PAR_RDW_CV", "PAR_WBC", "PAR_NEUT", "PAR_LYMPH", "PAR_MONO",
+      "PAR_EOS", "PAR_BASO", "PAR_IG", "PAR_NRBC", "PAR_NEUT_ABS", "PAR_LYMPH_ABS",
+      "PAR_MONO_ABS", "PAR_EOS_ABS", "PAR_BASO_ABS", "PAR_IG_ABS", "PAR_NRBC_ABS",
+      "PAR_PLT", "PAR_MPV", "PAR_PDW", "PAR_PLCR", "PAR_PCT"
     ]
   }
 };

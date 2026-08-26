@@ -97,12 +97,16 @@ AVM.modules = AVM.modules || {};
         // math the profile's own Test Count uses (a code like CBC reports
         // more than one result on its own — see data.js's paramCount) —
         // not just how many lines are listed below, which for CBC would
-        // undercount it as 1 instead of the real 21.
+        // undercount it as 1 instead of the real 21. Skipped entirely for
+        // a genuine single-parameter group (count === 1, e.g. Phosphorous
+        // on its own) — "(1)" next to a heading that's already just one
+        // test's own name only repeats what's obvious.
         const count = packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
+        const countLabel = count === 1 ? "" : ` (${count})`;
         const body = names.length === 1 ? "" : `<p>${dotJoin(names, esc)}</p>`;
         return `
           <div class="fr-panel-details__group">
-            <span class="fr-panel-details__group-label">${esc(g.label)} (${count})</span>
+            <span class="fr-panel-details__group-label">${esc(g.label)}${countLabel}</span>
             ${body}
           </div>`;
       }).join("");

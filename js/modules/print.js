@@ -171,11 +171,15 @@ AVM.modules = AVM.modules || {};
               // Test Count uses (see panels-table.js) — a code like CBC
               // reports more than one result on its own, so the heading's
               // count isn't just how many lines are listed below it.
+              // Skipped for a genuine single-parameter group (count === 1)
+              // — "(1)" next to a heading that's already just one test's
+              // own name only repeats what's obvious.
               const count = AVM.modules.calculations.packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
+              const countLabel = count === 1 ? "" : ` (${count})`;
               const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(n => highlightAsterisk(esc(n))).join(dot)}</p>`;
               return `
                 <div class="group-head__group">
-                  <span class="group-head__group-label">${esc(g.label)} (${count})</span>
+                  <span class="group-head__group-label">${esc(g.label)}${countLabel}</span>
                   ${body}
                 </div>`;
             }).join("")}</div>`

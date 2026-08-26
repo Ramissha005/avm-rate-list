@@ -246,7 +246,7 @@ AVM.state = {
       "franchise": 30,
       "b2b": 40,
       "b2c": 100,
-      "categoryId": "general-biochemistry",
+      "categoryId": "kidney-function",
       "departmentId": "biochemistry",
       "displayOrder": 5,
       "fastingRequired": null,

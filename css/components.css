@@ -576,7 +576,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    that itself reports more than one result), not just its own count of
    priced codes. Muted rather than the bold navy .cell-price treatment —
    informational, not a number tied to money. */
-.cell-testcount{ font-family:var(--font-body); font-size:var(--text-md); color:var(--ink-soft); font-weight:600; font-variant-numeric:tabular-nums; text-align:center; }
+.cell-testcount{ font-family:var(--font-body); font-size:var(--text-md); color:var(--ink-soft); font-weight:600; font-variant-numeric:tabular-nums; text-align:left; }
 
 .cell-price{ font-family:var(--font-body); font-size:var(--text-md); color:var(--navy); font-weight:700; font-variant-numeric:tabular-nums; }
 

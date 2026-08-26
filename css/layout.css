@@ -586,10 +586,11 @@ section{ padding:var(--space-20) 0; }
   grid-template-columns:minmax(0,1.6fr) 84px 110px 130px 110px 54px;
 }
 
-/* "Tests included" is short enough to need centering over its number
-   below (.cell-testcount is centered too) rather than reading like a
-   left-aligned label over a centered value. */
-.fr-head.fr-panels-head > *:nth-child(2){ text-align:center; }
+/* Left-aligned (and .cell-testcount below left-aligned to match) rather
+   than centered — "No of Parameters" wraps to two lines in this 84px
+   column, and centered it crowded right up against B2B's own header
+   with barely any gap between them. */
+.fr-head.fr-panels-head > *:nth-child(2){ text-align:left; }
 
 /* Individual Tests vs Profiles switch above the savings table (see
    js/modules/franchise-rates.js) — a segmented control, not filter chips

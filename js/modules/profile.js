@@ -160,11 +160,13 @@ AVM.modules = AVM.modules || {};
   // is one — not just a bundle that fully contains it. E.g. Total Thyroid
   // Profile (TT3, TT4, TSH) shares only its TSH with AVM Profile 1 (which
   // doesn't have TT3/TT4 at all), but that one shared test is still
-  // enough to block it — adding it too would re-bill that one shared test
+  // enough to overlap — adding it too would re-bill that one shared test
   // a second time, even though the rest of the bundle would be genuinely
   // new. Never true for pkg itself (checked first), and only looks for a
   // single bundle that shares a code — not several bundles that only
-  // collectively touch all of pkg's codes between them.
+  // collectively touch all of pkg's codes between them. This just reports
+  // the overlap; addPackage decides separately whether it's an upgrade
+  // (see isBiggerThan) or a block.
   function coveringPackage(pkg) {
     if (state.cartPackages.has(pkg.id) || !pkg.codes.length) return null;
     const { packageById } = AVM.data.getCatalog();
@@ -176,15 +178,34 @@ AVM.modules = AVM.modules || {};
     return null;
   }
 
+  // True once `a` covers strictly more reportable tests than `b` — the
+  // same weighted count (packageTestCount) the Profiles table's own "No
+  // of Tests" column already shows, so "bigger" here always matches what
+  // a partner can see on screen. A tie counts as false (neither wins) —
+  // deliberately never a swap on equal size, only a genuine upgrade.
+  function isBiggerThan(a, b) {
+    const { byCode } = AVM.data.getCatalog();
+    const { packageTestCount } = AVM.modules.calculations;
+    const countOf = pkg => packageTestCount(pkg, pkg.codes.map(c => byCode[c]).filter(Boolean));
+    return countOf(a) > countOf(b);
+  }
+
   // Adds a fixed-price profile bundle to the cart as one atomic unit — its
   // price is its own flat number (see data.js `pricing`), not the sum of
   // its member tests, so unlike the old package model those tests are
   // never added to state.cart individually; only the package id itself
-  // goes into state.cartPackages. Blocked if another active bundle
-  // already shares any of its own tests (see coveringPackage), or if any
-  // of its own tests are already sitting in the cart as separately-added
-  // individual tests — either way, adding it too would bill some of the
-  // same tests twice.
+  // goes into state.cartPackages.
+  //
+  // If another active bundle already shares any of pkg's own tests (see
+  // coveringPackage), the outcome depends on which one is actually
+  // bigger (see isBiggerThan — by the same "No of Tests" count shown on
+  // screen): adding a genuinely bigger profile over a smaller active one
+  // auto-replaces the smaller one (an "upgrade" — e.g. Total Thyroid
+  // Profile gets swapped out the moment AVM Profile 1 is added over it),
+  // while adding a smaller/redundant profile over a bigger active one
+  // stays blocked, same as adding one already sitting in the cart as
+  // separately-added individual tests — both would otherwise bill some
+  // of the same tests twice with nothing gained.
   function addPackage(pkg) {
     if (state.cartPackages.has(pkg.id)) {
       AVM.utils.helpers.showToast(`${pkg.name} is already in your profile`);
@@ -192,6 +213,13 @@ AVM.modules = AVM.modules || {};
     }
     const covering = coveringPackage(pkg);
     if (covering) {
+      if (isBiggerThan(pkg, covering)) {
+        state.cartPackages.delete(covering.id);
+        state.cartPackages.add(pkg.id);
+        persistCart();
+        AVM.utils.helpers.showToast(`${covering.name} was replaced by ${pkg.name}`);
+        return 1;
+      }
       AVM.utils.helpers.showToast(`${pkg.name} overlaps with ${covering.name} already in your profile — remove that first to add ${pkg.name} separately`);
       return 0;
     }
@@ -206,6 +234,20 @@ AVM.modules = AVM.modules || {};
     persistCart();
     AVM.utils.helpers.showToast(`Added ${pkg.name} to your profile`);
     return 1;
+  }
+
+  // The other active bundle that actually stops pkg from being added as
+  // its own "+" — i.e. it overlaps with pkg (see coveringPackage) AND
+  // isn't smaller than it (a smaller overlapping bundle gets auto-
+  // replaced instead of blocking — see addPackage/isBiggerThan), so it
+  // never really "blocks" the add. Used by panels-table.js to decide the
+  // Blocked/⊘ state — a profile that would actually trigger an upgrade
+  // on click shows its normal "+ Add to Profile" instead, since clicking
+  // it does genuinely work.
+  function blockingPackage(pkg) {
+    const covering = coveringPackage(pkg);
+    if (!covering) return null;
+    return isBiggerThan(pkg, covering) ? null : covering;
   }
 
   // True once this profile bundle is in the cart — used to flip its
@@ -593,7 +635,7 @@ AVM.modules = AVM.modules || {};
 
   AVM.modules.profile = {
     persistCart, restoreCart, toggleTest, addPackage, removePackage, isPackageActive,
-    removeFromProfile, clearProfile, renderCart, conflictingCodeFor, coveringPackage, packageOwning,
+    removeFromProfile, clearProfile, renderCart, conflictingCodeFor, coveringPackage, blockingPackage, packageOwning,
     setDiscountedPrice, clearDiscountedPrice, groupCartItems,
   };
 })();

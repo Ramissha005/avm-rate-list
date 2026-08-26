@@ -186,15 +186,18 @@ AVM.modules = AVM.modules || {};
       // A profile not yet added itself can still share tests with a
       // bigger one already in the cart — e.g. Total Thyroid Profile
       // shares just its TSH with AVM Profile 1 (which doesn't have
-      // Total T3/T4 at all), but that's still enough to block it:
-      // offering it as its own separately-priced "+" would re-bill that
-      // one shared test a second time. Same blocked/⊘ treatment as a
-      // conflicting individual test (see rate-list.js) rather than a
-      // working "+" that would actually just double-charge part of what's
-      // underneath it. Only checked when not already added itself — an
-      // actively-added profile always shows its normal "✓ Added" state,
-      // even if some other bundle happens to share a test with it too.
-      const covering = !isAdded ? AVM.modules.profile.coveringPackage(pkg) : null;
+      // Total T3/T4 at all). Whether that shows as Blocked/⊘ depends on
+      // which one is actually bigger (see profile.js's
+      // blockingPackage/isBiggerThan, same "No of Tests" count this
+      // table's own column shows): adding a genuinely bigger profile
+      // over a smaller active one is a working "+" that auto-replaces
+      // the smaller one (not blocked — see addPackage), while adding a
+      // smaller/redundant one over a bigger active one stays Blocked, same
+      // treatment as a conflicting individual test (see rate-list.js).
+      // Only checked when not already added itself — an actively-added
+      // profile always shows its normal "✓ Added" state, even if some
+      // other bundle happens to share a test with it too.
+      const covering = !isAdded ? AVM.modules.profile.blockingPackage(pkg) : null;
       let btnClass = "add-btn";
       let btnLabel = "Add to Profile";
       let btnIcon = "+";

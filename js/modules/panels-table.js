@@ -183,14 +183,17 @@ AVM.modules = AVM.modules || {};
 
     elements.body.innerHTML = rows.map(({ pkg, items, pricing }) => {
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
-      // Every one of this profile's tests can be "active" without this
-      // profile ever having been added itself — a bigger profile that
-      // includes it (e.g. AVM Profile A already covers Kidney Profile
-      // whole) tagged them all first. Same blocked/⊘ treatment as a
-      // conflicting individual test (see rate-list.js) rather than a
-      // misleading "✓ Added" that would look removable but actually do
-      // nothing when clicked.
-      const covering = isAdded ? AVM.modules.profile.coveringPackage(pkg) : null;
+      // A profile not yet added itself can still be entirely covered by a
+      // bigger one already in the cart (e.g. AVM Profile 1 already
+      // includes every one of Kidney Profile's own codes) — offering it
+      // as its own separately-priced "+" would bill those same tests
+      // twice. Same blocked/⊘ treatment as a conflicting individual test
+      // (see rate-list.js) rather than a working "+" that would actually
+      // just double-charge the tests underneath it. Only checked when
+      // not already added itself — an actively-added profile always
+      // shows its normal "✓ Added" state, even if some other bundle
+      // happens to cover the same tests too.
+      const covering = !isAdded ? AVM.modules.profile.coveringPackage(pkg) : null;
       let btnClass = "add-btn";
       let btnLabel = "Add to Profile";
       let btnIcon = "+";

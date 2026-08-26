@@ -156,17 +156,42 @@ AVM.modules = AVM.modules || {};
     persistCart();
   }
 
+  // The other active bundle that already includes every one of pkg's own
+  // codes, if there is one — e.g. once AVM Profile 1 is added, Kidney
+  // Profile reads as fully covered by it (every code Kidney Profile lists
+  // is also inside AVM Profile 1's own list), so offering Kidney Profile
+  // as its own separately-priced bundle on top would bill those same
+  // tests twice. Never true for pkg itself (checked first), and only
+  // looks for a single bundle that covers pkg entirely — not several
+  // bundles collectively covering it between them.
+  function coveringPackage(pkg) {
+    if (state.cartPackages.has(pkg.id) || !pkg.codes.length) return null;
+    const { packageById } = AVM.data.getCatalog();
+    for (const pkgId of state.cartPackages) {
+      if (pkgId === pkg.id) continue;
+      const other = packageById[pkgId];
+      if (other && pkg.codes.every(code => other.codes.includes(code))) return other;
+    }
+    return null;
+  }
+
   // Adds a fixed-price profile bundle to the cart as one atomic unit — its
   // price is its own flat number (see data.js `pricing`), not the sum of
   // its member tests, so unlike the old package model those tests are
   // never added to state.cart individually; only the package id itself
-  // goes into state.cartPackages. Blocked if any of the bundle's own tests
-  // are already sitting in the cart as separately-added individual tests
-  // — allowing both would bill the same test twice (once at its own price,
-  // once inside the bundle).
+  // goes into state.cartPackages. Blocked if another active bundle
+  // already covers every one of its own tests (see coveringPackage), or
+  // if any of its own tests are already sitting in the cart as
+  // separately-added individual tests — either way, adding it too would
+  // bill the same tests twice.
   function addPackage(pkg) {
     if (state.cartPackages.has(pkg.id)) {
       AVM.utils.helpers.showToast(`${pkg.name} is already in your profile`);
+      return 0;
+    }
+    const covering = coveringPackage(pkg);
+    if (covering) {
+      AVM.utils.helpers.showToast(`${pkg.name} is already fully covered by ${covering.name} — remove that first to add ${pkg.name} separately`);
       return 0;
     }
     const { byCode } = AVM.data.getCatalog();
@@ -184,17 +209,11 @@ AVM.modules = AVM.modules || {};
 
   // True once this profile bundle is in the cart — used to flip its
   // "✓ Added" state on the Profiles table and the cart-drawer group.
+  // Doesn't count as "active" just because another bundle happens to
+  // cover the same tests (see coveringPackage) — that's a separate,
+  // blocked state, not this one.
   function isPackageActive(pkg) {
     return state.cartPackages.has(pkg.id);
-  }
-
-  // Kept for API compatibility with panels-table.js's blocked/⊘ check —
-  // under the fixed-price model every profile is its own independent,
-  // atomically-added bundle (see addPackage), so one profile can no
-  // longer be silently "covered by" a bigger one the way AVM Profile A
-  // used to fully absorb Kidney Profile. Always null for now.
-  function coveringPackage(pkg) {
-    return null;
   }
 
   // Removes a fixed-price profile bundle from the cart as one atomic unit
@@ -204,7 +223,10 @@ AVM.modules = AVM.modules || {};
   // addPackage's own-test guard).
   function removePackage(pkg) {
     if (!state.cartPackages.has(pkg.id)) {
-      AVM.utils.helpers.showToast(`${pkg.name} isn't in your profile`);
+      const covering = coveringPackage(pkg);
+      AVM.utils.helpers.showToast(
+        covering ? `Already covered by ${covering.name} — remove that to free up ${pkg.name}` : `${pkg.name} isn't in your profile`
+      );
       return 0;
     }
     state.cartPackages.delete(pkg.id);

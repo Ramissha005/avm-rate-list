@@ -2249,6 +2249,48 @@
       "sampleVolume": null,
       "tat": null,
       "active": true
+    },
+    {
+      "sr": 108,
+      "code": "ZINC",
+      "name": "Zinc",
+      "aliases": ["Serum Zinc","Zn"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 108,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
+    },
+    {
+      "sr": 109,
+      "code": "COPP",
+      "name": "Copper",
+      "aliases": ["Serum Copper","Cu"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 109,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
     }
   ]
 }

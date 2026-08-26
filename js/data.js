@@ -2444,6 +2444,48 @@ AVM.state = {
       "sampleVolume": null,
       "tat": null,
       "active": true
+    },
+    {
+      "sr": 108,
+      "code": "ZINC",
+      "name": "Zinc",
+      "aliases": ["Serum Zinc","Zn"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 108,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
+    },
+    {
+      "sr": 109,
+      "code": "COPP",
+      "name": "Copper",
+      "aliases": ["Serum Copper","Cu"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 109,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
     }
   ]
 };
@@ -2555,6 +2597,55 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 600, "franchise": 500, "b2c": 1500 } },
+  // Everything AVM Profile 2 has, plus Vitamin Profile, Serum Zinc, Serum
+  // Copper, and C-Reactive Protein (CRP) as their own new groups — Ferritin
+  // is folded into the existing Iron Profile group instead of getting a
+  // group of its own, per the user's own "will come under Iron Profile".
+  { "id": "avm-profile-3", "name": "AVM Profile 3", "categoryId": "general-biochemistry",
+    "codes": [
+      "UTSH", "MAGN", "PHOS",
+      "CHOL", "TRIG", "HCHO", "LDL",
+      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
+      "URIC", "SCRE", "CALC", "UREA", "BUN",
+      "IRON", "TIBC", "FERR",
+      "A1c", "CBC", "LASE", "AMYL",
+      "VITDT", "VB12", "ZINC", "COPP", "CRP"
+    ],
+    "groups": [
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
+        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+        "Non-HDL Cholesterol", "VLDL Cholesterol"
+      ] },
+      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
+        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+      ] },
+      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
+        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+      ] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
+      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
+      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] }
+    ],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol",
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
+      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
+    ], "active": true,
+    "pricing": { "b2b": 1100, "franchise": 900, "b2c": 3000 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },

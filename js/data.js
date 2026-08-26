@@ -2603,7 +2603,7 @@ AVM.state = {
   // ..." instead of one flattened line, same as before the fixed-price
   // switchover. Its own price is still its own flat number, same as
   // every other profile here — not the sum of what it lists.
-  { "id": "avm-profile-1", "name": "AVM Profile 1", "categoryId": "general-biochemistry",
+  { "id": "avm-profile-1", "name": "AVM 1 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
@@ -2639,9 +2639,9 @@ AVM.state = {
       "Transferrin Saturation (%)"
     ], "active": true,
     "pricing": { "b2b": 300, "franchise": 250, "b2c": 800 } },
-  // Everything AVM Profile 1 has, plus HbA1c (+ its Average Blood Glucose
+  // Everything AVM 1 Profile has, plus HbA1c (+ its Average Blood Glucose
   // calculated param), Complete Blood Count, and Pancreatic Profile.
-  { "id": "avm-profile-2", "name": "AVM Profile 2", "categoryId": "general-biochemistry",
+  { "id": "avm-profile-2", "name": "AVM 2 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
@@ -2681,11 +2681,11 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 600, "franchise": 500, "b2c": 1500 } },
-  // Everything AVM Profile 2 has, plus Vitamin Profile, Serum Zinc, Serum
+  // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, Serum
   // Copper, and C-Reactive Protein (CRP) as their own new groups — Ferritin
   // is folded into the existing Iron Profile group instead of getting a
   // group of its own, per the user's own "will come under Iron Profile".
-  { "id": "avm-profile-3", "name": "AVM Profile 3", "categoryId": "general-biochemistry",
+  { "id": "avm-profile-3", "name": "AVM 3 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
@@ -2730,12 +2730,12 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 1100, "franchise": 900, "b2c": 3000 } },
-  // Everything AVM Profile 3 has, plus a new Cardiac Profile group (Apo A1,
+  // Everything AVM 3 Profile has, plus a new Cardiac Profile group (Apo A1,
   // Apo B, Lipoprotein (a), High-Sensitivity CRP + Apo B / Apo A1 Ratio
   // calculated). C-Reactive Protein (CRP) stays its own separate group,
-  // same as in AVM Profile 3 — the user asked only for the Apo/Lp(a)/
+  // same as in AVM 3 Profile — the user asked only for the Apo/Lp(a)/
   // HS-CRP cluster to be grouped under Cardiac Profile, not CRP itself.
-  { "id": "avm-profile-4", "name": "AVM Profile 4", "categoryId": "general-biochemistry",
+  { "id": "avm-profile-4", "name": "AVM 4 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
@@ -2781,10 +2781,10 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
     "pricing": { "b2b": 1300, "franchise": 1100, "b2c": 3600 } },
-  // Everything AVM Profile 4 has, plus Homocysteine folded into Cardiac
+  // Everything AVM 4 Profile has, plus Homocysteine folded into Cardiac
   // Profile, Folic Acid folded into Vitamin Profile, and three new
   // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
-  { "id": "avm-profile-5", "name": "AVM Profile 5", "categoryId": "general-biochemistry",
+  { "id": "avm-profile-5", "name": "AVM 5 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MAGN", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",

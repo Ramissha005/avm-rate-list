@@ -158,7 +158,7 @@ AVM.modules = AVM.modules || {};
 
   // The other active bundle that shares ANY of pkg's own codes, if there
   // is one — not just a bundle that fully contains it. E.g. Total Thyroid
-  // Profile (TT3, TT4, TSH) shares only its TSH with AVM Profile 1 (which
+  // Profile (TT3, TT4, TSH) shares only its TSH with AVM 1 Profile (which
   // doesn't have TT3/TT4 at all), but that one shared test is still
   // enough to overlap — adding it too would re-bill that one shared test
   // a second time, even though the rest of the bundle would be genuinely
@@ -201,7 +201,7 @@ AVM.modules = AVM.modules || {};
   // bigger (see isBiggerThan — by the same "No of Tests" count shown on
   // screen): adding a genuinely bigger profile over a smaller active one
   // auto-replaces the smaller one (an "upgrade" — e.g. Total Thyroid
-  // Profile gets swapped out the moment AVM Profile 1 is added over it),
+  // Profile gets swapped out the moment AVM 1 Profile is added over it),
   // while adding a smaller/redundant profile over a bigger active one
   // stays blocked, same as adding one already sitting in the cart as
   // separately-added individual tests — both would otherwise bill some

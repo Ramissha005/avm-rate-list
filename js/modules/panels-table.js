@@ -185,7 +185,7 @@ AVM.modules = AVM.modules || {};
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
       // A profile not yet added itself can still share tests with a
       // bigger one already in the cart — e.g. Total Thyroid Profile
-      // shares just its TSH with AVM Profile 1 (which doesn't have
+      // shares just its TSH with AVM 1 Profile (which doesn't have
       // Total T3/T4 at all). Whether that shows as Blocked/⊘ depends on
       // which one is actually bigger (see profile.js's
       // blockingPackage/isBiggerThan, same "No of Tests" count this

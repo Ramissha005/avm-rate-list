@@ -2486,6 +2486,90 @@ AVM.state = {
       "sampleVolume": null,
       "tat": null,
       "active": true
+    },
+    {
+      "sr": 110,
+      "code": "HOMO",
+      "name": "Homocysteine",
+      "aliases": ["Serum Homocysteine","Hcy"],
+      "techId": "eclia",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "cardiac",
+      "departmentId": "immunoassay",
+      "displayOrder": 110,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
+    },
+    {
+      "sr": 111,
+      "code": "KET",
+      "name": "Blood Ketone",
+      "aliases": ["Serum Ketone","Ketone Bodies"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "diabetes",
+      "departmentId": "biochemistry",
+      "displayOrder": 111,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
+    },
+    {
+      "sr": 112,
+      "code": "FRUC",
+      "name": "Fructosamine",
+      "aliases": ["Serum Fructosamine"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "diabetes",
+      "departmentId": "biochemistry",
+      "displayOrder": 112,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
+    },
+    {
+      "sr": 113,
+      "code": "RFAC",
+      "name": "Rheumatoid Factor",
+      "aliases": ["RA Factor","RF"],
+      "techId": "eclia",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "arthritis-autoimmune",
+      "departmentId": "immunoassay",
+      "displayOrder": 113,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
     }
   ]
 };
@@ -2697,6 +2781,59 @@ AVM.state = {
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
     "pricing": { "b2b": 1300, "franchise": 1100, "b2c": 3600 } },
+  // Everything AVM Profile 4 has, plus Homocysteine folded into Cardiac
+  // Profile, Folic Acid folded into Vitamin Profile, and three new
+  // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
+  { "id": "avm-profile-5", "name": "AVM Profile 5", "categoryId": "general-biochemistry",
+    "codes": [
+      "UTSH", "MAGN", "PHOS",
+      "CHOL", "TRIG", "HCHO", "LDL",
+      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
+      "URIC", "SCRE", "CALC", "UREA", "BUN",
+      "IRON", "TIBC", "FERR",
+      "A1c", "CBC", "LASE", "AMYL",
+      "VITDT", "VB12", "FOLI", "ZINC", "COPP",
+      "APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO",
+      "KET", "FRUC", "RFAC"
+    ],
+    "groups": [
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
+        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+        "Non-HDL Cholesterol", "VLDL Cholesterol"
+      ] },
+      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
+        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+      ] },
+      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
+        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+      ] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
+      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
+      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12", "FOLI"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
+      { "label": "Blood Ketone", "codes": ["KET"], "calculatedParams": [] },
+      { "label": "Fructosamine", "codes": ["FRUC"], "calculatedParams": [] },
+      { "label": "Rheumatoid Factor", "codes": ["RFAC"], "calculatedParams": [] }
+    ],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol",
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
+      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
+    ], "active": true,
+    "pricing": { "b2b": 1800, "franchise": 1600, "b2c": 6000 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },

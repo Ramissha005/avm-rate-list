@@ -183,16 +183,17 @@ AVM.modules = AVM.modules || {};
 
     elements.body.innerHTML = rows.map(({ pkg, items, pricing }) => {
       const isAdded = AVM.modules.profile.isPackageActive(pkg);
-      // A profile not yet added itself can still be entirely covered by a
-      // bigger one already in the cart (e.g. AVM Profile 1 already
-      // includes every one of Kidney Profile's own codes) — offering it
-      // as its own separately-priced "+" would bill those same tests
-      // twice. Same blocked/⊘ treatment as a conflicting individual test
-      // (see rate-list.js) rather than a working "+" that would actually
-      // just double-charge the tests underneath it. Only checked when
-      // not already added itself — an actively-added profile always
-      // shows its normal "✓ Added" state, even if some other bundle
-      // happens to cover the same tests too.
+      // A profile not yet added itself can still share tests with a
+      // bigger one already in the cart — e.g. Total Thyroid Profile
+      // shares just its TSH with AVM Profile 1 (which doesn't have
+      // Total T3/T4 at all), but that's still enough to block it:
+      // offering it as its own separately-priced "+" would re-bill that
+      // one shared test a second time. Same blocked/⊘ treatment as a
+      // conflicting individual test (see rate-list.js) rather than a
+      // working "+" that would actually just double-charge part of what's
+      // underneath it. Only checked when not already added itself — an
+      // actively-added profile always shows its normal "✓ Added" state,
+      // even if some other bundle happens to share a test with it too.
       const covering = !isAdded ? AVM.modules.profile.coveringPackage(pkg) : null;
       let btnClass = "add-btn";
       let btnLabel = "Add to Profile";
@@ -202,7 +203,7 @@ AVM.modules = AVM.modules || {};
         btnClass += " blocked";
         btnLabel = "Blocked";
         btnIcon = "⊘";
-        btnAttrs = `data-pkg="${esc(pkg.id)}" data-conflict="1" aria-label="${esc(pkg.name)} is already covered by ${esc(covering.name)} in your profile" title="Already covered by ${esc(covering.name)} in your profile"`;
+        btnAttrs = `data-pkg="${esc(pkg.id)}" data-conflict="1" aria-label="${esc(pkg.name)} overlaps with ${esc(covering.name)} already in your profile" title="Overlaps with ${esc(covering.name)} already in your profile"`;
       } else if (isAdded) {
         btnClass += " added";
         btnLabel = "Added";

@@ -2685,8 +2685,7 @@ AVM.state = {
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
       { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
-      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
+      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
     ],
     "calculatedParams": [
       "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",

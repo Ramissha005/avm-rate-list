@@ -2472,7 +2472,19 @@ AVM.state = {
     "calculatedParams": [
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
     ], "active": true,
-    "pricing": { "b2b": 75, "franchise": 50, "b2c": 250 } }
+    "pricing": { "b2b": 75, "franchise": 50, "b2c": 250 } },
+  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies",
+    "codes": ["IRON", "TIBC"],
+    "calculatedParams": ["Transferrin Saturation (%)"], "active": true,
+    "pricing": { "b2b": 100, "franchise": 75, "b2c": 300 } },
+  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "pancreatic-function",
+    "codes": ["LASE", "AMYL"],
+    "calculatedParams": [], "active": true,
+    "pricing": { "b2b": 125, "franchise": 100, "b2c": 500 } },
+  { "id": "total-thyroid-profile", "name": "Total Thyroid Profile", "categoryId": "thyroid",
+    "codes": ["TT3", "TT4", "UTSH"],
+    "calculatedParams": [], "active": true,
+    "pricing": { "b2b": 60, "franchise": 60, "b2c": 300 } }
 ];
 
   const PARAMETERS_WRAPPED = {

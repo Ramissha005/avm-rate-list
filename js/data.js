@@ -2513,6 +2513,48 @@ AVM.state = {
       "Transferrin Saturation (%)"
     ], "active": true,
     "pricing": { "b2b": 300, "franchise": 250, "b2c": 800 } },
+  // Everything AVM Profile 1 has, plus HbA1c (+ its Average Blood Glucose
+  // calculated param), Complete Blood Count, and Pancreatic Profile.
+  { "id": "avm-profile-2", "name": "AVM Profile 2", "categoryId": "general-biochemistry",
+    "codes": [
+      "UTSH", "MAGN", "PHOS",
+      "CHOL", "TRIG", "HCHO", "LDL",
+      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
+      "URIC", "SCRE", "CALC", "UREA", "BUN",
+      "IRON", "TIBC",
+      "A1c", "CBC", "LASE", "AMYL"
+    ],
+    "groups": [
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
+        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+        "Non-HDL Cholesterol", "VLDL Cholesterol"
+      ] },
+      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
+        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+      ] },
+      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
+        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+      ] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "HbA1c", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
+      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
+      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] }
+    ],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol",
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
+      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
+    ], "active": true,
+    "pricing": { "b2b": 600, "franchise": 500, "b2c": 1500 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },

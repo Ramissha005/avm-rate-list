@@ -587,9 +587,9 @@ section{ padding:var(--space-20) 0; }
 }
 
 /* Left-aligned (and .cell-testcount below left-aligned to match) rather
-   than centered — "No of Parameters" wraps to two lines in this 84px
-   column, and centered it crowded right up against B2B's own header
-   with barely any gap between them. */
+   than centered — "No of Tests" crowded right up against B2B's own
+   header with barely any gap between them when centered in this 84px
+   column. */
 .fr-head.fr-panels-head > *:nth-child(2){ text-align:left; }
 
 /* Individual Tests vs Profiles switch above the savings table (see

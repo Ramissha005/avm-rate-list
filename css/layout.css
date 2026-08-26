@@ -580,10 +580,16 @@ section{ padding:var(--space-20) 0; }
    priced code plus any calculated/derived parameters, e.g. AVM
    Profile A shows 36 even though it's 26 priced codes). Needs both
    classes combined for specificity over the plain .fr-head/.fr-row
-   rule above. */
+   rule above.
+   First column is capped (not a bare `1.6fr` that eats 100% of
+   whatever's left) — with few short-named profiles in the catalog, an
+   uncapped flexible column stretches far past the name itself, leaving
+   a wide dead gap before "No of Tests" and every column after it
+   instead of any extra space just sitting past the Action button where
+   it belongs. */
 .fr-head.fr-panels-head,
 .fr-row.fr-panels-row{
-  grid-template-columns:minmax(0,1.6fr) 84px 110px 130px 110px 54px;
+  grid-template-columns:minmax(200px,480px) 84px 110px 130px 110px 54px;
 }
 
 /* Left-aligned (and .cell-testcount below left-aligned to match) rather

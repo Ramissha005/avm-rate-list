@@ -86,7 +86,7 @@ AVM.state = {
   },
   {
     "id": "cardiac",
-    "label": "Cardiac"
+    "label": "Cardiac Marker"
   },
   {
     "id": "drug-monitoring",

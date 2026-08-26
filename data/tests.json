@@ -2228,6 +2228,27 @@
       "tat": null,
       "active": true,
       "paramCount": 28
+    },
+    {
+      "sr": 107,
+      "code": "MAGN",
+      "name": "Magnesium",
+      "aliases": ["Serum Magnesium","Mg"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 107,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
     }
   ]
 }

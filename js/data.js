@@ -2423,6 +2423,27 @@ AVM.state = {
       "tat": null,
       "active": true,
       "paramCount": 28
+    },
+    {
+      "sr": 107,
+      "code": "MAGN",
+      "name": "Magnesium",
+      "aliases": ["Serum Magnesium","Mg"],
+      "techId": "photometry",
+      "sampleId": "serum",
+      "franchise": 30,
+      "b2b": 40,
+      "b2c": 100,
+      "categoryId": "metabolic-disorder",
+      "departmentId": "biochemistry",
+      "displayOrder": 107,
+      "fastingRequired": null,
+      "homeCollection": true,
+      "reportType": "Digital",
+      "container": null,
+      "sampleVolume": null,
+      "tat": null,
+      "active": true
     }
   ]
 };
@@ -2449,6 +2470,49 @@ AVM.state = {
   // Profiles are being rebuilt one at a time under this new fixed-price
   // model — more will be added back here, each with its own `pricing`.
   const PACKAGES = [
+  // AVM's own curated multi-panel checkup, built from several of the
+  // standalone profiles below plus a few extra standalone tests — carries
+  // its own `groups` breakdown (see panels-table.js/print.js) so its
+  // "Tests included" list reads as "Lipid Profile: ..." / "Liver Profile:
+  // ..." instead of one flattened line, same as before the fixed-price
+  // switchover. Its own price is still its own flat number, same as
+  // every other profile here — not the sum of what it lists.
+  { "id": "avm-profile-1", "name": "AVM Profile 1", "categoryId": "general-biochemistry",
+    "codes": [
+      "CHOL", "TRIG", "HCHO", "LDL",
+      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
+      "URIC", "SCRE", "CALC", "UREA", "BUN",
+      "IRON", "TIBC",
+      "UTSH", "MAGN", "PHOS"
+    ],
+    "groups": [
+      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
+        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+        "Non-HDL Cholesterol", "VLDL Cholesterol"
+      ] },
+      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
+        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+      ] },
+      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
+        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+      ] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] }
+    ],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol",
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
+      "Transferrin Saturation (%)"
+    ], "active": true,
+    "pricing": { "b2b": 300, "franchise": 250, "b2c": 800 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },

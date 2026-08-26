@@ -61,7 +61,8 @@ AVM.modules = AVM.modules || {};
   }
 
   function dotJoin(names, esc) {
-    return names.map(esc).join(`<span class="fr-panel-details__dot">•</span>`);
+    const { highlightAsterisk } = AVM.utils.formatters;
+    return names.map(n => highlightAsterisk(esc(n))).join(`<span class="fr-panel-details__dot">•</span>`);
   }
 
   // Packages built from several named panels + a few extra tests (e.g. AVM

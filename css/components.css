@@ -754,6 +754,14 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 /* Calculated/derived report line items that ride along with a package for
    free — shown so the panel's real test count adds up, but they're not
    separate cart entries (no price, nothing to remove). */
+/* A literal "*" inside a calculated parameter's own label (e.g. "eGFR
+   (For Adults*)") — a caveat marker, not decoration, so it's colored
+   to actually stand out rather than blend into the surrounding text.
+   See AVM.utils.formatters.highlightAsterisk, applied everywhere a
+   calculatedParam gets rendered (this cart drawer, the site's own
+   Profiles view "Tests included" line, and print/share). */
+.calc-star{ color:var(--amber-dark); font-weight:800; }
+
 .cart-item--calc{ opacity:.75; }
 .cart-item--calc:hover{ background:transparent; }
 .cart-item--calc .cart-item__name{ font-style:italic; }

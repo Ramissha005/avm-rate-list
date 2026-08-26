@@ -36,5 +36,15 @@ AVM.utils = AVM.utils || {};
     return String(s).replace(/[&<>"']/g, ch => ESCAPE_MAP[ch]);
   }
 
-  AVM.utils.formatters = { money, pluralize, escapeHtml };
+  // A literal "*" in a calculated parameter's own label (e.g. "eGFR (For
+  // Adults*)") is a caveat marker, not decoration — colored differently
+  // (see .calc-star) so it actually draws the eye instead of blending
+  // into the rest of the name. Safe to run on already-escaped text: "*"
+  // isn't one of escapeHtml's special characters, so it survives
+  // escaping untouched either way.
+  function highlightAsterisk(s) {
+    return s.replace(/\*/g, '<span class="calc-star">*</span>');
+  }
+
+  AVM.utils.formatters = { money, pluralize, escapeHtml, highlightAsterisk };
 })();

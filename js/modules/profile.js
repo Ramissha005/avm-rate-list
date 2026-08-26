@@ -450,7 +450,7 @@ AVM.modules = AVM.modules || {};
       const groupB2C = AVM.modules.calculations.totals(group.items).b2c;
       const calcRows = (group.pkg.calculatedParams || []).map(name => `
         <div class="cart-item cart-item--calc">
-          <div class="cart-item__name">${esc(name)}<small>Calculated from the tests above</small></div>
+          <div class="cart-item__name">${AVM.utils.formatters.highlightAsterisk(esc(name))}<small>Calculated from the tests above</small></div>
         </div>
       `).join("");
 

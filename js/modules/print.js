@@ -110,6 +110,7 @@ AVM.modules = AVM.modules || {};
       // Nitrogen (BUN)") — stripped here so the "tests included" line
       // reads as plain names, same as panels-table.js's own version does.
       const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      const { highlightAsterisk } = AVM.utils.formatters;
       // AVM Profile A/B/C and AVM Anemia A's `groups` (see below) list
       // codes, not resolved test objects — this page's own `byCode` was
       // scoped to the cache-population block above and out of reach down
@@ -168,7 +169,7 @@ AVM.modules = AVM.modules || {};
               // reports more than one result on its own, so the heading's
               // count isn't just how many lines are listed below it.
               const count = AVM.modules.calculations.packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
-              const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(esc).join(dot)}</p>`;
+              const body = names.length === 1 ? "" : `<p class="group-head__tests">${names.map(n => highlightAsterisk(esc(n))).join(dot)}</p>`;
               return `
                 <div class="group-head__group">
                   <span class="group-head__group-label">${esc(g.label)} (${count})</span>
@@ -178,7 +179,7 @@ AVM.modules = AVM.modules || {};
           : `<p class="group-head__tests">${[
               ...group.items.map(t => cleanName(t.name)),
               ...(group.pkg.calculatedParams || []),
-            ].map(esc).join(dot)}</p>`;
+            ].map(n => highlightAsterisk(esc(n))).join(dot)}</p>`;
 
         return `
           <tr class="row-group-head">

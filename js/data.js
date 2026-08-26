@@ -2484,7 +2484,7 @@ AVM.state = {
     "calculatedParams": ["Transferrin Saturation (%)"], "active": true },
   { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "general-biochemistry", "codes": ["AMYL", "LASE"],
     "calculatedParams": [], "active": true },
-  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"],
+  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function", "codes": ["BUN", "SCRE", "URIC", "CALC"],
     "calculatedParams": ["BUN / Serum Creatinine Ratio", "eGFR (estimated Glomerular Filtration Rate)"], "active": true },
   { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
     "calculatedParams": ["VLDL Cholesterol", "Non-HDL Cholesterol", "TC / HDL Cholesterol Ratio", "LDL / HDL Ratio"], "active": true },

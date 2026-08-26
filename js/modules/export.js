@@ -64,7 +64,14 @@ AVM.modules = AVM.modules || {};
     }
     const customerView = state.customerView;
     const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
-    const totalCount = items.length + bundlePkgs.reduce((n, pkg) => n + pkg.codes.length, 0);
+    // Same weighted count the cart drawer's own header badge and every
+    // bundle's own group meta line use (see profile.js's renderCart) —
+    // each test's own paramCount, plus each bundle's full
+    // packageTestCount() (priced codes + calculated params), so this
+    // subtitle always agrees with what's shown on screen.
+    const { packageTestCount } = AVM.modules.calculations;
+    const totalCount = items.reduce((n, t) => n + (t.paramCount || 1), 0)
+      + bundlePkgs.reduce((n, pkg) => n + packageTestCount(pkg, pkg.codes.map(c => byCode[c]).filter(Boolean)), 0);
     const pricingColumns = customerView
       ? [{ header: "B2C", key: "b2c", type: "currency", width: 12 }]
       : [

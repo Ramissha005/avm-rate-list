@@ -398,12 +398,17 @@ AVM.modules = AVM.modules || {};
     const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
     const customerView = state.customerView;
 
-    // Individually-added tests plus every fixed-price bundle's own test
-    // count (raw code count, not the weighted packageTestCount() figure —
-    // same "how many things are in here" meaning the badge always showed
-    // before bundles existed) — what the header badge and "N tests
-    // selected" line below actually count.
-    const totalCount = items.length + bundlePkgs.reduce((n, pkg) => n + pkg.codes.length, 0);
+    // Individually-added tests (each weighted by its own paramCount, same
+    // as everywhere else a test's result count matters — see
+    // calculations.js) plus every fixed-price bundle's own weighted
+    // packageTestCount() — the exact same figure its own group header
+    // and the Profiles table's "No of Tests" column already show, so the
+    // header badge and "N tests selected" line below always agree with
+    // every other count on the page instead of a smaller raw-code-count
+    // total that only counted priced lines, not calculated ones.
+    const { packageTestCount } = AVM.modules.calculations;
+    const totalCount = items.reduce((n, t) => n + (t.paramCount || 1), 0)
+      + bundlePkgs.reduce((n, pkg) => n + packageTestCount(pkg, pkg.codes.map(c => byCode[c]).filter(Boolean)), 0);
 
     // A test (or a whole bundle) was just added (not removed, not the
     // first render) — pop the "Make My Profile" button so the count

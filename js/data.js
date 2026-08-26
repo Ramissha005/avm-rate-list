@@ -106,7 +106,7 @@ AVM.state = {
   },
   {
     "id": "infectious-disease",
-    "label": "Infectious Disease Serology"
+    "label": "Infectious Disease"
   },
   {
     "id": "autoimmune",
@@ -122,7 +122,7 @@ AVM.state = {
   },
   {
     "id": "allergy-immunology",
-    "label": "Allergy & Immunology"
+    "label": "Allergy"
   },
   {
     "id": "general-biochemistry",
@@ -135,6 +135,26 @@ AVM.state = {
   {
     "id": "urine",
     "label": "Urine"
+  },
+  {
+    "id": "stress-hormone",
+    "label": "Stress Hormone"
+  },
+  {
+    "id": "thyroid-autoimmune",
+    "label": "Thyroid Autoimmune"
+  },
+  {
+    "id": "arthritis-autoimmune",
+    "label": "Arthritis Autoimmune"
+  },
+  {
+    "id": "infertility",
+    "label": "Infertility"
+  },
+  {
+    "id": "infectious",
+    "label": "Infectious"
   }
 ];
 
@@ -1472,7 +1492,7 @@ AVM.state = {
       "franchise": 130,
       "b2b": 140,
       "b2c": 450,
-      "categoryId": "pituitary-growth",
+      "categoryId": "stress-hormone",
       "departmentId": "immunoassay",
       "displayOrder": 63,
       "fastingRequired": null,
@@ -1514,7 +1534,7 @@ AVM.state = {
       "franchise": 150,
       "b2b": 160,
       "b2c": 600,
-      "categoryId": "thyroid",
+      "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
       "displayOrder": 65,
       "fastingRequired": null,
@@ -1766,7 +1786,7 @@ AVM.state = {
       "franchise": 180,
       "b2b": 190,
       "b2c": 500,
-      "categoryId": "thyroid",
+      "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
       "displayOrder": 77,
       "fastingRequired": null,
@@ -1871,7 +1891,7 @@ AVM.state = {
       "franchise": 205,
       "b2b": 215,
       "b2c": 650,
-      "categoryId": "autoimmune",
+      "categoryId": "arthritis-autoimmune",
       "departmentId": "immunoassay",
       "displayOrder": 82,
       "fastingRequired": null,
@@ -1955,7 +1975,7 @@ AVM.state = {
       "franchise": 210,
       "b2b": 220,
       "b2c": 650,
-      "categoryId": "thyroid",
+      "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
       "displayOrder": 86,
       "fastingRequired": null,
@@ -2039,7 +2059,7 @@ AVM.state = {
       "franchise": 250,
       "b2b": 250,
       "b2c": 750,
-      "categoryId": "reproductive-hormones",
+      "categoryId": "infertility",
       "departmentId": "immunoassay",
       "displayOrder": 90,
       "fastingRequired": null,
@@ -2165,7 +2185,7 @@ AVM.state = {
       "franchise": 300,
       "b2b": 310,
       "b2c": 750,
-      "categoryId": "allergy-immunology",
+      "categoryId": "infectious",
       "departmentId": "immunoassay",
       "displayOrder": 96,
       "fastingRequired": null,

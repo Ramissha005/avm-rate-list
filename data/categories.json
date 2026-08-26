@@ -57,7 +57,7 @@
   },
   {
     "id": "infectious-disease",
-    "label": "Infectious Disease Serology"
+    "label": "Infectious Disease"
   },
   {
     "id": "autoimmune",
@@ -73,7 +73,7 @@
   },
   {
     "id": "allergy-immunology",
-    "label": "Allergy & Immunology"
+    "label": "Allergy"
   },
   {
     "id": "general-biochemistry",
@@ -86,5 +86,25 @@
   {
     "id": "urine",
     "label": "Urine"
+  },
+  {
+    "id": "stress-hormone",
+    "label": "Stress Hormone"
+  },
+  {
+    "id": "thyroid-autoimmune",
+    "label": "Thyroid Autoimmune"
+  },
+  {
+    "id": "arthritis-autoimmune",
+    "label": "Arthritis Autoimmune"
+  },
+  {
+    "id": "infertility",
+    "label": "Infertility"
+  },
+  {
+    "id": "infectious",
+    "label": "Infectious"
   }
 ]

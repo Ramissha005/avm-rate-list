@@ -2446,13 +2446,33 @@ AVM.state = {
   // the panel's total "test" count (per the source rate card) but never
   // toward B2B/B2C/margin.
   //
-  // Only one profile exists for now (Vitamin Profile) while the rest of
-  // the old sum-of-tests catalog is rebuilt under this new fixed-price
+  // Profiles are being rebuilt one at a time under this new fixed-price
   // model — more will be added back here, each with its own `pricing`.
   const PACKAGES = [
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } }
+    "pricing": { "b2b": 250, "franchise": 200, "b2c": 800 } },
+  { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile",
+    "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
+    "calculatedParams": [
+      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
+      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
+      "Non-HDL Cholesterol", "VLDL Cholesterol"
+    ], "active": true,
+    "pricing": { "b2b": 75, "franchise": 50, "b2c": 250 } },
+  { "id": "liver-profile", "name": "Liver Profile", "categoryId": "liver-function",
+    "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"],
+    "calculatedParams": [
+      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
+      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
+    ], "active": true,
+    "pricing": { "b2b": 115, "franchise": 90, "b2c": 300 } },
+  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function",
+    "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"],
+    "calculatedParams": [
+      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
+    ], "active": true,
+    "pricing": { "b2b": 75, "franchise": 50, "b2c": 250 } }
 ];
 
   const PARAMETERS_WRAPPED = {

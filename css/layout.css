@@ -329,7 +329,7 @@ button{ font-family:inherit; cursor:pointer; }
    figure — same "was/now" contrast a price tag uses, just without ever
    stating what the discounted price actually comes out to. */
 .offer-banner__fee{ font-size:var(--text-sm); font-weight:800; margin-top:1px; }
-.offer-banner__fee s{ opacity:.75; text-decoration-thickness:2px; }
+.offer-banner__fee s{ font-size:var(--text-lg); opacity:.92; text-decoration-thickness:2px; }
 /* The discount itself is the one figure that has to grab the eye first —
    a warm gold gradient fill reads as a lit-up highlight/badge instead of
    just more white text like the tag and detail lines around it. No

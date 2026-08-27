@@ -123,7 +123,7 @@
 .slip{
   background:#FBFAF5; color:var(--ink); border-radius:var(--radius-lg);
   padding:var(--space-6) var(--space-6) var(--space-5); box-shadow:var(--shadow-lg);
-  transform:rotate(1.2deg);
+  transform:rotate(4deg);
   font-family:var(--font-mono);
 }
 

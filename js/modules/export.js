@@ -45,7 +45,7 @@ AVM.modules = AVM.modules || {};
       ? `Original Price: ${money(sum.b2c)}\nDiscounted Price: ${money(discountedPrice)}`
       : `B2C Value: ${money(sum.b2c)}`;
     // B2B Cost is the MSB-adjusted figure (grouped by sample type, floored
-    // at ₹25/sample type), not a raw per-test sum.
+    // at ₹50/sample type), not a raw per-test sum.
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
       (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.msbB2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 

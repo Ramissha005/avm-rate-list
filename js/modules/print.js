@@ -203,7 +203,7 @@ AVM.modules = AVM.modules || {};
     }
 
     // The summary card below is the actual billable B2B cost: MSB-adjusted,
-    // floored at ₹25 per sample type.
+    // floored at ₹50 per sample type.
     if (sumB2BEl) sumB2BEl.textContent = money(sum.msbB2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);

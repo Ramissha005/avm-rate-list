@@ -12,12 +12,12 @@ AVM.modules = AVM.modules || {};
   }
 
   // Minimum Sample Billing: the lab draws/processes one sample per sample
-  // type regardless of how many tests ride on it, so the ₹25 floor applies
+  // type regardless of how many tests ride on it, so the ₹50 floor applies
   // once per sample type — never per test. Tests are grouped by sampleId,
   // their B2B prices summed per group, and only *that* group total is
-  // floored at ₹25. A group with several tests whose combined price already
-  // clears ₹25 is billed at its real (higher) total, not bumped to ₹25×N.
-  const MSB_FLOOR = 25;
+  // floored at ₹50. A group with several tests whose combined price already
+  // clears ₹50 is billed at its real (higher) total, not bumped to ₹50×N.
+  const MSB_FLOOR = 50;
 
   // Map<sampleId, { sampleId, tests, rawB2b, billedB2b }>
   function sampleTypeBilling(items) {
@@ -43,7 +43,7 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
-  // Same ₹25-per-sample-type minimum billing floor as sampleTypeBilling
+  // Same ₹50-per-sample-type minimum billing floor as sampleTypeBilling
   // above, but priced at the Franchise rate instead of B2B — this is what
   // this exact profile would cost billed as a franchisee rather than a
   // regular B2B partner. Falls back to a test's own B2B price when it has
@@ -72,10 +72,10 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
-  // Which sample-type groups are currently under the ₹25 floor, and how
+  // Which sample-type groups are currently under the ₹50 floor, and how
   // much more B2B value in that same sample type would clear it — the data
-  // behind a "add ₹5 more Serum tests to clear the ₹25 minimum" nudge.
-  // Groups already at/above ₹25 (no MSB uplift) are omitted entirely.
+  // behind a "add ₹5 more Serum tests to clear the ₹50 minimum" nudge.
+  // Groups already at/above ₹50 (no MSB uplift) are omitted entirely.
   function msbShortfalls(items) {
     const shortfalls = [];
     sampleTypeBilling(items).forEach(group => {
@@ -99,7 +99,7 @@ AVM.modules = AVM.modules || {};
   // consistent with what's printed above them.
   //
   // `msbB2b` is the actual billable B2B base: tests grouped by sample type,
-  // each group floored at ₹25 (see `sampleTypeBilling`) — MSB applies once
+  // each group floored at ₹50 (see `sampleTypeBilling`) — MSB applies once
   // per sample type, never per test. `netB2b`/`netMargin`/
   // `netMarginPercentage` are that same post-MSB figure for callers that
   // want the partner's actual bottom line (cart drawer headline, print

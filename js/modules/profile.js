@@ -556,7 +556,7 @@ AVM.modules = AVM.modules || {};
     // price bundle's own flat number — see calculations.js cartTotals().
     const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
     // The headline B2B figure is the MSB-adjusted cost (grouped by sample
-    // type, floored at ₹25/sample type), not a raw per-test sum — that's
+    // type, floored at ₹50/sample type), not a raw per-test sum — that's
     // what the partner is actually billed. Per-item rows below still show
     // each test's own raw price.
     elements.b2b.textContent = money(sum.msbB2b);
@@ -587,7 +587,7 @@ AVM.modules = AVM.modules || {};
 
     // Minimum Sample Billing: surface it as its own line (not silently
     // folded into B2B Cost above) plus a hint telling the partner exactly
-    // how much more of that same sample type would clear the ₹25 floor —
+    // how much more of that same sample type would clear the ₹50 floor —
     // so adding one more test in it visibly drops the MSB row instead of
     // just quietly changing the total.
     if (!customerView) {
@@ -600,9 +600,15 @@ AVM.modules = AVM.modules || {};
         }
         if (elements.msbHint) {
           elements.msbHint.style.display = "";
+          // `billedB2b` on any shortfall IS the MSB floor itself (that's
+          // what a still-short group gets billed at) — read it from the
+          // data instead of hardcoding the ₹ figure here, so this hint
+          // can never drift out of sync with calculations.js's own
+          // MSB_FLOOR again.
+          const floorAmt = money(shortfalls[0].billedB2b);
           elements.msbHint.textContent = shortfalls.length === 1
-            ? `Add ${money(shortfalls[0].remaining)} more in ${shortfalls[0].label} to clear the ₹25 minimum`
-            : shortfalls.map(g => `${g.label}: add ${money(g.remaining)}`).join(" · ") + " to clear the ₹25 minimum per sample type";
+            ? `Add ${money(shortfalls[0].remaining)} more in ${shortfalls[0].label} to clear the ${floorAmt} minimum`
+            : shortfalls.map(g => `${g.label}: add ${money(g.remaining)}`).join(" · ") + ` to clear the ${floorAmt} minimum per sample type`;
         }
       }
     }

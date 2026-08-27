@@ -2443,7 +2443,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 108,
@@ -2464,7 +2465,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 109,
@@ -2485,7 +2487,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 110,
@@ -2506,7 +2509,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 111,
@@ -2527,7 +2531,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 112,
@@ -2548,7 +2553,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 113,
@@ -2569,7 +2575,8 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     }
   ]
 };
@@ -2974,8 +2981,17 @@ AVM.state = {
       group.codes.forEach(code => { conflictGroupByCode[code] = group; });
     });
 
+    // A test can exist purely to be referenced inside a profile's own
+    // "Tests included" breakdown (e.g. Magnesium, added only because
+    // AVM 1-5 Profile list it) without being its own separately-browsable/
+    // purchasable line — `profileOnly: true` marks those. `tests` above
+    // stays the full, unfiltered list (so `byCode` and any profile lookup
+    // still resolves them); this is the narrower list the Individual
+    // Tests table, its own stat count, and Excel export actually browse.
+    const standaloneTests = joined.filter(t => !t.profileOnly);
+
     return {
-      tests: joined, byCode,
+      tests: joined, standaloneTests, byCode,
       technologies: TECHNOLOGIES, techById, techColors,
       samples: SAMPLES, sampleById,
       categories: CATEGORIES, categoryById,

@@ -11,7 +11,7 @@ window.AVM = window.AVM || {};
     const catalog = await AVM.data.loadCatalog();
     AVM.modules.profile.restoreCart();
 
-    if ($("statTests")) $("statTests").textContent = catalog.tests.length;
+    if ($("statTests")) $("statTests").textContent = catalog.standaloneTests.length;
     if ($("statTech")) $("statTech").textContent = catalog.technologies.length;
     if ($("statPackages")) $("statPackages").textContent = catalog.packages.length;
 
@@ -90,14 +90,14 @@ window.AVM = window.AVM || {};
         if (view === "profiles") {
           AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll, priceMode: "margin" });
         } else {
-          AVM.modules.rateList.renderTable({ tests: catalog.tests, techColors: catalog.techColors, elements: tableElements, onChange: refreshAll });
+          AVM.modules.rateList.renderTable({ tests: catalog.standaloneTests, techColors: catalog.techColors, elements: tableElements, onChange: refreshAll });
         }
       }
       if (hasCart) {
         AVM.modules.profile.renderCart(cartElements);
       }
       if (hasFranchiseRates) {
-        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.tests, packages: catalog.packages, elements: franchiseRatesElements, onChange: refreshAll });
+        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.standaloneTests, packages: catalog.packages, elements: franchiseRatesElements, onChange: refreshAll });
       }
       updateFiltersBadge();
     }
@@ -276,7 +276,7 @@ window.AVM = window.AVM || {};
     if ($("printList")) $("printList").onclick = AVM.modules.print.openPrintProfile;
     if ($("exportProfileCsv")) $("exportProfileCsv").onclick = AVM.modules.exportProfile.exportProfileCSV;
     if ($("exportRateListCsv")) {
-      $("exportRateListCsv").onclick = () => AVM.modules.exportProfile.exportRateListCSV(AVM.modules.rateList.getFiltered(catalog.tests));
+      $("exportRateListCsv").onclick = () => AVM.modules.exportProfile.exportRateListCSV(AVM.modules.rateList.getFiltered(catalog.standaloneTests));
     }
 
     // Close the mobile hamburger dropdown after tapping one of its links —

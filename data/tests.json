@@ -2248,7 +2248,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 108,
@@ -2269,7 +2270,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 109,
@@ -2290,7 +2292,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 110,
@@ -2311,7 +2314,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 111,
@@ -2332,7 +2336,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 112,
@@ -2353,7 +2358,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     },
     {
       "sr": 113,
@@ -2374,7 +2380,8 @@
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true
+      "active": true,
+      "profileOnly": true
     }
   ]
 }

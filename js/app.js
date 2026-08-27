@@ -169,6 +169,15 @@ window.AVM = window.AVM || {};
     // panels-table.js via rateListView() above, or franchise-rates.js via
     // its own currentView()). Same wiring on both the homepage rate list
     // and the Franchise savings table, just a different toggle id.
+    //
+    // Switching to Profiles also resets the Technology filter and Sort
+    // choice: the Technology filter chips (and the Filters button that
+    // reveals them) are hidden entirely while Profiles is showing, so a
+    // filter left active from Tests would otherwise keep silently
+    // narrowing (or emptying) the Profiles list with no visible way to
+    // see why or clear it. Sort resets alongside it for the same "each
+    // tab starts from a clean, predictable state" reasoning, even though
+    // the two tabs' sorters happen to share matching option values today.
     function wireViewToggle(id) {
       const toggle = $(id);
       if (!toggle) return;
@@ -181,6 +190,16 @@ window.AVM = window.AVM || {};
           btn.classList.add("active");
           btn.setAttribute("aria-pressed", "true");
           AVM.state.currentPage = 1;
+          if (btn.dataset.view === "profiles") {
+            AVM.state.activeFilters.technology.clear();
+            renderFilterGroups();
+            [$("sortSelect"), $("franchiseRatesSort")].forEach(select => {
+              if (!select) return;
+              select.value = select.options[0] ? select.options[0].value : "";
+              delete select.dataset.userSet;
+            });
+            AVM.state.sortMode = "sr";
+          }
           refreshAll();
         };
       });

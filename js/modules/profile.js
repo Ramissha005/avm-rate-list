@@ -431,9 +431,14 @@ AVM.modules = AVM.modules || {};
     // anyway) rather than leaving a blank flex row behind.
     if (elements.discountMarginRow) elements.discountMarginRow.style.display = customerView ? "none" : "";
     if (elements.priceBox) elements.priceBox.style.display = customerView ? "" : "none";
-    // Copy List / Export Excel / Print Profile are customer-handoff
-    // actions — only relevant once there's a customer copy to hand off.
-    if (elements.cartActions) elements.cartActions.style.display = customerView ? "" : "none";
+    // Copy List / Export Excel / Print Profile are useful in both views —
+    // a staff member might want the internal copy (with B2B/margin) for
+    // their own records just as often as the customer-facing one, and
+    // hiding them behind the Customer copy toggle made them undiscoverable
+    // by default. Always shown now; copyProfileToClipboard/exportProfileCSV/
+    // openPrintProfile each already branch on state.customerView
+    // themselves to produce the right version either way.
+    if (elements.cartActions) elements.cartActions.style.display = "";
     // Reset every render — shown again below only when actually in effect
     // (and never in customer view, alongside B2B/margin).
     if (elements.msbRow) elements.msbRow.style.display = "none";

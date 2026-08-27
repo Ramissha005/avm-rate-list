@@ -530,19 +530,26 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .customer-view-toggle__text small{ display:block; font-weight:400; color:var(--ink-soft); margin-top:2px; }
 
 /* Compact variant — sits in the cart header next to "My Profile" instead of
-   its own full-width banner, so there's no <small> subtitle line (the
-   title attribute covers that on hover/focus). */
+   its own full-width banner. Used to rely on the title attribute alone for
+   what this toggle actually does (hover/focus-only — invisible on a touch
+   screen, and easy to never notice even on desktop), so the compact
+   <small> caption is kept visible here too now instead of being dropped
+   for space; it wraps onto its own line under "Customer copy" rather than
+   forcing everything onto one nowrap row like the label text alone did. */
 .customer-view-toggle--compact{
-  background:none; border:none; padding:0; margin-bottom:0; align-items:center; gap:var(--space-2);
+  background:none; border:none; padding:0; margin-bottom:0; align-items:flex-start; gap:var(--space-2);
 }
 .customer-view-toggle--compact .customer-view-toggle__text{
-  font-size:var(--text-xs); font-weight:600; color:var(--ink-soft); white-space:nowrap;
+  font-size:var(--text-xs); font-weight:600; color:var(--ink-soft); max-width:180px;
+}
+.customer-view-toggle--compact .customer-view-toggle__text small{
+  font-size:var(--text-2xs); font-weight:400; white-space:normal;
 }
 
-/* Once customer copy is switched on, the label's own job is done — hide it
-   so the header goes back to just "My Profile" + the switch, instead of
-   permanently narrating "Customer copy" at the customer-facing view. */
-.customer-view-toggle--active .customer-view-toggle__text{ display:none; }
+/* Kept visible once switched on too (not hidden) — so a partner looking
+   back at the header can still see what "on" means and that it's what's
+   currently affecting Copy List/Export/Print, instead of just a bare,
+   unlabeled switch with no reminder of what state it's in. */
 
 .rl-filter{
   font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; padding:var(--space-2) var(--space-4); border-radius:var(--radius-full);

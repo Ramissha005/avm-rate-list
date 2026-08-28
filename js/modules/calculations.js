@@ -17,7 +17,13 @@ AVM.modules = AVM.modules || {};
   // their B2B prices summed per group, and only *that* group total is
   // floored at ₹50. A group with several tests whose combined price already
   // clears ₹50 is billed at its real (higher) total, not bumped to ₹50×N.
+  //
+  // MSB only applies to Serum-drawn tests — every other sample type (Whole
+  // Blood, Urine, Fluoride, etc.) bills at its real raw total, uplifted or
+  // not, since the lab's minimum-draw economics that justify the floor are
+  // specific to serum processing.
   const MSB_FLOOR = 50;
+  const MSB_SAMPLE_ID = "serum";
 
   // Map<sampleId, { sampleId, tests, rawB2b, billedB2b }>
   function sampleTypeBilling(items) {
@@ -32,7 +38,7 @@ AVM.modules = AVM.modules || {};
       group.rawB2b += t.b2b;
     });
     groups.forEach(group => {
-      group.billedB2b = group.rawB2b < MSB_FLOOR ? MSB_FLOOR : group.rawB2b;
+      group.billedB2b = group.sampleId === MSB_SAMPLE_ID && group.rawB2b < MSB_FLOOR ? MSB_FLOOR : group.rawB2b;
     });
     return groups;
   }
@@ -43,12 +49,12 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
-  // Same ₹50-per-sample-type minimum billing floor as sampleTypeBilling
-  // above, but priced at the Franchise rate instead of B2B — this is what
-  // this exact profile would cost billed as a franchisee rather than a
-  // regular B2B partner. Falls back to a test's own B2B price when it has
-  // no `franchise` rate on file yet, so a not-yet-priced test never
-  // invents a saving that isn't backed by real franchise data.
+  // Same Serum-only ₹50 minimum billing floor as sampleTypeBilling above,
+  // but priced at the Franchise rate instead of B2B — this is what this
+  // exact profile would cost billed as a franchisee rather than a regular
+  // B2B partner. Falls back to a test's own B2B price when it has no
+  // `franchise` rate on file yet, so a not-yet-priced test never invents a
+  // saving that isn't backed by real franchise data.
   function sampleTypeBillingFranchise(items) {
     const groups = new Map();
     items.forEach(t => {
@@ -61,7 +67,7 @@ AVM.modules = AVM.modules || {};
       group.rawFranchise += (t.franchise != null ? t.franchise : t.b2b);
     });
     groups.forEach(group => {
-      group.billedFranchise = group.rawFranchise < MSB_FLOOR ? MSB_FLOOR : group.rawFranchise;
+      group.billedFranchise = group.sampleId === MSB_SAMPLE_ID && group.rawFranchise < MSB_FLOOR ? MSB_FLOOR : group.rawFranchise;
     });
     return groups;
   }
@@ -72,13 +78,16 @@ AVM.modules = AVM.modules || {};
     return total;
   }
 
-  // Which sample-type groups are currently under the ₹50 floor, and how
-  // much more B2B value in that same sample type would clear it — the data
-  // behind a "add ₹5 more Serum tests to clear the ₹50 minimum" nudge.
-  // Groups already at/above ₹50 (no MSB uplift) are omitted entirely.
+  // Which Serum group is currently under the ₹50 floor, and how much more
+  // B2B value in Serum would clear it — the data behind a "add ₹5 more
+  // Serum tests to clear the ₹50 minimum" nudge. Non-Serum sample types
+  // never carry an MSB floor (see MSB_SAMPLE_ID above), so they can never
+  // appear here even when cheap. Omitted entirely once Serum is at/above
+  // ₹50 (no MSB uplift).
   function msbShortfalls(items) {
     const shortfalls = [];
     sampleTypeBilling(items).forEach(group => {
+      if (group.sampleId !== MSB_SAMPLE_ID) return;
       if (group.rawB2b >= MSB_FLOOR) return;
       shortfalls.push({
         sampleId: group.sampleId,
@@ -99,8 +108,9 @@ AVM.modules = AVM.modules || {};
   // consistent with what's printed above them.
   //
   // `msbB2b` is the actual billable B2B base: tests grouped by sample type,
-  // each group floored at ₹50 (see `sampleTypeBilling`) — MSB applies once
-  // per sample type, never per test. `netB2b`/`netMargin`/
+  // with only the Serum group floored at ₹50 (see `sampleTypeBilling`) —
+  // MSB applies once per Serum draw, never per test, and never to other
+  // sample types. `netB2b`/`netMargin`/
   // `netMarginPercentage` are that same post-MSB figure for callers that
   // want the partner's actual bottom line (cart drawer headline, print
   // summary cards, clipboard copy) — there's no further bulk-volume

@@ -381,7 +381,7 @@
 .data-table-card--emerald .sarc-num{ background:var(--emerald); }
 .data-table__note{
   display:flex; align-items:center; justify-content:center; gap:6px;
-  padding:var(--space-3) var(--space-5) var(--space-4); font-size:var(--text-xs); font-style:italic; color:var(--ink-faint);
+  padding:var(--space-3) var(--space-5) var(--space-4); font-size:var(--text-sm); font-style:italic; color:var(--ink-faint);
   text-align:center;
 }
 .data-table__note-icon{

@@ -2426,15 +2426,15 @@ AVM.state = {
     },
     {
       "sr": 107,
-      "code": "MAGN",
+      "code": "MG",
       "name": "Magnesium",
       "aliases": ["Serum Magnesium","Mg"],
       "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
-      "categoryId": "metabolic-disorder",
+      "franchise": 40,
+      "b2b": 50,
+      "b2c": 200,
+      "categoryId": "bone-metabolism",
       "departmentId": "biochemistry",
       "displayOrder": 107,
       "fastingRequired": null,
@@ -2443,20 +2443,19 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 108,
-      "code": "ZINC",
-      "name": "Zinc",
-      "aliases": ["Serum Zinc","Zn"],
+      "code": "SEZN",
+      "name": "Serum Zinc",
+      "aliases": ["Zinc","Zn"],
       "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
-      "categoryId": "metabolic-disorder",
+      "franchise": 50,
+      "b2b": 60,
+      "b2c": 200,
+      "categoryId": "bone-metabolism",
       "departmentId": "biochemistry",
       "displayOrder": 108,
       "fastingRequired": null,
@@ -2465,20 +2464,19 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 109,
-      "code": "COPP",
-      "name": "Copper",
-      "aliases": ["Serum Copper","Cu"],
+      "code": "SECU",
+      "name": "Serum Copper",
+      "aliases": ["Copper","Cu"],
       "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
-      "categoryId": "metabolic-disorder",
+      "franchise": 60,
+      "b2b": 70,
+      "b2c": 200,
+      "categoryId": "general-biochemistry",
       "departmentId": "biochemistry",
       "displayOrder": 109,
       "fastingRequired": null,
@@ -2487,21 +2485,20 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 110,
       "code": "HOMO",
       "name": "Homocysteine",
       "aliases": ["Serum Homocysteine","Hcy"],
-      "techId": "eclia",
+      "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
+      "franchise": 205,
+      "b2b": 215,
+      "b2c": 500,
       "categoryId": "cardiac",
-      "departmentId": "immunoassay",
+      "departmentId": "biochemistry",
       "displayOrder": 110,
       "fastingRequired": null,
       "homeCollection": true,
@@ -2509,19 +2506,18 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 111,
-      "code": "KET",
+      "code": "BKETO",
       "name": "Blood Ketone",
-      "aliases": ["Serum Ketone","Ketone Bodies"],
+      "aliases": ["Ketone Bodies","Blood Ketones"],
       "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
+      "franchise": 145,
+      "b2b": 155,
+      "b2c": 300,
       "categoryId": "diabetes",
       "departmentId": "biochemistry",
       "displayOrder": 111,
@@ -2531,19 +2527,18 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 112,
-      "code": "FRUC",
+      "code": "FRUCT",
       "name": "Fructosamine",
-      "aliases": ["Serum Fructosamine"],
+      "aliases": ["Serum Fructosamine","Glycated Serum Protein"],
       "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
+      "franchise": 70,
+      "b2b": 80,
+      "b2c": 200,
       "categoryId": "diabetes",
       "departmentId": "biochemistry",
       "displayOrder": 112,
@@ -2553,21 +2548,20 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     },
     {
       "sr": 113,
       "code": "RFAC",
-      "name": "Rheumatoid Factor",
+      "name": "Rheumatoid Factor (RF)",
       "aliases": ["RA Factor","RF"],
-      "techId": "eclia",
+      "techId": "photometry",
       "sampleId": "serum",
-      "franchise": 30,
-      "b2b": 40,
-      "b2c": 100,
+      "franchise": 90,
+      "b2b": 100,
+      "b2c": 300,
       "categoryId": "arthritis-autoimmune",
-      "departmentId": "immunoassay",
+      "departmentId": "biochemistry",
       "displayOrder": 113,
       "fastingRequired": null,
       "homeCollection": true,
@@ -2575,8 +2569,7 @@ AVM.state = {
       "container": null,
       "sampleVolume": null,
       "tat": null,
-      "active": true,
-      "profileOnly": true
+      "active": true
     }
   ]
 };
@@ -2612,7 +2605,7 @@ AVM.state = {
   // every other profile here — not the sum of what it lists.
   { "id": "avm-profile-1", "name": "AVM 1 Profile", "categoryId": "general-biochemistry",
     "codes": [
-      "UTSH", "MAGN", "PHOS",
+      "UTSH", "MG", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
@@ -2620,7 +2613,7 @@ AVM.state = {
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2650,7 +2643,7 @@ AVM.state = {
   // calculated param), Complete Blood Count, and Pancreatic Profile.
   { "id": "avm-profile-2", "name": "AVM 2 Profile", "categoryId": "general-biochemistry",
     "codes": [
-      "UTSH", "MAGN", "PHOS",
+      "UTSH", "MG", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
@@ -2659,7 +2652,7 @@ AVM.state = {
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2694,17 +2687,17 @@ AVM.state = {
   // group of its own, per the user's own "will come under Iron Profile".
   { "id": "avm-profile-3", "name": "AVM 3 Profile", "categoryId": "general-biochemistry",
     "codes": [
-      "UTSH", "MAGN", "PHOS",
+      "UTSH", "MG", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "ZINC", "COPP", "CRP"
+      "VITDT", "VB12", "SEZN", "SECU", "CRP"
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2723,8 +2716,8 @@ AVM.state = {
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
       { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] }
     ],
     "calculatedParams": [
@@ -2744,18 +2737,18 @@ AVM.state = {
   // HS-CRP cluster to be grouped under Cardiac Profile, not CRP itself.
   { "id": "avm-profile-4", "name": "AVM 4 Profile", "categoryId": "general-biochemistry",
     "codes": [
-      "UTSH", "MAGN", "PHOS",
+      "UTSH", "MG", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "ZINC", "COPP", "CRP",
+      "VITDT", "VB12", "SEZN", "SECU", "CRP",
       "APOA", "APOB", "LPA", "HSCPRP"
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2774,8 +2767,8 @@ AVM.state = {
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
       { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
     ],
     "calculatedParams": [
@@ -2793,19 +2786,19 @@ AVM.state = {
   // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
   { "id": "avm-profile-5", "name": "AVM 5 Profile", "categoryId": "general-biochemistry",
     "codes": [
-      "UTSH", "MAGN", "PHOS",
+      "UTSH", "MG", "PHOS",
       "CHOL", "TRIG", "HCHO", "LDL",
       "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
       "URIC", "SCRE", "CALC", "UREA", "BUN",
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "FOLI", "ZINC", "COPP",
+      "VITDT", "VB12", "FOLI", "SEZN", "SECU",
       "APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO",
-      "KET", "FRUC", "RFAC"
+      "BKETO", "FRUCT", "RFAC"
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MAGN"], "calculatedParams": [] },
+      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
       { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
       { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
         "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2824,11 +2817,11 @@ AVM.state = {
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12", "FOLI"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["ZINC"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["COPP"], "calculatedParams": [] },
+      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
+      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
       { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
-      { "label": "Blood Ketone", "codes": ["KET"], "calculatedParams": [] },
-      { "label": "Fructosamine", "codes": ["FRUC"], "calculatedParams": [] },
+      { "label": "Blood Ketone", "codes": ["BKETO"], "calculatedParams": [] },
+      { "label": "Fructosamine", "codes": ["FRUCT"], "calculatedParams": [] },
       { "label": "Rheumatoid Factor", "codes": ["RFAC"], "calculatedParams": [] }
     ],
     "calculatedParams": [

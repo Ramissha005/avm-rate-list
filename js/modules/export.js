@@ -44,10 +44,10 @@ AVM.modules = AVM.modules || {};
     const b2cLine = hasCustomerDiscount
       ? `Original Price: ${money(sum.b2c)}\nDiscounted Price: ${money(discountedPrice)}`
       : `B2C Value: ${money(sum.b2c)}`;
-    // B2B Cost is the MSB-adjusted figure (grouped by sample type, floored
-    // at ₹50/sample type), not a raw per-test sum.
+    // B2B Cost is the MPB-adjusted figure (the whole profile's raw total,
+    // floored at ₹100), not a raw per-test sum.
     const text = `AVMLabs — My Profile\n\n` + lines.join("\n") +
-      (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.msbB2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
+      (customerView ? `\n\n${b2cLine}` : `\n\nB2B Cost: ${money(sum.netB2b)}\nB2C Value: ${money(sum.b2c)}\nMargin: ${money(sum.netMargin)}`);
 
     navigator.clipboard?.writeText(text)
       .then(() => AVM.utils.helpers.showToast(customerView ? "Customer copy copied to clipboard" : "Profile copied to clipboard"))
@@ -80,12 +80,12 @@ AVM.modules = AVM.modules || {};
           { header: "Margin", key: "margin", type: "margin", width: 12 },
         ];
     // The B2B/Margin columns below stay raw (each row summed by an actual
-    // Excel formula), so an MSB-adjusted total can't be dropped into those
+    // Excel formula), so an MPB-adjusted total can't be dropped into those
     // footer cells without them disagreeing with their own SUM() once Excel
-    // recalculates. The MSB adjustment goes in the subtitle instead, as a
+    // recalculates. The MPB adjustment goes in the subtitle instead, as a
     // plain note alongside the raw column totals.
-    const msbNote = !customerView && sum.msbB2b !== sum.b2b
-      ? ` · Min. Sample Billing → B2B ${AVM.utils.formatters.money(sum.msbB2b)}`
+    const mpbNote = !customerView && sum.netB2b !== sum.b2b
+      ? ` · Min. Patient Billing → B2B ${AVM.utils.formatters.money(sum.netB2b)}`
       : "";
     // The manually-entered customer-copy discount (see profile.js) — only
     // in customer view, and only when it's actually lower than the B2C
@@ -102,7 +102,7 @@ AVM.modules = AVM.modules || {};
       filename: customerView ? "avmlabs-profile-customer-copy.xlsx" : "avmlabs-profile.xlsx",
       sheetName: "My Profile",
       title: customerView ? "AVMLabs — My Profile (Customer Copy)" : "AVMLabs — My Profile",
-      subtitle: `Generated ${today()} · ${totalCount} test${totalCount === 1 ? "" : "s"}${msbNote}${customerDiscountNote}`,
+      subtitle: `Generated ${today()} · ${totalCount} test${totalCount === 1 ? "" : "s"}${mpbNote}${customerDiscountNote}`,
       // Code is internal shorthand (BUN, SCRE, …) — left out of the
       // customer copy's columns entirely, same as Copy List and Print.
       columns: [

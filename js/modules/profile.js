@@ -441,8 +441,8 @@ AVM.modules = AVM.modules || {};
     if (elements.cartActions) elements.cartActions.style.display = "";
     // Reset every render — shown again below only when actually in effect
     // (and never in customer view, alongside B2B/margin).
-    if (elements.msbRow) elements.msbRow.style.display = "none";
-    if (elements.msbHint) elements.msbHint.style.display = "none";
+    if (elements.mpbRow) elements.mpbRow.style.display = "none";
+    if (elements.mpbHint) elements.mpbHint.style.display = "none";
     if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
     if (elements.b2b) elements.b2b.classList.remove("ct-amount--struck");
 
@@ -552,18 +552,19 @@ AVM.modules = AVM.modules || {};
       };
     });
 
-    // Individually-added tests (MSB-adjusted, as before) plus every fixed-
-    // price bundle's own flat number — see calculations.js cartTotals().
+    // Individually-added tests plus every fixed-price bundle's own flat
+    // number, with the ₹100 Minimum Patient Billing floor applied to the
+    // combined total — see calculations.js cartTotals().
     const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
-    // The headline B2B figure is the MSB-adjusted cost (grouped by sample
-    // type, floored at ₹50/sample type), not a raw per-test sum — that's
-    // what the partner is actually billed. Per-item rows below still show
-    // each test's own raw price.
-    elements.b2b.textContent = money(sum.msbB2b);
+    // The headline B2B figure is the MPB-adjusted cost (the whole profile's
+    // raw total, floored at ₹100), not a raw per-test sum — that's what the
+    // partner is actually billed. Per-item rows below still show each
+    // test's own raw price.
+    elements.b2b.textContent = money(sum.netB2b);
     elements.b2c.textContent = money(sum.b2c);
-    // The headline margin is the partner's real bottom line — after MSB,
+    // The headline margin is the partner's real bottom line — after MPB,
     // and (if set) after a staff-entered customer discount too: what the
-    // customer actually pays, minus the partner's own (MSB-adjusted) cost.
+    // customer actually pays, minus the partner's own (MPB-adjusted) cost.
     // The discount only takes effect once it's genuinely lower than the
     // B2C total it would otherwise be based on.
     //
@@ -575,7 +576,7 @@ AVM.modules = AVM.modules || {};
     const discountedPrice = state.discountedPrice;
     const hasCustomerDiscount = discountedPrice != null && discountedPrice > 0 && discountedPrice < sum.b2c;
     const marginBase = hasCustomerDiscount ? discountedPrice : sum.b2c;
-    const costBase = elements.useFranchiseMargin ? sum.msbFranchise : sum.netB2b;
+    const costBase = elements.useFranchiseMargin ? sum.netFranchise : sum.netB2b;
     const finalMargin = marginBase - costBase;
     const finalMarginPct = AVM.modules.calculations.marginPercentage(costBase, marginBase);
     elements.margin.textContent = money(finalMargin);
@@ -585,30 +586,25 @@ AVM.modules = AVM.modules || {};
     updatePriceBox(elements, sum.b2c);
     updateDiscountEditor(elements, customerView, sum.b2c);
 
-    // Minimum Sample Billing: surface it as its own line (not silently
+    // Minimum Patient Billing: surface it as its own line (not silently
     // folded into B2B Cost above) plus a hint telling the partner exactly
-    // how much more of that same sample type would clear the ₹50 floor —
-    // so adding one more test in it visibly drops the MSB row instead of
-    // just quietly changing the total.
+    // how much more this profile needs to clear the ₹100 floor — so adding
+    // one more test visibly drops the MPB row instead of just quietly
+    // changing the total. Checked against whichever rate is actually in
+    // play here (Franchise on the Franchise page, B2B everywhere else) —
+    // same floor, just compared to the right raw total.
     if (!customerView) {
-      const shortfalls = AVM.modules.calculations.msbShortfalls(items);
-      if (shortfalls.length > 0) {
-        const totalUplift = shortfalls.reduce((s, g) => s + g.uplift, 0);
-        if (elements.msbRow) {
-          elements.msbRow.style.display = "";
-          if (elements.msbAmt) elements.msbAmt.textContent = "+" + money(totalUplift);
+      const rawCost = elements.useFranchiseMargin ? sum.franchiseRaw : sum.b2b;
+      const netCost = elements.useFranchiseMargin ? sum.netFranchise : sum.netB2b;
+      const uplift = netCost - rawCost;
+      if (uplift > 0) {
+        if (elements.mpbRow) {
+          elements.mpbRow.style.display = "";
+          if (elements.mpbAmt) elements.mpbAmt.textContent = "+" + money(uplift);
         }
-        if (elements.msbHint) {
-          elements.msbHint.style.display = "";
-          // `billedB2b` on any shortfall IS the MSB floor itself (that's
-          // what a still-short group gets billed at) — read it from the
-          // data instead of hardcoding the ₹ figure here, so this hint
-          // can never drift out of sync with calculations.js's own
-          // MSB_FLOOR again.
-          const floorAmt = money(shortfalls[0].billedB2b);
-          elements.msbHint.textContent = shortfalls.length === 1
-            ? `Add ${money(shortfalls[0].remaining)} more in ${shortfalls[0].label} to clear the ${floorAmt} minimum`
-            : shortfalls.map(g => `${g.label}: add ${money(g.remaining)}`).join(" · ") + ` to clear the ${floorAmt} minimum per sample type`;
+        if (elements.mpbHint) {
+          elements.mpbHint.style.display = "";
+          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(netCost)} minimum patient bill`;
         }
       }
     }
@@ -623,7 +619,7 @@ AVM.modules = AVM.modules || {};
     // partner-facing upsell nudge, not something to hand a customer.
     if (!customerView && sum.franchiseSavings > 0 && elements.franchiseRow) {
       elements.franchiseRow.style.display = "";
-      if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.msbFranchise);
+      if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.netFranchise);
       const pct = Math.round(sum.franchiseSavingsPercentage);
       // "Saving X%" on the Franchise page (elements.useFranchiseMargin)
       // to match the hint sentence right below it ("You're saving X%

@@ -59,7 +59,7 @@ window.AVM = window.AVM || {};
       discountedRow: $("cartDiscountedRow"), discountedAmt: $("cartDiscountedAmt"),
       marginLabel: $("cartMarginLabel"),
       cartActions: $("cartActions"),
-      msbRow: $("cartMsbRow"), msbAmt: $("cartMsbAmt"), msbHint: $("cartMsbHint"),
+      mpbRow: $("cartMpbRow"), mpbAmt: $("cartMpbAmt"), mpbHint: $("cartMpbHint"),
       franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"),
       franchiseHint: $("cartFranchiseHint"),
       // True only on the Franchise page (the one page with a

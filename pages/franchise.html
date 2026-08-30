@@ -178,6 +178,29 @@
         <p>Every test on the rate list — B2B rate vs Franchise rate, side by side.</p>
       </div>
 
+      <!-- Same Minimum Consignment Value / Consignment Handling Charges as
+           the main Rate List (see index.html) — these apply per consignment
+           regardless of B2B or Franchise rate, so they're shown here too
+           rather than only on the B2B-facing page. -->
+      <div class="charge-cards">
+        <div class="stat-card stat-card--plain stat-card--teal">
+          <div class="stat-card__row">
+            <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 20 8v8l-8 4.5L4 16V8l8-4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 8l8 4.5L20 8M12 12.5V21" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+            <div class="stat-card__label">Minimum Consignment Value</div>
+            <div class="stat-card__num">₹250</div>
+          </div>
+          <p class="stat-card__desc">₹250 per consignment is must for a client.</p>
+        </div>
+        <div class="stat-card stat-card--plain stat-card--emerald">
+          <div class="stat-card__row">
+            <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 7h11v9H3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 10h4l3 3v3h-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="18" r="1.7" stroke="currentColor" stroke-width="1.8"/><circle cx="17.5" cy="18" r="1.7" stroke="currentColor" stroke-width="1.8"/></svg></div>
+            <div class="stat-card__label">Consignment Handling Charges</div>
+            <div class="stat-card__num">₹100</div>
+          </div>
+          <p class="stat-card__desc">Consignment Handling Charges (CHC) applies for each consignment to cover logistic costs.</p>
+        </div>
+      </div>
+
       <!-- Individual tests vs whole common panels — two different datasets
            (js/modules/franchise-rates.js), so Filters/Sort/page size only
            make sense for Tests and are hidden in Panels view (see there).
@@ -344,8 +367,8 @@
           <p class="franchise-box__hint" id="cartFranchiseHint"></p>
         </div>
         <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
-        <div class="ct-row ct-row--msb" id="cartMsbRow" style="display:none"><span>Min. Sample Billing</span><span id="cartMsbAmt">+₹0</span></div>
-        <p class="ct-hint ct-hint--msb" id="cartMsbHint" style="display:none"></p>
+        <div class="ct-row ct-row--mpb" id="cartMpbRow" style="display:none"><span>Min. Patient Billing</span><span id="cartMpbAmt">+₹0</span></div>
+        <p class="ct-hint ct-hint--mpb" id="cartMpbHint" style="display:none"></p>
         <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
         <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
       </div>

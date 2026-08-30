@@ -202,9 +202,9 @@ AVM.modules = AVM.modules || {};
       }).join("");
     }
 
-    // The summary card below is the actual billable B2B cost: MSB-adjusted,
-    // floored at ₹50 per sample type.
-    if (sumB2BEl) sumB2BEl.textContent = money(sum.msbB2b);
+    // The summary card below is the actual billable B2B cost: MPB-adjusted,
+    // floored at ₹100 for the whole profile.
+    if (sumB2BEl) sumB2BEl.textContent = money(sum.netB2b);
     if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
     if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);
     if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";

@@ -11,136 +11,64 @@ AVM.modules = AVM.modules || {};
     return ((b2c - b2b) / b2b) * 100;
   }
 
-  // Minimum Sample Billing: the lab draws/processes one sample per sample
-  // type regardless of how many tests ride on it, so the ₹50 floor applies
-  // once per sample type — never per test. Tests are grouped by sampleId,
-  // their B2B prices summed per group, and only *that* group total is
-  // floored at ₹50. A group with several tests whose combined price already
-  // clears ₹50 is billed at its real (higher) total, not bumped to ₹50×N.
-  //
-  // MSB only applies to Serum-drawn tests — every other sample type (Whole
-  // Blood, Urine, Fluoride, etc.) bills at its real raw total, uplifted or
-  // not, since the lab's minimum-draw economics that justify the floor are
-  // specific to serum processing.
-  const MSB_FLOOR = 50;
-  const MSB_SAMPLE_ID = "serum";
+  // Minimum Patient Billing: whatever a patient's whole profile adds up to
+  // — every test and sample combined, not grouped by sample type — the lab
+  // still has to draw, process and report on it, so the bill can never come
+  // in under ₹100 total. Below that, the patient is simply billed the ₹100
+  // floor instead of their raw (lower) total. One floor, checked once per
+  // profile — applies identically whether the cost base in play is B2B or
+  // Franchise (see `netFranchise` below), just compared against whichever
+  // rate is actually being billed.
+  const MPB_FLOOR = 100;
 
-  // Map<sampleId, { sampleId, tests, rawB2b, billedB2b }>
-  function sampleTypeBilling(items) {
-    const groups = new Map();
-    items.forEach(t => {
-      const sampleId = t.sampleId || "unknown";
-      if (!groups.has(sampleId)) {
-        groups.set(sampleId, { sampleId, tests: [], rawB2b: 0, billedB2b: 0 });
-      }
-      const group = groups.get(sampleId);
-      group.tests.push(t);
-      group.rawB2b += t.b2b;
-    });
-    groups.forEach(group => {
-      group.billedB2b = group.sampleId === MSB_SAMPLE_ID && group.rawB2b < MSB_FLOOR ? MSB_FLOOR : group.rawB2b;
-    });
-    return groups;
+  // Floors a raw total at MPB_FLOOR — but only once there's actually
+  // something being billed; an empty cart stays ₹0, never bumped to ₹100.
+  function mpbFloor(raw) {
+    return raw > 0 && raw < MPB_FLOOR ? MPB_FLOOR : raw;
   }
 
-  function msbAdjustedB2b(items) {
-    let total = 0;
-    sampleTypeBilling(items).forEach(group => { total += group.billedB2b; });
-    return total;
-  }
-
-  // Same Serum-only ₹50 minimum billing floor as sampleTypeBilling above,
-  // but priced at the Franchise rate instead of B2B — this is what this
-  // exact profile would cost billed as a franchisee rather than a regular
-  // B2B partner. Falls back to a test's own B2B price when it has no
-  // `franchise` rate on file yet, so a not-yet-priced test never invents a
-  // saving that isn't backed by real franchise data.
-  function sampleTypeBillingFranchise(items) {
-    const groups = new Map();
-    items.forEach(t => {
-      const sampleId = t.sampleId || "unknown";
-      if (!groups.has(sampleId)) {
-        groups.set(sampleId, { sampleId, tests: [], rawFranchise: 0, billedFranchise: 0 });
-      }
-      const group = groups.get(sampleId);
-      group.tests.push(t);
-      group.rawFranchise += (t.franchise != null ? t.franchise : t.b2b);
-    });
-    groups.forEach(group => {
-      group.billedFranchise = group.sampleId === MSB_SAMPLE_ID && group.rawFranchise < MSB_FLOOR ? MSB_FLOOR : group.rawFranchise;
-    });
-    return groups;
-  }
-
-  function msbAdjustedFranchise(items) {
-    let total = 0;
-    sampleTypeBillingFranchise(items).forEach(group => { total += group.billedFranchise; });
-    return total;
-  }
-
-  // Which Serum group is currently under the ₹50 floor, and how much more
-  // B2B value in Serum would clear it — the data behind a "add ₹5 more
-  // Serum tests to clear the ₹50 minimum" nudge. Non-Serum sample types
-  // never carry an MSB floor (see MSB_SAMPLE_ID above), so they can never
-  // appear here even when cheap. Omitted entirely once Serum is at/above
-  // ₹50 (no MSB uplift).
-  function msbShortfalls(items) {
-    const shortfalls = [];
-    sampleTypeBilling(items).forEach(group => {
-      if (group.sampleId !== MSB_SAMPLE_ID) return;
-      if (group.rawB2b >= MSB_FLOOR) return;
-      shortfalls.push({
-        sampleId: group.sampleId,
-        label: (group.tests[0] && group.tests[0].sample) || group.sampleId,
-        rawB2b: group.rawB2b,
-        billedB2b: group.billedB2b,
-        uplift: group.billedB2b - group.rawB2b,
-        remaining: MSB_FLOOR - group.rawB2b,
-      });
-    });
-    return shortfalls;
-  }
-
-  // `margin`/`marginPercentage`/`b2b` stay raw (pre-MSB) so they still
+  // `margin`/`marginPercentage`/`b2b` stay raw (pre-MPB) so they still
   // match a straight sum of each item's own numbers — callers that render
   // per-line-item figures alongside a total (Excel columns summed by an
   // actual SUM() formula, the print table's footer row) stay internally
   // consistent with what's printed above them.
   //
-  // `msbB2b` is the actual billable B2B base: tests grouped by sample type,
-  // with only the Serum group floored at ₹50 (see `sampleTypeBilling`) —
-  // MSB applies once per Serum draw, never per test, and never to other
-  // sample types. `netB2b`/`netMargin`/
-  // `netMarginPercentage` are that same post-MSB figure for callers that
+  // `netB2b` is the actual billable B2B total: the raw sum, floored once at
+  // ₹100 for the whole profile (see `mpbFloor`) — MPB applies once per
+  // patient, never per sample type or per test. `netMargin`/
+  // `netMarginPercentage` are that same post-MPB figure for callers that
   // want the partner's actual bottom line (cart drawer headline, print
-  // summary cards, clipboard copy) — there's no further bulk-volume
-  // discount layered on top of it. Recompute by calling `totals` again
+  // summary cards, clipboard copy). `franchiseRaw`/`netFranchise` are the
+  // same raw-sum-then-₹100-floor treatment applied to the Franchise rate
+  // instead, for the "what would this cost as a franchisee" comparison —
+  // falls back to a test's own B2B price when it has no `franchise` rate on
+  // file yet, so a not-yet-priced test never invents a saving that isn't
+  // backed by real franchise data. Recompute by calling `totals` again
   // after any add/remove — nothing here is cached, so it always reflects
   // the current item list.
   function totals(items) {
     const b2b = items.reduce((sum, t) => sum + t.b2b, 0);
     const b2c = items.reduce((sum, t) => sum + t.b2c, 0);
-    const msbB2b = msbAdjustedB2b(items);
-    const netB2b = msbB2b;
+    const franchiseRaw = items.reduce((sum, t) => sum + (t.franchise != null ? t.franchise : t.b2b), 0);
 
-    // What this same profile costs at the Franchise rate (same MSB floor)
+    const netB2b = mpbFloor(b2b);
+    // What this same profile costs at the Franchise rate (same ₹100 floor)
     // vs. `netB2b` above, which is what a B2B partner actually pays today.
     // The difference is the real, apples-to-apples "you'd save this much
-    // as a franchise" figure for the profile currently in the cart.
-    // Floored at 0 so a data gap (a test priced the same or cheaper at B2B
-    // than franchise) can never show a negative/nonsense saving.
-    const msbFranchise = msbAdjustedFranchise(items);
-    const franchiseSavings = Math.max(0, netB2b - msbFranchise);
+    // as a franchise" figure for the profile currently in the cart. Floored
+    // at 0 so a data gap (a test priced the same or cheaper at B2B than
+    // franchise) can never show a negative/nonsense saving.
+    const netFranchise = mpbFloor(franchiseRaw);
+    const franchiseSavings = Math.max(0, netB2b - netFranchise);
     const franchiseSavingsPercentage = netB2b > 0 ? (franchiseSavings / netB2b) * 100 : 0;
 
     return {
-      b2b, b2c, msbB2b,
+      b2b, b2c, netB2b,
       margin: b2c - b2b,
       marginPercentage: marginPercentage(b2b, b2c),
-      netB2b,
       netMargin: b2c - netB2b,
       netMarginPercentage: marginPercentage(netB2b, b2c),
-      msbFranchise, franchiseSavings, franchiseSavingsPercentage,
+      franchiseRaw, netFranchise, franchiseSavings, franchiseSavingsPercentage,
     };
   }
 
@@ -162,9 +90,9 @@ AVM.modules = AVM.modules || {};
 
   // A profile's own flat price (see each package's `pricing` in data.js) —
   // NOT assembled from its member tests' own B2B/B2C prices the way every
-  // profile used to be priced. No MSB floor either: that's a per-sample-
-  // type billing rule for individually-priced tests, and doesn't apply to
-  // a bundle that's already one flat number.
+  // profile used to be priced. No MPB floor either: that's a per-profile
+  // billing rule for individually-priced tests, and doesn't apply to a
+  // bundle that's already one flat number.
   function packagePricing(pkg) {
     const p = pkg.pricing || { b2b: 0, franchise: 0, b2c: 0 };
     const franchiseSavings = Math.max(0, p.b2b - p.franchise);
@@ -177,17 +105,21 @@ AVM.modules = AVM.modules || {};
     };
   }
 
-  // The cart's real combined total: individually-added tests (summed and
-  // MSB-floored exactly like totals() above) PLUS every fixed-price
-  // profile currently in the cart, added as its own flat number — a
-  // profile bundle isn't subject to MSB (it's already one line, not
-  // assembled from per-sample-type groups) and never double-counts with
-  // `individualItems`, since a profile's own tests are never added there
-  // in the first place (see profile.js's addPackage). Returns the exact
-  // same shape totals() does so every caller downstream (cart drawer,
-  // print page, margin/franchise boxes) works unchanged either way.
+  // The cart's real combined total: individually-added tests plus every
+  // fixed-price profile currently in the cart, each contributing its own
+  // flat number — then the ₹100 Minimum Patient Billing floor is applied
+  // once to that *combined* raw total (not to the individual tests alone),
+  // since MPB is about the patient's whole visit, not any one line item.
+  // Never double-counts with `individualItems`, since a profile's own tests
+  // are never added there in the first place (see profile.js's
+  // addPackage). Returns the exact same shape totals() does so every caller
+  // downstream (cart drawer, print page, margin/franchise boxes) works
+  // unchanged either way.
   function cartTotals(individualItems, bundlePkgs) {
-    const base = totals(individualItems);
+    const rawB2b = individualItems.reduce((sum, t) => sum + t.b2b, 0);
+    const rawB2c = individualItems.reduce((sum, t) => sum + t.b2c, 0);
+    const rawFranchiseItems = individualItems.reduce((sum, t) => sum + (t.franchise != null ? t.franchise : t.b2b), 0);
+
     let bundleB2b = 0, bundleB2c = 0, bundleFranchise = 0;
     (bundlePkgs || []).forEach(pkg => {
       const p = pkg.pricing || { b2b: 0, franchise: 0, b2c: 0 };
@@ -195,27 +127,27 @@ AVM.modules = AVM.modules || {};
       bundleB2c += p.b2c;
       bundleFranchise += (p.franchise != null ? p.franchise : p.b2b);
     });
-    const b2b = base.b2b + bundleB2b;
-    const b2c = base.b2c + bundleB2c;
-    const msbB2b = base.msbB2b + bundleB2b;
-    const netB2b = msbB2b;
-    const msbFranchise = base.msbFranchise + bundleFranchise;
-    const franchiseSavings = Math.max(0, netB2b - msbFranchise);
+
+    const b2b = rawB2b + bundleB2b;
+    const b2c = rawB2c + bundleB2c;
+    const franchiseRaw = rawFranchiseItems + bundleFranchise;
+
+    const netB2b = mpbFloor(b2b);
+    const netFranchise = mpbFloor(franchiseRaw);
+    const franchiseSavings = Math.max(0, netB2b - netFranchise);
+
     return {
-      b2b, b2c, msbB2b,
+      b2b, b2c, netB2b,
       margin: b2c - b2b,
       marginPercentage: marginPercentage(b2b, b2c),
-      netB2b,
       netMargin: b2c - netB2b,
       netMarginPercentage: marginPercentage(netB2b, b2c),
-      msbFranchise, franchiseSavings,
+      franchiseRaw, netFranchise, franchiseSavings,
       franchiseSavingsPercentage: netB2b > 0 ? (franchiseSavings / netB2b) * 100 : 0,
     };
   }
 
   AVM.modules.calculations = {
     margin, marginPercentage, totals, packageTestCount, packagePricing, cartTotals,
-    sampleTypeBilling, msbAdjustedB2b, msbShortfalls,
-    sampleTypeBillingFranchise, msbAdjustedFranchise,
   };
 })();

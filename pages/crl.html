@@ -29,6 +29,34 @@
 </head>
 <body>
 
+<!-- ================= TEMPORARY NOTICE =================
+     Full-page notice shown to every visitor until 11:00 AM IST on
+     31 Aug 2026, while rates are being revised further. Self-clears —
+     once that time passes this script is a no-op and the site loads
+     normally, no redeploy needed to bring it back. Inline (not an
+     external file) so it renders before anything else, with zero
+     network round-trip delay — literally the first thing in <body>,
+     before header/main. Same block duplicated on index.html/
+     franchise.html/sarc.html — keep REOPEN_AT in sync across all 4 if
+     the date changes, or delete this block from all 4 once it's past. -->
+<script>
+(function () {
+  var REOPEN_AT = new Date("2026-08-31T11:00:00+05:30").getTime();
+  if (Date.now() >= REOPEN_AT) return;
+  document.documentElement.style.overflow = "hidden";
+  var el = document.createElement("div");
+  el.style.cssText = "position:fixed;inset:0;z-index:999999;background:#0E2238;display:flex;align-items:center;justify-content:center;padding:24px;font-family:'Poppins',system-ui,sans-serif;";
+  el.innerHTML =
+    '<div style="max-width:480px;text-align:center;color:#EFF0F2;">' +
+      '<p style="margin:0 0 14px;letter-spacing:.14em;text-transform:uppercase;font-size:12px;font-weight:700;color:#DB8A34;">— Notice</p>' +
+      '<h1 style="margin:0 0 18px;font-size:clamp(26px,4.4vw,36px);line-height:1.15;font-weight:800;color:#fff;">We\'re Reducing Our Rates Further</h1>' +
+      '<p style="margin:0 0 10px;font-size:16px;line-height:1.6;color:#C7CDD3;">Please come back on or after <strong style="color:#fff;">11:00 AM on 31st August 2026</strong>.</p>' +
+      '<p style="margin:0;font-size:14px;color:#8FA0AE;">We regret the inconvenience.</p>' +
+    '</div>';
+  document.body.appendChild(el);
+})();
+</script>
+
 <header class="site-header">
   <nav class="nav">
     <a href="../index.html#top" class="brand">

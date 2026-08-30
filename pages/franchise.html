@@ -178,18 +178,20 @@
         <p>Every test on the rate list — B2B rate vs Franchise rate, side by side.</p>
       </div>
 
-      <!-- Same Minimum Consignment Value / Consignment Handling Charges as
-           the main Rate List (see index.html) — these apply per consignment
-           regardless of B2B or Franchise rate, so they're shown here too
-           rather than only on the B2B-facing page. -->
+      <!-- Consignment Handling Charges is the same as the main Rate List
+           (see index.html) — applies per consignment regardless of B2B or
+           Franchise rate. Minimum Consignment Value is Franchise-specific
+           though: ₹1000 here vs ₹250 on the B2B-facing page, so this card
+           is NOT shared markup with index.html's — don't copy that one
+           over verbatim if this section changes again. -->
       <div class="charge-cards">
         <div class="stat-card stat-card--plain stat-card--teal">
           <div class="stat-card__row">
             <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.5 20 8v8l-8 4.5L4 16V8l8-4.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 8l8 4.5L20 8M12 12.5V21" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
             <div class="stat-card__label">Minimum Consignment Value</div>
-            <div class="stat-card__num">₹250</div>
+            <div class="stat-card__num">₹1000</div>
           </div>
-          <p class="stat-card__desc">₹250 per consignment is must for a client.</p>
+          <p class="stat-card__desc">₹1000 per consignment is must for a Franchise.</p>
         </div>
         <div class="stat-card stat-card--plain stat-card--emerald">
           <div class="stat-card__row">

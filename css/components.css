@@ -1000,6 +1000,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    per-card (--accent) so the two stay visually distinct from each other. */
 .stat-card--teal{ --accent:var(--teal); --accent-bg:var(--teal-bg); }
 .stat-card--emerald{ --accent:var(--emerald); --accent-bg:var(--emerald-bg); }
+.stat-card--violet{ --accent:var(--violet); --accent-bg:var(--violet-bg); }
 .stat-card--plain{
   background:none; border:none; border-radius:0; padding:0; box-shadow:none;
   justify-content:flex-start;
@@ -1013,7 +1014,7 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
    spread to the edges of the card. */
 .stat-card--plain .stat-card__row{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); }
 .stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
-.charge-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:var(--space-6); margin-bottom:var(--space-8); }
+.charge-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-6); margin-bottom:var(--space-8); }
 
 /* ---------- Quick actions ---------- */
 .quick-actions{ display:flex; flex-wrap:wrap; gap:var(--space-3); }

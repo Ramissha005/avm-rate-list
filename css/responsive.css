@@ -210,7 +210,9 @@
      the tag/button onto a phone-width line with the rest. */
   .lab-stats__head{ flex-wrap:wrap; row-gap:var(--space-1); }
   .lab-stats__cta{ margin-left:0; }
-  .charge-cards{ gap:var(--space-4); }
+  /* 3 cards at full width is tight below 960px — 2 up here (the 3rd
+     wraps to its own row), 1 up under 600px (see below). */
+  .charge-cards{ grid-template-columns:repeat(2,1fr); gap:var(--space-4); }
   /* The centered text-align above reads fine for a short num+label, but
      a whole sentence centered across several lines is harder to read —
      left-align just the description. */

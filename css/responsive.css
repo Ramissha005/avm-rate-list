@@ -42,8 +42,6 @@
      that width it would just sit awkwardly under/behind the paragraph. */
   .hero__image-wrap{ display:none; }
 
-  .pillars{ grid-template-columns:1fr; }
-  .founder__grid{ grid-template-columns:1fr; }
   .footer__top{ grid-template-columns:1fr 1fr; }
   .rl-head{ display:none; }
 

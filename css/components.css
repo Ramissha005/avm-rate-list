@@ -173,8 +173,6 @@
 
 .slip__foot{ display:flex; justify-content:space-between; align-items:center; font-size:var(--text-xs); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); }
 
-.slip__total{ font-family:var(--font-display); font-size:var(--text-xl); color:var(--navy); text-transform:none; letter-spacing:0; font-weight:700; }
-
 .slip__foot--stack{ flex-direction:column; align-items:stretch; gap:var(--space-2); }
 
 .slip__foot--stack div{ display:flex; justify-content:space-between; align-items:baseline; }
@@ -187,32 +185,6 @@
 
 .slip__foot--stack .is-profit b{ color:var(--profit); font-size:var(--text-lg); }
 
-.pillar{
-  position:relative; overflow:hidden;
-  background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-  padding:var(--space-6) var(--space-5);
-  transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-}
-.pillar::before{
-  content:""; position:absolute; top:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg, var(--amber), var(--amber-dark));
-}
-.pillar:hover{ transform:translateY(-4px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-
-/* Doubles as a numbered badge (mono digits, e.g. "01") or an emoji icon —
-   emoji need real size to read as an icon rather than a stray character,
-   so this sits a step larger than a typical text badge. */
-.pillar__num{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:44px; height:44px; border-radius:50%;
-  background:#FBEEDF; border:1.5px solid var(--amber);
-  font-family:var(--font-mono); font-size:var(--text-lg); line-height:1; color:var(--amber-dark); font-weight:700; letter-spacing:0;
-}
-
-.pillar h3{ font-size:var(--text-lg); color:var(--navy); margin:var(--space-4) 0 var(--space-2); }
-
-.pillar p{ font-size:var(--text-base); color:var(--ink-soft); }
-
 /* ---------- Franchise vs. B2B comparison table — two columns, each row a
    franchise-partner benefit against what a regular B2B client doesn't get.
    Reuses --profit (already this app's "good financial outcome" color, e.g.
@@ -220,8 +192,7 @@
    off-palette green, and the same red the margin box's loss state uses for
    the "no" column, so both read as extensions of the existing system
    instead of a one-off. The partner column reads as the "featured" one —
-   navy header, Recommended badge, tinted cells — the same visual move
-   .package-card--featured uses elsewhere to mark the better option. ---------- */
+   navy header, Recommended badge, tinted cells. ---------- */
 .compare-table-wrap{
   overflow-x:auto; border-radius:var(--radius-lg); box-shadow:var(--shadow-lg); border:1px solid var(--line);
   position:relative;
@@ -323,7 +294,7 @@
    grid only aligns each column's own top edge, not the card inside it. */
 .sarc-chapter__desc{ font-size:var(--text-base); line-height:1.5; color:var(--ink-soft); margin:0; min-height:3em; }
 
-/* Same card language as .pillar elsewhere on the site (--radius, a soft
+/* Same card language as .stat-card elsewhere on the site (--radius, a soft
    resting shadow) rather than .compare-table-wrap's heavier treatment. */
 .data-table-card{
   background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
@@ -430,36 +401,6 @@ body.reveal-ready .reveal.is-visible{ opacity:1; transform:translateY(0); }
   border:1.5px solid var(--navy); color:var(--navy); background:#fff;
 }
 
-.founder__card{
-  background:linear-gradient(160deg, var(--navy-2), #0B1D30);
-  border:1px solid var(--glass-dark-border); border-radius:var(--radius-lg);
-  padding:var(--space-8) var(--space-6); text-align:center;
-  box-shadow:var(--shadow-lg);
-}
-
-.monogram{
-  width:104px; height:104px; margin:0 auto var(--space-5); border-radius:50%;
-  border:1.5px dashed rgba(219,138,52,0.6);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-display); font-size:var(--text-3xl); font-weight:700; color:var(--amber);
-}
-
-.founder__card h3{ font-size:var(--text-lg); color:#fff; margin-bottom:var(--space-1); }
-
-.founder__card .role{ font-size:var(--text-sm); color:#9FB4C4; margin-bottom:var(--space-5); }
-
-.founder__timeline{ text-align:left; display:flex; flex-direction:column; gap:var(--space-3); }
-
-.founder__timeline li{
-  display:flex; gap:0; list-style:none;
-}
-
-.tl-row{ display:flex; gap:var(--space-3); align-items:flex-start; font-size:var(--text-sm); }
-
-.tl-year{ font-family:var(--font-mono); color:var(--amber); flex:none; width:78px; }
-
-.tl-text{ color:#C9D6DE; }
-
 blockquote.pull{
   margin:var(--space-7) 0 var(--space-2); padding:var(--space-5) var(--space-6); border-left:3px solid var(--amber);
   background:rgba(255,255,255,0.05); border-radius:0 var(--radius-sm) var(--radius-sm) 0;
@@ -497,10 +438,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .rl-sort select:hover{ border-color:var(--navy-soft); background-color:var(--paper-2); }
 .rl-sort select:focus-visible{ outline:none; border-color:var(--teal); box-shadow:0 0 0 3px var(--profit-bg); }
 .rl-sort select::-ms-expand{ display:none; }
-
-.rl-toggle{
-  display:flex; align-items:center; gap:var(--space-2); font-size:var(--text-sm); font-family:var(--font-mono); color:var(--ink-soft);
-}
 
 .switch{ position:relative; width:42px; height:23px; }
 
@@ -755,8 +692,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .cart-item--calc:hover{ background:transparent; }
 .cart-item--calc .cart-item__name{ font-style:italic; }
 .cart-item--calc .cart-item__name small{ font-family:var(--font-body); font-style:normal; }
-
-.cart-item__price{ font-family:var(--font-mono); font-size:var(--text-base); color:var(--navy); font-weight:600; font-variant-numeric:tabular-nums; }
 
 .cart-item__remove{ width:26px; height:26px; border-radius:50%; border:1px solid var(--line-dark); background:#fff; color:var(--ink-soft); font-size:var(--text-sm); transition:background var(--transition-fast); }
 .cart-item__remove:hover{ background:var(--paper-2); }
@@ -1015,74 +950,6 @@ blockquote.pull cite{ display:block; margin-top:var(--space-2); font-size:var(--
 .stat-card--plain .stat-card__row{ display:flex; flex-wrap:wrap; align-items:center; gap:var(--space-3); }
 .stat-card__desc{ font-size:var(--text-xs); color:var(--ink-soft); line-height:1.4; margin-top:var(--space-2); }
 .charge-cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-6); margin-bottom:var(--space-8); }
-
-/* ---------- Quick actions ---------- */
-.quick-actions{ display:flex; flex-wrap:wrap; gap:var(--space-3); }
-
-/* ---------- Package cards (packages.html) ---------- */
-.package-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr)); gap:var(--space-5); }
-.package-card{
-  position:relative; overflow:hidden;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-6) var(--space-5);
-  display:flex; flex-direction:column; gap:var(--space-3);
-  transition:transform var(--transition), box-shadow var(--transition), border-color var(--transition);
-}
-.package-card::before{
-  content:""; position:absolute; top:0; left:0; right:0; height:3px;
-  background:linear-gradient(90deg, var(--teal), var(--amber));
-}
-.package-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-sm); border-color:var(--paper-2); }
-.package-card h3{ font-size:var(--text-lg); color:var(--navy); }
-.package-card__desc{ font-size:var(--text-base); color:var(--ink-soft); flex:1; }
-.package-card__meta{
-  display:inline-block; font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--teal-dark);
-  text-transform:uppercase; letter-spacing:.06em; flex:none;
-  background:var(--profit-bg); border-radius:var(--radius-full); padding:3px var(--space-2); margin-bottom:var(--space-1);
-}
-.package-card__tests{ display:flex; flex-wrap:wrap; gap:var(--space-2); }
-.package-card__tests li{
-  font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:600; color:var(--navy); background:var(--paper-2);
-  border:1.5px solid transparent; border-radius:var(--radius-full); padding:2.5px var(--space-3); cursor:default;
-}
-.package-card__count{ font-size:var(--text-xs); color:var(--ink-faint); }
-
-.package-card__price{
-  display:grid; grid-template-columns:repeat(3,1fr); gap:var(--space-2);
-  padding-top:var(--space-3); border-top:1px solid var(--line);
-}
-.package-card__price div{ display:flex; flex-direction:column; gap:2px; }
-.package-card__price span{ font-family:var(--font-mono); font-size:var(--text-2xs); text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); }
-.package-card__price b{ font-size:var(--text-md); font-weight:700; color:var(--navy); font-variant-numeric:tabular-nums; }
-.package-card__price .is-profit span{ color:var(--profit); }
-.package-card__price .is-profit b{ color:var(--profit); }
-
-.package-card__actions{ display:flex; gap:var(--space-2); margin-top:var(--space-1); }
-.package-card__actions .btn{ flex:1; justify-content:center; }
-
-/* The single most comprehensive panel is called out visually so the grid
-   isn't a wall of identical cards — same pattern pricing pages use for a
-   "recommended" tier. */
-.package-card--featured{
-  background:linear-gradient(165deg, var(--navy) 0%, var(--navy-2) 100%);
-  border-color:var(--navy); box-shadow:var(--shadow-navy);
-  transform:scale(1.015);
-}
-.package-card--featured::before{ background:var(--amber); height:4px; }
-.package-card--featured:hover{ transform:translateY(-4px) scale(1.015); border-color:var(--amber); }
-.package-card--featured h3{ color:#fff; }
-.package-card--featured .package-card__desc{ color:#C6D3DC; }
-.package-card--featured .package-card__meta{ background:rgba(255,255,255,.14); color:#fff; }
-.package-card--featured .package-card__count{ color:#9FB4C4; }
-.package-card--featured .package-card__price{ border-top-color:rgba(255,255,255,.18); }
-.package-card--featured .package-card__price span{ color:#9FB4C4; }
-.package-card--featured .package-card__price b{ color:#fff; }
-.package-card--featured .package-card__price .is-profit span,
-.package-card--featured .package-card__price .is-profit b{ color:#8FD4B8; }
-.package-card__badge{
-  position:absolute; top:0; right:0; font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700;
-  letter-spacing:.04em; color:#241300; background:var(--amber); padding:6px var(--space-4) 6px var(--space-5);
-  border-radius:0 var(--radius) 0 var(--radius);
-}
 
 /* ---------- Test-detail drawer ---------- */
 .td-head{ padding-bottom:var(--space-3); border-bottom:1px solid var(--line); margin-bottom:var(--space-3); }

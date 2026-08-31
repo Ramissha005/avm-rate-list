@@ -552,12 +552,12 @@ section{ padding:var(--space-20) 0; }
 
 .rl-disclaimer{ margin-top:var(--space-4); font-size:var(--text-sm); color:var(--ink-faint); }
 
-/* ---------- Franchise page "your savings" table (see js/modules/
-   franchise-rates.js) — the wrapper reuses .rl-table itself (see
-   franchise.html) rather than a duplicate box style; own grid here since
-   it's 6 columns (Code, Test, B2B, Franchise, Save, Action) not
-   .rl-row's 8. The Action column reuses .add-btn/.cell-action/
-   .add-btn__label as-is, same 54px width as the main rate list's. */
+/* ---------- Shared .fr-head/.fr-row grid shell — the base
+   grid-template-columns here is always overridden by the more specific
+   .fr-panels-head/.fr-panels-row rule below (the only thing still using
+   this shell, since the homepage's own Tests view uses .rl-head/.rl-row
+   instead); the non-grid properties (padding, border, hover, etc.) stay
+   shared between the two. */
 .fr-head, .fr-row{
   display:grid;
   grid-template-columns:70px minmax(0,1.8fr) 110px 130px 110px 54px;
@@ -593,10 +593,9 @@ section{ padding:var(--space-20) 0; }
    this 84px column. */
 .fr-head.fr-panels-head > *:nth-child(2){ text-align:left; }
 
-/* Individual Tests vs Profiles switch above the savings table (see
-   js/modules/franchise-rates.js) — a segmented control, not filter chips
-   (.rl-filter), since it's picking the dataset itself rather than
-   narrowing one. */
+/* Individual Tests vs Profiles switch above the homepage rate list — a
+   segmented control, not filter chips (.rl-filter), since it's picking
+   the dataset itself rather than narrowing one. */
 .fr-view-toggle{
   display:inline-flex; background:var(--paper-2); border-radius:var(--radius-full);
   padding:4px; gap:4px; margin-bottom:var(--space-4);

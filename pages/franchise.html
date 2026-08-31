@@ -184,10 +184,6 @@
               <td class="is-no" data-label="Regular B2B Client"><span class="compare-table__row"><span class="compare-table__icon" aria-hidden="true">✕</span><span>Not listed on Google &amp; Meta</span></span></td>
             </tr>
             <tr>
-              <td class="is-yes" data-label="Franchisee Partner"><span class="compare-table__row"><span class="compare-table__icon" aria-hidden="true">✓</span><span>Get <b>better rates &amp; margins</b> and get 10% discounts in majority of tests &amp; Profiles</span></span></td>
-              <td class="is-no" data-label="Regular B2B Client"><span class="compare-table__row"><span class="compare-table__icon" aria-hidden="true">✕</span><span>Pay normal B2B rates</span></span></td>
-            </tr>
-            <tr>
               <td class="is-yes" data-label="Franchisee Partner"><span class="compare-table__row"><span class="compare-table__icon" aria-hidden="true">✓</span><span>Become part of <b>AVMLabs' progress &amp; growth</b></span></span></td>
               <td class="is-no" data-label="Regular B2B Client"><span class="compare-table__row"><span class="compare-table__icon" aria-hidden="true">✕</span><span>Not part of AVMLabs' company progress</span></span></td>
             </tr>
@@ -197,21 +193,23 @@
     </div>
   </section>
 
-  <!-- ================= YOUR SAVINGS RATE LIST ================= -->
-  <section class="ratelist" id="savings">
+  <!-- ================= CONSIGNMENT CHARGES =================
+       Used to be "Your Savings" — a full B2B-vs-Franchise rate
+       comparison table (js/modules/franchise-rates.js). Removed: there's
+       no separate Franchise rate tier, so there was nothing left to
+       compare — every test's a single rate card (see index.html). These
+       two consignment figures are the only ones that genuinely differ
+       for a Franchise (Minimum Consignment Value is ₹1000 here vs ₹250
+       on the B2B-facing page); Consignment Handling Charges is the same
+       ₹100 either way. -->
+  <section class="ratelist" id="charges">
     <div class="wrap">
       <div class="section-head">
-        <p class="eyebrow">YOUR SAVINGS</p>
-        <h2>See Exactly What You'd Save</h2>
-        <p>Every test on the rate list — B2B rate vs Franchise rate, side by side.</p>
+        <p class="eyebrow">CONSIGNMENT CHARGES</p>
+        <h2>What Every Consignment Costs</h2>
+        <p>Same rate card as everyone else — these are the only Franchise-specific figures.</p>
       </div>
 
-      <!-- Consignment Handling Charges is the same as the main Rate List
-           (see index.html) — applies per consignment regardless of B2B or
-           Franchise rate. Minimum Consignment Value is Franchise-specific
-           though: ₹1000 here vs ₹250 on the B2B-facing page, so this card
-           is NOT shared markup with index.html's — don't copy that one
-           over verbatim if this section changes again. -->
       <div class="charge-cards">
         <div class="stat-card stat-card--plain stat-card--teal">
           <div class="stat-card__row">
@@ -230,68 +228,6 @@
           <p class="stat-card__desc">Consignment Handling Charges (CHC) applies for each consignment to cover logistic costs.</p>
         </div>
       </div>
-
-      <!-- Individual tests vs whole common panels — two different datasets
-           (js/modules/franchise-rates.js), so Filters/Sort/page size only
-           make sense for Tests and are hidden in Panels view (see there).
-           Wrapped with .rl-controls in .fr-sticky-controls so the toggle
-           and the search/filter/sort bar stick together as one unit
-           while scrolling — see layout.css. -->
-      <div class="fr-sticky-controls">
-        <div class="fr-view-toggle" id="franchiseViewToggle">
-          <button type="button" class="fr-view-toggle__btn active" data-view="tests" aria-pressed="true">Individual Tests</button>
-          <button type="button" class="fr-view-toggle__btn" data-view="profiles" aria-pressed="false">Profiles</button>
-        </div>
-
-        <div class="rl-controls">
-          <div class="rl-search">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
-            <input type="text" id="franchiseRatesSearch" placeholder="Search by test name or code" aria-label="Search tests">
-          </div>
-          <button type="button" class="filters-toggle-btn" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
-            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Filters
-            <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
-          </button>
-          <div class="rl-right">
-            <div class="rl-sort" id="franchiseSortWrap">
-              <select id="franchiseRatesSort" aria-label="Sort results">
-                <option value="savings-desc">Sort: Savings High to Low</option>
-                <option value="savings-asc">Savings: Low to High</option>
-                <option value="name">Name A–Z</option>
-                <option value="b2b-asc">B2B: Low to High</option>
-                <option value="b2b-desc">B2B: High to Low</option>
-                <option value="franchise-asc">Franchise: Low to High</option>
-                <option value="franchise-desc">Franchise: High to Low</option>
-              </select>
-            </div>
-            <div class="rl-sort" id="franchisePageSizeWrap">
-              <select id="franchiseRatesPageSize" aria-label="Results per page"></select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="filters-panel" id="filtersPanel" hidden>
-        <div class="filter-group">
-          <p class="filter-group__label">Technology</p>
-          <div class="rl-filters" id="filterTech"></div>
-        </div>
-      </div>
-
-      <div class="rl-toolbar">
-        <p class="rl-count" id="franchiseRatesCount"></p>
-        <div class="rl-toolbar__actions">
-          <button type="button" class="view-more-btn" id="clearFilters">Clear filters</button>
-        </div>
-      </div>
-
-      <div class="rl-table fr-table">
-        <div class="fr-head" id="franchiseRatesHead"></div>
-        <div id="franchiseRatesBody"></div>
-      </div>
-
-      <div id="franchiseRatesPagination" class="pagination"></div>
     </div>
   </section>
 
@@ -325,7 +261,7 @@
     <div class="footer__top">
       <div class="footer__brand">
         <img class="brand__logo" src="../assets/images/avm-logo.png" alt="AVMLabs" height="53">
-        <p>Automated diagnostics, one transparent rate card B2B &amp; Franchisee Rates</p>
+        <p>Automated diagnostics, one transparent rate card</p>
       </div>
       <div>
         <h4>Site</h4>
@@ -377,25 +313,6 @@
   <div class="cart-foot">
     <div class="cart-foot__summary" id="cartFootSummary">
       <div class="cart-totals">
-        <!-- Franchise page: lead with the Franchise Rate box (and what it
-             saves) before B2B Cost — this page's whole pitch is "become a
-             franchisee", so the savings number should be the first thing
-             a partner sees here, not buried after B2B. Every other page
-             with a cart drawer keeps B2B Cost first (see index.html/crl.
-             html/sarc.html) — this reordering is franchise.html-only. -->
-        <div class="franchise-box" id="cartFranchiseRow" style="display:none">
-          <div class="franchise-box__top">
-            <div class="franchise-box__info">
-              <span class="franchise-box__label"><span class="franchise-box__dot" aria-hidden="true"></span>Franchise Rate</span>
-              <div class="franchise-box__amount" id="cartFranchiseAmt">₹0</div>
-            </div>
-            <span class="franchise-box__pct" id="cartFranchisePct">Save 0%</span>
-          </div>
-          <!-- Franchise-page-only: spell out the "you're a franchisee"
-               framing since a visitor here is specifically weighing that
-               decision — see profile.js for the text it's filled with. -->
-          <p class="franchise-box__hint" id="cartFranchiseHint"></p>
-        </div>
         <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
         <div class="ct-row ct-row--mpb" id="cartMpbRow" style="display:none"><span>Min. Patient Billing</span><span id="cartMpbAmt">+₹0</span></div>
         <p class="ct-hint ct-hint--mpb" id="cartMpbHint" style="display:none"></p>
@@ -469,7 +386,6 @@
 <script src="../js/modules/export.js"></script>
 <script src="../js/modules/print.js"></script>
 <script src="../js/modules/panels-table.js"></script>
-<script src="../js/modules/franchise-rates.js"></script>
 <script src="../js/app.js"></script>
 
 </body>

@@ -443,8 +443,6 @@ AVM.modules = AVM.modules || {};
     // (and never in customer view, alongside B2B/margin).
     if (elements.mpbRow) elements.mpbRow.style.display = "none";
     if (elements.mpbHint) elements.mpbHint.style.display = "none";
-    if (elements.franchiseRow) elements.franchiseRow.style.display = "none";
-    if (elements.b2b) elements.b2b.classList.remove("ct-amount--struck");
 
     elements.badge.textContent = totalCount;
     elements.sub.textContent = `${totalCount} test${totalCount !== 1 ? "s" : ""} selected`;
@@ -567,16 +565,10 @@ AVM.modules = AVM.modules || {};
     // customer actually pays, minus the partner's own (MPB-adjusted) cost.
     // The discount only takes effect once it's genuinely lower than the
     // B2C total it would otherwise be based on.
-    //
-    // On the Franchise page (elements.useFranchiseMargin — see app.js,
-    // true only when the page's own #cartFranchiseHint exists), that cost
-    // is the Franchise rate instead of B2B: a visitor there is weighing
-    // life as a franchisee, so their margin should read against what
-    // they'd actually pay as one, not the regular B2B rate.
     const discountedPrice = state.discountedPrice;
     const hasCustomerDiscount = discountedPrice != null && discountedPrice > 0 && discountedPrice < sum.b2c;
     const marginBase = hasCustomerDiscount ? discountedPrice : sum.b2c;
-    const costBase = elements.useFranchiseMargin ? sum.netFranchise : sum.netB2b;
+    const costBase = sum.netB2b;
     const finalMargin = marginBase - costBase;
     const finalMarginPct = AVM.modules.calculations.marginPercentage(costBase, marginBase);
     elements.margin.textContent = money(finalMargin);
@@ -590,13 +582,9 @@ AVM.modules = AVM.modules || {};
     // folded into B2B Cost above) plus a hint telling the partner exactly
     // how much more this profile needs to clear the ₹100 floor — so adding
     // one more test visibly drops the MPB row instead of just quietly
-    // changing the total. Checked against whichever rate is actually in
-    // play here (Franchise on the Franchise page, B2B everywhere else) —
-    // same floor, just compared to the right raw total.
+    // changing the total.
     if (!customerView) {
-      const rawCost = elements.useFranchiseMargin ? sum.franchiseRaw : sum.b2b;
-      const netCost = elements.useFranchiseMargin ? sum.netFranchise : sum.netB2b;
-      const uplift = netCost - rawCost;
+      const uplift = sum.netB2b - sum.b2b;
       if (uplift > 0) {
         if (elements.mpbRow) {
           elements.mpbRow.style.display = "";
@@ -604,43 +592,8 @@ AVM.modules = AVM.modules || {};
         }
         if (elements.mpbHint) {
           elements.mpbHint.style.display = "";
-          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(netCost)} minimum patient bill`;
+          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(sum.netB2b)} minimum patient bill`;
         }
-      }
-    }
-
-    // Franchise upsell: what this exact profile would cost at the Franchise
-    // rate vs. what's actually being paid today (Net B2B Payable) — see
-    // calculations.js totals() for the math. Same callout treatment as the
-    // margin box (colored panel, left accent bar, label + live pill, big
-    // bold amount) — see .franchise-box. Only shown once there's a genuine
-    // saving to point at (a stray rounding-equal profile shows nothing
-    // rather than a "Save 0%" box). Internal view only — this is a
-    // partner-facing upsell nudge, not something to hand a customer.
-    if (!customerView && sum.franchiseSavings > 0 && elements.franchiseRow) {
-      elements.franchiseRow.style.display = "";
-      if (elements.franchiseAmt) elements.franchiseAmt.textContent = money(sum.netFranchise);
-      const pct = Math.round(sum.franchiseSavingsPercentage);
-      // "Saving X%" on the Franchise page (elements.useFranchiseMargin)
-      // to match the hint sentence right below it ("You're saving X%
-      // as an AVMLabs Franchisee") — "Save X%" everywhere else, where
-      // it's a plain upsell nudge rather than something addressed at a
-      // visitor already weighing life as a franchisee.
-      if (elements.franchisePct) {
-        elements.franchisePct.textContent = elements.useFranchiseMargin ? `Saving ${pct}%` : `Save ${pct}%`;
-      }
-      // Franchise page only (see franchise.html) — spells out the "you're
-      // a franchisee" framing, since a visitor there is specifically
-      // weighing that decision rather than just glancing at a nudge.
-      if (elements.franchiseHint) {
-        elements.franchiseHint.textContent = `You're saving ${pct}% as an AVMLabs Franchisee.`;
-      }
-      // Franchise page only (elements.useFranchiseMargin) — strikes
-      // through B2B Cost so it reads as the "before" price the
-      // Franchise Rate box above it replaces, not a second, unrelated
-      // figure a visitor has to compare on their own.
-      if (elements.useFranchiseMargin && elements.b2b) {
-        elements.b2b.classList.add("ct-amount--struck");
       }
     }
   }

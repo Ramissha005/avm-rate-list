@@ -121,12 +121,11 @@
   }
   .add-btn__label{ display:inline; }
 
-  /* .fr-row's mobile card — the Franchise savings table's Tests view (see
-     franchise-rates.js): code+name stacked full-width, then B2B Rate,
-     Franchise Rate and the You Save badge as three matching chips in
-     one row — same repeat(3,1fr) pattern .rl-row's own B2B/B2C/Margin
-     trio uses on the homepage — then the full-width Add to Profile
-     button (its text label shows at this width, same as
+  /* .fr-row's mobile card — used by the homepage's Profiles view (see
+     panels-table.js): name stacked full-width, then B2B/B2C/Margin as
+     three matching chips in one row — same repeat(3,1fr) pattern
+     .rl-row's own B2B/B2C/Margin trio uses — then the full-width Add
+     to Profile button (its text label shows at this width, same as
      .add-btn__label above). */
   .fr-head{ display:none; }
   .fr-row{

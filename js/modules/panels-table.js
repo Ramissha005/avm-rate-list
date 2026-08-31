@@ -2,14 +2,13 @@ window.AVM = window.AVM || {};
 AVM.modules = AVM.modules || {};
 
 (function () {
-  // Shared by the homepage rate list and the Franchise page's "Your
-  // Savings" table (see app.js and franchise-rates.js) — one common panel
+  // Renders the homepage rate list's Profiles view — one common panel
   // (Kidney Profile, Liver Profile, ...) per row instead of one test per
-  // row, reusing the same .fr-row/.fr-head grid shell either page already
-  // has loaded. Each row can expand to a "tests included" line (every
-  // test, and any calculated extra, that panel bundles in) — collapsed by
-  // default so a page with several panels doesn't turn into one long list
-  // of test names.
+  // row, reusing the same .fr-row/.fr-head grid shell the Tests view
+  // already has loaded. Each row can expand to a "tests included" line
+  // (every test, and any calculated extra, that panel bundles in) —
+  // collapsed by default so a page with several panels doesn't turn into
+  // one long list of test names.
   //
   // The Technology filter (state.activeFilters.technology, same chips as
   // the Tests view) applies here too — a panel matches if *any* of its
@@ -18,26 +17,19 @@ AVM.modules = AVM.modules || {};
   // relevant to it just because one other test inside happens to use a
   // different one.
   //
-  // priceMode picks which two rate columns sit next to the third
-  // (badge) column:
-  //   'margin'    -> B2B / B2C / Margin (the site's normal pricing —
-  //                  homepage)
-  //   'franchise' -> B2B / Franchise Rate / Save % (Franchise page)
-  // Both come from each profile's own flat, hand-set price (see data.js
+  // Each profile's price is its own flat, hand-set number (see data.js
   // `pricing` and calculations.js packagePricing()) — NOT summed from its
   // listed tests' own B2B/B2C prices the way every profile used to be
   // priced.
   //
-  // Sort reuses each page's existing Sort control (elements.sortSelect —
-  // #sortSelect on the homepage, #franchiseRatesSort on the Franchise
-  // page) rather than a separate dropdown just for panels: the same
-  // options (Default/Name/B2B/B2C/Margin, or Savings/Name/B2B/Franchise)
-  // read just as naturally against a panel's own price as they do against
-  // a single test's — see the two sorter maps below, keyed by the exact
-  // same option values each <select>'s markup already uses.
+  // Sort reuses the homepage's existing #sortSelect rather than a separate
+  // dropdown just for panels — the same options (Default/Name/B2B/B2C/
+  // Margin) read just as naturally against a panel's own price as they do
+  // against a single test's — see the sorter map below, keyed by the exact
+  // same option values #sortSelect's markup already uses.
   const expanded = new Set();
 
-  const MARGIN_SORTERS = {
+  const SORTERS = {
     name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
     "b2b-asc": (a, b) => a.pricing.b2b - b.pricing.b2b,
     "b2b-desc": (a, b) => b.pricing.b2b - a.pricing.b2b,
@@ -45,16 +37,6 @@ AVM.modules = AVM.modules || {};
     "b2c-desc": (a, b) => b.pricing.b2c - a.pricing.b2c,
     "margin-desc": (a, b) => b.pricing.margin - a.pricing.margin,
     "margin-asc": (a, b) => a.pricing.margin - b.pricing.margin,
-  };
-
-  const FRANCHISE_SORTERS = {
-    "savings-desc": (a, b) => b.pricing.franchiseSavingsPercentage - a.pricing.franchiseSavingsPercentage,
-    "savings-asc": (a, b) => a.pricing.franchiseSavingsPercentage - b.pricing.franchiseSavingsPercentage,
-    name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
-    "b2b-asc": (a, b) => a.pricing.b2b - b.pricing.b2b,
-    "b2b-desc": (a, b) => b.pricing.b2b - a.pricing.b2b,
-    "franchise-asc": (a, b) => a.pricing.franchise - b.pricing.franchise,
-    "franchise-desc": (a, b) => b.pricing.franchise - a.pricing.franchise,
   };
 
   function cleanTestName(name) {
@@ -115,7 +97,7 @@ AVM.modules = AVM.modules || {};
     return `<p>${dotJoin(names, esc)}</p>`;
   }
 
-  function renderPanelsTable({ packages, elements, onChange, priceMode }) {
+  function renderPanelsTable({ packages, elements, onChange }) {
     if (!elements || !elements.body) return;
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { byCode } = AVM.data.getCatalog();
@@ -123,9 +105,7 @@ AVM.modules = AVM.modules || {};
 
     if (elements.head) {
       elements.head.className = "fr-head fr-panels-head";
-      elements.head.innerHTML = priceMode === "franchise"
-        ? `<div>Profile</div><div>No of<br>Tests</div><div>B2B Rate</div><div>Franchise Rate</div><div>You Save</div><div></div>`
-        : `<div>Profile</div><div>No of<br>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+      elements.head.innerHTML = `<div>Profile</div><div>No of<br>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
     }
 
     const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
@@ -142,29 +122,13 @@ AVM.modules = AVM.modules || {};
         return true;
       });
 
-    // No sort selected (homepage's "Sort: Default", or no #sortSelect at
-    // all) leaves rows in catalog order — same as every other panel
-    // listing on the site (the old bundle-chip row included), so AVM
-    // Profile A/B/C/Infertility A/Anemia A show first here exactly like
-    // they do on the homepage's own Profiles view.
-    //
-    // The Franchise page's Individual Tests view defaults to "Savings:
-    // High to Low" (its <select>'s first <option>, and a deliberate
-    // earlier choice for that view specifically) — but that same
-    // <select> is shared with this Profiles view too, so left alone its
-    // untouched default would silently re-sort Profiles by savings as
-    // well, before the visitor ever picked anything, and scramble AVM
-    // Profile A out of first place. dataset.userSet (set once the
-    // dropdown actually fires a change event — see app.js) tells "still
-    // the pristine default" apart from "the visitor genuinely chose
-    // Savings High to Low again" — only the latter should sort Profiles
-    // by it.
-    const sortTouched = !elements.sortSelect || elements.sortSelect.dataset.userSet === "1";
-    const sortMode = priceMode === "franchise" && !sortTouched
-      ? ""
-      : (elements.sortSelect && elements.sortSelect.value) || "";
-    const sorters = priceMode === "franchise" ? FRANCHISE_SORTERS : MARGIN_SORTERS;
-    if (sorters[sortMode]) rows.sort(sorters[sortMode]);
+    // No sort selected ("Sort: Default", or no #sortSelect at all) leaves
+    // rows in catalog order — same as every other panel listing on the
+    // site (the old bundle-chip row included), so AVM Profile A/B/C/
+    // Infertility A/Anemia A show first here exactly like they do on the
+    // homepage's own Profiles view.
+    const sortMode = (elements.sortSelect && elements.sortSelect.value) || "";
+    if (SORTERS[sortMode]) rows.sort(SORTERS[sortMode]);
 
     if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
 
@@ -221,14 +185,7 @@ AVM.modules = AVM.modules || {};
       // too, not just pkg.codes.length.
       const testCount = packageTestCount(pkg, items);
 
-      const priceCells = priceMode === "franchise"
-        ? `
-          <div class="cell-price"><span class="mobile-label">B2B Rate</span>${money(pricing.b2b)}</div>
-          <div class="cell-price is-franchise"><span class="mobile-label">Franchise Rate</span>${money(pricing.franchise)}</div>
-          <div><span class="mobile-label">You Save</span>${pricing.franchiseSavingsPercentage > 0
-            ? `<span class="cell-margin is-franchise">${Math.round(pricing.franchiseSavingsPercentage)}%<small>${money(pricing.franchiseSavings)}</small></span>`
-            : `<span class="fr-save--none">—</span>`}</div>`
-        : `
+      const priceCells = `
           <div class="cell-price"><span class="mobile-label">B2B</span>${money(pricing.b2b)}</div>
           <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(pricing.b2c)}</div>
           <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(pricing.margin)}<small>+${Math.round(pricing.marginPercentage)}%</small></span></div>`;
@@ -261,7 +218,7 @@ AVM.modules = AVM.modules || {};
         // plain re-render (not the full onChange chain) keeps a toggle
         // click from re-scrolling or re-computing anything else on the
         // page.
-        renderPanelsTable({ packages, elements, onChange, priceMode });
+        renderPanelsTable({ packages, elements, onChange });
       };
     });
 

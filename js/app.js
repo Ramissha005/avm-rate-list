@@ -24,28 +24,14 @@ window.AVM = window.AVM || {};
       sortSelect: $("sortSelect"),
     } : null;
 
-    // Individual Tests / Profiles switch above the homepage rate
-    // list — same "read which button carries .active" pattern the
-    // Franchise page's own toggle uses (see franchise-rates.js).
+    // Individual Tests / Profiles switch above the homepage rate list —
+    // reads which button carries .active straight off the DOM.
     function rateListView() {
       const toggle = $("rateListViewToggle");
       if (!toggle) return "tests";
       const active = toggle.querySelector(".fr-view-toggle__btn.active");
       return (active && active.dataset.view) || "tests";
     }
-
-    const hasFranchiseRates = !!$("franchiseRatesBody");
-    const franchiseRatesElements = hasFranchiseRates ? {
-      body: $("franchiseRatesBody"),
-      head: $("franchiseRatesHead"),
-      count: $("franchiseRatesCount"),
-      searchInput: $("franchiseRatesSearch"),
-      sortSelect: $("franchiseRatesSort"),
-      paginationWrap: $("franchiseRatesPagination"),
-      viewToggle: $("franchiseViewToggle"),
-      filtersToggleBtn: $("filtersToggleBtn"),
-      pageSizeWrap: $("franchisePageSizeWrap"),
-    } : null;
 
     const hasCart = !!$("cartBody");
     const cartElements = hasCart ? {
@@ -60,12 +46,6 @@ window.AVM = window.AVM || {};
       marginLabel: $("cartMarginLabel"),
       cartActions: $("cartActions"),
       mpbRow: $("cartMpbRow"), mpbAmt: $("cartMpbAmt"), mpbHint: $("cartMpbHint"),
-      franchiseRow: $("cartFranchiseRow"), franchiseAmt: $("cartFranchiseAmt"), franchisePct: $("cartFranchisePct"),
-      franchiseHint: $("cartFranchiseHint"),
-      // True only on the Franchise page (the one page with a
-      // #cartFranchiseHint) — see profile.js's renderCart for what this
-      // changes Your Margin's cost basis to.
-      useFranchiseMargin: !!$("cartFranchiseHint"),
       onChange: refreshAll,
     } : null;
 
@@ -77,10 +57,8 @@ window.AVM = window.AVM || {};
         // mixed technologies, and the panel list is short enough to show
         // in full with no pagination), and the two header rows swap so a
         // panel's "Panel" + test-count columns show instead of a test's
-        // Code/Technology/Sample ones (see index.html — rate-list.js
-        // never touches the head itself, unlike franchise-rates.js's
-        // single dynamic one). Sort stays available in both views — the
-        // same options (Default/Name/B2B/B2C/Margin) apply just as well
+        // Code/Technology/Sample ones. Sort stays available in both views —
+        // the same options (Default/Name/B2B/B2C/Margin) apply just as well
         // to a panel's aggregate totals as to a single test's (see
         // panels-table.js's own sorter map).
         if ($("rlHeadTests")) $("rlHeadTests").style.display = view === "profiles" ? "none" : "";
@@ -88,16 +66,13 @@ window.AVM = window.AVM || {};
         if ($("filtersToggleBtn")) $("filtersToggleBtn").style.display = view === "profiles" ? "none" : "";
         if ($("pageSizeWrap")) $("pageSizeWrap").style.display = view === "profiles" ? "none" : "";
         if (view === "profiles") {
-          AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll, priceMode: "margin" });
+          AVM.modules.panelsTable.renderPanelsTable({ packages: catalog.packages, elements: tableElements, onChange: refreshAll });
         } else {
           AVM.modules.rateList.renderTable({ tests: catalog.standaloneTests, techColors: catalog.techColors, elements: tableElements, onChange: refreshAll });
         }
       }
       if (hasCart) {
         AVM.modules.profile.renderCart(cartElements);
-      }
-      if (hasFranchiseRates) {
-        AVM.modules.franchiseRates.renderFranchiseRates({ tests: catalog.standaloneTests, packages: catalog.packages, elements: franchiseRatesElements, onChange: refreshAll });
       }
       updateFiltersBadge();
     }
@@ -133,42 +108,13 @@ window.AVM = window.AVM || {};
     renderFilterGroups();
 
     AVM.modules.search.wireSearch($("searchInput"), { onChange: refreshAll });
-    // Its own independent search, not the shared rate-list state.searchTerm
-    // above — this table lives on a page that doesn't have the main rate
-    // list at all, and reads its own input value straight off the element
-    // (see franchise-rates.js) rather than through app-wide state.
-    if ($("franchiseRatesSearch")) {
-      $("franchiseRatesSearch").addEventListener("input",
-        AVM.utils.helpers.debounce(refreshAll, 200));
-    }
-    // Same "reads its own value, not shared app state" reasoning as the
-    // search box above — this table's Sort options (Savings/Franchise
-    // rate) don't exist in rate-list.js's SORTERS, so it isn't wired
-    // through AVM.modules.sorting.wireSort/state.sortMode either.
-    if ($("franchiseRatesSort")) {
-      $("franchiseRatesSort").addEventListener("change", (e) => {
-        // Marks that this dropdown's value is now a genuine, deliberate
-        // choice rather than just whatever its first <option> happens to
-        // be — see panels-table.js's own use of this flag, which the
-        // Profiles view needs to tell "nobody's touched Sort yet" apart
-        // from "the visitor picked Savings High to Low again".
-        e.target.dataset.userSet = "1";
-        AVM.state.currentPage = 1;
-        refreshAll();
-      });
-    }
     AVM.modules.sorting.wireSort($("sortSelect"), { onChange: refreshAll });
     AVM.modules.pagination.wirePageSize($("pageSizeSelect"), { onChange: refreshAll });
-    // Shared state.pageSize/currentPage, same as the main rate list — see
-    // franchise-rates.js's header comment for why that's safe here.
-    AVM.modules.pagination.wirePageSize($("franchiseRatesPageSize"), { onChange: refreshAll });
     // Individual Tests / Profiles switch — wired once here rather
     // than re-bound every render since the buttons themselves never
     // change, only which one carries .active (read straight back off the
     // DOM by whichever module owns that table's rendering — rate-list.js/
-    // panels-table.js via rateListView() above, or franchise-rates.js via
-    // its own currentView()). Same wiring on both the homepage rate list
-    // and the Franchise savings table, just a different toggle id.
+    // panels-table.js via rateListView() above).
     //
     // Switching to Profiles also resets the Technology filter and Sort
     // choice: the Technology filter chips (and the Filters button that
@@ -193,11 +139,10 @@ window.AVM = window.AVM || {};
           if (btn.dataset.view === "profiles") {
             AVM.state.activeFilters.technology.clear();
             renderFilterGroups();
-            [$("sortSelect"), $("franchiseRatesSort")].forEach(select => {
-              if (!select) return;
-              select.value = select.options[0] ? select.options[0].value : "";
-              delete select.dataset.userSet;
-            });
+            if ($("sortSelect")) {
+              $("sortSelect").value = $("sortSelect").options[0] ? $("sortSelect").options[0].value : "";
+              delete $("sortSelect").dataset.userSet;
+            }
             AVM.state.sortMode = "sr";
           }
           refreshAll();
@@ -205,7 +150,6 @@ window.AVM = window.AVM || {};
       });
     }
     wireViewToggle("rateListViewToggle");
-    wireViewToggle("franchiseViewToggle");
     AVM.modules.testDetail.wireTestDetailDrawer();
 
     if ($("clearFilters")) {

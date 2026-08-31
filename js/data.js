@@ -2756,7 +2756,7 @@ AVM.state = {
   { "id": "total-thyroid-profile", "name": "Total Thyroid Profile", "categoryId": "thyroid",
     "codes": ["TT3", "TT4", "UTSH"],
     "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 60, "b2c": 300 } }
+    "pricing": { "b2b": 50, "b2c": 300 } }
 ];
 
   const PARAMETERS_WRAPPED = {

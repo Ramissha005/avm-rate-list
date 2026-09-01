@@ -2525,7 +2525,7 @@ AVM.state = {
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
       "Transferrin Saturation (%)"
     ], "active": true,
-    "pricing": { "b2b": 220, "b2c": 800 } },
+    "pricing": { "b2b": 250, "b2c": 800 } },
   // Everything AVM 1 Profile has, plus HbA1c (+ its Average Blood Glucose
   // calculated param), Complete Blood Count, and Pancreatic Profile.
   { "id": "avm-profile-2", "name": "AVM 2 Profile", "categoryId": "general-biochemistry",
@@ -2567,7 +2567,7 @@ AVM.state = {
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
-    "pricing": { "b2b": 400, "b2c": 1500 } },
+    "pricing": { "b2b": 500, "b2c": 1500 } },
   // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, Serum
   // Copper, and C-Reactive Protein (CRP) as their own new groups — Ferritin
   // is folded into the existing Iron Profile group instead of getting a
@@ -2616,7 +2616,7 @@ AVM.state = {
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
     ], "active": true,
-    "pricing": { "b2b": 750, "b2c": 3000 } },
+    "pricing": { "b2b": 900, "b2c": 3000 } },
   // Everything AVM 3 Profile has, plus a new Cardiac Profile group (Apo A1,
   // Apo B, Lipoprotein (a), High-Sensitivity CRP + Apo B / Apo A1 Ratio
   // calculated). C-Reactive Protein (CRP) stays its own separate group,
@@ -2667,7 +2667,7 @@ AVM.state = {
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
-    "pricing": { "b2b": 900, "b2c": 3600 } },
+    "pricing": { "b2b": 1100, "b2c": 3600 } },
   // Everything AVM 4 Profile has, plus Homocysteine folded into Cardiac
   // Profile, Folic Acid folded into Vitamin Profile, and three new
   // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
@@ -2720,7 +2720,7 @@ AVM.state = {
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
       "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
-    "pricing": { "b2b": 1450, "b2c": 6000 } },
+    "pricing": { "b2b": 1600, "b2c": 6000 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 180, "b2c": 800 } },

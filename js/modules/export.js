@@ -156,5 +156,78 @@ AVM.modules = AVM.modules || {};
     AVM.utils.helpers.showToast("Rate list exported to Excel");
   }
 
-  AVM.modules.exportProfile = { copyProfileToClipboard, exportProfileCSV, exportRateListCSV };
+  // The Profiles tab's "Export Excel" — one row per ready-made panel
+  // (Kidney Profile, Liver Profile, ...) with its own flat price, same
+  // shape as the on-screen Profiles table (see panels-table.js), rather
+  // than exportRateListCSV's one-row-per-individual-test shape. Takes the
+  // same { pkg, items, pricing } rows panels-table.js's getFiltered()
+  // already produces so the exported file matches whatever's currently
+  // filtered/sorted on screen.
+  function exportPanelsCSV(panelRows) {
+    if (!panelRows || panelRows.length === 0) {
+      AVM.utils.helpers.showToast("Nothing to export");
+      return;
+    }
+    const { packageTestCount } = AVM.modules.calculations;
+    const { categories, categoryById } = AVM.data.getCatalog();
+    const b2b = panelRows.reduce((n, r) => n + r.pricing.b2b, 0);
+    const b2c = panelRows.reduce((n, r) => n + r.pricing.b2c, 0);
+
+    const toRow = ({ pkg, items, pricing }, groupLabel) => ({
+      ...(groupLabel ? { __group: groupLabel } : {}),
+      name: pkg.name, testsIncluded: AVM.modules.panelsTable.testsIncludedText(pkg, items), testCount: packageTestCount(pkg, items),
+      b2b: pricing.b2b, b2c: pricing.b2c, margin: pricing.margin,
+    });
+
+    // Grouped by category (General Biochemistry, Vitamins, Kidney
+    // Function, ...) with a section-banner row ahead of each group's
+    // first profile (see xlsx.js's `__group` handling) — in CATEGORIES'
+    // own declared order (same order every other category-driven listing
+    // on the site follows), filtered down to only the categories actually
+    // present among panelRows so an empty category never gets a banner
+    // with nothing under it. Each group keeps whatever sort
+    // panelsTable.getFiltered() already applied (Default/Name/B2B/B2C/
+    // Margin) as its own internal order.
+    const seen = new Set();
+    const rows = [];
+    categories.map(c => c.id).forEach(catId => {
+      const group = panelRows.filter(r => r.pkg.categoryId === catId);
+      if (!group.length) return;
+      const label = (categoryById[catId] && categoryById[catId].label) || catId;
+      group.forEach((r, i) => { seen.add(r.pkg.id); rows.push(toRow(r, i === 0 ? label : null)); });
+    });
+    // A profile whose categoryId doesn't resolve to any known category
+    // (shouldn't happen — every PACKAGES entry's categoryId matches one
+    // in CATEGORIES today — but a future typo'd id would otherwise vanish
+    // from the export silently) falls into its own trailing group instead.
+    const leftover = panelRows.filter(r => !seen.has(r.pkg.id));
+    leftover.forEach((r, i) => rows.push(toRow(r, i === 0 ? "Other" : null)));
+
+    AVM.utils.xlsx.downloadWorkbook({
+      filename: "avmlabs-profiles.xlsx",
+      sheetName: "Profiles",
+      title: "AVMLabs — Profiles",
+      subtitle: `Generated ${today()} · ${panelRows.length} profile${panelRows.length === 1 ? "" : "s"}`,
+      itemNoun: "profile",
+      columns: [
+        { header: "Profile", key: "name", type: "text", width: 36 },
+        // Same group-aware breakdown the on-screen "Tests included"
+        // expander shows (see panels-table.js's testsIncludedText), flattened
+        // to plain text for the cell.
+        { header: "Tests Included", key: "testsIncluded", type: "text", width: 60 },
+        // "text", not "currency" — xlsx.js's only two numeric-cell styles
+        // both apply the ₹ currency format (see stylesXml's numFmtId 164),
+        // which would print this plain test count as "₹28".
+        { header: "No of Tests", key: "testCount", type: "text", width: 12 },
+        { header: "B2B", key: "b2b", type: "currency", width: 12 },
+        { header: "B2C", key: "b2c", type: "currency", width: 12 },
+        { header: "Margin", key: "margin", type: "margin", width: 12 },
+      ],
+      rows,
+      totals: { b2b, b2c, margin: b2c - b2b },
+    });
+    AVM.utils.helpers.showToast("Profiles exported to Excel");
+  }
+
+  AVM.modules.exportProfile = { copyProfileToClipboard, exportProfileCSV, exportRateListCSV, exportPanelsCSV };
 })();

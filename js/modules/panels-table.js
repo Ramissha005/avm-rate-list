@@ -97,18 +97,34 @@ AVM.modules = AVM.modules || {};
     return `<p>${dotJoin(names, esc)}</p>`;
   }
 
-  function renderPanelsTable({ packages, elements, onChange }) {
-    if (!elements || !elements.body) return;
-    const { money, escapeHtml: esc } = AVM.utils.formatters;
-    const { byCode } = AVM.data.getCatalog();
-    const { packageTestCount } = AVM.modules.calculations;
-
-    if (elements.head) {
-      elements.head.className = "fr-head fr-panels-head";
-      elements.head.innerHTML = `<div>Profile</div><div>No of<br>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+  // Plain-text version of the same "Tests included" breakdown, for the
+  // Profiles Excel export's own column (see export.js's exportPanelsCSV)
+  // — a spreadsheet cell can't hold renderTestDetails()'s HTML, so this
+  // mirrors its group-aware logic with ", "/"; " joins instead of dots
+  // and <div>s.
+  function testsIncludedText(pkg, items) {
+    if (pkg.groups && pkg.groups.length) {
+      const { byCode } = AVM.data.getCatalog();
+      return pkg.groups.map(g => {
+        const resolved = g.codes.map(c => byCode[c]).filter(Boolean);
+        const names = [...resolved.map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
+        return `${g.label}: ${names.join(", ")}`;
+      }).join("; ");
     }
+    const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
+    return names.join(", ");
+  }
 
-    const term = ((elements.searchInput && elements.searchInput.value) || "").trim().toLowerCase();
+  // Shared by the on-page table below and the Profiles "Export Excel"
+  // button (see export.js's exportPanelsCSV) — both need the exact same
+  // active-technology + search filtering and Default/Name/B2B/B2C/Margin
+  // sort, so the exported file always matches what's currently on screen.
+  // Reads straight off AVM.state (search.js/sorting.js keep it in sync
+  // with the search box and sort dropdown), same convention rate-list.js's
+  // own getFiltered() uses.
+  function getFiltered(packages) {
+    const { byCode } = AVM.data.getCatalog();
+    const term = (AVM.state.searchTerm || "").trim().toLowerCase();
     const activeTech = AVM.state.activeFilters.technology;
     const rows = (packages || [])
       .filter(pkg => pkg.active !== false)
@@ -127,8 +143,24 @@ AVM.modules = AVM.modules || {};
     // site (the old bundle-chip row included), so AVM Profile A/B/C/
     // Infertility A/Anemia A show first here exactly like they do on the
     // homepage's own Profiles view.
-    const sortMode = (elements.sortSelect && elements.sortSelect.value) || "";
-    if (SORTERS[sortMode]) rows.sort(SORTERS[sortMode]);
+    if (SORTERS[AVM.state.sortMode]) rows.sort(SORTERS[AVM.state.sortMode]);
+    return rows;
+  }
+
+  function renderPanelsTable({ packages, elements, onChange }) {
+    if (!elements || !elements.body) return;
+    const { money, escapeHtml: esc } = AVM.utils.formatters;
+    const { byCode } = AVM.data.getCatalog();
+    const { packageTestCount } = AVM.modules.calculations;
+
+    if (elements.head) {
+      elements.head.className = "fr-head fr-panels-head";
+      elements.head.innerHTML = `<div>Profile</div><div>No of<br>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+    }
+
+    const rows = getFiltered(packages);
+    const term = AVM.state.searchTerm || "";
+    const activeTech = AVM.state.activeFilters.technology;
 
     if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
 
@@ -234,5 +266,5 @@ AVM.modules = AVM.modules || {};
     });
   }
 
-  AVM.modules.panelsTable = { renderPanelsTable };
+  AVM.modules.panelsTable = { renderPanelsTable, getFiltered, testsIncludedText };
 })();

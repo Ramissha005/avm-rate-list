@@ -185,15 +185,16 @@ AVM.utils = AVM.utils || {};
   }
 
   // columns: [{header, key, type:'text'|'currency'|'margin', width}]
-  // rows: array of plain objects keyed by column.key
+  // rows: array of plain objects keyed by column.key. A row can also carry
+  // `__group: "Label"` (see export.js's exportPanelsCSV, grouping profiles
+  // by category) — a bold section-banner row spanning every column is
+  // inserted immediately above that row, and zebra striping restarts at
+  // the top of each new group so it reads as its own little table.
   // totals: { key: number } for columns that get a summed footer cell
-  function worksheetXml({ title, subtitle, columns, rows, totals }) {
+  function worksheetXml({ title, subtitle, columns, rows, totals, itemNoun = "test" }) {
     const lastCol = colLetter(columns.length - 1);
     const headerRow = 4;
     const firstDataRow = headerRow + 1;
-    const lastDataRow = firstDataRow + rows.length - 1;
-    const hasTotals = totals && rows.length > 0;
-    const totalsRow = lastDataRow + 1;
 
     const cols = `<cols>${columns.map((c, i) => `<col min="${i + 1}" max="${i + 1}" width="${c.width}" customWidth="1"/>`).join("")}</cols>`;
 
@@ -206,9 +207,27 @@ AVM.utils = AVM.utils || {};
     }).join("");
     const headerRowXml = `<row r="${headerRow}" ht="20">${headerCells}</row>`;
 
-    const dataRowsXml = rows.map((row, ri) => {
-      const r = firstDataRow + ri;
-      const zebra = ri % 2 === 1;
+    // A running row cursor, not a fixed firstDataRow+index formula — each
+    // banner row inserted ahead of a group pushes every row after it down
+    // by one, so the sheet-row a given data row lands on can't be derived
+    // from its position in `rows` alone.
+    let cursor = firstDataRow;
+    let zebraIndex = 0;
+    let dataCount = 0;
+    const dataRowsXmlParts = [];
+    const groupMergeRefs = [];
+    rows.forEach(row => {
+      if (row.__group) {
+        // Reuses the header row's own navy/white style (S.headerLeft)
+        // rather than a dedicated style index — one less entry to keep in
+        // sync with stylesXml's cellXfs order.
+        dataRowsXmlParts.push(`<row r="${cursor}" ht="19"><c r="A${cursor}" t="inlineStr" s="${S.headerLeft}"><is><t>${xmlEscape(row.__group)}</t></is></c></row>`);
+        groupMergeRefs.push(`<mergeCell ref="A${cursor}:${lastCol}${cursor}"/>`);
+        cursor++;
+        zebraIndex = 0;
+      }
+      const r = cursor;
+      const zebra = zebraIndex % 2 === 1;
       const cells = columns.map((c, ci) => {
         const ref = `${colLetter(ci)}${r}`;
         const val = row[c.key];
@@ -219,30 +238,40 @@ AVM.utils = AVM.utils || {};
         const s = c.type === "margin" ? (zebra ? S.marginCellZebra : S.marginCell) : (zebra ? S.numCellZebra : S.numCell);
         return `<c r="${ref}" s="${s}"><v>${Number(val) || 0}</v></c>`;
       }).join("");
-      return `<row r="${r}">${cells}</row>`;
-    }).join("");
+      dataRowsXmlParts.push(`<row r="${r}">${cells}</row>`);
+      cursor++;
+      zebraIndex++;
+      dataCount++;
+    });
+    const dataRowsXml = dataRowsXmlParts.join("");
+    const lastDataRow = cursor - 1;
+    const hasTotals = totals && dataCount > 0;
+    const totalsRow = lastDataRow + 1;
 
     let totalsRowXml = "";
-    let mergeCells;
+    const mergeRefs = [`<mergeCell ref="A1:${lastCol}1"/>`, `<mergeCell ref="A2:${lastCol}2"/>`, ...groupMergeRefs];
     if (hasTotals) {
       const totalKeys = Object.keys(totals);
       const firstTotalIdx = columns.findIndex(c => totalKeys.includes(c.key));
       const labelSpan = firstTotalIdx > 0 ? firstTotalIdx : 1;
       const cells = [];
-      cells.push(`<c r="A${totalsRow}" t="inlineStr" s="${S.totalLabel}"><is><t>Total — ${rows.length} test${rows.length === 1 ? "" : "s"}</t></is></c>`);
+      cells.push(`<c r="A${totalsRow}" t="inlineStr" s="${S.totalLabel}"><is><t>Total — ${dataCount} ${itemNoun}${dataCount === 1 ? "" : "s"}</t></is></c>`);
       columns.forEach((c, ci) => {
         if (ci === 0 || !totalKeys.includes(c.key)) return;
         const ref = `${colLetter(ci)}${totalsRow}`;
+        // Banner rows fall inside this range too (SUM() over their blank
+        // numeric cells just contributes nothing), so the range can stay
+        // one contiguous firstDataRow:lastDataRow span same as the
+        // ungrouped case rather than needing to skip over them.
         const range = `${colLetter(ci)}${firstDataRow}:${colLetter(ci)}${lastDataRow}`;
         const s = c.type === "margin" ? S.totalMargin : S.totalNum;
         cells.push(`<c r="${ref}" s="${s}"><f>SUM(${range})</f><v>${Number(totals[c.key]) || 0}</v></c>`);
       });
       totalsRowXml = `<row r="${totalsRow}">${cells.join("")}</row>`;
       // merge label across the leading non-total columns
-      mergeCells = `<mergeCells count="3"><mergeCell ref="A1:${lastCol}1"/><mergeCell ref="A2:${lastCol}2"/><mergeCell ref="A${totalsRow}:${colLetter(Math.max(labelSpan - 1, 0))}${totalsRow}"/></mergeCells>`;
-    } else {
-      mergeCells = `<mergeCells count="2"><mergeCell ref="A1:${lastCol}1"/><mergeCell ref="A2:${lastCol}2"/></mergeCells>`;
+      mergeRefs.push(`<mergeCell ref="A${totalsRow}:${colLetter(Math.max(labelSpan - 1, 0))}${totalsRow}"/>`);
     }
+    const mergeCells = `<mergeCells count="${mergeRefs.length}">${mergeRefs.join("")}</mergeCells>`;
 
     const filterRef = `A${headerRow}:${lastCol}${lastDataRow}`;
     const dimensionEnd = hasTotals ? totalsRow : lastDataRow;
@@ -251,7 +280,7 @@ AVM.utils = AVM.utils || {};
 <worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><dimension ref="A1:${lastCol}${dimensionEnd}"/><sheetViews><sheetView tabSelected="1" workbookViewId="0"><pane ySplit="${headerRow}" topLeftCell="A${firstDataRow}" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><sheetFormatPr defaultRowHeight="15"/>${cols}<sheetData>${titleRow}${subtitleRow}${headerRowXml}${dataRowsXml}${totalsRowXml}</sheetData><autoFilter ref="${filterRef}"/>${mergeCells}</worksheet>`;
   }
 
-  function downloadWorkbook({ filename, sheetName, title, subtitle, columns, rows, totals }) {
+  function downloadWorkbook({ filename, sheetName, title, subtitle, columns, rows, totals, itemNoun }) {
     const enc = new TextEncoder();
     const files = [
       { name: "[Content_Types].xml", data: enc.encode(contentTypesXml()) },
@@ -259,7 +288,7 @@ AVM.utils = AVM.utils || {};
       { name: "xl/workbook.xml", data: enc.encode(workbookXml(sheetName)) },
       { name: "xl/_rels/workbook.xml.rels", data: enc.encode(workbookRelsXml()) },
       { name: "xl/styles.xml", data: enc.encode(stylesXml()) },
-      { name: "xl/worksheets/sheet1.xml", data: enc.encode(worksheetXml({ title, subtitle, columns, rows, totals })) },
+      { name: "xl/worksheets/sheet1.xml", data: enc.encode(worksheetXml({ title, subtitle, columns, rows, totals, itemNoun })) },
     ];
     const blob = makeZip(files);
     const url = URL.createObjectURL(blob);

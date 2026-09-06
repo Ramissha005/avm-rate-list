@@ -219,8 +219,21 @@ window.AVM = window.AVM || {};
     if ($("copyList")) $("copyList").onclick = AVM.modules.exportProfile.copyProfileToClipboard;
     if ($("printList")) $("printList").onclick = AVM.modules.print.openPrintProfile;
     if ($("exportProfileCsv")) $("exportProfileCsv").onclick = AVM.modules.exportProfile.exportProfileCSV;
+    // Exports whichever table is actually showing — Tests view exported
+    // one row per test same as always, but Profiles view used to fall
+    // through to this same tests export regardless (silently exporting
+    // the Tests data, or "Nothing to export" if the current search/filter
+    // happened to match no tests) since this button was hardwired to
+    // exportRateListCSV. Routes to exportPanelsCSV instead when Profiles
+    // is the active tab.
     if ($("exportRateListCsv")) {
-      $("exportRateListCsv").onclick = () => AVM.modules.exportProfile.exportRateListCSV(AVM.modules.rateList.getFiltered(catalog.standaloneTests));
+      $("exportRateListCsv").onclick = () => {
+        if (rateListView() === "profiles") {
+          AVM.modules.exportProfile.exportPanelsCSV(AVM.modules.panelsTable.getFiltered(catalog.packages));
+        } else {
+          AVM.modules.exportProfile.exportRateListCSV(AVM.modules.rateList.getFiltered(catalog.standaloneTests));
+        }
+      };
     }
 
     // Close the mobile hamburger dropdown after tapping one of its links —

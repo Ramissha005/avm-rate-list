@@ -186,10 +186,9 @@ AVM.utils = AVM.utils || {};
 
   // columns: [{header, key, type:'text'|'currency'|'margin', width}]
   // rows: array of plain objects keyed by column.key. A row can also carry
-  // `__group: "Label"` (see export.js's exportPanelsCSV, grouping profiles
-  // by category) — a bold section-banner row spanning every column is
-  // inserted immediately above that row, and zebra striping restarts at
-  // the top of each new group so it reads as its own little table.
+  // `__group: "Label"` — a bold section-banner row spanning every column
+  // is inserted immediately above that row, and zebra striping restarts
+  // at the top of each new group so it reads as its own little table.
   // totals: { key: number } for columns that get a summed footer cell
   function worksheetXml({ title, subtitle, columns, rows, totals, itemNoun = "test" }) {
     const lastCol = colLetter(columns.length - 1);

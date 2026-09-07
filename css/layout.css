@@ -32,7 +32,7 @@ button{ font-family:inherit; cursor:pointer; }
 }
 
 .nav{
-  max-width:1180px; margin:0 auto; padding:var(--space-3) var(--space-7);
+  max-width:1180px; margin:0 auto; padding:var(--space-4) var(--space-7);
   display:flex; align-items:center; justify-content:space-between; gap:var(--space-5);
 }
 
@@ -90,10 +90,10 @@ button{ font-family:inherit; cursor:pointer; }
   background:linear-gradient(180deg, #0E2238, #173A5A);
   color:#EFF3F6;
   /* Was space-24/space-20 (96px/80px), then space-16/space-12. Tightened
-     again now that the franchise band grew into a two-card CTA row (see
-     .cta-grid) — the whole hero (headline through the CTA cards) still
-     needs a realistic shot at fitting above the fold on common laptop
-     heights (~900px), not just ultra-tall monitors. */
+     again once the SARC CTA band was folded into the hero itself — the
+     whole hero (headline through the CTA band) still needs a realistic
+     shot at fitting above the fold on common laptop heights (~900px),
+     not just ultra-tall monitors. */
   padding:var(--space-12) 0 var(--space-8);
   position:relative; overflow:hidden;
 }
@@ -115,11 +115,6 @@ button{ font-family:inherit; cursor:pointer; }
   pointer-events:none;
 }
 
-.hero__grid{
-  position:relative; z-index:1;
-  display:grid; grid-template-columns:1.05fr 0.85fr; gap:var(--space-10); align-items:center;
-}
-
 .hero h1{
   font-size:var(--text-5xl);
   margin:var(--space-5) 0 var(--space-6);
@@ -129,42 +124,70 @@ button{ font-family:inherit; cursor:pointer; }
 .hero__content{
   position:relative; z-index:1;
   max-width:720px;
-  /* Grid items default to `min-width:auto`, which means the item won't
-     shrink below its content's own minimum intrinsic width — so a single
-     wide-content descendant (e.g. an overflow-x:auto scroll strip that
-     miscalculates, or just a long unbreakable string) can silently stretch
-     this whole grid column past the viewport and drag every sibling in it
-     (headline, CTAs) along, well past `.hero`'s own edge-to-edge overflow
-     clip. Overriding it to 0 is what actually lets `.hero__specialties`
-     scroll internally instead of inflating this column's width.
-     The z-index bump keeps the copy above .hero__image-wrap below, which
-     is also absolutely positioned inside .hero. */
-  min-width:0;
 }
 
-/* SARC hero has no second grid column (no image/slip/chart) — rather than
-   cap the text at a narrow reading width and leave the rest of the row
-   empty, this modifier drops the 720px cap so the headline/paragraph run
-   left-to-right across the full hero instead. Scoped to this modifier
-   (not the bare .hero__content rule above) so it doesn't touch the
-   homepage/franchise heroes, which *do* have a second column and need to
-   stay capped against it. */
+/* Drops the 720px cap so text fills the rest of its row instead of
+   stopping at a narrow reading width and leaving empty space beside it.
+   Used both by heroes with no second grid column at all (sarc/crl — the
+   "row" is the full hero) and by the homepage hero, which has a second
+   column (the portrait) but a wide enough share of it (see .hero__grid)
+   that the bare 720px cap was leaving a dead gap between the text and
+   the photo rather than actually being needed to avoid overlapping it. */
 .hero__content--wide{ max-width:none; }
 
-/* Franchise page's hero image — bleeds to the right edge of the viewport
-   and fills the hero's full height (an absolutely-positioned layer inside
-   .hero, not a grid column), rather than sitting in a separate rounded
-   card. Its left edge fades into the hero's own navy backdrop via
-   mask-image, so text and photo blend into one scene instead of reading
-   as two stacked boxes. */
-.hero__image-wrap{
-  position:absolute; top:0; right:0; bottom:0; z-index:0;
-  width:min(48%, 760px); pointer-events:none;
+/* Two-column hero — text beside a portrait cutout. Revives the
+   .hero__grid pattern the homepage's original hero used for its own
+   second column (see git history) rather than inventing a parallel
+   one. align-items:end (not the default stretch/center) so a standing
+   cutout figure plants its feet at the same baseline as the text
+   column instead of floating centered against it. */
+.hero__grid{
+  display:grid; grid-template-columns:7fr 3fr; gap:var(--space-10); align-items:end;
 }
-.hero__image{
-  display:block; width:100%; height:100%; object-fit:cover; object-position:center;
-  -webkit-mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 45%);
-  mask-image:linear-gradient(90deg, transparent 0%, rgba(0,0,0,.55) 20%, #000 45%);
+
+/* The portrait is a transparent cutout (no background of its own), not
+   a rectangular photo — a card frame (border-radius, background,
+   box-shadow-as-border) would paint a visible box around it, showing
+   through everywhere the cutout itself is transparent. So instead of
+   the site's usual card language this sits directly on the hero's own
+   dark gradient: natural width/height (no crop-to-box object-fit) and
+   a filter:drop-shadow, which follows the cutout's actual opaque
+   pixels rather than its rectangular bounding box the way box-shadow
+   would.
+   The negative margins let it bleed past the two paddings that would
+   otherwise box it in — .wrap's own right padding (moving it further
+   right, past where the text column's edge sits) and .hero's bottom
+   padding (letting him stand flush against the section's true bottom
+   edge instead of leaving a strip of bare gradient beneath his feet,
+   which is what was reading as "pasted on" rather than standing in the
+   scene). .hero's own overflow:hidden clips both cleanly at the
+   section boundary rather than spilling into the content below. */
+.hero__portrait{
+  position:relative;
+  margin-right:calc(-1 * var(--space-7));
+  margin-bottom:calc(-1 * var(--space-8));
+}
+/* Soft ambient glow behind him, same warm tone as .hero::before's
+   corner glow — gives the cutout a light source to sit in rather than
+   floating on a flat gradient with nothing grounding it. */
+.hero__portrait::before{
+  content:"";
+  position:absolute;
+  left:50%; top:34%;
+  width:80%; aspect-ratio:1;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(255,180,71,0.18), rgba(255,180,71,0) 70%);
+  filter:blur(6px);
+}
+.hero__portrait img{
+  position:relative;
+  width:100%; height:auto; display:block;
+  /* Two stacked shadows rather than one — a tight, darker contact
+     shadow plus a larger, softer ambient one — reads as a real cast
+     shadow instead of the single flat blur under a sticker. */
+  filter:
+    drop-shadow(0 8px 10px rgba(0,0,0,0.3))
+    drop-shadow(0 32px 40px rgba(0,0,0,0.4));
 }
 
 .hero__brand-wrap{
@@ -209,10 +232,12 @@ button{ font-family:inherit; cursor:pointer; }
   border-radius:999px;
   background:linear-gradient(90deg, rgba(255,180,71,0.95), rgba(255,180,71,0.25));
 }
-/* Homepage hero only: the NABL accreditation badge sits right under this
-   headline now, so the gold underline is dropped there to avoid two
-   amber accents stacked on top of each other. sarc.html/crl.html keep
-   the underline since they have no badge beneath it. */
+/* Used wherever another amber-accented element sits right under the
+   headline — the gold underline would otherwise stack two amber
+   accents on top of each other. That's the homepage hero's boxed JVL
+   intro line today, and pages/rates.html's NABL badge; sarc.html/
+   crl.html keep the underline since nothing sits directly beneath it
+   there. */
 .hero__headline--no-rule::after{ content:none; }
 
 /* .hero__headline is used on 3 pages' actual <h1> (sarc/crl/index), which
@@ -227,13 +252,33 @@ button{ font-family:inherit; cursor:pointer; }
 .hero__sub{
   font-size:var(--text-md); color:#C4D2DC; max-width:46ch; margin-bottom:var(--space-4);
 }
-/* SARC hero's paragraph specifically — the 46ch cap above is what every
-   other hero's .hero__sub wants (short paragraph, narrower column), but
-   this page's hero has no second column competing for width, so the
-   same cap left this one sentence wrapping across 4 short lines instead
-   of 2 wide ones. Scoped to this modifier so it doesn't touch .hero__sub
-   anywhere else. */
+/* The 46ch cap above suits a narrow text column (short paragraph,
+   competing with a second column for width), but sarc.html's hero has
+   no second column to compete with, and the homepage hero's text
+   column is wide enough (see .hero__content--wide's own comment) that
+   46ch was wrapping every paragraph far short of the space actually
+   available. This modifier lets both run wider instead. Scoped so it
+   doesn't touch .hero__sub anywhere else. */
 .hero__sub--wide{ max-width:90ch; }
+
+/* Boxed variant — same amber rounded-box treatment as pages/rates.html's
+   NABL badge (border, faint amber tint) so the two read as one family
+   of trust cues, but sized as a block for a full sentence rather than a
+   short pill label. A modest fixed --radius rather than the badge's
+   pill-shaped --radius-full: this can wrap to 2 lines on mobile, and a
+   pill radius on a box tall enough to wrap balloons into a blob instead
+   of reading as a rounded box (see the .toast comment in
+   components.css for the same tradeoff). Used on the homepage's
+   (index.html, the JVL page) opening line to call it out from the
+   plain paragraphs below it. */
+.hero__sub--boxed{
+  display:inline-block;
+  padding:0.7rem 1.2rem;
+  border:1.5px solid var(--amber);
+  border-radius:var(--radius);
+  background:rgba(219,138,52,0.1);
+  color:#e4edf3;
+}
 
 .hero__sub--lead{
   margin-top:var(--space-3);
@@ -244,15 +289,6 @@ button{ font-family:inherit; cursor:pointer; }
   letter-spacing:0.08em;
   text-transform:none;
   font-family:var(--font-body);
-}
-
-/* Same gold gradient as .hero__headline::after (the homepage hero's
-   underline), as a standalone bar for pages that don't have a headline
-   to attach the pseudo-element to. */
-.hero__gold-rule{
-  width:120px; height:4px; border-radius:999px;
-  background:linear-gradient(90deg, rgba(255,180,71,0.95), rgba(255,180,71,0.25));
-  margin:calc(var(--space-4) * -1) 0 var(--space-4);
 }
 
 .hero__focus-title{
@@ -270,10 +306,12 @@ button{ font-family:inherit; cursor:pointer; }
    amber tint (not solid, unlike .btn--amber) so it reads as a status
    badge rather than a call to action. */
 .hero__accred-badge{
-  display:inline-flex;
+  display:flex;
+  width:fit-content;
   align-items:center;
   gap:var(--space-2);
   padding:0.5rem 1.1rem;
+  margin-top:var(--space-3);
   margin-bottom:var(--space-3);
   border:1.5px solid var(--amber);
   border-radius:var(--radius-full);
@@ -291,12 +329,12 @@ button{ font-family:inherit; cursor:pointer; }
 
 .hero__specialties{
   max-width:760px;
-  gap:var(--space-2);
+  gap:var(--space-3);
 }
 
 .hero__specialties > span{
   font-size:0.7rem;
-  padding:0.52rem 0.75rem;
+  padding:0.62rem 0.9rem;
   background:rgba(255,255,255,0.04);
   border-color:rgba(255,255,255,0.16);
   letter-spacing:0.01em;
@@ -304,42 +342,39 @@ button{ font-family:inherit; cursor:pointer; }
 
 section{ padding:var(--space-20) 0; }
 
-.section-head{ max-width:640px; margin-bottom:var(--space-10); }
+.section-head{ max-width:640px; margin-bottom:var(--space-12); }
 
 .section-head h2{ font-size:var(--text-4xl); margin:var(--space-3) 0 var(--space-3); color:var(--navy); }
 
 .section-head p{ color:var(--ink-soft); font-size:var(--text-sm); margin-top:var(--space-2); }
 
-/* CRL "About" body copy (pages/crl.html) — sits below a .section-head
-   heading but isn't capped to its 640px reading width. This is longer,
-   denser body text meant to use the section's full measure rather than
-   read as a short intro blurb, so it gets its own wider, larger-type
-   treatment instead of inheriting .section-head p. */
-.crl-about{ display:flex; flex-direction:column; gap:var(--space-4); max-width:1100px; }
-.crl-about p{ font-size:var(--text-md); line-height:1.7; color:var(--ink-soft); margin:0; }
+/* Long-form body copy (pages/crl.html, index.html/JVL) — sits below a
+   .section-head heading but isn't capped to its 640px reading width.
+   This is longer, denser body text meant to use the section's full
+   measure rather than read as a short intro blurb, so it gets its own
+   wider, larger-type treatment instead of inheriting .section-head p. */
+.copy-block{ display:flex; flex-direction:column; gap:var(--space-4); max-width:1100px; }
+.copy-block p{ font-size:var(--text-md); line-height:1.7; color:var(--ink-soft); margin:0; }
 
 .ratelist{ background:var(--paper-2); }
 
-/* Individual Tests/Panels toggle + the search/filter/sort bar stick
-   together as one unit while scrolling (see index.html/franchise.html —
-   .fr-view-toggle and .rl-controls sit inside this wrapper) — sticky
-   lives on the wrapper itself rather than on each piece separately with
-   two hand-tuned top offsets that would drift apart if either one's own
-   height ever changed.
-   Needs its own opaque background: .fr-view-toggle is an inline-flex
-   pill that's only as wide as its own two buttons, and it also has a
-   margin-bottom gap before .rl-controls — without a background here,
-   both that empty space beside the toggle and the gap below it are
-   transparent, so rows scrolled underneath show through the pinned bar
-   instead of being covered by it. Matches .ratelist's own background so
-   the pinned bar blends into the section instead of reading as a
-   separate strip. */
-.fr-sticky-controls{ position:sticky; top:64px; z-index:40; background:var(--paper-2); padding:var(--space-3) 0; }
+/* White band for a page with several stacked .ratelist sections back to
+   back (e.g. index.html/JVL) — alternating this in breaks up what would
+   otherwise read as one long undifferentiated grey field into distinct,
+   scannable sections. */
+.ratelist--white{ background:var(--card); }
+
+/* The search/filter/sort bar (.rl-controls, see index.html) sticks in
+   place while scrolling — kept in its own wrapper rather than making
+   .rl-controls itself sticky so a top offset only needs setting once
+   here. Needs its own opaque background to match .ratelist's so rows
+   scrolled underneath don't show through the pinned bar. */
+.fr-sticky-controls{ position:sticky; top:var(--fr-sticky-top, 64px); z-index:40; background:var(--paper-2); padding:var(--space-3) 0; }
 
 .rl-controls{
   display:flex; flex-wrap:wrap; gap:var(--space-4); align-items:center; justify-content:space-between;
-  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-4); margin-bottom:var(--space-6);
-  box-shadow:0 10px 24px -18px rgba(14,34,56,0.35);
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius); padding:var(--space-5); margin-bottom:var(--space-6);
+  box-shadow:var(--shadow-sm);
 }
 
 .rl-right{ display:flex; gap:var(--space-4); align-items:center; flex-wrap:wrap; }
@@ -375,7 +410,8 @@ section{ padding:var(--space-20) 0; }
 
 .filters-panel{
   background:#fff; border:1px solid var(--line); border-radius:var(--radius);
-  padding:var(--space-5); margin-bottom:var(--space-6);
+  padding:var(--space-6); margin-bottom:var(--space-6);
+  box-shadow:var(--shadow-sm);
 }
 .filters-panel .filter-group{ padding-bottom:var(--space-4); margin-bottom:var(--space-4); border-bottom:1px solid var(--paper-2); }
 .filters-panel .filter-group:last-child{ padding-bottom:0; margin-bottom:0; border-bottom:none; }
@@ -396,30 +432,34 @@ section{ padding:var(--space-20) 0; }
    an overflow:hidden ancestor silently breaks position:sticky on any
    descendant (it isn't an actual scrolling container, so the sticky
    element never gets to "travel": it just sits clipped in its static
-   position). .rl-head/.fr-head's own top corners and .rl-row/.fr-row's
-   own bottom corners carry matching border-radius instead, so the
-   rounded-corner look survives without it. */
-.rl-table{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); }
+   position). .rl-head's own top corners and .rl-row's own bottom corners
+   carry matching border-radius instead, so the rounded-corner look
+   survives without it. */
+.rl-table{ background:#fff; border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-sm); }
 
 .rl-head, .rl-row{
   display:grid;
-  grid-template-columns:70px minmax(0,1.7fr) 150px 68px 78px 78px 96px 54px;
-  gap:var(--space-3); align-items:center; padding:var(--space-3) var(--space-4);
+  grid-template-columns:70px minmax(0,1.7fr) 150px 68px 78px 78px 96px;
+  gap:var(--space-3); align-items:center; padding:var(--space-4) var(--space-5);
 }
 
 /* Sticky, same technique as .fr-sticky-controls above (position:sticky +
    opaque background so scrolling rows don't show through) — stacks right
-   below it rather than at the same top:64px, so the two don't overlap.
-   The 260px = .fr-sticky-controls' own ~196px rendered height + its own
-   64px top offset; re-measure both if either bar's content changes.
+   below it rather than at the same offset, so the two don't overlap.
+   --rl-head-top is computed at runtime (see app.js's syncStickyOffsets)
+   as the site header's real height + .fr-sticky-controls' real rendered
+   height — a hand-measured pixel guess here silently drifts out of sync
+   the moment either bar's own content/height changes (this is the second
+   time that's happened — a toggle above .rl-controls was added, then
+   later removed, each time leaving a stale hardcoded number behind).
    z-index:30 keeps it above row content but below .fr-sticky-controls'
    own z-index:40. Only ever visible above 960px — the responsive rule
-   below hides both .rl-head and .fr-head entirely under that, so
-   nothing extra is needed to turn this off on mobile.
+   below hides .rl-head entirely under that, so nothing extra is needed
+   to turn this off on mobile.
    Its own top corners are rounded to match .rl-table's (see .rl-table's
    own comment on why overflow:hidden isn't what clips them anymore). */
 .rl-head{
-  position:sticky; top:260px; z-index:30;
+  position:sticky; top:var(--rl-head-top, 204px); z-index:30;
   font-family:var(--font-body); font-size:var(--text-xs); font-weight:700; text-transform:uppercase; letter-spacing:.06em;
   color:var(--ink-faint); border-bottom:1px solid var(--line); background:var(--paper-2);
   border-top-left-radius:var(--radius); border-top-right-radius:var(--radius);
@@ -431,111 +471,9 @@ section{ padding:var(--space-20) 0; }
 
 .rl-row:hover{ background:#F4F5F6; }
 
-.rl-row.is-added{ background:rgba(27,110,98,0.06); }
-
 .rl-disclaimer{ margin-top:var(--space-4); font-size:var(--text-sm); color:var(--ink-faint); }
 
-/* ---------- Shared .fr-head/.fr-row grid shell — the base
-   grid-template-columns here is always overridden by the more specific
-   .fr-panels-head/.fr-panels-row rule below (the only thing still using
-   this shell, since the homepage's own Tests view uses .rl-head/.rl-row
-   instead); the non-grid properties (padding, border, hover, etc.) stay
-   shared between the two. */
-.fr-head, .fr-row{
-  display:grid;
-  grid-template-columns:70px minmax(0,1.8fr) 110px 130px 110px 54px;
-  gap:var(--space-3); align-items:center; padding:var(--space-3) var(--space-4);
-}
-
-/* Sticky, same reasoning as .rl-head above — this is the Profiles view's
-   own header row, sharing the same position in the layout (toggled
-   display:none/'' against .rl-head, never both visible at once), so it
-   needs the same top offset to line up in the same spot. */
-.fr-head{
-  position:sticky; top:260px; z-index:30;
-  font-family:var(--font-body); font-size:var(--text-xs); font-weight:700; text-transform:uppercase; letter-spacing:.06em;
-  color:var(--ink-faint); border-bottom:1px solid var(--line); background:var(--paper-2);
-  border-top-left-radius:var(--radius); border-top-right-radius:var(--radius);
-}
-
-.fr-row{ border-bottom:1px solid var(--line); transition:background var(--transition-fast); }
-.fr-row:last-child{ border-bottom:none; border-bottom-left-radius:var(--radius); border-bottom-right-radius:var(--radius); }
-.fr-row:hover{ background:#F4F5F6; }
-
-/* Panels table (see js/modules/panels-table.js) — same shell, but 6
-   columns (Profile, Tests included, first rate, second rate, badge,
-   Action) instead of the Tests view's: no per-test code column, but
-   its own Tests-included count instead (packageTestCount() — every
-   priced code plus any calculated/derived parameters, e.g. AVM
-   Profile A shows 36 even though it's 26 priced codes). Needs both
-   classes combined for specificity over the plain .fr-head/.fr-row
-   rule above. */
-.fr-head.fr-panels-head,
-.fr-row.fr-panels-row{
-  grid-template-columns:minmax(0,1.6fr) 84px 110px 130px 110px 54px;
-}
-
-/* Left-aligned (and .cell-testcount below left-aligned to match) rather
-   than centered — "No of Tests" (forced to wrap onto two lines via a
-   <br> — see panels-table.js/index.html) crowded right up against
-   B2B's own header with barely any gap between them when centered in
-   this 84px column. */
-.fr-head.fr-panels-head > *:nth-child(2){ text-align:left; }
-
-/* Individual Tests vs Profiles switch above the homepage rate list — a
-   segmented control, not filter chips (.rl-filter), since it's picking
-   the dataset itself rather than narrowing one. */
-.fr-view-toggle{
-  display:inline-flex; background:var(--paper-2); border-radius:var(--radius-full);
-  padding:4px; gap:4px; margin-bottom:var(--space-4);
-}
-.fr-view-toggle__btn{
-  font-family:var(--font-body); font-size:var(--text-sm); font-weight:600; color:var(--ink-soft);
-  background:none; border:none; border-radius:var(--radius-full); padding:9px 20px; cursor:pointer;
-  transition:background var(--transition-fast), color var(--transition-fast);
-}
-.fr-view-toggle__btn:hover{ color:var(--ink); }
-.fr-view-toggle__btn.active{ background:var(--navy); color:#fff; }
-
-/* Panels table (see js/modules/panels-table.js) — the per-panel "tests
-   included" toggle inside .cell-name, and the details block it reveals.
-   The details block is a plain sibling after .fr-row, not part of its
-   grid, so it can sit full-width under the row without disturbing that
-   row's own 6-column layout. */
-.fr-panel-toggle{
-  display:block; margin-top:2px; background:none; border:none; padding:0; cursor:pointer;
-  font-family:var(--font-body); font-size:var(--text-xs); font-weight:600; color:var(--teal);
-}
-.fr-panel-toggle:hover{ text-decoration:underline; }
-.fr-panel-details{
-  padding:var(--space-4) var(--space-4) var(--space-4) 82px; border-bottom:1px solid var(--line);
-}
-.fr-panel-details__label{
-  display:block; font-size:var(--text-2xs); font-weight:700; color:var(--ink-faint);
-  text-transform:uppercase; letter-spacing:.05em; margin-bottom:var(--space-3);
-}
-.fr-panel-details p{ margin:0; font-size:var(--text-sm); color:var(--ink-soft); line-height:1.6; }
-.fr-panel-details__dot{ font-weight:700; color:var(--ink-faint); margin:0 6px; }
-
-/* Multi-panel packages (AVM Profile A/B/C, AVM Anemia A — see data.js's
-   per-package `groups`) break their "Tests included" line into one
-   sub-block per named panel it's built from, instead of one flattened
-   line of every test. Each block gets a small colored rail so a
-   several-line panel like Liver Profile still reads as one unit at a
-   glance, rather than leaning on bold text alone to separate it from
-   the block above and below. Standalone tests split out of what used
-   to be one "Additional Tests" bucket (Calcium, CRP, TSH, ...) get this
-   exact same block treatment (see panels-table.js) — just without a
-   body line, since a one-item line would only repeat the heading. */
-.fr-panel-details__group{
-  margin-top:var(--space-4); padding-left:var(--space-3); border-left:2px solid var(--teal-bg);
-}
-.fr-panel-details__group:first-child{ margin-top:0; }
-.fr-panel-details__group-label{
-  display:block; font-size:var(--text-xs); font-weight:700; color:var(--navy); margin-bottom:3px;
-}
-
-footer{ background:var(--navy); color:#B9C7D1; padding:var(--space-14) 0 var(--space-7); }
+footer{ background:var(--navy); color:#B9C7D1; padding:var(--space-16) 0 var(--space-7); }
 .footer__top{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:var(--space-10); margin-bottom:var(--space-10); }
 .footer__brand p{ margin-top:var(--space-3); font-size:var(--text-sm); color:#93A6B4; max-width:34ch; }
 footer h4{ font-family:var(--font-mono); font-size:var(--text-xs); text-transform:uppercase; letter-spacing:.08em; color:#7E93A2; margin-bottom:var(--space-4); }
@@ -548,7 +486,10 @@ footer a:hover{ color:#fff; }
   font-size:var(--text-xs); color:#7E93A2;
 }
 
-/* ---------- Cart / detail drawers — frosted glass ---------- */
+/* ---------- Slide-out drawer shell — frosted glass. Currently only the
+   test detail drawer uses this (see index.html/pages/*.html), but the
+   class names stay generic (.cart-*) in case another drawer needs the
+   same shell later. ---------- */
 .cart-overlay{
   position:fixed; inset:0; background:rgba(10,20,32,0.45); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
   opacity:0; pointer-events:none; transition:opacity var(--transition); z-index:80;
@@ -570,13 +511,4 @@ footer a:hover{ color:#fff; }
 
 .cart-head{ display:flex; justify-content:space-between; align-items:center; padding:var(--space-5) var(--space-6); border-bottom:1px solid var(--line); gap:var(--space-3); }
 
-.cart-head__left{ display:flex; align-items:center; gap:var(--space-4); flex-wrap:wrap; }
-
 .cart-body{ flex:1 1 auto; min-height:0; overflow-y:auto; padding:var(--space-4) var(--space-6); }
-
-.cart-foot{
-  flex:0 0 auto;
-  border-top:1px solid var(--line); padding:var(--space-3) var(--space-6) var(--space-4);
-}
-
-.cart-actions{ display:flex; gap:var(--space-3); flex-wrap:wrap; margin-top:var(--space-3); }

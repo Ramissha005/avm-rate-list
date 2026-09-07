@@ -6,11 +6,10 @@ AVM.modules = AVM.modules || {};
   // collapsed (heading + count only) so a test with a long panel like
   // CBC's 28 reportable results doesn't turn the drawer into one long
   // scroll by default; click to drop down and see them all. Keyed by
-  // test code, mirrors panels-table.js's own `expanded` Set for "Tests
-  // included" — not persisted, resets each session.
+  // test code — not persisted, resets each session.
   const expandedParams = new Set();
 
-  function renderTestDetail(container, test, onChange) {
+  function renderTestDetail(container, test) {
     if (!container) return;
     if (!test) {
       container.innerHTML = `<div class="td-empty">Test not found.</div>`;
@@ -19,35 +18,6 @@ AVM.modules = AVM.modules || {};
 
     const { money, escapeHtml: esc } = AVM.utils.formatters;
     const { margin, marginPercentage } = AVM.modules.calculations;
-    const { byCode } = AVM.data.getCatalog();
-    // Part of a fixed-price profile bundle already in the cart (e.g. via
-    // Vitamin Profile) — same blocked treatment as a conflicting test
-    // rather than a "✓ Added to Profile" that would look freely removable
-    // here but actually just quietly pull it out of that profile (see
-    // profile.js's packageOwning/toggleTest).
-    const owner = AVM.modules.profile.packageOwning(test.code);
-    const isAdded = !owner && AVM.state.cart.has(test.code);
-    const conflictCode = !isAdded && !owner ? AVM.modules.profile.conflictingCodeFor(test.code) : null;
-    const conflictTest = conflictCode ? byCode[conflictCode] : null;
-
-    let btnClass = "btn--teal";
-    let btnLabel = "+ Add to Profile";
-    let btnDisabled = "";
-    let btnNote = "";
-    if (owner) {
-      btnClass = "btn--outline";
-      btnLabel = "Blocked — already in " + esc(owner.name);
-      btnDisabled = "disabled";
-      btnNote = `<p class="td-note">Already included in ${esc(owner.name)}. Remove it from there to change it.</p>`;
-    } else if (isAdded) {
-      btnClass = "btn--outline";
-      btnLabel = "✓ Added to Profile";
-    } else if (conflictTest) {
-      btnClass = "btn--outline";
-      btnLabel = "Blocked — conflicts with " + esc(conflictTest.name);
-      btnDisabled = "disabled";
-      btnNote = `<p class="td-note">Already covered by ${esc(conflictTest.name)} in your profile. Remove it first to add this instead.</p>`;
-    }
 
     // A test that's itself a bundled multi-analyte panel (e.g. CBC's 28
     // reportable results — see js/data.js's PARAMETERS/TEST_PARAMETERS)
@@ -82,13 +52,11 @@ AVM.modules = AVM.modules || {};
         <div><dt>Processed At</dt><dd>LPL</dd></div>
       </dl>
       <div class="td-pricing">
-        <div><span>B2B Cost</span><b>${money(test.b2b)}</b></div>
+        <div><span>A Rates Cost</span><b>${money(test.b2b)}</b></div>
         <div><span>B2C Value</span><b>${money(test.b2c)}</b></div>
         <div class="is-profit"><span>Margin</span><b>+${money(margin(test))} <small>(${test.b2b ? `+${Math.round(marginPercentage(test.b2b, test.b2c))}%` : "—"})</small></b></div>
       </div>
       ${paramsSection}
-      ${btnNote}
-      <button type="button" class="btn ${btnClass} td-add-btn" id="tdAddBtn" ${btnDisabled}>${btnLabel}</button>
     `;
 
     const paramsToggle = container.querySelector("#tdParamsToggle");
@@ -96,25 +64,18 @@ AVM.modules = AVM.modules || {};
       paramsToggle.onclick = () => {
         if (expandedParams.has(test.code)) expandedParams.delete(test.code);
         else expandedParams.add(test.code);
-        renderTestDetail(container, test, onChange);
+        renderTestDetail(container, test);
       };
     }
-
-    container.querySelector("#tdAddBtn").onclick = () => {
-      if (conflictTest || owner) return;
-      AVM.modules.profile.toggleTest(test.code);
-      if (onChange) onChange();
-      renderTestDetail(container, AVM.data.getTestByCode(test.code), onChange);
-    };
   }
 
-  function openTestDetail(code, onChange) {
+  function openTestDetail(code) {
     const test = AVM.data.getTestByCode(code);
     const drawer = document.getElementById("testDetailDrawer");
     const overlay = document.getElementById("testDetailOverlay");
     const body = document.getElementById("testDetailBody");
     if (!drawer || !overlay || !body) return;
-    renderTestDetail(body, test, onChange);
+    renderTestDetail(body, test);
     drawer.classList.add("open");
     overlay.classList.add("open");
   }

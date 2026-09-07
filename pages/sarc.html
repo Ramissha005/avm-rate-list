@@ -36,15 +36,10 @@
     </a>
     <input type="checkbox" class="nav-toggle" id="navToggle">
     <div class="nav__links">
-      <a href="../index.html#ratelist">Rate List</a>
-      <a href="franchise.html">AVMLabs Franchisee</a>
+      <a href="rates.html#ratelist">Rate List</a>
+      <a href="../index.html">JVL</a>
       <a href="sarc.html" aria-current="page">SARC Explained</a>
       <a href="crl.html">CRL</a>
-    </div>
-    <div class="nav__actions">
-      <button class="cart-btn" id="openCart" aria-haspopup="dialog">
-        <span class="cart-btn__text-full">Make My Profile</span><span class="cart-btn__text-short">Profile</span> <span class="cart-btn__badge" id="cartBadge">0</span>
-      </button>
     </div>
     <label for="navToggle" class="nav-toggle-btn" aria-label="Toggle menu"><span></span></label>
   </nav>
@@ -218,9 +213,9 @@
       <div class="cta-band reveal">
         <div class="cta-band__text">
           <h2 class="cta-band__title">See SARC Pricing on the Rate List</h2>
-          <p>Every test on the rate list already reflects the SARC advantage — browse the full list or start building a profile.</p>
+          <p>Every test on the rate list already reflects the SARC advantage — browse the full list to see it for yourself.</p>
         </div>
-        <a href="../index.html#ratelist" class="btn btn--amber">Browse the Rate List →</a>
+        <a href="rates.html#ratelist" class="btn btn--amber">Browse the Rate List →</a>
       </div>
     </div>
   </section>
@@ -237,9 +232,8 @@
       <div>
         <h4>Site</h4>
         <ul>
-          <li><a href="../index.html#ratelist">Rate List</a></li>
-          <li><a href="../index.html#ratelist">Make My Profile</a></li>
-          <li><a href="franchise.html">AVMLabs Franchisee</a></li>
+          <li><a href="rates.html#ratelist">Rate List</a></li>
+          <li><a href="../index.html">JVL</a></li>
           <li><a href="sarc.html">SARC Explained</a></li>
           <li><a href="crl.html">CRL</a></li>
         </ul>
@@ -247,7 +241,8 @@
       <div>
         <h4>Contact</h4>
         <ul>
-          <li><a href="tel:+917094606386">+91 70946 06386</a></li>
+          <li><a href="tel:+918919549071">+91 89195 49071</a></li>
+          <li><a href="mailto:uday.kumar@avmlabs.com">uday.kumar@avmlabs.com</a></li>
         </ul>
       </div>
     </div>
@@ -256,76 +251,7 @@
       <span>Rates in INR (₹). Indicative rate card, not a medical prescription.</span>
     </div>
   </div>
-</footer>
-
-<!-- ================= CART DRAWER =================
-     Same markup/IDs as index.html's — js/app.js already guards every
-     lookup (hasCart = !!$("cartBody")) so the exact same shared script
-     chain works unmodified here; nothing page-specific to wire up. -->
-<div class="cart-overlay" id="cartOverlay"></div>
-<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="My Profile">
-  <div class="cart-head">
-    <div class="cart-head__left">
-      <div>
-        <h3>My Profile</h3>
-        <p class="sub" id="cartSub">0 tests selected</p>
-      </div>
-      <label class="customer-view-toggle customer-view-toggle--compact" id="customerViewLabel" title="Hide B2B cost & margin everywhere below">
-        <span class="switch"><input type="checkbox" id="customerViewToggle"><span class="track"></span></span>
-        <span class="customer-view-toggle__text">Customer copy</span>
-      </label>
-    </div>
-    <button class="cart-close" id="closeCart" aria-label="Close">✕</button>
-  </div>
-  <div class="cart-body" id="cartBody">
-    <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a profile.</p>
-  </div>
-  <div class="cart-foot">
-    <div class="cart-foot__summary" id="cartFootSummary">
-      <div class="cart-totals">
-        <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
-        <div class="ct-row ct-row--mpb" id="cartMpbRow" style="display:none"><span>Min. Patient Billing</span><span id="cartMpbAmt">+₹0</span></div>
-        <p class="ct-hint ct-hint--mpb" id="cartMpbHint" style="display:none"></p>
-        <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
-        <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
-      </div>
-      <div class="discount-margin-row" id="discountMarginRow">
-        <div class="discount-editor" id="discountEditor">
-          <label class="discount-editor__label" for="discountedPriceInput">Discounted Price</label>
-          <div class="discount-editor__row">
-            <span class="discount-editor__currency" aria-hidden="true">₹</span>
-            <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
-            <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
-          </div>
-          <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
-        </div>
-        <div class="margin-box" id="marginBox">
-          <div class="margin-box__top">
-            <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
-            <span class="margin-box__pct" id="cartMarginPct">+0%</span>
-          </div>
-          <div class="margin-box__amount" id="cartMargin">₹0</div>
-        </div>
-      </div>
-      <div class="price-box" id="priceBox" style="display:none">
-        <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
-          <span class="price-box__original-label">Original Price</span>
-          <span class="price-box__original-amount" id="priceOriginal">₹0</span>
-        </div>
-        <span class="price-box__label" id="priceLabel">Price</span>
-        <span class="price-box__amount" id="cartPrice">₹0</span>
-      </div>
-    </div>
-    <div class="cart-actions" id="cartActions">
-      <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
-      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
-      <button class="btn btn--navy btn--sm" id="printList">Print/Share</button>
-    </div>
-    <button class="cart-clear" id="clearCart">Clear all</button>
-  </div>
-</aside>
-
-<!-- ================= TEST DETAIL DRAWER ================= -->
+</footer><!-- ================= TEST DETAIL DRAWER ================= -->
 <div class="cart-overlay" id="testDetailOverlay"></div>
 <aside class="cart-drawer" id="testDetailDrawer" role="dialog" aria-label="Test details">
   <div class="cart-head">
@@ -341,12 +267,10 @@
 
 <script src="../js/config.js"></script>
 <script src="../js/utils/formatters.js"></script>
-<script src="../js/utils/storage.js"></script>
 <script src="../js/utils/helpers.js"></script>
 <script src="../js/utils/xlsx.js"></script>
 <script src="../js/data.js"></script>
 <script src="../js/modules/calculations.js"></script>
-<script src="../js/modules/profile.js"></script>
 <script src="../js/modules/pagination.js"></script>
 <script src="../js/modules/test-detail.js"></script>
 <script src="../js/modules/rate-list.js"></script>
@@ -354,7 +278,6 @@
 <script src="../js/modules/sorting.js"></script>
 <script src="../js/modules/filters.js"></script>
 <script src="../js/modules/export.js"></script>
-<script src="../js/modules/print.js"></script>
 <script src="../js/app.js"></script>
 <script src="../js/modules/reveal.js"></script>
 </body>

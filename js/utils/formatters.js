@@ -4,7 +4,7 @@ AVM.utils = AVM.utils || {};
 (function () {
   const CONFIG = AVM.CONFIG;
 
-  // Every render path (rate list, cart, print, exports) builds its whole
+  // Every render path (rate list, test detail, exports) builds its whole
   // markup in one .map().join("") and calls this per row — one bad/missing
   // price field used to throw mid-render and blank the entire table, not
   // just that row. "—" signals "no price on file" instead of pretending
@@ -16,12 +16,8 @@ AVM.utils = AVM.utils || {};
     return sign + CONFIG.CURRENCY_SYMBOL + Math.abs(n).toLocaleString(CONFIG.CURRENCY_LOCALE);
   }
 
-  function pluralize(count, singular, plural = singular + "s") {
-    return `${count} ${count === 1 ? singular : plural}`;
-  }
-
   const ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-  // Every render path (rate list, cart, test detail, print) interpolates
+  // Every render path (rate list, test detail, exports) interpolates
   // catalog text — test names, categories, tech labels, aliases — straight
   // into innerHTML, including inside HTML attributes like aria-label/title
   // (e.g. `aria-label="Add ${t.name}"`). The catalog is hand-edited JSON
@@ -36,15 +32,5 @@ AVM.utils = AVM.utils || {};
     return String(s).replace(/[&<>"']/g, ch => ESCAPE_MAP[ch]);
   }
 
-  // A literal "*" in a calculated parameter's own label (e.g. "eGFR (For
-  // Adults*)") is a caveat marker, not decoration — colored differently
-  // (see .calc-star) so it actually draws the eye instead of blending
-  // into the rest of the name. Safe to run on already-escaped text: "*"
-  // isn't one of escapeHtml's special characters, so it survives
-  // escaping untouched either way.
-  function highlightAsterisk(s) {
-    return s.replace(/\*/g, '<span class="calc-star">*</span>');
-  }
-
-  AVM.utils.formatters = { money, pluralize, escapeHtml, highlightAsterisk };
+  AVM.utils.formatters = { money, escapeHtml };
 })();

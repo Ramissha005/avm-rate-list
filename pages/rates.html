@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4RXFMJV6DZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4RXFMJV6DZ');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=2">
+<title>AVMLabs — Rate List</title>
+<meta name="description" content="AVMLabs diagnostic rate list. Browse lab tests and compare technologies — A Rates cost, B2C price and margin on every test.">
+<meta name="theme-color" content="#0E2238">
+<!-- og:url and og:image are left out until there's a final production
+     domain to point them at — a wrong/relative image URL breaks link
+     previews worse than omitting them. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AVMLabs">
+<meta property="og:title" content="AVMLabs — Rate List">
+<meta property="og:description" content="AVMLabs diagnostic rate list. Browse lab tests and compare technologies — A Rates cost, B2C price and margin on every test.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AVMLabs — Rate List">
+<meta name="twitter:description" content="AVMLabs diagnostic rate list. Browse lab tests and compare technologies — A Rates cost, B2C price and margin on every test.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="../index.html#top" class="brand">
+      <img class="brand__logo" src="../assets/images/avm-logo.png" alt="AVMLabs" height="53">
+    </a>
+    <input type="checkbox" class="nav-toggle" id="navToggle">
+    <div class="nav__links">
+      <a href="#ratelist" aria-current="page">Rate List</a>
+      <a href="../index.html">JVL</a>
+      <a href="sarc.html">SARC Explained</a>
+      <a href="crl.html">CRL</a>
+    </div>
+    <label for="navToggle" class="nav-toggle-btn" aria-label="Toggle menu"><span></span></label>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="hero__content hero__content--wide">
+        <div class="hero__brand-wrap">
+          <span class="hero__brand">SARC</span>
+        </div>
+        <h1 class="hero__headline hero__headline--no-rule">Services At Reagent Cost</h1>
+        <div class="hero__accred-badge"><strong>NABL</strong><span>– Process On</span></div>
+        <p class="hero__sub hero__sub--lead">Truth. Trust. Transparency</p>
+        <h2 class="hero__focus-title">We focus &amp; specialize in</h2>
+        <div class="stat-strip hero__specialties">
+          <span><span class="dot"></span>Chemistry not Micro or Histo</span>
+          <span><span class="dot"></span>Metabolism not Infection</span>
+          <span><span class="dot"></span>Disorders not Diseases</span>
+          <span><span class="dot"></span>Chronic care not Acute care</span>
+          <span><span class="dot"></span>Preventive care not Sick care</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- JVL + SARC CTAs, folded into the hero itself. Two cards in one
+         .cta-grid, same pairing pattern the old Franchise+SARC grid used
+         (see git history) — same .cta-band styling on both so the JVL
+         card reads as the first half of one CTA section rather than a
+         bolted-on, unrelated block. JVL now lives at the site root (see
+         ../index.html) rather than under pages/, since JVL is the site's
+         actual landing page — this card is what sends a visitor there
+         from the rate list. -->
+    <div class="wrap hero__franchise">
+      <div class="cta-grid">
+        <div class="cta-band">
+          <div class="cta-band__text">
+            <h2 class="cta-band__title">Joint Venture Laboratory (JVL)</h2>
+            <p>Turn your lab's under-utilised capacity into a profitable AVMLabs network for the entire district.</p>
+          </div>
+          <a class="btn btn--amber" href="../index.html">
+            Explore JVL →
+          </a>
+        </div>
+        <div class="cta-band cta-band--gold">
+          <div class="cta-band__text">
+            <h2 class="cta-band__title">The Economics Behind SARC</h2>
+            <p>Understand how AVMLabs delivers Services At Reagent Cost...</p>
+          </div>
+          <a class="btn btn--teal" href="sarc.html">
+            Explore SARC →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RATE LIST ================= -->
+  <section class="ratelist ratelist--page" id="ratelist">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">THE RATE LIST</p>
+        <h2>SPECIAL RATES FOR JVL</h2>
+        <p>Preferential A Rates pricing for JVL partner laboratories — one unified rate list across LPL and CRL, with easy search and smart filters, all in one place.</p>
+      </div>
+
+      <div class="lab-stats">
+        <div class="lab-stats__col">
+          <div class="lab-stats__head">
+            <span class="lab-stats__code">LPL</span>
+            <span class="lab-stats__name">Local Processing Laboratory</span>
+          </div>
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6M10 3v8.5L5.6 18a2 2 0 0 0 1.7 3h9.4a2 2 0 0 0 1.7-3L14 11.5V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="stat-card__num" id="statTests">—</div>
+              <div class="stat-card__label">Tests</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="1.8" fill="currentColor"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6" transform="rotate(120 12 12)"/></svg></div>
+              <div class="stat-card__num" id="statTech">—</div>
+              <div class="stat-card__label">Technologies</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lab-stats__col lab-stats__col--crl">
+          <div class="lab-stats__head">
+            <span class="lab-stats__code">CRL</span>
+            <span class="lab-stats__name">Central Reference Laboratory</span>
+            <span class="lab-stats__cta">
+              <span class="lab-stats__soon">Coming Soon</span>
+              <a href="crl.html" class="lab-stats__explore">Explore →</a>
+            </span>
+          </div>
+          <div class="stat-cards stat-cards--crl">
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 3h6M10 3v8.5L5.6 18a2 2 0 0 0 1.7 3h9.4a2 2 0 0 0 1.7-3L14 11.5V3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 15h9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              <div class="stat-card__num">500+</div>
+              <div class="stat-card__label">Tests</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="1.8" fill="currentColor"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" stroke="currentColor" stroke-width="1.6" transform="rotate(120 12 12)"/></svg></div>
+              <div class="stat-card__num">10</div>
+              <div class="stat-card__label">Technologies</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search/filter/sort bar sticks in place while scrolling — see
+           .fr-sticky-controls in layout.css. -->
+      <div class="fr-sticky-controls">
+        <div class="rl-controls">
+          <div class="rl-search">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#51606B" stroke-width="1.8"/><path d="M21 21L16.5 16.5" stroke="#51606B" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <input type="text" id="searchInput" placeholder="Search by test name, code or category" aria-label="Search tests">
+          </div>
+          <button type="button" class="filters-toggle-btn" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            Filters
+            <span class="filters-toggle-btn__count" id="filtersActiveCount" hidden></span>
+          </button>
+          <div class="rl-right">
+            <div class="rl-sort" id="sortWrap">
+              <select id="sortSelect" aria-label="Sort results">
+                <option value="sr">Sort: Default</option>
+                <option value="name">Name A–Z</option>
+                <option value="b2b-asc">A Rates: Low to High</option>
+                <option value="b2b-desc">A Rates: High to Low</option>
+                <option value="b2c-asc">B2C: Low to High</option>
+                <option value="b2c-desc">B2C: High to Low</option>
+                <option value="margin-desc">Margin: High to Low</option>
+                <option value="margin-asc">Margin: Low to High</option>
+              </select>
+            </div>
+            <div class="rl-sort" id="pageSizeWrap">
+              <select id="pageSizeSelect" aria-label="Results per page"></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filters-panel" id="filtersPanel" hidden>
+        <div class="filter-group">
+          <p class="filter-group__label">Technology</p>
+          <div class="rl-filters" id="filterTech"></div>
+        </div>
+        <div class="filter-group">
+          <p class="filter-group__label">Price</p>
+          <div class="rl-filters" id="filterPrice"></div>
+        </div>
+      </div>
+
+      <div class="rl-toolbar">
+        <p class="rl-count" id="rlCount"></p>
+        <div class="rl-toolbar__actions">
+          <button type="button" class="view-more-btn" id="clearFilters">Clear filters</button>
+          <button type="button" class="view-more-btn" id="exportRateListCsv">Export Excel</button>
+        </div>
+      </div>
+
+      <div class="rl-table">
+        <div class="rl-head" id="rlHeadTests">
+          <span>Code</span><span>Test</span><span>Technology</span><span>Sample</span><span>A Rates</span><span>B2C</span><span>Margin</span>
+        </div>
+        <div id="rlBody"></div>
+      </div>
+
+      <div id="paginationWrap" class="pagination"></div>
+
+      <p class="rl-disclaimer">Prices shown are indicative and subject to change without notice. Sample collection and reporting timelines vary by test and location.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <img class="brand__logo" src="../assets/images/avm-logo.png" alt="AVMLabs" height="53">
+        <p>Automated diagnostics, one transparent rate card</p>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="#ratelist">Rate List</a></li>
+          <li><a href="../index.html">JVL</a></li>
+          <li><a href="sarc.html">SARC Explained</a></li>
+          <li><a href="crl.html">CRL</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+918919549071">+91 89195 49071</a></li>
+          <li><a href="mailto:uday.kumar@avmlabs.com">uday.kumar@avmlabs.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 AVMLabs</span>
+      <span>Rates in INR (₹). Indicative rate card, not a medical prescription.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= TEST DETAIL DRAWER ================= -->
+<div class="cart-overlay" id="testDetailOverlay"></div>
+<aside class="cart-drawer" id="testDetailDrawer" role="dialog" aria-label="Test details">
+  <div class="cart-head">
+    <div>
+      <h3>Test Details</h3>
+    </div>
+    <button class="cart-close" id="closeTestDetail" aria-label="Close">✕</button>
+  </div>
+  <div class="cart-body" id="testDetailBody"></div>
+</aside>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<script src="../js/config.js"></script>
+<script src="../js/utils/formatters.js"></script>
+<script src="../js/utils/helpers.js"></script>
+<script src="../js/utils/xlsx.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/modules/calculations.js"></script>
+<script src="../js/modules/pagination.js"></script>
+<script src="../js/modules/test-detail.js"></script>
+<script src="../js/modules/rate-list.js"></script>
+<script src="../js/modules/search.js"></script>
+<script src="../js/modules/sorting.js"></script>
+<script src="../js/modules/filters.js"></script>
+<script src="../js/modules/export.js"></script>
+<script src="../js/app.js"></script>
+
+</body>
+</html>

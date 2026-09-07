@@ -1,12 +1,20 @@
 /* AVMLabs design tokens — colors, spacing scale, type scale, radii, shadows, glass, motion */
 
 :root{
-  /* ---- Brand colors (updated to cyan-green gradient) ---- */
+  /* ---- Brand colors ----
+     Navy and teal are the site's "blue" and are load-bearing brand
+     colors — left exactly as they were through this pass. Everything
+     else here was warmed a step: the old paper/line/chip neutrals were
+     a flat cool grey that fought the amber accent instead of setting it
+     off; these now lean a shade toward warm-neutral so amber (and the
+     navy headings sitting on top of them) both read richer. Violet was
+     desaturated for the same reason — the old #7C4FE0 read as a bright
+     "default web purple" next to navy/amber's more considered tones. */
   --navy:#0E2238;
   --navy-2:#173A5A;
   --navy-soft:#2A4C6B;
-  --paper:#EFF0F2;
-  --paper-2:#E4E6E9;
+  --paper:#F2F0EB;
+  --paper-2:#E9E6DF;
   --card:#FFFFFF;
   --amber:#DB8A34;
   --amber-dark:#B4701F;
@@ -17,19 +25,17 @@
   --emerald:#0E8F74;
   --emerald-dark:#0A6B57;
   --emerald-bg:#E1F3EE;
-  --cyan:#00D9FF;
-  --cyan-dark:#00B8D4;
   --ink:#101C27;
   --ink-soft:#39474F;
   --ink-faint:#5B6971;
-  --line:#D2D5D9;
+  --line:#DAD6CE;
   --line-dark:#2C4863;
   --profit:#1B5FA8;
   --profit-bg:#E2ECF7;
-  --mono-chip:#E9EAEC;
-  --violet:#7C4FE0;
-  --violet-dark:#5E35B1;
-  --violet-bg:#F0EBFB;
+  --mono-chip:#EDEAE2;
+  --violet:#6E56CF;
+  --violet-dark:#4C3A94;
+  --violet-bg:#EFECFA;
 
   /* ---- Spacing scale — 4px grid ---- */
   --space-1:4px;
@@ -68,14 +74,19 @@
   --radius-lg:24px;
   --radius-full:999px;
 
-  /* ---- Shadow / elevation scale ---- */
-  --shadow-xs:0 2px 6px -2px rgba(14,34,56,0.15);
-  --shadow-sm:0 8px 20px -12px rgba(14,34,56,0.25);
-  --shadow:0 18px 40px -22px rgba(14,34,56,0.35);
-  --shadow-lg:0 30px 60px -20px rgba(14,34,56,0.4);
-  --shadow-amber:0 14px 26px -14px rgba(219,138,52,0.55);
-  --shadow-navy:0 14px 26px -14px rgba(14,34,56,0.5);
-  --shadow-teal:0 14px 26px -14px rgba(30,99,180,0.45);
+  /* ---- Shadow / elevation scale ----
+     Wider spread, lower opacity than before across the board — the old
+     values were tight and dark enough to read as a hard drop-shadow;
+     these diffuse further and sit lighter, closer to how elevation
+     looks in current-generation UI (soft, ambient) than a literal cast
+     shadow. */
+  --shadow-xs:0 2px 8px -3px rgba(14,34,56,0.12);
+  --shadow-sm:0 10px 28px -14px rgba(14,34,56,0.16);
+  --shadow:0 20px 44px -20px rgba(14,34,56,0.22);
+  --shadow-lg:0 32px 64px -20px rgba(14,34,56,0.26);
+  --shadow-amber:0 16px 32px -16px rgba(219,138,52,0.42);
+  --shadow-navy:0 16px 32px -16px rgba(14,34,56,0.38);
+  --shadow-teal:0 16px 32px -16px rgba(30,99,180,0.35);
 
   /* ---- Glassmorphism tokens ---- */
   --glass-light-bg:rgba(255,255,255,0.55);

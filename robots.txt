@@ -1,5 +1,5 @@
 User-agent: *
 Disallow: /pages/admin/
 Disallow: /pages/login.html
-Disallow: /pages/print-profile.html
+Disallow: /pages/jvl.html
 Allow: /

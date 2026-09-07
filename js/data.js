@@ -4,33 +4,6 @@ AVM.state = {
   searchTerm: "",
   sortMode: "sr",
   activeFilters: { technology: new Set(), category: new Set(), sample: new Set(), priceBand: new Set() },
-  cart: new Set(),
-  // Fixed-price profile bundles (e.g. Vitamin Profile) currently in the
-  // cart — a Set of package ids, tracked separately from `cart` above.
-  // A profile's price is now its own flat B2B/Franchise/B2C figure (see
-  // each package's `pricing` in PACKAGES below), not assembled from its
-  // member tests' own prices, so its tests are never added to `cart`
-  // itself — see profile.js's addPackage/removePackage.
-  cartPackages: new Set(),
-  // "Customer copy" mode: hides B2B cost and margin everywhere a profile is
-  // shown or shared (cart drawer, Copy List, Export Excel, Print) so a B2B
-  // partner can hand this straight to their own customer without exposing
-  // their cost or markup. Off by default — resets each session on purpose,
-  // so it's never accidentally left on for the next person using this
-  // browser to view their own internal numbers.
-  customerView: false,
-  // A manually-entered discounted price for the customer copy — B2C rates
-  // never get the B2B bulk-value discount, so this is the only way to show
-  // a customer a lower number: whoever's building the profile types one in
-  // (Make My Profile → Customer copy), and every customer-facing surface
-  // (cart drawer, Print Profile, Copy List, Export Excel) then shows the
-  // original B2C value alongside it instead of swapping it outright. Kept
-  // in rupees (not a %) since it's a one-off negotiated price, not a tiered
-  // rule like the B2B discount. null means no discount is set. Persisted
-  // alongside the cart (see profile.js) so it survives a reload and carries
-  // into Print Profile, but — like the cart itself, and unlike
-  // `customerView` above — isn't reset on purpose each session.
-  discountedPrice: null,
   currentPage: 1,
   pageSize: (AVM.CONFIG && AVM.CONFIG.DEFAULT_PAGE_SIZE) || 25,
 };
@@ -654,7 +627,7 @@ AVM.state = {
       "aliases": ["Serum Amylase","AMY"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 35,
+      "b2b": 25,
       "b2c": 200,
       "categoryId": "pancreatic-function",
       "departmentId": "biochemistry",
@@ -674,7 +647,7 @@ AVM.state = {
       "aliases": ["Glycated Hemoglobin","HbA1c"],
       "techId": "hplc",
       "sampleId": "edta",
-      "b2b": 50,
+      "b2b": 40,
       "b2c": 300,
       "categoryId": "diabetes",
       "departmentId": "biochemistry",
@@ -754,7 +727,7 @@ AVM.state = {
       "aliases": ["Free Triiodothyronine","FT3"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 30,
+      "b2b": 20,
       "b2c": 100,
       "categoryId": "thyroid",
       "departmentId": "immunoassay",
@@ -774,7 +747,7 @@ AVM.state = {
       "aliases": ["Free Thyroxine","FT4"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 30,
+      "b2b": 20,
       "b2c": 100,
       "categoryId": "thyroid",
       "departmentId": "immunoassay",
@@ -794,7 +767,7 @@ AVM.state = {
       "aliases": ["Serum Lipase","LPS"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 65,
+      "b2b": 55,
       "b2c": 300,
       "categoryId": "pancreatic-function",
       "departmentId": "immunoassay",
@@ -834,7 +807,7 @@ AVM.state = {
       "aliases": ["HBsAg","Hepatitis B Surface Antigen"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 75,
+      "b2b": 55,
       "b2c": 200,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -854,7 +827,7 @@ AVM.state = {
       "aliases": ["FSH","Follitropin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 80,
+      "b2b": 60,
       "b2c": 250,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -874,7 +847,7 @@ AVM.state = {
       "aliases": ["LH","Lutropin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 80,
+      "b2b": 60,
       "b2c": 250,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -894,7 +867,7 @@ AVM.state = {
       "aliases": ["PRL","Lactogenic Hormone"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 80,
+      "b2b": 60,
       "b2c": 250,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -934,7 +907,7 @@ AVM.state = {
       "aliases": ["E2","Oestradiol"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 85,
+      "b2b": 65,
       "b2c": 300,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -954,7 +927,7 @@ AVM.state = {
       "aliases": ["Beta hCG","Pregnancy Hormone Test"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 90,
+      "b2b": 70,
       "b2c": 300,
       "categoryId": "pregnancy",
       "departmentId": "immunoassay",
@@ -974,7 +947,7 @@ AVM.state = {
       "aliases": ["HIV Test","HIV 1 & 2 Antibody-Antigen"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 95,
+      "b2b": 75,
       "b2c": 400,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1014,7 +987,7 @@ AVM.state = {
       "aliases": ["Cytomegalovirus IgG","CMV Antibody IgG"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1034,7 +1007,7 @@ AVM.state = {
       "aliases": ["Cytomegalovirus IgM","CMV Antibody IgM"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1054,7 +1027,7 @@ AVM.state = {
       "aliases": ["Herpes Simplex Virus 1 IgG","HSV1 Antibody"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1074,7 +1047,7 @@ AVM.state = {
       "aliases": ["Herpes Simplex Virus 2 IgG","HSV2 Antibody"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1094,7 +1067,7 @@ AVM.state = {
       "aliases": ["P4","Serum Progesterone"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -1114,7 +1087,7 @@ AVM.state = {
       "aliases": ["German Measles IgG","Rubella Antibody IgG"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1134,7 +1107,7 @@ AVM.state = {
       "aliases": ["German Measles IgM","Rubella Antibody IgM"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1154,7 +1127,7 @@ AVM.state = {
       "aliases": ["Toxoplasma IgG","Toxoplasmosis Antibody IgG"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1174,7 +1147,7 @@ AVM.state = {
       "aliases": ["Toxoplasma IgM","Toxoplasmosis Antibody IgM"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 100,
+      "b2b": 80,
       "b2c": 350,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1194,7 +1167,7 @@ AVM.state = {
       "aliases": ["HCV Antibody","Hepatitis C Test"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 105,
+      "b2b": 85,
       "b2c": 600,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1214,7 +1187,7 @@ AVM.state = {
       "aliases": ["Total Testosterone","T"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 105,
+      "b2b": 85,
       "b2c": 300,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -1254,7 +1227,7 @@ AVM.state = {
       "aliases": ["Cancer Antigen 125","Ovarian Tumor Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 115,
+      "b2b": 95,
       "b2c": 550,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1274,7 +1247,7 @@ AVM.state = {
       "aliases": ["CEA","Tumor Marker CEA"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 115,
+      "b2b": 95,
       "b2c": 550,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1294,7 +1267,7 @@ AVM.state = {
       "aliases": ["Fasting Insulin","Serum Insulin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 115,
+      "b2b": 95,
       "b2c": 300,
       "categoryId": "diabetes",
       "departmentId": "immunoassay",
@@ -1314,7 +1287,7 @@ AVM.state = {
       "aliases": ["AFP","Tumor Marker AFP"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 120,
+      "b2b": 100,
       "b2c": 550,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1334,7 +1307,7 @@ AVM.state = {
       "aliases": ["Free Prostate-Specific Antigen","fPSA"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 120,
+      "b2b": 100,
       "b2c": 550,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1354,7 +1327,7 @@ AVM.state = {
       "aliases": ["Syphilis Test","Treponema pallidum Antibody"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 120,
+      "b2b": 100,
       "b2c": 550,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1374,7 +1347,7 @@ AVM.state = {
       "aliases": ["IgE","Total IgE"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 120,
+      "b2b": 100,
       "b2c": 300,
       "categoryId": "allergy-immunology",
       "departmentId": "immunoassay",
@@ -1394,7 +1367,7 @@ AVM.state = {
       "aliases": ["Cancer Antigen 15-3","Breast Tumor Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 130,
+      "b2b": 110,
       "b2c": 500,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1414,7 +1387,7 @@ AVM.state = {
       "aliases": ["Cancer Antigen 19-9","Pancreatic Tumor Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 130,
+      "b2b": 110,
       "b2c": 500,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -1434,7 +1407,7 @@ AVM.state = {
       "aliases": ["Serum Cortisol","Hydrocortisone"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 130,
+      "b2b": 110,
       "b2c": 450,
       "categoryId": "stress-hormone",
       "departmentId": "immunoassay",
@@ -1454,7 +1427,7 @@ AVM.state = {
       "aliases": ["Connecting Peptide","C-Peptide Insulin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 130,
+      "b2b": 110,
       "b2c": 500,
       "categoryId": "diabetes",
       "departmentId": "immunoassay",
@@ -1474,7 +1447,7 @@ AVM.state = {
       "aliases": ["Anti-Tg","Thyroglobulin Antibody"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 150,
+      "b2b": 130,
       "b2c": 600,
       "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
@@ -1494,7 +1467,7 @@ AVM.state = {
       "aliases": ["DHEA-S","DHEA Sulfate"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 150,
+      "b2b": 130,
       "b2c": 600,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -1514,7 +1487,7 @@ AVM.state = {
       "aliases": ["Anti-HBc","HBcAb"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 150,
+      "b2b": 130,
       "b2c": 600,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1534,7 +1507,7 @@ AVM.state = {
       "aliases": ["Anti-HBs","HBsAb"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 150,
+      "b2b": 130,
       "b2c": 600,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1554,7 +1527,7 @@ AVM.state = {
       "aliases": ["Vitamin B9","Folate"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 155,
+      "b2b": 135,
       "b2c": 450,
       "categoryId": "vitamins",
       "departmentId": "immunoassay",
@@ -1574,7 +1547,7 @@ AVM.state = {
       "aliases": ["Anti-HBe","HBeAb"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 160,
+      "b2b": 140,
       "b2c": 450,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1594,7 +1567,7 @@ AVM.state = {
       "aliases": ["CK-MB","Cardiac Enzyme Test"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 160,
+      "b2b": 140,
       "b2c": 450,
       "categoryId": "cardiac",
       "departmentId": "immunoassay",
@@ -1614,7 +1587,7 @@ AVM.state = {
       "aliases": ["HBeAg","Hepatitis B e Antigen"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 160,
+      "b2b": 140,
       "b2c": 450,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1634,7 +1607,7 @@ AVM.state = {
       "aliases": ["Free Beta hCG","fBHCG"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 160,
+      "b2b": 140,
       "b2c": 450,
       "categoryId": "pregnancy",
       "departmentId": "immunoassay",
@@ -1654,7 +1627,7 @@ AVM.state = {
       "aliases": ["Pregnancy-Associated Plasma Protein A","First Trimester Screening Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 160,
+      "b2b": 140,
       "b2c": 450,
       "categoryId": "pregnancy",
       "departmentId": "immunoassay",
@@ -1674,7 +1647,7 @@ AVM.state = {
       "aliases": ["Human Growth Hormone","Somatotropin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 170,
+      "b2b": 150,
       "b2c": 450,
       "categoryId": "pituitary-growth",
       "departmentId": "immunoassay",
@@ -1694,7 +1667,7 @@ AVM.state = {
       "aliases": ["Serum Myoglobin","Muscle Protein Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 170,
+      "b2b": 150,
       "b2c": 500,
       "categoryId": "cardiac",
       "departmentId": "immunoassay",
@@ -1714,7 +1687,7 @@ AVM.state = {
       "aliases": ["Thyroid Peroxidase Antibody","TPO Antibody"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 180,
+      "b2b": 160,
       "b2c": 500,
       "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
@@ -1734,7 +1707,7 @@ AVM.state = {
       "aliases": ["SHBG","Sex Hormone Binding Globulin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 180,
+      "b2b": 160,
       "b2c": 500,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -1754,7 +1727,7 @@ AVM.state = {
       "aliases": ["Digoxin Level","Cardiac Drug Monitoring"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 190,
+      "b2b": 170,
       "b2c": 550,
       "categoryId": "drug-monitoring",
       "departmentId": "immunoassay",
@@ -1774,7 +1747,7 @@ AVM.state = {
       "aliases": ["Troponin I","Cardiac Troponin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 190,
+      "b2b": 170,
       "b2c": 600,
       "categoryId": "cardiac",
       "departmentId": "immunoassay",
@@ -1794,7 +1767,7 @@ AVM.state = {
       "aliases": ["Serum Calcitonin","Thyrocalcitonin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 200,
+      "b2b": 180,
       "b2c": 600,
       "categoryId": "bone-metabolism",
       "departmentId": "immunoassay",
@@ -1814,7 +1787,7 @@ AVM.state = {
       "aliases": ["Anti-Centromere Antibody","ACA"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 205,
+      "b2b": 185,
       "b2c": 650,
       "categoryId": "arthritis-autoimmune",
       "departmentId": "immunoassay",
@@ -1834,7 +1807,7 @@ AVM.state = {
       "aliases": ["N-terminal proBNP","Heart Failure Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 210,
+      "b2b": 190,
       "b2c": 650,
       "categoryId": "cardiac",
       "departmentId": "immunoassay",
@@ -1854,7 +1827,7 @@ AVM.state = {
       "aliases": ["Procollagen Type 1 N-Terminal Propeptide","Bone Formation Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 210,
+      "b2b": 190,
       "b2c": 650,
       "categoryId": "bone-metabolism",
       "departmentId": "immunoassay",
@@ -1874,7 +1847,7 @@ AVM.state = {
       "aliases": ["Parathyroid Hormone","PTH"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 210,
+      "b2b": 190,
       "b2c": 650,
       "categoryId": "bone-metabolism",
       "departmentId": "immunoassay",
@@ -1894,7 +1867,7 @@ AVM.state = {
       "aliases": ["TSH Receptor Antibody","TRAb"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 210,
+      "b2b": 190,
       "b2c": 650,
       "categoryId": "thyroid-autoimmune",
       "departmentId": "immunoassay",
@@ -1914,7 +1887,7 @@ AVM.state = {
       "aliases": ["HAV IgM","Hepatitis A Antibody IgM"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 220,
+      "b2b": 200,
       "b2c": 700,
       "categoryId": "infectious-disease",
       "departmentId": "immunoassay",
@@ -1934,7 +1907,7 @@ AVM.state = {
       "aliases": ["ACTH","Corticotropin"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 230,
+      "b2b": 210,
       "b2c": 700,
       "categoryId": "pituitary-growth",
       "departmentId": "immunoassay",
@@ -1954,7 +1927,7 @@ AVM.state = {
       "aliases": ["IGF-1","Somatomedin C"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 230,
+      "b2b": 210,
       "b2c": 750,
       "categoryId": "pituitary-growth",
       "departmentId": "immunoassay",
@@ -1994,7 +1967,7 @@ AVM.state = {
       "aliases": ["NSE","Neuroendocrine Tumor Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 240,
+      "b2b": 220,
       "b2c": 750,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2014,7 +1987,7 @@ AVM.state = {
       "aliases": ["ProGRP","Lung Cancer Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 240,
+      "b2b": 220,
       "b2c": 750,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2034,7 +2007,7 @@ AVM.state = {
       "aliases": ["CA 72-4","Gastric Tumor Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 260,
+      "b2b": 240,
       "b2c": 650,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2054,7 +2027,7 @@ AVM.state = {
       "aliases": ["CYFRA 21-1","Lung Cancer Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 260,
+      "b2b": 240,
       "b2c": 650,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2074,7 +2047,7 @@ AVM.state = {
       "aliases": ["Serum Androstenedione","Andro"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 290,
+      "b2b": 270,
       "b2c": 750,
       "categoryId": "reproductive-hormones",
       "departmentId": "immunoassay",
@@ -2094,7 +2067,7 @@ AVM.state = {
       "aliases": ["IL-6","Inflammatory Cytokine"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 300,
+      "b2b": 280,
       "b2c": 750,
       "categoryId": "infectious",
       "departmentId": "immunoassay",
@@ -2114,7 +2087,7 @@ AVM.state = {
       "aliases": ["HE4","Ovarian Cancer Marker"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 320,
+      "b2b": 300,
       "b2c": 850,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2134,7 +2107,7 @@ AVM.state = {
       "aliases": ["FK506","Tacrolimus Level"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 370,
+      "b2b": 350,
       "b2c": 950,
       "categoryId": "drug-monitoring",
       "departmentId": "immunoassay",
@@ -2154,7 +2127,7 @@ AVM.state = {
       "aliases": ["PIVKA-II","DCP"],
       "techId": "eclia",
       "sampleId": "serum",
-      "b2b": 480,
+      "b2b": 460,
       "b2c": 1300,
       "categoryId": "tumor-markers",
       "departmentId": "immunoassay",
@@ -2174,7 +2147,7 @@ AVM.state = {
       "aliases": ["TIBC","Iron Binding Capacity"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 40,
+      "b2b": 30,
       "b2c": 200,
       "categoryId": "iron-studies",
       "departmentId": "biochemistry",
@@ -2194,7 +2167,7 @@ AVM.state = {
       "aliases": ["Urine Routine","Urinalysis"],
       "techId": "microscopy",
       "sampleId": "urine",
-      "b2b": 80,
+      "b2b": 60,
       "b2c": 300,
       "categoryId": "urine",
       "departmentId": "clinical-pathology",
@@ -2215,7 +2188,7 @@ AVM.state = {
       "aliases": ["Lp(a)","Lipoprotein a"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 35,
+      "b2b": 25,
       "b2c": 200,
       "categoryId": "cardiac",
       "departmentId": "biochemistry",
@@ -2235,7 +2208,7 @@ AVM.state = {
       "aliases": ["Apo A1","ApoA-I"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 45,
+      "b2b": 35,
       "b2c": 200,
       "categoryId": "cardiac",
       "departmentId": "biochemistry",
@@ -2255,7 +2228,7 @@ AVM.state = {
       "aliases": ["Apo B","ApoB-100"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 45,
+      "b2b": 35,
       "b2c": 200,
       "categoryId": "cardiac",
       "departmentId": "biochemistry",
@@ -2275,7 +2248,7 @@ AVM.state = {
       "aliases": ["hs-CRP","Cardiac CRP"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 50,
+      "b2b": 40,
       "b2c": 200,
       "categoryId": "cardiac",
       "departmentId": "biochemistry",
@@ -2304,7 +2277,7 @@ AVM.state = {
       "aliases": ["Complete Blood Count","CBC"],
       "techId": "hematology",
       "sampleId": "edta",
-      "b2b": 60,
+      "b2b": 40,
       "b2c": 300,
       "categoryId": "hematology",
       "departmentId": "hematology",
@@ -2345,7 +2318,7 @@ AVM.state = {
       "aliases": ["Zinc","Zn"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 50,
+      "b2b": 30,
       "b2c": 200,
       "categoryId": "bone-metabolism",
       "departmentId": "biochemistry",
@@ -2365,7 +2338,7 @@ AVM.state = {
       "aliases": ["Copper","Cu"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 60,
+      "b2b": 40,
       "b2c": 200,
       "categoryId": "general-biochemistry",
       "departmentId": "biochemistry",
@@ -2385,7 +2358,7 @@ AVM.state = {
       "aliases": ["Serum Homocysteine","Hcy"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 205,
+      "b2b": 185,
       "b2c": 500,
       "categoryId": "cardiac",
       "departmentId": "biochemistry",
@@ -2405,7 +2378,7 @@ AVM.state = {
       "aliases": ["Ketone Bodies","Blood Ketones"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 145,
+      "b2b": 125,
       "b2c": 300,
       "categoryId": "diabetes",
       "departmentId": "biochemistry",
@@ -2425,7 +2398,7 @@ AVM.state = {
       "aliases": ["Serum Fructosamine","Glycated Serum Protein"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 70,
+      "b2b": 50,
       "b2c": 200,
       "categoryId": "diabetes",
       "departmentId": "biochemistry",
@@ -2445,7 +2418,7 @@ AVM.state = {
       "aliases": ["RA Factor","RF"],
       "techId": "photometry",
       "sampleId": "serum",
-      "b2b": 90,
+      "b2b": 70,
       "b2c": 300,
       "categoryId": "arthritis-autoimmune",
       "departmentId": "biochemistry",
@@ -2461,303 +2434,6 @@ AVM.state = {
   ]
 };
   const TESTS = TESTS_WRAPPED.tests;
-
-  // Profiles — as of the pricing-model switchover below, a profile's price
-  // is its OWN flat, hand-set figure (see `pricing`), never derived by
-  // summing its member tests' individual B2B/B2C prices the way every
-  // profile used to work. `codes` still lists what the profile physically
-  // covers (for the "Tests included" breakdown and Test Count column —
-  // see calculations.js packageTestCount()), but adding a profile to a
-  // cart no longer adds those codes as separately-priced line items — see
-  // profile.js's addPackage/removePackage and calculations.js
-  // packagePricing()/cartTotals(). Every profile here MUST carry a
-  // `pricing: { b2b, franchise, b2c }` block.
-  //
-  // calculatedParams: report line items the panel also produces that are
-  // NOT separately-priced tests of their own — they're derived/calculated
-  // from the priced codes above (e.g. eGFR from Creatinine, VLDL from
-  // Triglycerides) and come bundled in at no extra cost. They count toward
-  // the panel's total "test" count (per the source rate card) but never
-  // toward B2B/B2C/margin.
-  //
-  // Profiles are being rebuilt one at a time under this new fixed-price
-  // model — more will be added back here, each with its own `pricing`.
-  const PACKAGES = [
-  // AVM's own curated multi-panel checkup, built from several of the
-  // standalone profiles below plus a few extra standalone tests — carries
-  // its own `groups` breakdown (see panels-table.js/print.js) so its
-  // "Tests included" list reads as "Lipid Profile: ..." / "Liver Profile:
-  // ..." instead of one flattened line, same as before the fixed-price
-  // switchover. Its own price is still its own flat number, same as
-  // every other profile here — not the sum of what it lists.
-  { "id": "avm-profile-1", "name": "AVM 1 Profile", "categoryId": "general-biochemistry",
-    "codes": [
-      "UTSH", "MG", "PHOS",
-      "CHOL", "TRIG", "HCHO", "LDL",
-      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
-      "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC"
-    ],
-    "groups": [
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
-        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-        "Non-HDL Cholesterol", "VLDL Cholesterol"
-      ] },
-      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
-        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-      ] },
-      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
-        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-      ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] }
-    ],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol",
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)"
-    ], "active": true,
-    "pricing": { "b2b": 250, "b2c": 800 } },
-  // Everything AVM 1 Profile has, plus HbA1c (+ its Average Blood Glucose
-  // calculated param), Complete Blood Count, and Pancreatic Profile.
-  { "id": "avm-profile-2", "name": "AVM 2 Profile", "categoryId": "general-biochemistry",
-    "codes": [
-      "UTSH", "MG", "PHOS",
-      "CHOL", "TRIG", "HCHO", "LDL",
-      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
-      "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC",
-      "A1c", "CBC", "LASE", "AMYL"
-    ],
-    "groups": [
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
-        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-        "Non-HDL Cholesterol", "VLDL Cholesterol"
-      ] },
-      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
-        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-      ] },
-      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
-        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-      ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] }
-    ],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol",
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
-    ], "active": true,
-    "pricing": { "b2b": 500, "b2c": 1500 } },
-  // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, Serum
-  // Copper, and C-Reactive Protein (CRP) as their own new groups — Ferritin
-  // is folded into the existing Iron Profile group instead of getting a
-  // group of its own, per the user's own "will come under Iron Profile".
-  { "id": "avm-profile-3", "name": "AVM 3 Profile", "categoryId": "general-biochemistry",
-    "codes": [
-      "UTSH", "MG", "PHOS",
-      "CHOL", "TRIG", "HCHO", "LDL",
-      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
-      "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC", "FERR",
-      "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "SEZN", "SECU", "CRP"
-    ],
-    "groups": [
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
-        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-        "Non-HDL Cholesterol", "VLDL Cholesterol"
-      ] },
-      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
-        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-      ] },
-      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
-        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-      ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
-      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] }
-    ],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol",
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
-    ], "active": true,
-    "pricing": { "b2b": 900, "b2c": 3000 } },
-  // Everything AVM 3 Profile has, plus a new Cardiac Profile group (Apo A1,
-  // Apo B, Lipoprotein (a), High-Sensitivity CRP + Apo B / Apo A1 Ratio
-  // calculated). C-Reactive Protein (CRP) stays its own separate group,
-  // same as in AVM 3 Profile — the user asked only for the Apo/Lp(a)/
-  // HS-CRP cluster to be grouped under Cardiac Profile, not CRP itself.
-  { "id": "avm-profile-4", "name": "AVM 4 Profile", "categoryId": "general-biochemistry",
-    "codes": [
-      "UTSH", "MG", "PHOS",
-      "CHOL", "TRIG", "HCHO", "LDL",
-      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
-      "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC", "FERR",
-      "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "SEZN", "SECU", "CRP",
-      "APOA", "APOB", "LPA", "HSCPRP"
-    ],
-    "groups": [
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
-        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-        "Non-HDL Cholesterol", "VLDL Cholesterol"
-      ] },
-      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
-        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-      ] },
-      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
-        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-      ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
-      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
-    ],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol",
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
-    ], "active": true,
-    "pricing": { "b2b": 1100, "b2c": 3600 } },
-  // Everything AVM 4 Profile has, plus Homocysteine folded into Cardiac
-  // Profile, Folic Acid folded into Vitamin Profile, and three new
-  // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
-  { "id": "avm-profile-5", "name": "AVM 5 Profile", "categoryId": "general-biochemistry",
-    "codes": [
-      "UTSH", "MG", "PHOS",
-      "CHOL", "TRIG", "HCHO", "LDL",
-      "PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT",
-      "URIC", "SCRE", "CALC", "UREA", "BUN",
-      "IRON", "TIBC", "FERR",
-      "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "FOLI", "SEZN", "SECU",
-      "APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO",
-      "BKETO", "FRUCT", "RFAC"
-    ],
-    "groups": [
-      { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
-      { "label": "Magnesium", "codes": ["MG"], "calculatedParams": [] },
-      { "label": "Phosphorous", "codes": ["PHOS"], "calculatedParams": [] },
-      { "label": "Lipid Profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL"], "calculatedParams": [
-        "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-        "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-        "Non-HDL Cholesterol", "VLDL Cholesterol"
-      ] },
-      { "label": "Liver Profile", "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"], "calculatedParams": [
-        "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-        "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-      ] },
-      { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
-        "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-      ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
-      { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
-      { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
-      { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
-      { "label": "Vitamin Profile", "codes": ["VITDT", "VB12", "FOLI"], "calculatedParams": [] },
-      { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
-      { "label": "Blood Ketone", "codes": ["BKETO"], "calculatedParams": [] },
-      { "label": "Fructosamine", "codes": ["FRUCT"], "calculatedParams": [] },
-      { "label": "Rheumatoid Factor", "codes": ["RFAC"], "calculatedParams": [] }
-    ],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol",
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
-    ], "active": true,
-    "pricing": { "b2b": 1600, "b2c": 6000 } },
-  { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],
-    "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 180, "b2c": 800 } },
-  { "id": "lipid-profile", "name": "Lipid Profile", "categoryId": "lipid-profile",
-    "codes": ["CHOL", "TRIG", "HCHO", "LDL"],
-    "calculatedParams": [
-      "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
-      "LDL Cholesterol / HDL Cholesterol Ratio", "HDL Cholesterol / LDL Cholesterol Ratio",
-      "Non-HDL Cholesterol", "VLDL Cholesterol"
-    ], "active": true,
-    "pricing": { "b2b": 40, "b2c": 250 } },
-  { "id": "liver-profile", "name": "Liver Profile", "categoryId": "liver-function",
-    "codes": ["PROT", "SALB", "ALKP", "BILD", "BILT", "SGPT", "SGOT", "GGT"],
-    "calculatedParams": [
-      "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
-      "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)"
-    ], "active": true,
-    "pricing": { "b2b": 70, "b2c": 300 } },
-  { "id": "kidney-profile", "name": "Kidney Profile", "categoryId": "kidney-function",
-    "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"],
-    "calculatedParams": [
-      "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
-    ], "active": true,
-    "pricing": { "b2b": 40, "b2c": 250 } },
-  { "id": "iron-profile", "name": "Iron Profile", "categoryId": "iron-studies",
-    "codes": ["IRON", "TIBC"],
-    "calculatedParams": ["Transferrin Saturation (%)"], "active": true,
-    "pricing": { "b2b": 60, "b2c": 300 } },
-  { "id": "pancreatic-profile", "name": "Pancreatic Profile", "categoryId": "pancreatic-function",
-    "codes": ["LASE", "AMYL"],
-    "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 100, "b2c": 500 } },
-  { "id": "total-thyroid-profile", "name": "Total Thyroid Profile", "categoryId": "thyroid",
-    "codes": ["TT3", "TT4", "UTSH"],
-    "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 50, "b2c": 300 } }
-];
 
   const PARAMETERS_WRAPPED = {
   "_note": "Only populated for tests that are genuinely well-known multi-analyte panels (lipid profile, liver function, kidney function, CBC) — these breakdowns are standard textbook clinical chemistry, not lab-specific. Single-analyte tests are not listed here since the test itself IS the parameter; see js/modules/test-detail.js, which falls back to the test's own name when no breakdown exists.",
@@ -2852,34 +2528,15 @@ AVM.state = {
 
     const byCode = Object.fromEntries(joined.map(t => [t.code, t]));
     const techColors = Object.fromEntries(TECHNOLOGIES.map(t => [t.label, t]));
-    const packageById = Object.fromEntries(PACKAGES.map(p => [p.id, p]));
-
-    // Reverse-index each conflict group so a test's code resolves straight
-    // to the group it belongs to (most tests belong to none).
-    const conflictGroupByCode = {};
-    (AVM.CONFIG.CONFLICT_GROUPS || []).forEach(group => {
-      group.codes.forEach(code => { conflictGroupByCode[code] = group; });
-    });
-
-    // A test can exist purely to be referenced inside a profile's own
-    // "Tests included" breakdown (e.g. Magnesium, added only because
-    // AVM 1-5 Profile list it) without being its own separately-browsable/
-    // purchasable line — `profileOnly: true` marks those. `tests` above
-    // stays the full, unfiltered list (so `byCode` and any profile lookup
-    // still resolves them); this is the narrower list the Individual
-    // Tests table, its own stat count, and Excel export actually browse.
-    const standaloneTests = joined.filter(t => !t.profileOnly);
 
     return {
-      tests: joined, standaloneTests, byCode,
+      tests: joined, standaloneTests: joined, byCode,
       technologies: TECHNOLOGIES, techById, techColors,
       samples: SAMPLES, sampleById,
       categories: CATEGORIES, categoryById,
       departments: DEPARTMENTS, departmentById,
-      packages: PACKAGES, packageById,
       parameters: PARAMETERS, parameterById,
       testParameters: TEST_PARAMETERS,
-      conflictGroupByCode,
     };
   }
 
@@ -2894,10 +2551,9 @@ AVM.state = {
   }
 
   // ---- service layer — the seam for a future API swap; every module below
-  // reads through these functions rather than touching TESTS/PACKAGES/etc directly ----
+  // reads through these functions rather than touching TESTS/CATEGORIES/etc directly ----
   function getTests() { return getCatalog().tests; }
   function getTestByCode(code) { return getCatalog().byCode[code] || null; }
-  function getPackages() { return getCatalog().packages; }
   function getCategories() { return getCatalog().categories; }
   function getDepartments() { return getCatalog().departments; }
   function getTechnologies() { return getCatalog().technologies; }
@@ -2917,7 +2573,7 @@ AVM.state = {
 
   AVM.data = {
     loadCatalog, getCatalog,
-    getTests, getTestByCode, getPackages, getCategories, getDepartments, getTechnologies, getSamples,
+    getTests, getTestByCode, getCategories, getDepartments, getTechnologies, getSamples,
     getParametersForTest,
   };
 })();

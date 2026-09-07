@@ -68,57 +68,19 @@ AVM.modules = AVM.modules || {};
     }
 
     const rangeText = `${start + 1}–${start + shown.length}`;
-    elements.count.textContent = `Showing ${rangeText} of ${totalItems} matching tests${hasActiveFilters() ? "" : ` (${tests.length} total)`} · B2B cost, B2C price & your margin`;
-
-    const { byCode } = AVM.data.getCatalog();
+    elements.count.textContent = `Showing ${rangeText} of ${totalItems} matching tests${hasActiveFilters() ? "" : ` (${tests.length} total)`} · A Rates cost, B2C price & your margin`;
 
     elements.body.innerHTML = shown.map(t => {
       const col = techColors[t.tech] || { fg: "#101C27", bd: "#D2D5D9", bg: "#EFF0F2" };
-      // Part of a fixed-price profile bundle already in the cart (e.g.
-      // Vitamin D via Vitamin Profile) — checked first, independent of
-      // state.cart (a bundle's own tests are never added there — see
-      // profile.js's addPackage); same blocked/⊘ treatment as a
-      // conflicting test rather than a "✓ Added" that looks freely
-      // removable here but would actually just be quietly pulled out of
-      // that profile (see profile.js's toggleTest).
-      const owner = AVM.modules.profile.packageOwning(t.code);
-      const isAdded = !owner && state.cart.has(t.code);
-      const conflictCode = !isAdded && !owner ? AVM.modules.profile.conflictingCodeFor(t.code) : null;
-      const conflictTest = conflictCode ? byCode[conflictCode] : null;
-
-      let btnClass = "add-btn";
-      let btnLabel = "Add to Profile";
-      let btnIcon = "+";
-      let btnAttrs = `data-code="${esc(t.code)}" aria-label="Add ${esc(t.name)}"`;
-      if (owner) {
-        btnClass += " blocked";
-        btnLabel = "Blocked";
-        btnIcon = "⊘";
-        btnAttrs = `data-code="${esc(t.code)}" data-conflict="1" aria-label="${esc(t.name)} is already included in ${esc(owner.name)}" title="Already included in ${esc(owner.name)} — remove it from there to change it"`;
-      } else if (isAdded) {
-        btnClass += " added";
-        btnLabel = "Added";
-        btnIcon = "✓";
-        btnAttrs = `data-code="${esc(t.code)}" aria-label="Remove ${esc(t.name)}"`;
-      } else if (conflictTest) {
-        btnClass += " blocked";
-        btnLabel = "Blocked";
-        btnIcon = "⊘";
-        btnAttrs = `data-code="${esc(t.code)}" data-conflict="1" aria-label="${esc(t.name)} conflicts with ${esc(conflictTest.name)}, already in your profile" title="Already covered by ${esc(conflictTest.name)} in your profile"`;
-      }
-
       return `
-        <div class="rl-row ${isAdded ? "is-added" : ""}" data-code="${esc(t.code)}">
+        <div class="rl-row" data-code="${esc(t.code)}">
           <div><span class="cell-code">${esc(t.code)}</span></div>
           <div class="cell-name cell-name--clickable" data-code="${esc(t.code)}">${esc(t.name)}${t.category ? `<small>${esc(t.category)}</small>` : ""}</div>
           <div><span class="cell-tech" style="color:${col.fg};border-color:${col.bd};background:${col.bg}">${esc(t.tech)}</span></div>
           <div class="cell-sample">${esc(t.sample)}</div>
-          <div class="cell-price"><span class="mobile-label">B2B</span>${money(t.b2b)}</div>
+          <div class="cell-price"><span class="mobile-label">A Rates</span>${money(t.b2b)}</div>
           <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(t.b2c)}</div>
           <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(margin(t))}<small>${t.b2b ? `+${Math.round(marginPercentage(t.b2b, t.b2c))}%` : "—"}</small></span></div>
-          <div class="cell-action">
-            <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>
-          </div>
         </div>`;
     }).join("");
 
@@ -126,16 +88,8 @@ AVM.modules = AVM.modules || {};
       AVM.modules.pagination.renderPagination({ container: elements.paginationWrap, totalItems, onChange });
     }
 
-    elements.body.querySelectorAll(".add-btn").forEach(btn => {
-      btn.onclick = (e) => {
-        e.stopPropagation();
-        AVM.modules.profile.toggleTest(btn.dataset.code);
-        onChange();
-      };
-    });
-
     elements.body.querySelectorAll(".cell-name--clickable").forEach(el => {
-      el.onclick = () => AVM.modules.testDetail.openTestDetail(el.dataset.code, onChange);
+      el.onclick = () => AVM.modules.testDetail.openTestDetail(el.dataset.code);
     });
   }
 

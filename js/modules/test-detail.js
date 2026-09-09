@@ -50,6 +50,7 @@ AVM.modules = AVM.modules || {};
       <dl class="td-facts">
         <div><dt>Sample</dt><dd>${esc(test.sample)}</dd></div>
         <div><dt>Processed At</dt><dd>LPL</dd></div>
+        ${test.analyzer ? `<div><dt>Analyzer</dt><dd>${esc(test.analyzer)}</dd></div>` : ""}
       </dl>
       <div class="td-pricing">
         <div><span>A Rates Cost</span><b>${money(test.b2b)}</b></div>

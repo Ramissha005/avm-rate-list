@@ -1,0 +1,98 @@
+[
+  {
+    "id": "diabetes",
+    "label": "Diabetes"
+  },
+  {
+    "id": "liver-function",
+    "label": "Liver Function"
+  },
+  {
+    "id": "kidney-function",
+    "label": "Kidney Function"
+  },
+  {
+    "id": "electrolytes",
+    "label": "Electrolytes"
+  },
+  {
+    "id": "pancreatic-function",
+    "label": "Pancreatic Function"
+  },
+  {
+    "id": "metabolic-disorder",
+    "label": "Metabolic Disorder"
+  },
+  {
+    "id": "lipid-profile",
+    "label": "Lipid Profile"
+  },
+  {
+    "id": "thyroid",
+    "label": "Thyroid"
+  },
+  {
+    "id": "iron-studies",
+    "label": "Iron Studies"
+  },
+  {
+    "id": "vitamins",
+    "label": "Vitamins"
+  },
+  {
+    "id": "cardiac",
+    "label": "Cardiac Marker"
+  },
+  {
+    "id": "reproductive-hormones",
+    "label": "Reproductive & Endocrine Hormones"
+  },
+  {
+    "id": "pregnancy",
+    "label": "Pregnancy"
+  },
+  {
+    "id": "tumor-markers",
+    "label": "Tumor Markers"
+  },
+  {
+    "id": "infectious-disease",
+    "label": "Infectious Disease"
+  },
+  {
+    "id": "bone-metabolism",
+    "label": "Bone Metabolism"
+  },
+  {
+    "id": "allergy-immunology",
+    "label": "Allergy"
+  },
+  {
+    "id": "general-biochemistry",
+    "label": "General Biochemistry"
+  },
+  {
+    "id": "hematology",
+    "label": "Hematology"
+  },
+  {
+    "id": "urine",
+    "label": "Urine"
+  },
+  {
+    "id": "stress-hormone",
+    "label": "Stress Hormone"
+  },
+  {
+    "id": "thyroid-autoimmune",
+    "label": "Thyroid Autoimmune"
+  },
+  {
+    "id": "arthritis-autoimmune",
+    "label": "Arthritis Autoimmune"
+  },
+  {
+    "id": "infertility",
+    "label": "Infertility"
+  }
+]

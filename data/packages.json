@@ -1,0 +1,9 @@
+[
+  { "id": "kidney-function", "name": "Kidney Function", "description": "Core markers of renal function.", "categoryId": "kidney-function", "codes": ["BUN", "UREA", "SCRE", "URIC"], "active": true },
+  { "id": "liver-function", "name": "Liver Function", "description": "Full liver enzyme and protein panel.", "categoryId": "liver-function", "codes": ["BILD", "BILT", "SGOT", "SGPT", "ALKP", "GGT", "PROT", "SALB"], "active": true },
+  { "id": "lipid-profile", "name": "Lipid Profile", "description": "Cholesterol and triglyceride panel for cardiovascular risk screening.", "categoryId": "lipid-profile", "codes": ["CHOL", "TRIG", "HCHO", "LDL", "LPA", "APOA", "APOB"], "active": true },
+  { "id": "total-thyroid", "name": "Total Thyroid (T3, T4, TSH)", "description": "Standard total-hormone thyroid screen.", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH"], "active": true },
+  { "id": "free-thyroid", "name": "Free Thyroid (FT3, FT4, TSH)", "description": "Free-hormone thyroid screen.", "categoryId": "thyroid", "codes": ["FT3", "FT4", "UTSH"], "active": true },
+  { "id": "thyro-5", "name": "Thyro 5 (T3, T4, TSH, FT3, FT4)", "description": "Combined total and free thyroid panel.", "categoryId": "thyroid", "codes": ["TT3", "TT4", "UTSH", "FT3", "FT4"], "active": true },
+  { "id": "iron-deficiency", "name": "Iron Deficiency", "description": "Iron status and storage panel.", "categoryId": "iron-studies", "codes": ["IRON", "TIBC", "FERR"], "active": true }
+]

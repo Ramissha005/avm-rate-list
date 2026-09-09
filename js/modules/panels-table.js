@@ -1,0 +1,270 @@
+window.AVM = window.AVM || {};
+AVM.modules = AVM.modules || {};
+
+(function () {
+  // Renders the homepage rate list's Profiles view — one common panel
+  // (Kidney Profile, Liver Profile, ...) per row instead of one test per
+  // row, reusing the same .fr-row/.fr-head grid shell the Tests view
+  // already has loaded. Each row can expand to a "tests included" line
+  // (every test, and any calculated extra, that panel bundles in) —
+  // collapsed by default so a page with several panels doesn't turn into
+  // one long list of test names.
+  //
+  // The Technology filter (state.activeFilters.technology, same chips as
+  // the Tests view) applies here too — a panel matches if *any* of its
+  // tests use one of the selected technologies, not only if every test
+  // does, so picking a technology never hides a panel that's genuinely
+  // relevant to it just because one other test inside happens to use a
+  // different one.
+  //
+  // Each profile's price is its own flat, hand-set number (see data.js
+  // `pricing` and calculations.js packagePricing()) — NOT summed from its
+  // listed tests' own B2B/B2C prices the way every profile used to be
+  // priced.
+  //
+  // Sort reuses the homepage's existing #sortSelect rather than a separate
+  // dropdown just for panels — the same options (Default/Name/B2B/B2C/
+  // Margin) read just as naturally against a panel's own price as they do
+  // against a single test's — see the sorter map below, keyed by the exact
+  // same option values #sortSelect's markup already uses.
+  const expanded = new Set();
+
+  const SORTERS = {
+    name: (a, b) => a.pkg.name.localeCompare(b.pkg.name),
+    "b2b-asc": (a, b) => a.pricing.b2b - b.pricing.b2b,
+    "b2b-desc": (a, b) => b.pricing.b2b - a.pricing.b2b,
+    "b2c-asc": (a, b) => a.pricing.b2c - b.pricing.b2c,
+    "b2c-desc": (a, b) => b.pricing.b2c - a.pricing.b2c,
+    "margin-desc": (a, b) => b.pricing.margin - a.pricing.margin,
+    "margin-asc": (a, b) => a.pricing.margin - b.pricing.margin,
+  };
+
+  function cleanTestName(name) {
+    return name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+  }
+
+  function dotJoin(names, esc) {
+    const { highlightAsterisk } = AVM.utils.formatters;
+    return names.map(n => highlightAsterisk(esc(n))).join(`<span class="fr-panel-details__dot">•</span>`);
+  }
+
+  // A profile built from several named sub-panels + a few extra tests can
+  // carry its own `groups` breakdown (see data.js) so the expanded "Tests
+  // included" list reads as "Kidney Profile: ..." / "Iron Profile: ..."
+  // instead of one long flattened line. No current profile uses this (the
+  // fixed-price model rebuild started from just one — see PACKAGES in
+  // data.js) but the rendering support stays here for when a bigger,
+  // multi-panel profile gets added back. Packages without `groups` fall
+  // back to the plain flat line instead.
+  function renderTestDetails(pkg, items, byCode, esc) {
+    const { packageTestCount } = AVM.modules.calculations;
+    if (pkg.groups && pkg.groups.length) {
+      // Each group carries its own calculatedParams (the same ratios its
+      // matching standalone panel already lists — see data.js), folded
+      // onto that group's own line rather than pulled out into a
+      // separate "Calculated Parameters" section, so e.g. eGFR reads
+      // under Kidney Profile the same way it does on the Kidney Profile
+      // package itself.
+      //
+      // A group that's just one standalone test and nothing else (the
+      // Calcium/CRP/TSH-style entries split out of what used to be one
+      // "Additional Tests" bucket) gets the exact same block treatment
+      // as Kidney Profile or Liver Profile — same heading style, same
+      // left rail — just without a body line, since a one-item line
+      // would only repeat the heading's own name.
+      return pkg.groups.map(g => {
+        const resolved = g.codes.map(c => byCode[c]).filter(Boolean);
+        const names = [...resolved.map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
+        // The count in the heading is the same weighted packageTestCount()
+        // math the profile's own Test Count uses (a code like CBC reports
+        // more than one result on its own — see data.js's paramCount) —
+        // not just how many lines are listed below, which for CBC would
+        // undercount it as 1 instead of the real 21. Skipped entirely for
+        // a genuine single-parameter group (count === 1, e.g. Phosphorous
+        // on its own) — "(1)" next to a heading that's already just one
+        // test's own name only repeats what's obvious.
+        const count = packageTestCount({ calculatedParams: g.calculatedParams }, resolved);
+        const countLabel = count === 1 ? "" : ` (${count})`;
+        const body = names.length === 1 ? "" : `<p>${dotJoin(names, esc)}</p>`;
+        return `
+          <div class="fr-panel-details__group">
+            <span class="fr-panel-details__group-label">${esc(g.label)}${countLabel}</span>
+            ${body}
+          </div>`;
+      }).join("");
+    }
+    const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
+    return `<p>${dotJoin(names, esc)}</p>`;
+  }
+
+  // Plain-text version of the same "Tests included" breakdown, for the
+  // Profiles Excel export's own column (see export.js's exportPanelsCSV)
+  // — a spreadsheet cell can't hold renderTestDetails()'s HTML, so this
+  // mirrors its group-aware logic with ", "/"; " joins instead of dots
+  // and <div>s.
+  function testsIncludedText(pkg, items) {
+    if (pkg.groups && pkg.groups.length) {
+      const { byCode } = AVM.data.getCatalog();
+      return pkg.groups.map(g => {
+        const resolved = g.codes.map(c => byCode[c]).filter(Boolean);
+        const names = [...resolved.map(t => cleanTestName(t.name)), ...(g.calculatedParams || [])];
+        return `${g.label}: ${names.join(", ")}`;
+      }).join("; ");
+    }
+    const names = [...items.map(t => cleanTestName(t.name)), ...(pkg.calculatedParams || [])];
+    return names.join(", ");
+  }
+
+  // Shared by the on-page table below and the Profiles "Export Excel"
+  // button (see export.js's exportPanelsCSV) — both need the exact same
+  // active-technology + search filtering and Default/Name/B2B/B2C/Margin
+  // sort, so the exported file always matches what's currently on screen.
+  // Reads straight off AVM.state (search.js/sorting.js keep it in sync
+  // with the search box and sort dropdown), same convention rate-list.js's
+  // own getFiltered() uses.
+  function getFiltered(packages) {
+    const { byCode } = AVM.data.getCatalog();
+    const term = (AVM.state.searchTerm || "").trim().toLowerCase();
+    const activeTech = AVM.state.activeFilters.technology;
+    const rows = (packages || [])
+      .filter(pkg => pkg.active !== false)
+      .map(pkg => {
+        const items = pkg.codes.map(c => byCode[c]).filter(Boolean);
+        return { pkg, items, pricing: AVM.modules.calculations.packagePricing(pkg) };
+      })
+      .filter(({ pkg, items }) => {
+        if (activeTech.size && !items.some(t => activeTech.has(t.tech))) return false;
+        if (term && !pkg.name.toLowerCase().includes(term)) return false;
+        return true;
+      });
+
+    // No sort selected ("Sort: Default", or no #sortSelect at all) leaves
+    // rows in catalog order — same as every other panel listing on the
+    // site (the old bundle-chip row included), so AVM Profile A/B/C/
+    // Infertility A/Anemia A show first here exactly like they do on the
+    // homepage's own Profiles view.
+    if (SORTERS[AVM.state.sortMode]) rows.sort(SORTERS[AVM.state.sortMode]);
+    return rows;
+  }
+
+  function renderPanelsTable({ packages, elements, onChange }) {
+    if (!elements || !elements.body) return;
+    const { money, escapeHtml: esc } = AVM.utils.formatters;
+    const { byCode } = AVM.data.getCatalog();
+    const { packageTestCount } = AVM.modules.calculations;
+
+    if (elements.head) {
+      elements.head.className = "fr-head fr-panels-head";
+      elements.head.innerHTML = `<div>Profile</div><div>No of<br>Tests</div><div>B2B</div><div>B2C</div><div>Margin</div><div></div>`;
+    }
+
+    const rows = getFiltered(packages);
+    const term = AVM.state.searchTerm || "";
+    const activeTech = AVM.state.activeFilters.technology;
+
+    if (elements.paginationWrap) elements.paginationWrap.innerHTML = "";
+
+    if (rows.length === 0) {
+      elements.body.innerHTML = `<div class="fr-empty">No profiles match that search/filter.</div>`;
+      if (elements.count) elements.count.textContent = "";
+      return;
+    }
+
+    if (elements.count) {
+      const filtered = term || activeTech.size;
+      elements.count.textContent = filtered
+        ? `Showing ${rows.length} of ${packages.length} profiles`
+        : `${rows.length} profile${rows.length !== 1 ? "s" : ""}`;
+    }
+
+    elements.body.innerHTML = rows.map(({ pkg, items, pricing }) => {
+      const isAdded = AVM.modules.profile.isPackageActive(pkg);
+      // A profile not yet added itself can still share tests with a
+      // bigger one already in the cart — e.g. Total Thyroid Profile
+      // shares just its TSH with AVM 1 Profile (which doesn't have
+      // Total T3/T4 at all). Whether that shows as Blocked/⊘ depends on
+      // which one is actually bigger (see profile.js's
+      // blockingPackage/isBiggerThan, same "No of Tests" count this
+      // table's own column shows): adding a genuinely bigger profile
+      // over a smaller active one is a working "+" that auto-replaces
+      // the smaller one (not blocked — see addPackage), while adding a
+      // smaller/redundant one over a bigger active one stays Blocked, same
+      // treatment as a conflicting individual test (see rate-list.js).
+      // Only checked when not already added itself — an actively-added
+      // profile always shows its normal "✓ Added" state, even if some
+      // other bundle happens to share a test with it too.
+      const covering = !isAdded ? AVM.modules.profile.blockingPackage(pkg) : null;
+      let btnClass = "add-btn";
+      let btnLabel = "Add to Profile";
+      let btnIcon = "+";
+      let btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="Add ${esc(pkg.name)}"`;
+      if (covering) {
+        btnClass += " blocked";
+        btnLabel = "Blocked";
+        btnIcon = "⊘";
+        btnAttrs = `data-pkg="${esc(pkg.id)}" data-conflict="1" aria-label="${esc(pkg.name)} overlaps with ${esc(covering.name)} already in your profile" title="Overlaps with ${esc(covering.name)} already in your profile"`;
+      } else if (isAdded) {
+        btnClass += " added";
+        btnLabel = "Added";
+        btnIcon = "✓";
+        btnAttrs = `data-pkg="${esc(pkg.id)}" aria-label="Remove ${esc(pkg.name)}"`;
+      }
+      const isOpen = expanded.has(pkg.id);
+      // Same real test count the cart drawer's own "N tests" badge shows
+      // once this profile is added (see calculations.js) — a code that
+      // itself reports more than one result (CBC's 28, CUA's 22) and any
+      // calculated/derived parameters (eGFR, ABG, ...) both count here
+      // too, not just pkg.codes.length.
+      const testCount = packageTestCount(pkg, items);
+
+      const priceCells = `
+          <div class="cell-price"><span class="mobile-label">B2B</span>${money(pricing.b2b)}</div>
+          <div class="cell-price is-b2c"><span class="mobile-label">B2C</span>${money(pricing.b2c)}</div>
+          <div><span class="mobile-label">Margin</span><span class="cell-margin">+${money(pricing.margin)}<small>+${Math.round(pricing.marginPercentage)}%</small></span></div>`;
+
+      return `
+        <div class="fr-row fr-panels-row">
+          <div class="cell-name">
+            ${esc(pkg.name)}
+            <button type="button" class="fr-panel-toggle" data-toggle-pkg="${esc(pkg.id)}" aria-expanded="${isOpen}">${isOpen ? "▴" : "▾"} Tests included</button>
+          </div>
+          <div class="cell-testcount"><span class="mobile-label">Tests</span>${testCount}</div>
+          ${priceCells}
+          <div class="cell-action">
+            <button type="button" class="${btnClass}" ${btnAttrs}><span aria-hidden="true">${btnIcon}</span><span class="add-btn__label">${btnLabel}</span></button>
+          </div>
+        </div>
+        ${isOpen ? `
+        <div class="fr-panel-details">
+          <span class="fr-panel-details__label">Tests included</span>
+          ${renderTestDetails(pkg, items, byCode, esc)}
+        </div>` : ""}`;
+    }).join("");
+
+    elements.body.querySelectorAll(".fr-panel-toggle").forEach(btn => {
+      btn.onclick = () => {
+        const id = btn.dataset.togglePkg;
+        if (expanded.has(id)) expanded.delete(id);
+        else expanded.add(id);
+        // Only this table needs to re-render — no cart/count change, so a
+        // plain re-render (not the full onChange chain) keeps a toggle
+        // click from re-scrolling or re-computing anything else on the
+        // page.
+        renderPanelsTable({ packages, elements, onChange });
+      };
+    });
+
+    elements.body.querySelectorAll(".add-btn").forEach(btn => {
+      btn.onclick = () => {
+        const { packageById } = AVM.data.getCatalog();
+        const pkg = packageById[btn.dataset.pkg];
+        if (!pkg) return;
+        if (AVM.modules.profile.isPackageActive(pkg)) AVM.modules.profile.removePackage(pkg);
+        else AVM.modules.profile.addPackage(pkg);
+        if (onChange) onChange();
+      };
+    });
+  }
+
+  AVM.modules.panelsTable = { renderPanelsTable, getFiltered, testsIncludedText };
+})();

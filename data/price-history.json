@@ -1,0 +1,4 @@
+{
+  "_note": "Reserved schema for future price versioning. Not populated — this catalog only has current prices (tests.json), and no historical change log exists yet. Shape shown here is the intended target once an admin pricing workflow exists: { testCode, oldB2B, newB2B, oldB2C, newB2C, effectiveFrom, effectiveTo, changedBy, changedAt }.",
+  "history": []
+}

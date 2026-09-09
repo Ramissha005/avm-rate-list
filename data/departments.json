@@ -1,0 +1,18 @@
+[
+  {
+    "id": "biochemistry",
+    "label": "Biochemistry"
+  },
+  {
+    "id": "immunoassay",
+    "label": "Immunoassay / Serology"
+  },
+  {
+    "id": "hematology",
+    "label": "Hematology"
+  },
+  {
+    "id": "clinical-pathology",
+    "label": "Clinical Pathology"
+  }
+]

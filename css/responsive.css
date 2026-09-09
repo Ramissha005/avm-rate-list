@@ -1,0 +1,291 @@
+/* AVMLabs responsive overrides — breakpoints + reduced-motion */
+/* Depends on: variables.css, layout.css, components.css */
+
+@media (max-width:960px){
+  /* Nav links collapse into a hamburger dropdown — with up to 7 links on
+     admin pages, forcing them to stay inline (or scroll sideways, as the
+     old overflow:auto row did) either overlapped the cart button or made
+     the row unreadable at phone widths. */
+  .nav{ flex-wrap:wrap; position:relative; }
+  .nav-toggle-btn{ display:flex; order:3; }
+  .nav__actions{ order:2; }
+  .nav__links{
+    order:4; flex-basis:100%; width:100%; margin-top:0;
+    flex-direction:column; align-items:stretch; gap:0;
+    max-height:0; opacity:0; overflow:hidden;
+    transition:max-height var(--transition), opacity var(--transition-fast);
+  }
+  .nav-toggle:checked ~ .nav__links{
+    max-height:70vh; opacity:1; overflow-y:auto; margin-top:var(--space-3);
+  }
+  .nav__links a{
+    padding:var(--space-3) 2px; border-bottom:1px solid var(--line); white-space:normal;
+  }
+  .nav__links a:last-child{ border-bottom:none; }
+
+  .hero__grid{ grid-template-columns:1fr; }
+  .cta-grid{ grid-template-columns:1fr; }
+  .sarc-chapter-pair{ grid-template-columns:1fr; }
+  /* Tighter padding/type so the SARC reference tables (only 3-5 short
+     numeric columns each) have a real shot at fitting a phone's width
+     without falling back to .data-table-wrap's horizontal scroll. */
+  .data-table thead th{ padding:var(--space-2) var(--space-3); font-size:10px; }
+  .data-table thead th:first-child{ width:64px; }
+  .data-table tbody td{ padding:var(--space-2) var(--space-3); font-size:var(--text-sm); }
+  .hero::before{ width:360px; height:360px; right:-120px; top:-100px; }
+  /* The specimen-requisition slip is a nice desktop flourish but just eats
+     scroll distance above the fold on a phone — drop it entirely here. */
+  .hero__slip-wrap{ display:none; }
+  /* Same reasoning for the franchise page's full-bleed hero photo — it's
+     absolutely positioned behind the copy specifically because there's
+     enough side-by-side width for it not to compete with the text; below
+     that width it would just sit awkwardly under/behind the paragraph. */
+  .hero__image-wrap{ display:none; }
+
+  .footer__top{ grid-template-columns:1fr 1fr; }
+  .rl-head{ display:none; }
+
+  /* Technology/Price filters are collapsed behind the Filters toggle button
+     on every breakpoint now (see .filters-panel[hidden] in layout.css), so
+     they no longer need a mobile-only display:none — the panel just isn't
+     open until tapped, same as desktop. */
+
+  /* Every row (Individual Tests and Profiles alike, on both the homepage
+     and Franchise page — .rl-row and .fr-row/.fr-panels-row share this
+     .rl-table wrapper) reads as its own floating card at this width
+     rather than one continuous list with a barely-visible 1px divider
+     between entries — each row got noticeably taller once it started
+     carrying category/tech/sample plus three price chips, and a thin
+     line alone no longer read as a real boundary between two of them.
+     The wrapper's own white background/border step aside so the page's
+     own grey (.ratelist) shows through as the gap between cards. */
+  .rl-table{ background:transparent; border:none; border-radius:0; overflow:visible; }
+  .rl-row, .fr-row{
+    background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow-sm); margin-bottom:var(--space-3);
+  }
+  .rl-row:last-child, .fr-row:last-child{ border:1px solid var(--line); margin-bottom:0; }
+
+  /* Mobile test card — an explicit 3-column grid rather than every field
+     stacking full-width on its own line (which is what made B2B/B2C read as
+     two huge, disconnected numbers with nothing tying them together). Each
+     cell is placed by its fixed position in rate-list.js's markup — code,
+     name, tech, sample, B2B, B2C, margin, action, in that order — so code
+     sits alone, name spans the full card, tech pairs with sample, and
+     B2B / B2C / Margin sit together on one row as three matching chips. */
+  .rl-row{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    column-gap:var(--space-2); row-gap:var(--space-2);
+    padding:var(--space-4); align-items:center;
+  }
+  .rl-row > *:nth-child(1){ grid-column:1; grid-row:1; }                   /* code */
+  .rl-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }              /* name */
+  .rl-row > *:nth-child(3){ grid-column:1 / span 2; grid-row:3; }          /* technology */
+  .rl-row > *:nth-child(4){ grid-column:3; grid-row:3; text-align:right; } /* sample */
+  .rl-row > *:nth-child(5){ grid-column:1; grid-row:4; }                   /* B2B */
+  .rl-row > *:nth-child(6){ grid-column:2; grid-row:4; }                   /* B2C */
+  .rl-row > *:nth-child(7){ grid-column:3; grid-row:4; }                   /* margin */
+  .rl-row > *:nth-child(8){ grid-column:1 / -1; grid-row:5; }              /* add-to-profile */
+
+  .cell-sample{ font-size:var(--text-sm); }
+  .cell-sample::before{
+    content:"Sample"; display:block; font-family:var(--font-mono); font-size:var(--text-2xs); font-weight:700;
+    color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px;
+  }
+
+  /* Price cells become compact, evenly-sized stat chips in one row instead
+     of one oversized number per line — dialed down further (padding, font,
+     column-gap) so three of them actually fit a phone width without feeling
+     cramped or wasting space on oversized numbers. */
+  .rl-row{ column-gap:6px; }
+  .cell-price{
+    font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
+    padding:var(--space-1) 6px; line-height:1.2;
+  }
+  .mobile-label{
+    display:block; font-size:9px; font-weight:700; color:var(--ink-faint);
+    text-transform:uppercase; letter-spacing:.03em; margin-bottom:1px;
+  }
+  .cell-margin{
+    font-size:var(--text-xs); padding:var(--space-1) 6px; width:100%; box-sizing:border-box;
+    display:block; text-align:center;
+  }
+  .cell-margin small{ display:inline; margin-left:3px; }
+
+  .cell-action{ text-align:left; }
+  .add-btn{
+    width:100%; height:auto; border-radius:var(--radius-full);
+    padding:var(--space-3) var(--space-4); font-size:var(--text-base); font-weight:600;
+  }
+  .add-btn__label{ display:inline; }
+
+  /* .fr-row's mobile card — used by the homepage's Profiles view (see
+     panels-table.js): name stacked full-width, then B2B/B2C/Margin as
+     three matching chips in one row — same repeat(3,1fr) pattern
+     .rl-row's own B2B/B2C/Margin trio uses — then the full-width Add
+     to Profile button (its text label shows at this width, same as
+     .add-btn__label above). */
+  .fr-head{ display:none; }
+  .fr-row{
+    display:grid; grid-template-columns:repeat(3,1fr);
+    column-gap:var(--space-2); row-gap:var(--space-2);
+    padding:var(--space-4); align-items:center;
+  }
+  .fr-row > *:nth-child(1){ grid-column:1 / -1; grid-row:1; }                 /* code */
+  .fr-row > *:nth-child(2){ grid-column:1 / -1; grid-row:2; }                 /* name */
+  .fr-row > *:nth-child(3){ grid-column:1; grid-row:3; }                     /* first rate */
+  .fr-row > *:nth-child(4){ grid-column:2; grid-row:3; }                     /* second rate */
+  .fr-row > *:nth-child(5){ grid-column:3; grid-row:3; }                     /* badge */
+  .fr-row > *:nth-child(6){ grid-column:1 / -1; grid-row:4; }                /* Add to Profile */
+  .fr-row .cell-price{
+    font-size:var(--text-sm); background:var(--paper-2); border-radius:var(--radius-xs);
+    padding:var(--space-1) 6px; line-height:1.2;
+  }
+
+  /* Panels view (see panels-table.js) — same card, no code column: name
+     (with its own "Tests included" toggle) alongside its own Tests
+     count in the top-right corner of that same row — same idea as the
+     Tests view's code+sample pairing above — then B2B/B2C/Margin as
+     three matching chips in one row exactly like .rl-row's own
+     B2B/B2C/Margin trio, then Add to Profile. Needs .fr-panels-row
+     (not just nth-child alone) to win over the 6-field positions above
+     at equal specificity.
+     Also needs its own grid-template-columns override: layout.css's
+     desktop .fr-row.fr-panels-row rule combines two classes (0,2,0),
+     which outranks a plain .fr-row grid-template-columns mobile rule
+     (0,1,0) regardless of the media query — so without this, the row
+     would silently keep its 6-track desktop grid on phones instead of
+     the three even mobile columns below. */
+  .fr-row.fr-panels-row{ grid-template-columns:repeat(3,1fr); }
+  .fr-panels-row > *:nth-child(1){ grid-column:1 / span 2; grid-row:1; }            /* name */
+  .fr-panels-row > *:nth-child(2){ grid-column:3; grid-row:1; text-align:right; }   /* tests, top-right corner */
+  .fr-panels-row > *:nth-child(3){ grid-column:1; grid-row:2; }                     /* B2B */
+  .fr-panels-row > *:nth-child(4){ grid-column:2; grid-row:2; }                     /* B2C */
+  .fr-panels-row > *:nth-child(5){ grid-column:3; grid-row:2; }                     /* margin */
+  .fr-panels-row > *:nth-child(6){ grid-column:1 / -1; grid-row:3; }                /* Add to Profile */
+
+  /* Desktop's .fr-panel-details lines its text up under the Panel column
+     (82px in from the 70px code column + gap) — no such column on this
+     stacked card layout, so it just gets the card's own padding back.
+     An open details panel is a separate sibling after .fr-row, not part
+     of its card — merged into one continuous card instead of a rounded
+     floating row with an unrelated rectangular block appearing right
+     under it: the row drops its own bottom corners/shadow/gap when a
+     details panel follows it, and the details panel picks up matching
+     bottom corners/shadow/border, continuing seamlessly from the row
+     above rather than reading as a second, disconnected element. */
+  .fr-row:has(+ .fr-panel-details){
+    border-bottom-left-radius:0; border-bottom-right-radius:0; border-bottom:none;
+    box-shadow:none; margin-bottom:0;
+  }
+  .fr-panel-details{
+    padding:var(--space-4); background:#fff; border:1px solid var(--line); border-top:none;
+    border-bottom-left-radius:var(--radius); border-bottom-right-radius:var(--radius);
+    box-shadow:var(--shadow-sm); margin-bottom:var(--space-3);
+  }
+
+  /* Sort and page-size drop out of the mobile controls bar entirely —
+     leaves .rl-right empty, so the frozen bar is just the search input. */
+  .rl-right{ display:none; }
+
+  .rl-controls{ padding:var(--space-4); }
+
+  /* LPL/CRL stack instead of sitting side by side at this width. */
+  .lab-stats{ flex-direction:column; gap:var(--space-6); }
+  .stat-cards{ gap:var(--space-2); }
+  .stat-card{ padding:var(--space-3) var(--space-2); text-align:center; }
+  /* The icon badge is a block element, so the text-align:center above
+     (which only centers inline text) leaves it stuck on the left —
+     center it explicitly to match. */
+  .stat-card__icon{ margin-left:auto; margin-right:auto; }
+  /* ...except in the charge cards' row layout, where the icon sits
+     inline at the start of the row rather than stacked above the text. */
+  .stat-card--plain .stat-card__icon{ margin-left:0; margin-right:0; }
+  .stat-card__num{ font-size:var(--text-xl); }
+  .stat-card__label{ font-size:9px; margin-top:2px; }
+  /* CRL's heading (code + name + Coming Soon/Explore) is the one row
+     here with pieces fighting for space — let it wrap rather than force
+     the tag/button onto a phone-width line with the rest. */
+  .lab-stats__head{ flex-wrap:wrap; row-gap:var(--space-1); }
+  .lab-stats__cta{ margin-left:0; }
+  /* 3 cards at full width is tight below 960px — 2 up here (the 3rd
+     wraps to its own row), 1 up under 600px (see below). */
+  .charge-cards{ grid-template-columns:repeat(2,1fr); gap:var(--space-4); }
+  /* The centered text-align above reads fine for a short num+label, but
+     a whole sentence centered across several lines is harder to read —
+     left-align just the description. */
+  .stat-card__desc{ text-align:left; }
+}
+@media (max-width:600px){
+  .wrap{ padding:0 var(--space-4); }
+  section{ padding:var(--space-12) 0; }
+  .nav{ padding:var(--space-3) var(--space-4); gap:var(--space-2); }
+  .brand__logo{ height:44px; }
+  .nav__links a{ font-size:var(--text-sm); }
+  .cart-btn{ padding:var(--space-2) var(--space-3) var(--space-2) var(--space-3); font-size:var(--text-xs); }
+  .cart-btn__text-full{ display:none; }
+  .cart-btn__text-short{ display:inline; }
+  .hero{ padding:var(--space-10) 0 var(--space-8); }
+  .hero::before{ width:280px; height:280px; right:-100px; top:-80px; }
+  .hero__ctas .btn{ flex:1 1 auto; justify-content:center; text-align:center; }
+
+  .hero__focus-title{ margin-top:var(--space-3); }
+  /* Two tags per row (a fixed grid, not flex-wrap — at this width each
+     tag's own content is close enough to full-width that wrapping just
+     produces one per row anyway) so five tags cost 3 short rows instead
+     of 5 full-width ones or a swipeable slider that hides tags off the
+     right edge with no cue to scroll for them. Smaller type/padding is
+     what actually makes two fit per row without truncating. */
+  .hero__specialties{
+    display:grid; grid-template-columns:1fr 1fr; gap:var(--space-2); max-width:none;
+  }
+  .hero__specialties > span{
+    font-size:0.62rem; padding:0.42rem 0.55rem; white-space:normal; line-height:1.25;
+  }
+  .footer__top{ grid-template-columns:1fr; }
+  /* Smaller heading/copy/button and tighter padding — the full desktop
+     sizing ran this CTA taller than the hero content above it on a phone
+     screen. */
+  .cta-band{ padding:var(--space-5); flex-direction:column; align-items:flex-start; }
+  .cta-band__title{ font-size:var(--text-lg); margin-bottom:var(--space-1); }
+  .cta-band p{ font-size:var(--text-sm); }
+  /* The homepage's Franchise + SARC pair (.cta-grid) is the tallest thing
+     on a phone screen — dropping their description line (heading + button
+     alone are still a complete, self-explanatory CTA) is what actually
+     gets the page closer to fitting a single screen. Scoped to .cta-grid
+     so franchise.html/sarc.html's own closing .cta-band keeps its text. */
+  .cta-grid .cta-band p{ display:none; }
+  .cta-band .btn{ width:100%; justify-content:center; padding:var(--space-3) var(--space-5); font-size:var(--text-sm); }
+  /* With the description gone, the homepage pair goes back to one row —
+     heading left, button right, same shape as desktop — instead of the
+     stacked/full-width layout above (still right for franchise.html/
+     sarc.html's own .cta-band, which keeps its longer description text
+     and genuinely needs the extra vertical room). */
+  .cta-grid .cta-band{ flex-direction:row; align-items:center; }
+  .cta-grid .cta-band__title{ font-size:var(--text-md); margin-bottom:0; }
+  .cta-grid .cta-band .btn{ width:auto; flex:none; padding:var(--space-2) var(--space-4); font-size:var(--text-xs); }
+  blockquote.pull p{ font-size:var(--text-lg); }
+  .cart-drawer{ width:100vw; }
+
+  /* The frozen search bar's top offset tracks the header's real height —
+     it shrinks here as the logo drops to 36px and the hamburger button
+     (38px) becomes the tallest element in the row. */
+  .fr-sticky-controls{ top:60px; }
+
+  .section-head{ margin-bottom:var(--space-6); }
+  .lab-stats{ gap:var(--space-5); }
+  /* Two columns still fits the short stat cards above, but a whole
+     sentence squeezed into half a phone width wraps too tightly — one
+     column here instead. */
+  .charge-cards{ grid-template-columns:1fr; }
+  .filters-panel{ padding:var(--space-4); margin-bottom:var(--space-4); }
+  .rl-toolbar{ margin:var(--space-4) 0 var(--space-2); }
+}
+@media (max-width:400px){
+  .brand__logo{ height:36px; }
+  .cart-btn{ padding:var(--space-2) var(--space-2) var(--space-2) var(--space-2); font-size:var(--text-2xs); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}

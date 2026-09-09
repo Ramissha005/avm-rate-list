@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4RXFMJV6DZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4RXFMJV6DZ');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg?v=2">
+<title>SARC Explained — AVMLabs</title>
+<meta name="description" content="Services At Reagent Cost — how AVMLabs prices testing at or near reagent cost, and the numbers behind it as volume rises.">
+<meta name="theme-color" content="#0E2238">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AVMLabs">
+<meta property="og:title" content="SARC Explained — AVMLabs">
+<meta property="og:description" content="Services At Reagent Cost — how AVMLabs prices testing at or near reagent cost, and the numbers behind it as volume rises.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SARC Explained — AVMLabs">
+<meta name="twitter:description" content="Services At Reagent Cost — how AVMLabs prices testing at or near reagent cost, and the numbers behind it as volume rises.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="../index.html#top" class="brand">
+      <img class="brand__logo" src="../assets/images/avm-logo.png" alt="AVMLabs" height="53">
+    </a>
+    <input type="checkbox" class="nav-toggle" id="navToggle">
+    <div class="nav__links">
+      <a href="../index.html#ratelist">Rate List</a>
+      <a href="franchise.html">AVMLabs Franchisee</a>
+      <a href="sarc.html" aria-current="page">SARC Explained</a>
+      <a href="crl.html">CRL</a>
+    </div>
+    <div class="nav__actions">
+      <button class="cart-btn" id="openCart" aria-haspopup="dialog">
+        <span class="cart-btn__text-full">Make My Profile</span><span class="cart-btn__text-short">Profile</span> <span class="cart-btn__badge" id="cartBadge">0</span>
+      </button>
+    </div>
+    <label for="navToggle" class="nav-toggle-btn" aria-label="Toggle menu"><span></span></label>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ================= HERO ================= -->
+  <!-- What used to sit as a separate section-head right above the tables
+       — now the hero itself, so the page opens straight on the one
+       claim it's actually there to prove, instead of a SARC-brand intro
+       followed by a second "here's what these tables show" intro. -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero__content hero__content--wide reveal">
+        <p class="eyebrow on-dark">THE NUMBERS BEHIND SARC</p>
+        <h1 class="hero__headline">Cost per test falls as volume rises</h1>
+        <p class="hero__sub hero__sub--wide">
+          The same pattern shows up whether the cost driver is quality control, reagent purchasing, or the full
+          services-cost breakdown — more volume through the same fixed base, lower cost per test.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= COST TABLES ================= -->
+  <!-- Three chapters, each an icon badge + heading + one-line description
+       above a themed table card (blue/emerald/amber — see .sarc-chapter__icon
+       and .data-table-card--blue/emerald/amber in components.css). Chapters
+       01/02 (same 3-column shape) sit side by side; Chapter 03 (the
+       5-column synthesis) is full-width on its own below. Each chapter is
+       .reveal, so they fade/rise in as you scroll (see reveal.js). -->
+  <section class="ratelist" id="cost-tables">
+    <div class="wrap">
+      <div class="sarc-chapter-pair">
+        <div class="sarc-chapter-pair__col reveal" id="chapter-01">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__icon sarc-chapter__icon--blue" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="3" width="4" height="15" rx="2"/>
+                <rect x="14" y="6" width="4" height="12" rx="2"/>
+                <line x1="4.5" y1="3" x2="11.5" y2="3"/>
+                <line x1="12.5" y1="6" x2="19.5" y2="6"/>
+              </svg>
+            </span>
+            <div>
+              <h2 class="sarc-chapter__title">Cost of Quality of CBC with 3-Level Controls</h2>
+              <p class="sarc-chapter__desc">See how the cost of quality control decreases as daily testing volume increases.</p>
+            </div>
+          </div>
+          <div class="data-table-card data-table-card--blue">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Test/Day</th>
+                    <th>Cost of Quality</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><span class="sarc-num">1</span></td><td>1</td><td>300.0</td></tr>
+                  <tr><td><span class="sarc-num">2</span></td><td>2</td><td>150.0</td></tr>
+                  <tr><td><span class="sarc-num">3</span></td><td>4</td><td>75.0</td></tr>
+                  <tr><td><span class="sarc-num">4</span></td><td>8</td><td>37.5</td></tr>
+                  <tr><td><span class="sarc-num">5</span></td><td>16</td><td>18.8</td></tr>
+                  <tr><td><span class="sarc-num">6</span></td><td>32</td><td>9.4</td></tr>
+                  <tr><td><span class="sarc-num">7</span></td><td>64</td><td>4.7</td></tr>
+                  <tr><td><span class="sarc-num">8</span></td><td>128</td><td>2.3</td></tr>
+                  <tr><td><span class="sarc-num">9</span></td><td>256</td><td>1.2</td></tr>
+                  <tr><td><span class="sarc-num">10</span></td><td>512</td><td>0.6</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="data-table__note"><span class="data-table__note-icon">i</span><strong>Cost of reagent not included.</strong></p>
+          </div>
+        </div>
+
+        <div class="sarc-chapter-pair__col reveal" id="chapter-02">
+          <div class="sarc-chapter__head">
+            <span class="sarc-chapter__icon sarc-chapter__icon--emerald" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="9" width="10" height="11" rx="2.5"/>
+                <rect x="9.5" y="5" width="5" height="4" rx="1"/>
+                <line x1="8.5" y1="3.5" x2="15.5" y2="3.5"/>
+                <line x1="9.5" y1="14.5" x2="14.5" y2="14.5"/>
+              </svg>
+            </span>
+            <div>
+              <h2 class="sarc-chapter__title">Reagent cost of Vitamin D</h2>
+              <p class="sarc-chapter__desc">Higher purchase volumes reduce the reagent cost per test.</p>
+            </div>
+          </div>
+          <div class="data-table-card data-table-card--emerald">
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Tests/Month</th>
+                    <th>Cost of Reagents</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><span class="sarc-num">1</span></td><td>100</td><td>100</td></tr>
+                  <tr><td><span class="sarc-num">2</span></td><td>200</td><td>90</td></tr>
+                  <tr><td><span class="sarc-num">3</span></td><td>400</td><td>81</td></tr>
+                  <tr><td><span class="sarc-num">4</span></td><td>800</td><td>73</td></tr>
+                  <tr><td><span class="sarc-num">5</span></td><td>1,600</td><td>66</td></tr>
+                  <tr><td><span class="sarc-num">6</span></td><td>3,200</td><td>59</td></tr>
+                  <tr><td><span class="sarc-num">7</span></td><td>6,400</td><td>53</td></tr>
+                  <tr><td><span class="sarc-num">8</span></td><td>12,800</td><td>48</td></tr>
+                  <tr><td><span class="sarc-num">9</span></td><td>25,600</td><td>43</td></tr>
+                  <tr><td><span class="sarc-num">10</span></td><td>51,200</td><td>39</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sarc-chapter reveal" id="chapter-03">
+        <div class="sarc-chapter__head">
+          <span class="sarc-chapter__icon sarc-chapter__icon--amber" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="20" x2="20" y2="20"/>
+              <rect x="6" y="14" width="3" height="6" rx="1" fill="currentColor" stroke="none"/>
+              <rect x="11" y="10" width="3" height="10" rx="1" fill="currentColor" stroke="none"/>
+              <rect x="16" y="5" width="3" height="15" rx="1" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          <div>
+            <h2 class="sarc-chapter__title">Services At Reagent Cost (SARC) – Simplified</h2>
+            <p class="sarc-chapter__desc">See how increasing analyzer utilization helps reduce the effective cost of delivering each service.</p>
+          </div>
+        </div>
+        <div class="data-table-card data-table-card--wide data-table-card--amber">
+          <div class="data-table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>HPD</th>
+                  <th>Services Cost</th>
+                  <th>Reagent Cost</th>
+                  <th>Over Heads</th>
+                  <th>% Margin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>1</td><td>100</td><td>100</td><td>50</td><td class="is-negative">-50%</td></tr>
+                <tr><td>2</td><td>100</td><td>94</td><td>48</td><td class="is-negative">-42%</td></tr>
+                <tr><td>4</td><td>100</td><td>83</td><td>43</td><td class="is-negative">-26%</td></tr>
+                <tr><td>6</td><td>100</td><td>73</td><td>39</td><td class="is-negative">-12%</td></tr>
+                <tr><td>8</td><td>100</td><td>65</td><td>35</td><td class="is-neutral">0%</td></tr>
+                <tr><td>10</td><td>100</td><td>57</td><td>32</td><td class="is-positive">11%</td></tr>
+                <tr><td>12</td><td>100</td><td>51</td><td>28</td><td class="is-positive">21%</td></tr>
+                <tr><td>14</td><td>100</td><td>45</td><td>26</td><td class="is-positive">30%</td></tr>
+                <tr><td>16</td><td>100</td><td>40</td><td>23</td><td class="is-positive">37%</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="data-table__note"><span class="data-table__note-icon">i</span><strong>HPD – Hours per Day the Analyzer running.</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CLOSING CTA ================= -->
+  <section>
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div class="cta-band__text">
+          <h2 class="cta-band__title">See SARC Pricing on the Rate List</h2>
+          <p>Every test on the rate list already reflects the SARC advantage — browse the full list or start building a profile.</p>
+        </div>
+        <a href="../index.html#ratelist" class="btn btn--amber">Browse the Rate List →</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <img class="brand__logo" src="../assets/images/avm-logo.png" alt="AVMLabs" height="53">
+        <p>Automated diagnostics, one transparent rate card</p>
+      </div>
+      <div>
+        <h4>Site</h4>
+        <ul>
+          <li><a href="../index.html#ratelist">Rate List</a></li>
+          <li><a href="../index.html#ratelist">Make My Profile</a></li>
+          <li><a href="franchise.html">AVMLabs Franchisee</a></li>
+          <li><a href="sarc.html">SARC Explained</a></li>
+          <li><a href="crl.html">CRL</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+917094606386">+91 70946 06386</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 AVMLabs</span>
+      <span>Rates in INR (₹). Indicative rate card, not a medical prescription.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= CART DRAWER =================
+     Same markup/IDs as index.html's — js/app.js already guards every
+     lookup (hasCart = !!$("cartBody")) so the exact same shared script
+     chain works unmodified here; nothing page-specific to wire up. -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" role="dialog" aria-label="My Profile">
+  <div class="cart-head">
+    <div class="cart-head__left">
+      <div>
+        <h3>My Profile</h3>
+        <p class="sub" id="cartSub">0 tests selected</p>
+      </div>
+      <label class="customer-view-toggle customer-view-toggle--compact" id="customerViewLabel" title="Hide B2B cost & margin everywhere below">
+        <span class="switch"><input type="checkbox" id="customerViewToggle"><span class="track"></span></span>
+        <span class="customer-view-toggle__text">Customer copy</span>
+      </label>
+    </div>
+    <button class="cart-close" id="closeCart" aria-label="Close">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <p class="cart-empty">Your profile is empty. Add tests from the rate list or start from a profile.</p>
+  </div>
+  <div class="cart-foot">
+    <div class="cart-foot__summary" id="cartFootSummary">
+      <div class="cart-totals">
+        <div class="ct-row" id="cartB2BRow"><span>B2B Cost</span><span id="cartB2B">₹0</span></div>
+        <div class="ct-row ct-row--mpb" id="cartMpbRow" style="display:none"><span>Min. Patient Billing</span><span id="cartMpbAmt">+₹0</span></div>
+        <p class="ct-hint ct-hint--mpb" id="cartMpbHint" style="display:none"></p>
+        <div class="ct-row" id="cartB2CRow"><span>B2C Value</span><span id="cartB2C">₹0</span></div>
+        <div class="ct-row ct-row--customer-discount" id="cartDiscountedRow" style="display:none"><span>Discounted Price</span><span id="cartDiscountedAmt">₹0</span></div>
+      </div>
+      <div class="discount-margin-row" id="discountMarginRow">
+        <div class="discount-editor" id="discountEditor">
+          <label class="discount-editor__label" for="discountedPriceInput">Discounted Price</label>
+          <div class="discount-editor__row">
+            <span class="discount-editor__currency" aria-hidden="true">₹</span>
+            <input type="number" inputmode="decimal" min="0" step="1" id="discountedPriceInput" class="discount-editor__input" placeholder="e.g. 250">
+            <button type="button" class="discount-editor__clear" id="clearDiscountedPrice" hidden aria-label="Remove discounted price">✕</button>
+          </div>
+          <p class="discount-editor__hint" id="discountWarn" style="display:none">Should be lower than the B2C value</p>
+        </div>
+        <div class="margin-box" id="marginBox">
+          <div class="margin-box__top">
+            <span class="margin-box__label"><span class="margin-box__dot"></span><span id="cartMarginLabel">Your Margin</span></span>
+            <span class="margin-box__pct" id="cartMarginPct">+0%</span>
+          </div>
+          <div class="margin-box__amount" id="cartMargin">₹0</div>
+        </div>
+      </div>
+      <div class="price-box" id="priceBox" style="display:none">
+        <div class="price-box__original-row" id="priceOriginalRow" style="display:none">
+          <span class="price-box__original-label">Original Price</span>
+          <span class="price-box__original-amount" id="priceOriginal">₹0</span>
+        </div>
+        <span class="price-box__label" id="priceLabel">Price</span>
+        <span class="price-box__amount" id="cartPrice">₹0</span>
+      </div>
+    </div>
+    <div class="cart-actions" id="cartActions">
+      <button class="btn btn--outline btn--sm" id="copyList">Copy List</button>
+      <button class="btn btn--outline btn--sm" id="exportProfileCsv">Export Excel</button>
+      <button class="btn btn--navy btn--sm" id="printList">Print/Share</button>
+    </div>
+    <button class="cart-clear" id="clearCart">Clear all</button>
+  </div>
+</aside>
+
+<!-- ================= TEST DETAIL DRAWER ================= -->
+<div class="cart-overlay" id="testDetailOverlay"></div>
+<aside class="cart-drawer" id="testDetailDrawer" role="dialog" aria-label="Test details">
+  <div class="cart-head">
+    <div>
+      <h3>Test Details</h3>
+    </div>
+    <button class="cart-close" id="closeTestDetail" aria-label="Close">✕</button>
+  </div>
+  <div class="cart-body" id="testDetailBody"></div>
+</aside>
+
+<div class="toast" id="toast"><span class="dot"></span><span id="toastText"></span></div>
+
+<script src="../js/config.js"></script>
+<script src="../js/utils/formatters.js"></script>
+<script src="../js/utils/storage.js"></script>
+<script src="../js/utils/helpers.js"></script>
+<script src="../js/utils/xlsx.js"></script>
+<script src="../js/data.js"></script>
+<script src="../js/modules/calculations.js"></script>
+<script src="../js/modules/profile.js"></script>
+<script src="../js/modules/pagination.js"></script>
+<script src="../js/modules/test-detail.js"></script>
+<script src="../js/modules/rate-list.js"></script>
+<script src="../js/modules/search.js"></script>
+<script src="../js/modules/sorting.js"></script>
+<script src="../js/modules/filters.js"></script>
+<script src="../js/modules/export.js"></script>
+<script src="../js/modules/print.js"></script>
+<script src="../js/app.js"></script>
+<script src="../js/modules/reveal.js"></script>
+</body>
+</html>

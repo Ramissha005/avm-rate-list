@@ -1926,10 +1926,11 @@ AVM.state = {
       "Transferrin Saturation (%)", "UIBC", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 500, "b2c": 1500 } },
-  // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, Serum
-  // Copper, and C-Reactive Protein (CRP) as their own new groups — Ferritin
-  // is folded into the existing Iron Profile group instead of getting a
-  // group of its own, per the user's own "will come under Iron Profile".
+  // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, and
+  // Serum Copper as their own new groups — Ferritin is folded into the
+  // existing Iron Profile group instead of getting a group of its own,
+  // per the user's own "will come under Iron Profile". C-Reactive Protein
+  // (CRP) was removed per the user's request.
   { "id": "avm-profile-3", "name": "AVM 3 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MG", "PHOS",
@@ -1938,7 +1939,7 @@ AVM.state = {
       "URIC", "SCRE", "CALC", "UREA", "BUN",
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "SEZN", "SECU", "CRP"
+      "VITDT", "VB12", "SEZN", "SECU"
     ],
     "groups": [
       { "label": "Thyroid-Stimulating Hormone", "codes": ["UTSH"], "calculatedParams": [] },
@@ -1962,8 +1963,7 @@ AVM.state = {
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
-      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] }
+      { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] }
     ],
     "calculatedParams": [
       "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -1977,9 +1977,9 @@ AVM.state = {
     "pricing": { "b2b": 900, "b2c": 3000 } },
   // Everything AVM 3 Profile has, plus a new Cardiac Profile group (Apo A1,
   // Apo B, Lipoprotein (a), High-Sensitivity CRP + Apo B / Apo A1 Ratio
-  // calculated). C-Reactive Protein (CRP) stays its own separate group,
-  // same as in AVM 3 Profile — the user asked only for the Apo/Lp(a)/
-  // HS-CRP cluster to be grouped under Cardiac Profile, not CRP itself.
+  // calculated). C-Reactive Protein (CRP) was removed per the user's
+  // request — the Cardiac Profile group's High-Sensitivity CRP (HSCPRP)
+  // is a distinct test and is unaffected.
   { "id": "avm-profile-4", "name": "AVM 4 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MG", "PHOS",
@@ -1988,7 +1988,7 @@ AVM.state = {
       "URIC", "SCRE", "CALC", "UREA", "BUN",
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
-      "VITDT", "VB12", "SEZN", "SECU", "CRP",
+      "VITDT", "VB12", "SEZN", "SECU",
       "APOA", "APOB", "LPA", "HSCPRP"
     ],
     "groups": [
@@ -2014,7 +2014,6 @@ AVM.state = {
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
       { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
       { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
     ],
     "calculatedParams": [
@@ -2031,7 +2030,8 @@ AVM.state = {
   // group (Cardiac Profile itself stays limited to Apo A1, Apo B,
   // Lipoprotein (a), HS-CRP + Apo B / Apo A1 Ratio, same as AVM 4 Profile),
   // Folic Acid folded into Vitamin Profile, and three new standalone groups
-  // (Blood Ketone, Fructosamine, Rheumatoid Factor).
+  // (Blood Ketone, Fructosamine, Rheumatoid Factor). C-Reactive Protein
+  // (CRP) was removed per the user's request.
   { "id": "avm-profile-5", "name": "AVM 5 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MG", "PHOS",
@@ -2041,7 +2041,7 @@ AVM.state = {
       "IRON", "TIBC", "FERR",
       "A1c", "CBC", "LASE", "AMYL",
       "VITDT", "VB12", "FOLI", "SEZN", "SECU",
-      "APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO",
+      "APOA", "APOB", "LPA", "HSCPRP", "HOMO",
       "BKETO", "FRUCT", "RFAC"
     ],
     "groups": [
@@ -2067,7 +2067,6 @@ AVM.state = {
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12", "FOLI"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
       { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
       { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
       { "label": "Homocysteine", "codes": ["HOMO"], "calculatedParams": [] },
       { "label": "Blood Ketone", "codes": ["BKETO"], "calculatedParams": [] },

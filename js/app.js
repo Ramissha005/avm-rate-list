@@ -104,6 +104,13 @@ window.AVM = window.AVM || {};
           singleSelect: true,
         });
       }
+      if ($("filterSample")) {
+        AVM.modules.filters.renderFilterGroup({
+          container: $("filterSample"), facetKey: "sample",
+          options: catalog.samples.map(s => ({ id: s.id, label: s.label })),
+          onChange: refreshAll,
+        });
+      }
     }
     renderFilterGroups();
 

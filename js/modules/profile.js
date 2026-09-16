@@ -582,7 +582,10 @@ AVM.modules = AVM.modules || {};
     // folded into B2B Cost above) plus a hint telling the partner exactly
     // how much more this profile needs to clear the ₹100 floor — so adding
     // one more test visibly drops the MPB row instead of just quietly
-    // changing the total.
+    // changing the total. Only triggers once a Serum-sample test is in the
+    // cart at all (see calculations.js netB2bWithMpb), but once it does, the
+    // uplift covers the whole visit's combined total, not just the serum
+    // tests' own subtotal.
     if (!customerView) {
       const uplift = sum.netB2b - sum.b2b;
       if (uplift > 0) {
@@ -592,7 +595,7 @@ AVM.modules = AVM.modules || {};
         }
         if (elements.mpbHint) {
           elements.mpbHint.style.display = "";
-          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(sum.netB2b)} minimum patient bill`;
+          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(sum.netB2b)} minimum patient billing`;
         }
       }
     }

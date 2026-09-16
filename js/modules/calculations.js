@@ -11,18 +11,34 @@ AVM.modules = AVM.modules || {};
     return ((b2c - b2b) / b2b) * 100;
   }
 
-  // Minimum Patient Billing: whatever a patient's whole profile adds up to
-  // — every test and sample combined, not grouped by sample type — the lab
-  // still has to draw, process and report on it, so the bill can never come
-  // in under ₹100 total. Below that, the patient is simply billed the ₹100
-  // floor instead of their raw (lower) total. One floor, checked once per
-  // profile.
+  // Minimum Patient Billing only kicks in when a Serum sample is actually
+  // being drawn: that's the tube the ₹100 floor is protecting, since a
+  // visit with no serum draw at all shouldn't be bumped up on its account.
+  // Once at least one Serum-sample test is in the mix, though, the floor
+  // covers the patient's *whole* combined bill for that visit — every
+  // sample type together, not just the serum tests' own subtotal — since
+  // it's a single blood draw covering the whole order, not per sample type.
+  // A visit with zero Serum-sample tests is billed at its raw total, however
+  // low, with no floor at all.
   const MPB_FLOOR = 100;
+
+  function isSerumSample(test) {
+    return test.sampleId === "serum";
+  }
 
   // Floors a raw total at MPB_FLOOR — but only once there's actually
   // something being billed; an empty cart stays ₹0, never bumped to ₹100.
   function mpbFloor(raw) {
     return raw > 0 && raw < MPB_FLOOR ? MPB_FLOOR : raw;
+  }
+
+  // The MPB-adjusted total for a set of items: the raw combined total,
+  // floored at ₹100 — but only when at least one item is a Serum sample.
+  // No serum test in the set at all means no floor, regardless of how low
+  // the raw total is.
+  function netB2bWithMpb(items) {
+    const raw = items.reduce((sum, t) => sum + t.b2b, 0);
+    return items.some(isSerumSample) ? mpbFloor(raw) : raw;
   }
 
   // `margin`/`marginPercentage`/`b2b` stay raw (pre-MPB) so they still
@@ -32,8 +48,8 @@ AVM.modules = AVM.modules || {};
   // consistent with what's printed above them.
   //
   // `netB2b` is the actual billable B2B total: the raw sum, floored once at
-  // ₹100 for the whole profile (see `mpbFloor`) — MPB applies once per
-  // patient, never per sample type or per test. `netMargin`/
+  // ₹100 (see `netB2bWithMpb`) — but only when a Serum-sample test is in the
+  // list at all; a list with none stays at its raw total. `netMargin`/
   // `netMarginPercentage` are that same post-MPB figure for callers that
   // want the partner's actual bottom line (cart drawer headline, print
   // summary cards, clipboard copy). Recompute by calling `totals` again
@@ -42,7 +58,7 @@ AVM.modules = AVM.modules || {};
   function totals(items) {
     const b2b = items.reduce((sum, t) => sum + t.b2b, 0);
     const b2c = items.reduce((sum, t) => sum + t.b2c, 0);
-    const netB2b = mpbFloor(b2b);
+    const netB2b = netB2bWithMpb(items);
 
     return {
       b2b, b2c, netB2b,
@@ -86,13 +102,15 @@ AVM.modules = AVM.modules || {};
   // The cart's real combined total: individually-added tests plus every
   // fixed-price profile currently in the cart, each contributing its own
   // flat number — then the ₹100 Minimum Patient Billing floor is applied
-  // once to that *combined* raw total (not to the individual tests alone),
-  // since MPB is about the patient's whole visit, not any one line item.
-  // Never double-counts with `individualItems`, since a profile's own tests
-  // are never added there in the first place (see profile.js's
-  // addPackage). Returns the exact same shape totals() does so every caller
-  // downstream (cart drawer, print page, margin box) works unchanged
-  // either way.
+  // once to the *combined* raw total of the individually-added tests (see
+  // `netB2bWithMpb`), but only when at least one of those individually-added
+  // tests is a Serum sample; a cart with none stays at its raw total no
+  // matter how low. Bundles (already a flat number) always pass through
+  // untouched, on top of that. Never double-counts with `individualItems`,
+  // since a profile's own tests are never added there in the first place
+  // (see profile.js's addPackage). Returns the exact same shape totals()
+  // does so every caller downstream (cart drawer, print page, margin box)
+  // works unchanged either way.
   function cartTotals(individualItems, bundlePkgs) {
     const rawB2b = individualItems.reduce((sum, t) => sum + t.b2b, 0);
     const rawB2c = individualItems.reduce((sum, t) => sum + t.b2c, 0);
@@ -106,7 +124,7 @@ AVM.modules = AVM.modules || {};
 
     const b2b = rawB2b + bundleB2b;
     const b2c = rawB2c + bundleB2c;
-    const netB2b = mpbFloor(b2b);
+    const netB2b = netB2bWithMpb(individualItems) + bundleB2b;
 
     return {
       b2b, b2c, netB2b,

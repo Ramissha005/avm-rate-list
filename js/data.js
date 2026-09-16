@@ -1872,7 +1872,7 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] }
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)", "UIBC"] }
     ],
     "calculatedParams": [
       "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -1881,7 +1881,7 @@ AVM.state = {
       "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
       "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)"
+      "Transferrin Saturation (%)", "UIBC"
     ], "active": true,
     "pricing": { "b2b": 250, "b2c": 800 } },
   // Everything AVM 1 Profile has, plus HbA1c (+ its Average Blood Glucose
@@ -1911,7 +1911,7 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC"], "calculatedParams": ["Transferrin Saturation (%)", "UIBC"] },
       { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] }
@@ -1923,7 +1923,7 @@ AVM.state = {
       "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
       "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
+      "Transferrin Saturation (%)", "UIBC", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 500, "b2c": 1500 } },
   // Everything AVM 2 Profile has, plus Vitamin Profile, Serum Zinc, Serum
@@ -1956,7 +1956,7 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)", "UIBC"] },
       { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
@@ -1972,7 +1972,7 @@ AVM.state = {
       "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
       "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)"
+      "Transferrin Saturation (%)", "UIBC", "ABG (Average Blood Glucose)"
     ], "active": true,
     "pricing": { "b2b": 900, "b2c": 3000 } },
   // Everything AVM 3 Profile has, plus a new Cardiac Profile group (Apo A1,
@@ -2007,14 +2007,15 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)", "UIBC"] },
       { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
       { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
+      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] }
     ],
     "calculatedParams": [
       "Total Cholesterol / HDL Cholesterol Ratio", "Triglycerides / HDL Cholesterol Ratio",
@@ -2023,12 +2024,14 @@ AVM.state = {
       "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
       "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
+      "Transferrin Saturation (%)", "UIBC", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
     "pricing": { "b2b": 1100, "b2c": 3600 } },
-  // Everything AVM 4 Profile has, plus Homocysteine folded into Cardiac
-  // Profile, Folic Acid folded into Vitamin Profile, and three new
-  // standalone groups (Blood Ketone, Fructosamine, Rheumatoid Factor).
+  // Everything AVM 4 Profile has, plus Homocysteine as its own standalone
+  // group (Cardiac Profile itself stays limited to Apo A1, Apo B,
+  // Lipoprotein (a), HS-CRP + Apo B / Apo A1 Ratio, same as AVM 4 Profile),
+  // Folic Acid folded into Vitamin Profile, and three new standalone groups
+  // (Blood Ketone, Fructosamine, Rheumatoid Factor).
   { "id": "avm-profile-5", "name": "AVM 5 Profile", "categoryId": "general-biochemistry",
     "codes": [
       "UTSH", "MG", "PHOS",
@@ -2057,14 +2060,16 @@ AVM.state = {
       { "label": "Kidney Profile", "codes": ["URIC", "SCRE", "CALC", "UREA", "BUN"], "calculatedParams": [
         "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio"
       ] },
-      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)"] },
+      { "label": "Iron Profile", "codes": ["IRON", "TIBC", "FERR"], "calculatedParams": ["Transferrin Saturation (%)", "UIBC"] },
       { "label": "Diabetes Screen", "codes": ["A1c"], "calculatedParams": ["ABG (Average Blood Glucose)"] },
       { "label": "Complete Blood Count", "codes": ["CBC"], "calculatedParams": [] },
       { "label": "Pancreatic Profile", "codes": ["LASE", "AMYL"], "calculatedParams": [] },
       { "label": "Vitamin Profile", "codes": ["VITDT", "VB12", "FOLI"], "calculatedParams": [] },
       { "label": "Serum Zinc", "codes": ["SEZN"], "calculatedParams": [] },
       { "label": "Serum Copper", "codes": ["SECU"], "calculatedParams": [] },
-      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP", "CRP", "HOMO"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
+      { "label": "C-Reactive Protein (CRP)", "codes": ["CRP"], "calculatedParams": [] },
+      { "label": "Cardiac Profile", "codes": ["APOA", "APOB", "LPA", "HSCPRP"], "calculatedParams": ["Apo B / Apo A1 Ratio"] },
+      { "label": "Homocysteine", "codes": ["HOMO"], "calculatedParams": [] },
       { "label": "Blood Ketone", "codes": ["BKETO"], "calculatedParams": [] },
       { "label": "Fructosamine", "codes": ["FRUCT"], "calculatedParams": [] },
       { "label": "Rheumatoid Factor", "codes": ["RFAC"], "calculatedParams": [] }
@@ -2076,7 +2081,7 @@ AVM.state = {
       "Serum Globulin", "Serum Albumin / Globulin (A/G) Ratio",
       "Indirect Bilirubin", "SGOT / SGPT Ratio (AST/ALT Ratio)",
       "BUN / Creatinine Ratio", "eGFR (for Adults only)", "Urea / Serum Creatinine Ratio",
-      "Transferrin Saturation (%)", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
+      "Transferrin Saturation (%)", "UIBC", "ABG (Average Blood Glucose)", "Apo B / Apo A1 Ratio"
     ], "active": true,
     "pricing": { "b2b": 1600, "b2c": 6000 } },
   { "id": "vitamin-profile", "name": "Vitamin Profile", "categoryId": "vitamins", "codes": ["VITDT", "VB12"],

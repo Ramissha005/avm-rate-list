@@ -595,7 +595,7 @@ AVM.modules = AVM.modules || {};
         }
         if (elements.mpbHint) {
           elements.mpbHint.style.display = "";
-          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(sum.netB2b)} minimum patient billing`;
+          elements.mpbHint.textContent = `Add ${money(uplift)} more to clear the ${money(sum.netB2b)} minimum patient billing (Only for Serum Samples)`;
         }
       }
     }

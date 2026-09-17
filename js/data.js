@@ -188,7 +188,8 @@ AVM.state = {
       "categoryId": "lipid-profile",
       "departmentId": "biochemistry",
       "displayOrder": 1,
-      "fastingRequired": null,
+      "fastingRequired": true,
+      "fastingHours": "10-12",
       "homeCollection": true,
       "reportType": "Digital",
       "container": null,
@@ -210,6 +211,7 @@ AVM.state = {
       "departmentId": "biochemistry",
       "displayOrder": 2,
       "fastingRequired": true,
+      "fastingHours": "10-12",
       "homeCollection": true,
       "reportType": "Digital",
       "container": null,
@@ -272,7 +274,8 @@ AVM.state = {
       "categoryId": "lipid-profile",
       "departmentId": "biochemistry",
       "displayOrder": 5,
-      "fastingRequired": null,
+      "fastingRequired": true,
+      "fastingHours": "10-12",
       "homeCollection": true,
       "reportType": "Digital",
       "container": null,
@@ -629,7 +632,8 @@ AVM.state = {
       "categoryId": "lipid-profile",
       "departmentId": "biochemistry",
       "displayOrder": 22,
-      "fastingRequired": null,
+      "fastingRequired": true,
+      "fastingHours": "10-12",
       "homeCollection": true,
       "reportType": "Digital",
       "container": null,
@@ -671,7 +675,8 @@ AVM.state = {
       "categoryId": "lipid-profile",
       "departmentId": "biochemistry",
       "displayOrder": 24,
-      "fastingRequired": null,
+      "fastingRequired": true,
+      "fastingHours": "10-12",
       "homeCollection": true,
       "reportType": "Digital",
       "container": null,
@@ -2115,10 +2120,25 @@ AVM.state = {
     "codes": ["LASE", "AMYL"],
     "calculatedParams": [], "active": true,
     "pricing": { "b2b": 100, "b2c": 500 } },
-  { "id": "total-thyroid-profile", "name": "Total Thyroid Profile", "categoryId": "thyroid",
+  { "id": "total-thyroid-profile", "name": "Thyroid Profile", "categoryId": "thyroid",
     "codes": ["TT3", "TT4", "UTSH"],
     "calculatedParams": [], "active": true,
-    "pricing": { "b2b": 50, "b2c": 300 } }
+    "pricing": { "b2b": 50, "b2c": 300 } },
+  // Price is the flat sum of its member tests' own individual B2B/B2C
+  // prices (TSH 10/100, T3 20/100, T4 20/100, FT3 30/100, FT4 30/100),
+  // per the user's own request — not an independently set package price
+  // the way most other profiles here are priced.
+  { "id": "advance-thyroid-profile", "name": "Advance Thyroid Profile", "categoryId": "thyroid",
+    "codes": ["UTSH", "TT3", "TT4", "FT3", "FT4"],
+    "calculatedParams": [], "active": true,
+    "pricing": { "b2b": 110, "b2c": 500 } },
+  // Price is the flat sum of its member tests' own individual B2B/B2C
+  // prices (FSH 80/250, LH 80/250, AMH 250/750, PRL 80/250), same as
+  // Advance Thyroid Profile above.
+  { "id": "infertility-profile", "name": "Infertility Profile", "categoryId": "infertility",
+    "codes": ["FSH", "LH", "AMH", "PRL"],
+    "calculatedParams": [], "active": true,
+    "pricing": { "b2b": 490, "b2c": 1500 } }
 ];
 
   const PARAMETERS_WRAPPED = {

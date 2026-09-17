@@ -203,9 +203,14 @@ AVM.modules = AVM.modules || {};
   // auto-replaces the smaller one (an "upgrade" — e.g. Total Thyroid
   // Profile gets swapped out the moment AVM 1 Profile is added over it),
   // while adding a smaller/redundant profile over a bigger active one
-  // stays blocked, same as adding one already sitting in the cart as
-  // separately-added individual tests — both would otherwise bill some
-  // of the same tests twice with nothing gained.
+  // stays blocked — both would otherwise bill some of the same tests
+  // twice with nothing gained.
+  //
+  // Individually-added tests that overlap with pkg's own codes get the
+  // same "upgrade" treatment, not a block — a bundle is definitionally
+  // bigger than any subset of loose single-priced lines it happens to
+  // include, so there's no "which one wins" ambiguity the way there is
+  // between two bundles.
   function addPackage(pkg) {
     if (state.cartPackages.has(pkg.id)) {
       AVM.utils.helpers.showToast(`${pkg.name} is already in your profile`);
@@ -227,8 +232,11 @@ AVM.modules = AVM.modules || {};
     const alreadyIndividual = pkg.codes.filter(code => state.cart.has(code));
     if (alreadyIndividual.length) {
       const names = alreadyIndividual.map(c => (byCode[c] && byCode[c].name) || c).join(", ");
-      AVM.utils.helpers.showToast(`Remove ${names} from your profile individually first to add ${pkg.name}`);
-      return 0;
+      alreadyIndividual.forEach(code => state.cart.delete(code));
+      state.cartPackages.add(pkg.id);
+      persistCart();
+      AVM.utils.helpers.showToast(`${names} rolled into ${pkg.name}`);
+      return 1;
     }
     state.cartPackages.add(pkg.id);
     persistCart();

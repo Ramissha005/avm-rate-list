@@ -31,110 +31,125 @@ body{
 
 /* ================= ON-SCREEN SHEET CHROME ================= */
 .sheet{
+  position:relative;
   max-width:860px;
   margin:0 auto;
   background:#fff;
-  padding:40px 44px 32px;
-  border-radius:6px;
+  padding:0 44px 32px;
+  border-radius:10px;
   box-shadow:0 20px 50px -24px rgba(14,34,56,.35);
+  /* Clips the accent bar's square bottom edge to the sheet's own rounded
+     top corners, instead of it sitting as a visible square-cornered strip
+     on top of a rounded card. */
+  overflow:hidden;
+}
+/* Brand accent bar — the one spot of color before the customer reads a
+   single word, so the page reads as branded stationery, not a plain
+   printout. Bleeds edge-to-edge via a negative margin matched to the
+   sheet's own 44px side padding (see the print override below, where
+   that padding is reset to 0 and this margin is reset to match). */
+.sheet::before{
+  content:"";
+  display:block;
+  height:5px;
+  margin:0 -44px;
+  background:linear-gradient(90deg, var(--navy) 0%, var(--navy-2) 55%, var(--amber) 100%);
 }
 
 /* ================= LETTERHEAD ================= */
 .letterhead{
   display:flex; align-items:flex-start; justify-content:space-between;
-  gap:20px; padding-bottom:18px; margin-bottom:18px;
+  gap:20px; padding-top:26px; padding-bottom:18px; margin-bottom:18px;
   border-bottom:2.5px solid var(--navy);
 }
 .letterhead__brand{ display:flex; align-items:center; gap:12px; }
 .letterhead__logo{ height:36px; max-width:160px; width:auto; object-fit:contain; display:block; }
 .letterhead__logo-fallback{
-  width:36px; height:36px; border-radius:50%; background:var(--navy); color:#fff;
+  width:38px; height:38px; border-radius:50%; background:var(--navy); color:#fff;
   display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex:none;
+  box-shadow:0 0 0 3px var(--profit-bg);
 }
 .letterhead__name{ margin:0; font-size:19px; font-weight:700; color:var(--navy); letter-spacing:-0.01em; }
-.letterhead__tag{ margin:2px 0 0; font-size:11px; color:var(--ink-faint); }
+.letterhead__tag{ margin:5px 0 0; font-size:11px; color:var(--ink-faint); }
+.letterhead__tag-line{ display:flex; align-items:center; gap:5px; }
+.letterhead__tag-line + .letterhead__tag-line{ margin-top:3px; }
 .letterhead__doc{ text-align:right; }
-.letterhead__title{ margin:0; font-size:15px; font-weight:600; color:var(--ink); }
-.letterhead__meta{ margin:3px 0 0; font-size:11px; color:var(--ink-faint); }
+.letterhead__title{ margin:0; font-size:16px; font-weight:700; color:var(--navy); }
+.letterhead__meta{ margin:5px 0 0; font-size:11px; color:var(--ink-faint); }
 .letterhead__meta b{ color:var(--ink-soft); font-weight:600; }
+
+/* ================= FASTING ADVISORY ================= */
+/* Only shown when at least one test in the profile actually needs it (see
+   print.js) — an amber callout so it reads as a heads-up, not just another
+   line of body text. Sits below the priced table and its total, as the
+   last thing before the footer's own collection note. */
+.fasting-note{
+  display:flex; align-items:center; gap:10px;
+  margin:18px 0 0; padding:10px 14px; border-radius:8px;
+  background:#FBF0E1; border:1px solid #F0CC98;
+}
+/* Same `display` vs `[hidden]` precedence gotcha as .total-card__line
+   above — without this, the banner stays visible even while `hidden`. */
+.fasting-note[hidden]{ display:none !important; }
+.fasting-note__icon{
+  flex:none; width:26px; height:26px; border-radius:50%;
+  background:var(--amber); color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:13px;
+}
+.fasting-note__text{ color:#7A4B12; font-size:12.5px; font-weight:700; }
 
 /* ================= TABLE ================= */
 /* table-layout:fixed makes column widths purely a function of the
-   <colgroup> below (or the customer-view override further down) — never
-   of cell content. That's what customer view relies on: with 'auto'
-   layout, a column whose cells are all display:none can still get width
-   reserved for it by the browser (especially once any colspan cell is in
-   the mix — see .row-group-head), leaving a blank gap on the right
-   instead of letting the visible columns fill the table. Fixed layout
-   has no such ambiguity: a column not given any width here simply has
-   none. */
+   <colgroup> below, never of cell content. */
 /* border-bottom closes the table off now that there's no tfoot totals row
    (removed — the summary cards below are the one place totals show). */
 table{ width:100%; border-collapse:collapse; table-layout:fixed; border-bottom:2px solid var(--navy); }
-colgroup .c-sr{ width:4%; }
-colgroup .c-code{ width:11%; }
-colgroup .c-name{ width:29%; }
-colgroup .c-tech{ width:16%; }
-colgroup .c-sample{ width:12%; }
-colgroup .c-b2b, colgroup .c-b2c, colgroup .c-margin{ width:9.33%; }
-
-/* Customer view hides Code/B2B/Margin/Technology entirely (see the rule
-   further below) — their <col> widths are zeroed here too so the 4
-   remaining columns' widths (redistributed to still sum to 100%) are
-   what the table actually renders, rather than leaving blank space
-   where those hidden columns used to be. */
-.sheet.customer-view colgroup .c-sr{ width:5%; }
-.sheet.customer-view colgroup .c-name{ width:52%; }
-.sheet.customer-view colgroup .c-sample{ width:22%; }
-.sheet.customer-view colgroup .c-b2c{ width:21%; }
-.sheet.customer-view colgroup .c-code,
-.sheet.customer-view colgroup .c-b2b,
-.sheet.customer-view colgroup .c-tech,
-.sheet.customer-view colgroup .c-margin{ width:0; }
+colgroup .c-sr{ width:6%; }
+colgroup .c-name{ width:70%; }
+colgroup .c-price{ width:24%; }
 
 thead th{
   text-align:left; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
-  color:#fff; background:var(--navy); padding:9px 8px;
+  color:#fff; background:var(--navy); padding:10px 8px;
 }
-thead th:first-child{ border-radius:4px 0 0 0; }
-thead th:last-child{ border-radius:0 4px 0 0; }
+thead th:first-child{ border-radius:6px 0 0 0; }
+thead th:last-child{ border-radius:0 6px 0 0; }
 thead th.num{ text-align:right; }
 
-tbody td{ padding:8px 8px; border-bottom:1px solid var(--line); font-size:12.5px; vertical-align:top; }
+tbody td{ padding:9px 8px; border-bottom:1px solid var(--line); font-size:12.5px; vertical-align:top; }
 tbody tr:nth-child(even){ background:var(--zebra); }
 tbody tr{ break-inside:avoid; }
 
 .sr{ color:var(--ink-faint); font-variant-numeric:tabular-nums; }
-.code{
-  display:inline-block; font-weight:700; font-size:11px; letter-spacing:.01em;
-  background:#EDEFF1; color:var(--navy); border-radius:4px; padding:2px 6px;
-}
 .name{ font-weight:500; color:var(--ink); }
-.name small{ display:block; font-weight:400; color:var(--ink-faint); font-size:10.5px; margin-top:1px; }
-.tech, .sample{ color:var(--ink-soft); }
 .num{ text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
-.profit{ color:var(--profit); font-weight:600; }
+/* Scoped to body cells only — thead th.num shares the .num class purely
+   for its text-align:right, and must keep the header's own white/bold
+   styling rather than picking up navy-on-navy from this. */
+tbody .num{ font-weight:600; color:var(--navy); }
 
 /* Common-panel block — one per group from groupCartItems (see print.js):
-   a "Panel Name · Price" heading bar over a single plain line listing
-   every test (and calculated extra) it includes, rather than a full
-   priced row per test — the panel price above already covers all of them.
-   The flex layout lives on the inner div, not the <td> itself — a <td>
-   with display:flex doesn't reliably fill its column span. The heading's
-   colspan is set in JS to match only the *visible* columns (see
-   print.js) — spanning a hidden column can make the browser's table
-   layout reserve width for it anyway, stretching the row wider than the
-   rest of the table. break-after:avoid is a best-effort nudge to keep the
-   block from splitting across a page break. */
+   a bordered card with a "Panel Name · Price" heading bar over a plain
+   line listing every test (and calculated extra) it includes, rather
+   than a full priced row per test — the panel price already covers all
+   of them. The flex layout lives on inner divs, not the <td> itself — a
+   <td> with display:flex doesn't reliably fill its column span. The
+   heading's colspan is set in JS to match the table's column count (see
+   print.js). break-after:avoid is a best-effort nudge to keep the block
+   from splitting across a page break. */
 .row-group-head{ break-inside:avoid; break-after:avoid; }
-.row-group-head td{ padding:0; border-bottom:1px solid var(--line); }
+.row-group-head td{ padding:7px 6px; border-bottom:1px solid var(--line); }
+.group-card{
+  border:1px solid var(--line); border-radius:8px;
+  overflow:hidden; /* clips both children to the card's own rounded corners */
+}
 .group-head{
   display:flex; align-items:center; justify-content:space-between; gap:8px;
-  background:var(--profit-bg); padding:8px;
+  background:var(--profit-bg); padding:10px 12px;
 }
 .group-head__name{ font-weight:700; font-size:12.5px; color:var(--navy); }
-.group-head__price{ font-weight:700; font-size:12.5px; color:var(--profit); font-variant-numeric:tabular-nums; }
-.group-head__tests{ margin:0; padding:7px 8px; font-size:11.5px; color:var(--ink-soft); line-height:1.5; }
+.group-head__price{ font-weight:700; font-size:13px; color:var(--profit); font-variant-numeric:tabular-nums; }
+.group-head__tests{ margin:0; padding:9px 12px; font-size:11.5px; color:var(--ink-soft); line-height:1.6; background:#fff; }
 .group-head__dot{ font-weight:700; color:var(--profit); margin:0 4px; font-size:17px; vertical-align:middle; line-height:0; display:inline-block; }
 /* A literal "*" inside a calculated parameter's own label (e.g. "eGFR
    (For Adults*)") — a caveat marker, colored to stand out. This page
@@ -149,35 +164,45 @@ tbody tr{ break-inside:avoid; }
    named panel they're built from — same breakdown the site's own
    Profiles view shows (panels-table.js), so the printed/customer copy
    matches what the person building the profile already saw on screen.
-   The outer wrapper carries the same 7px/8px inset .group-head__tests
+   The outer wrapper carries the same 9px/12px inset .group-head__tests
    has on its own above; the nested copy of that class drops its own
    padding since the wrapper already provides it. */
-.group-head__groups{ padding:7px 8px 3px; }
-.group-head__group{ margin-top:6px; padding-left:8px; border-left:2px solid var(--line); }
+.group-head__groups{ padding:9px 12px 4px; background:#fff; }
+.group-head__group{ margin-top:8px; padding-left:10px; border-left:2px solid var(--line); }
 .group-head__group:first-child{ margin-top:0; }
 .group-head__group-label{ display:block; font-weight:700; font-size:11px; color:var(--navy); margin-bottom:1px; }
 .group-head__group .group-head__tests{ padding:0; margin-top:1px; }
 
-/* ================= SUMMARY STRIP ================= */
-.summary{
-  display:flex; gap:12px; margin-top:18px;
-  /* Without this, a page break can land mid-strip and slice straight
-     through a card (half the amber/blue box and its ₹ figure on one
-     page, the rest on the next) — the whole strip now moves to the next
-     page together instead of splitting. */
-  break-inside:avoid;
+/* ================= TOTAL CARD ================= */
+/* The one figure a customer actually needs to walk away with — a single
+   dark hero card rather than a row of equal-weight boxes, so it reads as
+   the page's clear endpoint instead of one stat among several. */
+.total-card{
+  margin-top:20px; padding:14px 18px; border-radius:10px;
+  background:linear-gradient(135deg, var(--navy), var(--navy-2));
+  break-inside:avoid; /* keeps a page break from slicing through it */
 }
-.summary__card{
-  flex:1; background:var(--paper); border-radius:6px; padding:10px 14px;
-  break-inside:avoid;
+.total-card__line{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+/* .total-card__line's own `display:flex` is author CSS, which beats the
+   UA stylesheet's `[hidden]{display:none}` regardless of specificity or
+   source order (see the same gotcha called out in print-profile.html's
+   own setVisible()) — without this, sumDiscountedCard stays visible even
+   while `hidden`. */
+.total-card__line[hidden]{ display:none !important; }
+.total-card__line + .total-card__line{ margin-top:8px; padding-top:8px; border-top:1px solid rgba(255,255,255,.2); }
+.total-card__line span{
+  font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:700;
+  color:rgba(255,255,255,.65);
 }
-.summary__card span{ display:block; font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); margin-bottom:3px; }
-.summary__card b{ font-size:15px; color:var(--navy); font-variant-numeric:tabular-nums; }
-.summary__card.is-profit{ background:var(--profit-bg); }
-.summary__card.is-profit b{ color:var(--profit); }
-/* Original B2C figure once a customer-copy discounted price is entered
-   (see print.js) — the card right after it carries the discounted amount. */
-.summary__card b.summary__card--struck{ text-decoration:line-through; color:var(--ink-faint); }
+.total-card__line b{ font-size:20px; font-weight:700; color:#fff; font-variant-numeric:tabular-nums; }
+/* The discounted-price line (see print.js) is the one that should catch
+   the eye once it's showing — amber against the navy card, and a size
+   step up from the (now secondary) original-price line above it. */
+.total-card__line--highlight b{ color:#FFC876; font-size:23px; }
+/* Original price once a customer-copy discount is entered (see print.js)
+   — struck through and dimmed rather than fully hidden, so the customer
+   can still see what it would otherwise have cost. */
+.total-card__value--struck{ text-decoration:line-through; color:rgba(255,255,255,.55) !important; font-size:15px !important; font-weight:600 !important; }
 
 /* ================= EMPTY STATE ================= */
 .empty{ text-align:center; padding:60px 20px; color:var(--ink-soft); }
@@ -187,19 +212,9 @@ tbody tr{ break-inside:avoid; }
 /* ================= FOOTER NOTE ================= */
 .foot{ margin-top:26px; padding-top:14px; border-top:1px solid var(--line); }
 .foot p{ margin:0; font-size:10px; color:var(--ink-faint); line-height:1.5; }
-.foot p + p{ margin-top:3px; }
+.foot p + p{ margin-top:5px; }
+.foot__icon{ color:var(--ink-faint); }
 .foot__brand{ font-weight:600; color:var(--ink-soft) !important; }
-
-/* ================= CUSTOMER COPY (hide B2B cost, margin, test codes & technology) ================= */
-/* Test codes (BUN, SCRE, …) are internal shorthand — a customer copy just
-   needs the test's name, not its code. Technology (Photometry, E.C.L.I.A,
-   …) is the same kind of internal/lab detail a customer doesn't need to
-   see — Sample stays, since that's what actually matters to them
-   (what gets drawn, not which analyzer method processes it). */
-.sheet.customer-view .c-b2b,
-.sheet.customer-view .c-margin,
-.sheet.customer-view .c-code,
-.sheet.customer-view .c-tech{ display:none !important; }
 
 /* ================= SCREEN-ONLY TOOLBAR ================= */
 .toolbar{
@@ -208,11 +223,10 @@ tbody tr{ break-inside:avoid; }
   display:flex; align-items:center; justify-content:flex-end; gap:14px;
   background:#fff; padding:10px 14px; border-radius:8px; box-shadow:0 10px 30px -18px rgba(14,34,56,.35);
 }
-.toolbar__toggle{
-  display:flex; align-items:center; gap:8px; margin-right:auto;
-  font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-soft); cursor:pointer;
+.toolbar__note{
+  margin-right:auto;
+  font-family:inherit; font-size:13px; font-weight:600; color:var(--ink-soft);
 }
-.toolbar__toggle input{ width:16px; height:16px; accent-color:var(--navy); cursor:pointer; }
 .toolbar button{
   font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
   padding:10px 18px; border-radius:8px; border:1.5px solid var(--line);
@@ -275,6 +289,10 @@ tbody tr{ break-inside:avoid; }
   @page{ size:A4; margin:14mm 12mm; }
   body{ background:#fff; padding:0; }
   .sheet{ box-shadow:none; border-radius:0; padding:0; max-width:none; }
+  /* .sheet's own side padding (what the -44px bleed above is matched to)
+     is zeroed for print, so the bar already spans full width on its own
+     — the negative margin would now just push it 44px past each edge. */
+  .sheet::before{ margin:0; }
   .no-print{ display:none !important; }
   thead{ display:table-header-group; }
   tr{ break-inside:avoid; }

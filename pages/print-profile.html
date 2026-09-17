@@ -41,24 +41,30 @@
   <div id="printContent">
     <table>
       <colgroup>
-        <col class="c-sr"><col class="c-code"><col class="c-name"><col class="c-tech">
-        <col class="c-sample"><col class="c-b2b"><col class="c-b2c"><col class="c-margin">
+        <col class="c-sr"><col class="c-name"><col class="c-price">
       </colgroup>
       <thead>
         <tr>
-          <th>#</th><th class="c-code">Code</th><th>Test</th><th class="c-tech">Technology</th><th>Sample</th>
-          <th class="num c-b2b">B2B</th><th class="num">B2C</th><th class="num c-margin">Margin</th>
+          <th>#</th><th>Test</th><th class="num">Price</th>
         </tr>
       </thead>
       <tbody id="printBody"></tbody>
     </table>
 
-    <div class="summary">
-      <div class="summary__card c-b2b"><span>B2B Cost</span><b id="sumB2B"></b></div>
-      <div class="summary__card"><span id="sumB2CLabel">B2C Value</span><b id="sumB2C"></b></div>
-      <div class="summary__card is-profit" id="sumDiscountedCard" hidden><span>Discounted Price</span><b id="sumDiscountedPrice"></b></div>
-      <div class="summary__card is-profit c-margin"><span>Your Margin</span><b id="sumMargin"></b></div>
-      <div class="summary__card is-profit c-margin"><span>Avg. Margin %</span><b id="sumMarginPct"></b></div>
+    <div class="total-card">
+      <div class="total-card__line">
+        <span id="sumTotalLabel">Total</span>
+        <b id="sumTotal"></b>
+      </div>
+      <div class="total-card__line total-card__line--highlight" id="sumDiscountedCard" hidden>
+        <span>Discounted Price</span>
+        <b id="sumDiscountedPrice"></b>
+      </div>
+    </div>
+
+    <div class="fasting-note" id="fastingNote" hidden>
+      <span class="fasting-note__icon" aria-hidden="true">⏱</span>
+      <span class="fasting-note__text" id="fastingNoteText"></span>
     </div>
   </div>
 
@@ -68,17 +74,14 @@
   </div>
 
   <footer class="foot">
-    <p>Rates in INR (₹). Indicative rate card, not a medical prescription — please confirm fasting and sample requirements at the time of collection.</p>
+    <p><span class="foot__icon" aria-hidden="true">ℹ</span> Rates in INR (₹). Indicative rate card, not a medical prescription — please confirm fasting and sample requirements at the time of collection.</p>
     <p class="foot__brand" id="footBrand" hidden></p>
   </footer>
 
 </div>
 
 <div class="toolbar no-print">
-  <label class="toolbar__toggle">
-    <input type="checkbox" id="customerViewToggle">
-    Customer copy — hide B2B cost &amp; margin
-  </label>
+  <span class="toolbar__note">Customer copy — test name &amp; price only</span>
   <button type="button" id="btnBranding">🏷 Branding</button>
   <button type="button" id="btnShare">📤 Share</button>
   <button type="button" id="btnClose">Close</button>
@@ -144,30 +147,18 @@
   const printElements = {
     tbody: document.getElementById("printBody"),
     dateEl: document.getElementById("printDate"),
-    sumB2BEl: document.getElementById("sumB2B"),
-    sumB2CEl: document.getElementById("sumB2C"),
-    sumMarginEl: document.getElementById("sumMargin"),
-    sumMarginPctEl: document.getElementById("sumMarginPct"),
-    sumB2CLabelEl: document.getElementById("sumB2CLabel"),
+    sumTotalEl: document.getElementById("sumTotal"),
+    sumTotalLabelEl: document.getElementById("sumTotalLabel"),
     sumDiscountedCardEl: document.getElementById("sumDiscountedCard"),
     sumDiscountedPriceEl: document.getElementById("sumDiscountedPrice"),
+    fastingNoteEl: document.getElementById("fastingNote"),
+    fastingNoteTextEl: document.getElementById("fastingNoteText"),
     contentEl: document.getElementById("printContent"),
     emptyEl: document.getElementById("printEmpty"),
-    sheetEl: document.getElementById("sheet"),
     titleEl: document.getElementById("printTitle"),
   };
 
-  const customerViewToggle = document.getElementById("customerViewToggle");
-
-  AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: true }).then(() => {
-    // Reflect whatever view (internal/customer) actually got rendered —
-    // carried over from the cart's own toggle when Print/Share was clicked.
-    customerViewToggle.checked = printElements.sheetEl.classList.contains("customer-view");
-  });
-
-  customerViewToggle.addEventListener("change", (e) => {
-    AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: false }, e.target.checked);
-  });
+  AVM.modules.print.renderPrintPage({ ...printElements, autoPrint: true });
 
   document.getElementById("btnPrint").addEventListener("click", () => window.print());
   document.getElementById("btnClose").addEventListener("click", () => window.close());
@@ -261,7 +252,14 @@
       brandLogoFallback.textContent = AVM.modules.branding.initialsFor(branding.name) || "—";
     }
     brandName.textContent = branding.name || "";
-    brandTag.textContent = [branding.phone, branding.address].filter(Boolean).join(" · ");
+    // Icon-prefixed, one per line — easier to scan than the old plain
+    // "phone · address" run-on, and immediately legible as *what* each
+    // value is without reading the digits/street name first.
+    const esc = AVM.utils.formatters.escapeHtml;
+    const tagLines = [];
+    if (branding.phone) tagLines.push(`<span class="letterhead__tag-line">📞 ${esc(branding.phone)}</span>`);
+    if (branding.address) tagLines.push(`<span class="letterhead__tag-line">📍 ${esc(branding.address)}</span>`);
+    brandTag.innerHTML = tagLines.join("");
 
     const footLine = [branding.name, branding.phone, branding.address].filter(Boolean).join(" · ");
     footBrand.textContent = footLine;

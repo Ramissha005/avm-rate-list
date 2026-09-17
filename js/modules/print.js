@@ -10,12 +10,13 @@ AVM.modules = AVM.modules || {};
       AVM.utils.helpers.showToast("Your profile is empty");
       return;
     }
-    // Carries the cart's current Customer Copy setting over as the print
-    // page's starting view — it can still be flipped again from the print
-    // page's own toggle before actually printing.
+    // This PDF/print-out goes straight to the customer, so the print page
+    // (see renderPrintPage) always renders a customer-safe copy — test name
+    // and price only, never B2B cost, margin, code, technology or sample —
+    // with no way to switch it back to an internal view. It doesn't read
+    // the cart's own admin/customer toggle at all.
     AVM.utils.storage.writeSession(CONFIG.STORAGE_KEYS.PRINT_PAYLOAD, {
       codes: [...state.cart],
-      customerView: state.customerView,
       discountedPrice: state.discountedPrice,
       // Fixed-price profile bundles in the cart — carried over so the
       // print table can group their tests under a profile heading with
@@ -49,10 +50,9 @@ AVM.modules = AVM.modules || {};
   let cachedItems = null;
 
   async function renderPrintPage({
-    tbody, dateEl, sumB2BEl, sumB2CEl, sumMarginEl, sumMarginPctEl,
-    sumB2CLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
-    contentEl, emptyEl, sheetEl, titleEl, autoPrint,
-  }, customerViewOverride) {
+    tbody, dateEl, sumTotalEl, sumTotalLabelEl, sumDiscountedCardEl, sumDiscountedPriceEl,
+    fastingNoteEl, fastingNoteTextEl, contentEl, emptyEl, titleEl, autoPrint,
+  }) {
     const money = AVM.utils.formatters.money;
     const esc = AVM.utils.formatters.escapeHtml;
 
@@ -70,7 +70,6 @@ AVM.modules = AVM.modules || {};
       state.cartPackages = new Set(pkgIds.filter(id => packageById[id]));
       cachedItems = {
         items: codes.map(c => byCode[c]).filter(Boolean),
-        customerView: Array.isArray(saved) ? false : !!saved.customerView,
         // Same "one-off B2C price, not a tiered rule" figure as the cart
         // drawer's price box — carried over via the print payload above so
         // it survives opening in a new tab/window.
@@ -78,13 +77,11 @@ AVM.modules = AVM.modules || {};
       };
     }
     const items = cachedItems.items;
-    const customerView = customerViewOverride != null ? customerViewOverride : cachedItems.customerView;
-    const { packageById } = AVM.data.getCatalog();
+    const { byCode, packageById } = AVM.data.getCatalog();
     const bundlePkgs = [...state.cartPackages].map(id => packageById[id]).filter(Boolean);
     const sum = AVM.modules.calculations.cartTotals(items, bundlePkgs);
 
-    if (sheetEl) sheetEl.classList.toggle("customer-view", customerView);
-    if (titleEl) titleEl.textContent = customerView ? "Custom Health Profile — Customer Copy" : "Custom Health Profile";
+    if (titleEl) titleEl.textContent = "Custom Health Profile";
 
     if (dateEl) dateEl.textContent = new Date().toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
 
@@ -92,6 +89,27 @@ AVM.modules = AVM.modules || {};
       if (contentEl) contentEl.hidden = true;
       if (emptyEl) emptyEl.hidden = false;
       return;
+    }
+
+    // Fasting advisory — a test needs it whether it landed here on its own
+    // or nested inside a bundled package (e.g. Lipid Profile's own tests
+    // still require it whether added standalone, via the flat Lipid
+    // Profile package, or via an AVM 1-5 Profile bundle that includes it
+    // as one of its groups) — so this scans every resolved test in the
+    // profile, not just the individually-added ones `items` holds.
+    if (fastingNoteEl) {
+      const allResolvedTests = [
+        ...items,
+        ...bundlePkgs.flatMap(pkg => pkg.codes.map(c => byCode[c]).filter(Boolean)),
+      ];
+      const fastingWindows = [...new Set(allResolvedTests.map(t => t.fastingHours).filter(Boolean))];
+      fastingNoteEl.hidden = fastingWindows.length === 0;
+      if (fastingWindows.length && fastingNoteTextEl) {
+        const windowText = w => `${w.replace(/-/g, "–")} Hours`;
+        fastingNoteTextEl.textContent = fastingWindows.length === 1
+          ? `${windowText(fastingWindows[0])} Fasting Required`
+          : `Fasting Required: ${fastingWindows.map(windowText).join(" / ")}`;
+      }
     }
 
     if (tbody) {
@@ -102,25 +120,8 @@ AVM.modules = AVM.modules || {};
       // price already covers all of them. Tests added one at a time (no
       // package tag) still print as normal individually-priced rows, same
       // as before. Row numbering (#) only counts those individual rows.
-      //
-      // The heading's colspan matches the number of columns actually
-      // visible (5 in customer view, 8 internally) rather than always 8 —
-      // a colspan cell that spans a *hidden* column can make the browser's
-      // table layout reserve width for that hidden column after all,
-      // stretching the row wider than the rest of the table.
-      const colCount = customerView ? 5 : 8;
-      // A test's own name often already ends in "(CODE)" (e.g. "Blood Urea
-      // Nitrogen (BUN)") — stripped here so the "tests included" line
-      // reads as plain names, same as panels-table.js's own version does.
       const cleanName = name => name.replace(/\s*\([^)]*\)\s*$/, "").trim();
       const { highlightAsterisk } = AVM.utils.formatters;
-      // A profile's own `groups` (see below), when it has one, lists
-      // codes, not resolved test objects — this page's own `byCode` was
-      // scoped to the cache-population block above and out of reach down
-      // here, so it's fetched again (loadCatalog() already resolved by
-      // the time we get this far, so this is just a cheap lookup, not a
-      // re-fetch).
-      const { byCode } = AVM.data.getCatalog();
 
       const groups = AVM.modules.profile.groupCartItems(items);
       let rowNum = 0;
@@ -133,13 +134,8 @@ AVM.modules = AVM.modules || {};
             return `
             <tr>
               <td class="sr">${rowNum}</td>
-              <td class="c-code"><span class="code">${esc(t.code)}</span></td>
               <td class="name">${esc(t.name)}</td>
-              <td class="tech c-tech">${esc(t.tech)}</td>
-              <td class="sample">${esc(t.sample)}</td>
-              <td class="num c-b2b">${money(t.b2b)}</td>
               <td class="num">${money(t.b2c)}</td>
-              <td class="num profit c-margin">+${money(t.b2c - t.b2b)}</td>
             </tr>
           `;
           }).join("");
@@ -190,34 +186,32 @@ AVM.modules = AVM.modules || {};
 
         return `
           <tr class="row-group-head">
-            <td colspan="${colCount}">
-              <div class="group-head">
-                <span class="group-head__name">${esc(group.pkg.name)}</span>
-                <span class="group-head__price">${money(groupB2C)}</span>
+            <td colspan="3">
+              <div class="group-card">
+                <div class="group-head">
+                  <span class="group-head__name">${esc(group.pkg.name)}</span>
+                  <span class="group-head__price">${money(groupB2C)}</span>
+                </div>
+                ${testsMarkup}
               </div>
-              ${testsMarkup}
             </td>
           </tr>
         `;
       }).join("");
     }
 
-    // The summary card below is the actual billable B2B cost: MPB-adjusted,
-    // floored at ₹100 for the whole profile.
-    if (sumB2BEl) sumB2BEl.textContent = money(sum.netB2b);
-    if (sumB2CEl) sumB2CEl.textContent = money(sum.b2c);
-    if (sumMarginEl) sumMarginEl.textContent = "+" + money(sum.netMargin);
-    if (sumMarginPctEl) sumMarginPctEl.textContent = "+" + Math.round(sum.netMarginPercentage) + "%";
-
     // The manually-entered customer-copy discount (see profile.js) — the
-    // only discount a customer copy ever shows. Only takes effect when
-    // it's actually lower than the B2C total; otherwise this prints
-    // exactly like before (plain "B2C Value" card, no strike-through).
+    // only discount this copy ever shows. Only takes effect when it's
+    // actually lower than the B2C total; otherwise this prints as a plain
+    // "Total" line, no strike-through.
     const discountedPrice = cachedItems.discountedPrice;
-    const hasCustomerDiscount = customerView && typeof discountedPrice === "number"
+    const hasCustomerDiscount = typeof discountedPrice === "number"
       && discountedPrice > 0 && discountedPrice < sum.b2c;
-    if (sumB2CLabelEl) sumB2CLabelEl.textContent = hasCustomerDiscount ? "Original Price" : "B2C Value";
-    if (sumB2CEl) sumB2CEl.classList.toggle("summary__card--struck", hasCustomerDiscount);
+    if (sumTotalLabelEl) sumTotalLabelEl.textContent = hasCustomerDiscount ? "Original Price" : "Total";
+    if (sumTotalEl) {
+      sumTotalEl.textContent = money(sum.b2c);
+      sumTotalEl.classList.toggle("total-card__value--struck", hasCustomerDiscount);
+    }
     if (sumDiscountedCardEl) {
       sumDiscountedCardEl.hidden = !hasCustomerDiscount;
       if (hasCustomerDiscount && sumDiscountedPriceEl) sumDiscountedPriceEl.textContent = money(discountedPrice);
